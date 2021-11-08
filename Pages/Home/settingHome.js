@@ -25,11 +25,9 @@ export class SettingHome {
     eventNotifyMessage() {
         let notify = $_all('.cardMessageUser')
         for (const iterator of notify) {
-
             let objectSenders = {}
             objectSenders.id = usefulComponents.splitString(iterator.getAttribute('id'), "_")[1]
             objectSenders.name = $(`#${iterator.getAttribute('id')} p`).innerText
-
             iterator.addEventListener('click', async () => {
                 this.openMessage();
                 if (document.querySelector('#message :first-child')) document.querySelector('#message :first-child').remove();
@@ -54,12 +52,14 @@ export class SettingHome {
                 input.value = ""
                 document.querySelector('#bodyMessageDiv section').scrollTop = document.querySelector('#bodyMessageDiv section').scrollHeight;
             } else {
-                let message = 'Atenção! \n O campo de envio não pode estar vazio... E não deve utrapassar 200 caracteres'
-                openModal(generalModal.main(message, true))
-                generalModal.close()
-                setTimeout(() => { closeModal() }, generalModal.readingTime(message));
+                this.error('Atenção! \n O campo de envio não pode estar vazio... E não deve utrapassar 200 caracteres')
             }
         })
         getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
+    }
+    error(message) {
+        openModal(generalModal.main(message, true))
+        generalModal.close()
+        setTimeout(() => { closeModal() }, generalModal.readingTime(message));
     }
 }
