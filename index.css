@@ -1,0 +1,120 @@
+body{
+    width: 100vw;
+    height: 100vh;
+    font-family: 'titillium_web';
+}
+@font-face {
+    font-family: "titillium_web";
+    src: url("./assets/fonts/titillium_web.ttf") format("truetype");
+}
+.container{     
+    position: fixed;
+    width: 100vw;
+    min-width: 150px;
+    height: 100vh;
+    top:0;
+    left: 0;
+    background: rgba(0,0,0,.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+.nav{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: #326744;
+    font-size: 20px;
+    height:9%;
+    min-height: 60px;
+}
+.menu{
+    display: flex;
+    flex-direction: row;    
+    align-items:center;
+    width:85%;
+}
+.menu ul.principal{ 
+    display: flex;
+    flex-direction: row;
+    justify-content:space-between;
+    align-items: center;
+    width: 100%;
+}
+.menu ul{  
+    list-style: none;
+    position: relative;  
+}
+.menu ul li{   
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    float: left;    
+    display: block;
+    text-decoration: none;
+    text-align: center;
+    background-color: #326744;
+    color: aliceblue;
+}
+.menu ul li ul li{ 
+    padding: 10px;
+}
+.menu .principal ul{
+    position: absolute;
+    visibility: hidden;
+}
+.menu ul li:hover ul{
+    visibility: visible;
+}
+.menu :hover{
+    cursor: pointer;
+}
+.menu ul.principal ul li{
+    float: none;
+    border-bottom: solid 1px #ccc;
+}
+.user{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.user img:hover{  
+    cursor: pointer;
+}
+#photoUser{
+    width:50px;
+    height:50px;
+    border-radius: 25px;
+    margin-right: 10px;
+}
+#bodySection{
+    display: flex;
+    margin: 0 auto;
+    width:85%;
+    height:90%;
+    background: #f1f2f5;
+}
+#content{
+    background: #f1f2f5;
+    width: 100%;
+    height:100%;
+}
+#message{
+    border-right: solid 5px white;
+    display: none;
+    width: 300px;
+    height:100%;
+}
+
+@media screen and (min-width:1451px){ 
+    .nav{
+        height: 7%;
+    }
+    #photoUser{
+        height:55px;
+        width: 55px;
+        border-radius: 27.5px;
+    }
+}

@@ -1,0 +1,187 @@
+#homeDiv {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+#bodyMessageDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    margin: 5px;
+    width: 250px;
+}
+#bodyMessageDiv header {
+    display: flex;
+    margin: 5px;
+    align-items: center;
+    justify-content: space-between;
+    height: 30px;
+    background: white;
+    border-bottom: solid 1px rgb(178, 178, 178);
+}
+#bodyMessageDiv header p{
+    margin-left: 5px;
+}
+#bodyMessageDiv header img:hover{
+    cursor: pointer;
+}
+#bodyMessageDiv section{
+    margin:5px;
+    overflow-y: auto;
+    height:85%;
+    background:white;
+    border: solid 1px rgb(178, 178, 178);
+}
+.messageReceived{
+    width:100%;
+    margin-top:10px;
+    word-wrap: break-word;
+}
+.messageReceived p{
+    padding:2px;
+    width: 70%;
+    background:#f1f2f5;
+    border-radius: 5px;
+}
+.messageSend{
+    display: flex;
+    justify-content: flex-end;
+    width:100%;
+    margin-top:10px;
+    word-wrap: break-word;
+}
+.messageSend p{
+    padding:2px;
+    width: 70%;
+    background:#f1f2f5;
+    border-radius: 5px;
+}
+#bodyMessageDiv footer{
+    margin: 5px;
+    display: flex;
+    justify-content: space-between;
+}
+#bodyMessageDiv footer button{
+    border:none;
+    background:none;
+}
+#bodyMessageDiv footer button:hover{
+    cursor: pointer;
+}
+#homeLeft {
+    border-right: solid 5px white;
+    width: 50%;
+    height: 100%;
+}
+#welcom {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 5px;
+    background: white;
+    min-height: 10%;
+    border: 1px solid rgb(178, 178, 178);
+}
+h1 {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 5px;
+}
+b {
+    font-weight: bold;
+}
+#welcom p {
+    border-top: 1px solid rgb(178, 178, 178);
+    padding: 5px;
+    font-size: 12px;
+}
+#bodyHome {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2%;
+    width: 100%;
+    height: 85%;
+}
+#messageDiv {
+    margin: 5px;
+    width: 49%;
+    height: 100%;
+    border: 1px solid rgb(178, 178, 178);
+    overflow-y: auto;
+}
+#bodyChatDiv {
+    padding: 5px;
+}
+.cardMessageUser {
+    display: flex;
+    align-items: center;
+    height: 50px;
+    border-bottom: 1px solid rgb(178, 178, 178);
+}
+.cardMessageUser img{
+    margin-left: 5px;
+}
+.photosUsers {
+    width: 35px;
+    height: 35px;
+    border-radius: 17.5px;
+    margin-right: 10px;
+}
+#checkResponseDiv {
+    margin: 5px;
+    width: 49%;
+    height: 100%;
+    overflow-y: auto;
+    border: 1px solid rgb(178, 178, 178);
+}
+.dashboardHome {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border-bottom: 1px solid rgb(178, 178, 178);
+}
+#homeRight {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 50%;
+    height: 100%;
+}
+#checkDiv {
+    margin: 5px;
+    height: 50%;
+    overflow-y: auto;
+}
+.cardCheck {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 5px;
+    border: solid 1px rgb(178, 178, 178);
+    background: white;
+    width: 120px;
+    height: 100px;
+    padding: 3px;
+    border-radius: 5px;
+}
+#bodyCheckDiv {
+    display: grid;
+    width: 100%;
+    justify-content: space-around;
+    grid-template-areas: "cardCheck cardCheck cardCheck";
+}
+.cardCheck header {
+    border-bottom: solid 1px rgb(178, 178, 178);
+    padding-bottom: 3px;
+}
+.cardCheck section {
+    margin-top: 5px;
+    font-size: 14px;
+}
+#recordDiv {
+    margin: 5px;
+    height: 50%;
+    border-top: solid 5px white;
+    overflow-y: auto;
+}
