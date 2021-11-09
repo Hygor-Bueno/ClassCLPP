@@ -6,6 +6,7 @@ import { RecordPage } from "../Pages/Record/record.js"
 export class Routers {
 
     async routers(params) {
+        localStorage.setItem('router',params)
         let local = document.getElementById('content');
         if (local) {
             let result;
