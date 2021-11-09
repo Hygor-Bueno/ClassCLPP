@@ -1,9 +1,11 @@
-export class MessagePage{
+import { SettingMessage } from "./settingMessage.js";
+
+export class MessagePage extends SettingMessage{
     
     main(){
         let response = 
         `
-        <h1>Pagina Mensagem</h1>        
+        <section class="container">       
         `
         return response;
     }

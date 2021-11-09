@@ -8,7 +8,8 @@ var principal = new Template();
 var version = new AppVersion();
 var webSocket = new WebSocketCLPP();
 
-if(localStorage.getItem('token')){  
+if(localStorage.getItem('token')){
+    if(!localStorage.getItem('router')) localStorage.setItem('router','home')
     await principal.main() 
     webSocket.connectWebSocket();
 }else{
