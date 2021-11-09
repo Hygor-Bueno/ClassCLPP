@@ -1,5 +1,9 @@
-let ws
-let isConnected = false;
+import { HomePage } from "../Pages/Home/home.js";
+
+var ws
+var isConnected = false;
+
+
 export class WebSocketCLPP {
     connectWebSocket() {
         try {
@@ -38,8 +42,10 @@ export class WebSocketCLPP {
         if (getNotify.objectType == 'notification') {
             console.log('vizualizaram sua mensagem')
         }else if (getNotify.message) {
+            var home = new HomePage;
             //Você recebeu uma mensagem...            
-            console.log('Você recebeu uma mensagem')     
+            console.log('Você recebeu uma mensagem') 
+            if(document.getElementById('bodyChDiv')) {document.getElementById('bodyChDiv').insertAdjacentHTML('beforeend',await home.messageReceived()); home.settings()}   
         }
     }
     // "Eu visualizei a mensagem"

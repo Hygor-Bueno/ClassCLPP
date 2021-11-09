@@ -24,10 +24,9 @@ export class HomePage extends SettingHome {
         this.userJson = await employee.get();
         this.checklistJson = await checklist.get('&web&userId=' + localStorage.getItem('id'));
         this.accessClpp = await userAccess.get('&application_id=7&web');
-        await listMessage.separator(await message.get("&id=" + localStorage.getItem('id')))
-
+       
         let nameUser = usefulComponents.splitStringName(this.userJson.name, " ")
-        console.log(listMessage.notSeen())
+       
         let response =
             `
         <div id="homeDiv">
@@ -42,12 +41,7 @@ export class HomePage extends SettingHome {
                             <h1> Mensagens não Visualizadas: </h1>
                         </header>
                         <div id="bodyChDiv">
-                            ${listMessage.notSeen().map((element) => (
-                                `<div class="cardMessageUser" id="user_${element.id_user}">
-                                        <img class="photosUsers" src ="${element.photo.src}" />
-                                        <p>${usefulComponents.splitStringName(element.description, " ")}</p>
-                                </div>`
-                            )).join("")}
+                            ${await this.messageReceived()}
                         </div>
                     </div>
                     <div id="checkResponseDiv">
@@ -80,7 +74,15 @@ export class HomePage extends SettingHome {
         `
         return response;
     }
-    messageReceived() {
-
+    async messageReceived() {
+        await listMessage.separator(await message.get("&id=" + localStorage.getItem('id')))
+        console.log(listMessage.notSeen())
+        if(document.getElementById('bodyChDiv')) document.getElementById('bodyChDiv').innerHTML = ""
+        return listMessage.notSeen().map((element) => (
+            `<div class="cardMessageUser" id="user_${element.id_user}">
+                    <img class="photosUsers" src ="${element.photo.src}" />
+                    <p>${usefulComponents.splitStringName(element.description, " ")}</p>
+            </div>`
+        )).join("")
     }
 }
