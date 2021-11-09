@@ -4,12 +4,14 @@ import { UsefulComponents } from "../../Util/usefulComponents.js"
 import { Validation } from "../../Util/validation.js";
 import { GeneralModal } from '../../Components/generalModal/modal_geral.js'
 import { Message } from "../../Connection/Message.js";
+import { WebSocketCLPP } from "../../Connection/WebSocket.js";
 
 var listMessage = new MessageList
 var validator = new Validation
 var generalModal = new GeneralModal;
 var usefulComponents = new UsefulComponents;
 var messages = new Message;
+var webSocket = new WebSocketCLPP;
 
 export class SettingHome {
     settings() {
@@ -22,7 +24,7 @@ export class SettingHome {
         getB_id('message').setAttribute('style', 'display:none')
         document.querySelector('#message :first-child').remove()
     }
-    eventNotifyMessage() {
+    eventNotifyMessage(){
         let notify = $_all('.cardMessageUser')
         for (const iterator of notify) {
             let objectSenders = {}
@@ -35,6 +37,7 @@ export class SettingHome {
                 getB_id(`${iterator.getAttribute('id')}`).remove()
                 this.settingsButtonChat(objectSenders.id)
                 document.querySelector('#bodyMessageDiv section').scrollTop = document.querySelector('#bodyMessageDiv section').scrollHeight;
+                webSocket.informPreview(objectSenders.id)
             })
         }
     }
@@ -47,8 +50,9 @@ export class SettingHome {
             let input = getB_id('inputSend')
             if (validator.minLength(input.value, 0) && validator.maxLength(input.value, 200)) {
                 let objectSend = [['id_user', localStorage.getItem('id')], ['id_sender', idSender], ['message', input.value], ['type', '1']]
-                await messages.post(usefulComponents.createObject(objectSend))
+                let req=await messages.post(usefulComponents.createObject(objectSend))
                 listMessage.addMessage(input.value)
+                webSocket.informSending(req.last_id,idSender)
                 input.value = ""
                 document.querySelector('#bodyMessageDiv section').scrollTop = document.querySelector('#bodyMessageDiv section').scrollHeight;
             } else {

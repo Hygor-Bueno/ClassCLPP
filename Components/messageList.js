@@ -33,10 +33,8 @@ export class MessageList {
                 this.messages.push(iterator)
             }
         }
-        console.log(this.messages)
     }
     async chatCLPP(senderObject) {
-        console.log(senderObject)
         let response =
         `
             <div id="bodyMessageDiv">
@@ -61,7 +59,6 @@ export class MessageList {
         let messages = new Message;
         let getMessage =await messages.get(`&id_user=${localStorage.getItem('id')}&id_send=${senderObject.id}&pages=1`)
         getMessage.reverse()
-        console.log(getMessage)
         let response =
             `
         <section>

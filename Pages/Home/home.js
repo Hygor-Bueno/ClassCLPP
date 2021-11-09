@@ -43,11 +43,11 @@ export class HomePage extends SettingHome {
                         </header>
                         <div id="bodyChDiv">
                             ${listMessage.notSeen().map((element) => (
-                `<div class="cardMessageUser" id="user_${element.id_user}">
+                                `<div class="cardMessageUser" id="user_${element.id_user}">
                                         <img class="photosUsers" src ="${element.photo.src}" />
                                         <p>${usefulComponents.splitStringName(element.description, " ")}</p>
                                 </div>`
-            )).join("")}
+                            )).join("")}
                         </div>
                     </div>
                     <div id="checkResponseDiv">
@@ -62,14 +62,14 @@ export class HomePage extends SettingHome {
                     <header><h1>Cabeçalho do Checklist</h1></header>
                     <div id=bodyCheckDiv>
                         ${this.checklistJson.map((element) => (
-                `<div class="cardCheck" id="check_${element.id}">
+                            `<div class="cardCheck" id="check_${element.id}">
                                 <header><p>${element.description.slice(0, 14) + "..."}</p></header>
                                 <section>
                                     <p><b>Notificação:</b> ${element.notification == 1 ? "Sim" : "Não"}</P>
                                     <p><b>Data:</b><br/> ${element.date_init ? "Inicial: " + element.date_init + " <br/> " + "Final:  " + element.date_final : "Não Possuí Válidade Definida."}</P>
                                 </section>
                             </div>`
-            )).join("")}
+                        )).join("")}
                     </div>   
                 </div>
                 <div id="recordDiv">
@@ -79,5 +79,8 @@ export class HomePage extends SettingHome {
         </div>
         `
         return response;
+    }
+    messageReceived() {
+
     }
 }
