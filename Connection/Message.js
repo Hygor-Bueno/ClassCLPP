@@ -4,7 +4,7 @@ var errorHandling = new ErrorHandling();
 export class Message {
     URL;
     async get(params,err) {
-        typeof params === "string" ? params : err = params
+        typeof params === "string" ? params : err = params;
         this.settingUrl('/Controller/CLPP/Message.php?app_id=7&AUTH=', params)       
         let req;
         await fetch(this.URL)

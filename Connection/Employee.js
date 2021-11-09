@@ -3,7 +3,7 @@ import { EmployeePhoto } from "./EmployeePhoto.js"
 
 export class Employee extends EmployeePhoto{
     async get(params, err){ 
-        typeof params === "string" ? params : err = params    
+        typeof params === "string" ? params : err = params;    
         let URL = localStorage.getItem("server") + "/Controller/CCPP/Employee.php?app_id=7&AUTH=" + localStorage.getItem("token")+ "&id=" + localStorage.getItem("id");
         let req 
         await fetch(URL+params, {
