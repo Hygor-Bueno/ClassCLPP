@@ -20,7 +20,7 @@ export class HomePage extends SettingHome {
     message;
 
     async main() {
-
+        
         this.userJson = await employee.get();
         this.checklistJson = await checklist.get('&web&userId=' + localStorage.getItem('id'));
         this.accessClpp = await userAccess.get('&application_id=7&web');
