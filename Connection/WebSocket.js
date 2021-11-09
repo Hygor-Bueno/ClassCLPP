@@ -1,9 +1,6 @@
 import { HomePage } from "../Pages/Home/home.js";
-
 var ws
 var isConnected = false;
-
-
 export class WebSocketCLPP {
     connectWebSocket() {
         try {

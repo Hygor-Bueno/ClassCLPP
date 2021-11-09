@@ -3,7 +3,8 @@ var errorHandling = new ErrorHandling();
 
 export class Message {
     URL;
-    async get(params) {
+    async get(params,err) {
+        typeof params === "string" ? params : err = params
         this.settingUrl('/Controller/CLPP/Message.php?app_id=7&AUTH=', params)       
         let req;
         await fetch(this.URL)
@@ -13,7 +14,7 @@ export class Message {
                 req = body.data
             })
             .catch(erro => {
-                errorHandling.main(erro)
+                if(err) errorHandling.main(erro)
             })
         return req;
     }
@@ -29,7 +30,7 @@ export class Message {
         .then(body =>{
             if(body.error) throw Error(body.message)
             req = body;
-        }).catch(error => errorHandling.main(error))
+        }).catch(error => {if(err) errorHandling.main(error)})
         return req;
     }
     settingUrl(middlewer,params){

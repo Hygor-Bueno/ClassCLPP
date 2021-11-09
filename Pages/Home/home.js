@@ -69,10 +69,12 @@ export class HomePage extends SettingHome {
         console.log(listMessage.notSeen())
         if(document.getElementById('bodyChDiv')) document.getElementById('bodyChDiv').innerHTML = ""
         return listMessage.notSeen().map((element) => (
-            `<div class="cardMessageUser" id="user_${element.id_user}">
+            `
+            <div class="cardMessageUser" id="user_${element.id_user}">
                     <img class="photosUsers" src ="${element.photo.src}" />
                     <p>${usefulComponents.splitStringName(element.description, " ")}</p>
-            </div>`
+            </div>
+            `
         )).join("")
     }
     async checklistCreated(){
