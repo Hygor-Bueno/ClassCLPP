@@ -20,9 +20,7 @@ export class HomePage extends SettingHome {
     message;
 
     async main() {
-
         this.userJson = await employee.get();
-        this.checklistJson = await checklist.get('&web&userId=' + localStorage.getItem('id'));
         this.accessClpp = await userAccess.get('&application_id=7&web');
        
         let nameUser = usefulComponents.splitStringName(this.userJson.name, " ")
@@ -55,15 +53,7 @@ export class HomePage extends SettingHome {
                 <div id="checkDiv">
                     <header><h1>Cabeçalho do Checklist</h1></header>
                     <div id=bodyCheckDiv>
-                        ${this.checklistJson.map((element) => (
-                            `<div class="cardCheck" id="check_${element.id}">
-                                <header><p>${element.description.slice(0, 14) + "..."}</p></header>
-                                <section>
-                                    <p><b>Notificação:</b> ${element.notification == 1 ? "Sim" : "Não"}</P>
-                                    <p><b>Data:</b><br/> ${element.date_init ? "Inicial: " + element.date_init + " <br/> " + "Final:  " + element.date_final : "Não Possuí Válidade Definida."}</P>
-                                </section>
-                            </div>`
-                        )).join("")}
+                        ${await this.checklistCreated() || `<p></p>`}
                     </div>   
                 </div>
                 <div id="recordDiv">
@@ -84,5 +74,19 @@ export class HomePage extends SettingHome {
                     <p>${usefulComponents.splitStringName(element.description, " ")}</p>
             </div>`
         )).join("")
+    }
+    async checklistCreated(){
+        this.checklistJson = await checklist.get('&web&userId=' + localStorage.getItem('id'));
+        if( this.checklistJson){
+            return this.checklistJson.map((element) => (
+                `<div class="cardCheck" id="check_${element.id}">
+                    <header><p>${element.description.slice(0, 14) + "..."}</p></header>
+                    <section>
+                        <p><b>Notificação:</b> ${element.notification == 1 ? "Sim" : "Não"}</P>
+                        <p><b>Data:</b><br/> ${element.date_init ? "Inicial: " + element.date_init + " <br/> " + "Final:  " + element.date_final : "Não Possuí Válidade Definida."}</P>
+                    </section>
+                </div>`
+                )).join("")
+        }
     }
 }
