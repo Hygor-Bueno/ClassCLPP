@@ -48,7 +48,7 @@ export class MessageList {
     headerChat(senderObject) {
         let response =
         `
-        <header>
+        <header data-id="${senderObject.id}">
             <p><b>${senderObject.name}</b></p>
             <img id="buttonReply" src="assets/images/reply.svg" title="Fechar Mensagem"/>
         </header>

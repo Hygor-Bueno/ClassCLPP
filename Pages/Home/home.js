@@ -64,9 +64,8 @@ export class HomePage extends SettingHome {
     }
     async messageReceived() {
         await listMessage.separator(await message.get("&id=" + localStorage.getItem('id')))
-        console.log(listMessage.notSeen())
-        if (document.getElementById('bodyChDiv')) document.getElementById('bodyChDiv').innerHTML = ""
-        return listMessage.notSeen().map((element) => (
+        if (document.getElementById('bodyChDiv')) document.getElementById('bodyChDiv').innerHTML = ""        
+        return this.validatorChat(listMessage.notSeen()).map((element) => (            
             `
             <div class="cardMessageUser" id="user_${element.id_user}">
                     <img class="photosUsers" src ="${element.photo.src}" />
@@ -87,6 +86,15 @@ export class HomePage extends SettingHome {
                     </section>
                 </div>`
             )).join("")
+        }
+    }
+    validatorChat(object){
+        if(document.querySelector('#bodyMessageDiv header')){
+            let exception = document.querySelector('#bodyMessageDiv header').getAttribute('data-id');
+            let response = object.filter((element) => element.id_user != exception)
+            return response;
+        }else{
+            return object;
         }
     }
 }
