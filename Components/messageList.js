@@ -34,7 +34,6 @@ export class MessageList {
             }
             this.messages.push(iterator)
         }
-        console.log(this.messages)
     }
     async chatCLPP(senderObject) {
         let response =
