@@ -33,7 +33,7 @@ export class Routers {
                 case 'message':
                     result = new MessagePage;
                     document.getElementById('StylePages').setAttribute('href',"./Pages/Message/message.css")
-                    local.insertAdjacentHTML("beforeend", result.main());
+                    local.insertAdjacentHTML("beforeend", await result.main());
                     break;
             }
             return result;
