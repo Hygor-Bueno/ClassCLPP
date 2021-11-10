@@ -9,7 +9,7 @@ export class MessageList {
   
     notSeen() {
         return this.messages.filter(
-            (element) => element.notification == 0
+            (element) => element.notification == 1
         )
     }
     notSeenGroup() {

@@ -1,10 +1,13 @@
+import { MessageList } from "../../Components/messageList.js";
 import { EmployeePhoto } from "../../Connection/EmployeePhoto.js";
 import { Message } from "../../Connection/Message.js";
 import { SettingMessage } from "./settingMessage.js";
 
+
 export class MessagePage extends SettingMessage{
     message = new Message();
     employeePhoto = new EmployeePhoto();
+    messageList = new MessageList();
 
     async main(){
         document.getElementById('message').setAttribute('style', 'display:none'); 
@@ -42,19 +45,17 @@ export class MessagePage extends SettingMessage{
     }
 
     async userReceived(obj){
-        await this.addPhoto(obj)
-        console.log(obj)
+        await this.messageList.separator(obj)
          return obj.map((element) => (
-            `<p>${element.description}</p>`
+            `
+            <div class="divUser">
+                <div class="divColab">
+                    <img id="photoUser" src="${element.photo.src}"/>
+                     <p>${element.description}</p>
+                </div>
+                <img class="notifyMsg" src="./assets/images/notification.svg">
+            </div>
+            `
         )).join('')
-    }
-    async addPhoto(obj){
-        for (let iterator of obj) {
-            if(iterator.id_user){
-                iterator.photo = await this.employeePhoto.getPhoto("&id=" + iterator.id_user)
-            }else{
-                iterator.photo = {'src':''}                
-            }
-        }
     }
 }
