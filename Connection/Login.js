@@ -3,7 +3,7 @@ import { ErrorHandling } from "../Util/errorHandling.js";
 export class Login{
     errorHandling = new ErrorHandling()
     async post(params,err) {
-        typeof params === "string" ? params : err = params;
+        typeof params === "string" || typeof params === "object" ? params : err = params;
         let response
         await fetch("http://192.168.0.99:71/GLOBAL/Controller/CCPP/Login.php?login=&app_id=7", {
             method: "POST",
@@ -20,7 +20,7 @@ export class Login{
     }
 
     put(params,err){
-        typeof params === "string" ? params : err = params
+        typeof params === "string" || typeof params === "object" ? params : err = params;
         let response
         fetch("http://192.168.0.99:71/GLOBAL/Controller/CCPP/Login.php?login=&app_id=7", {
             method: 'PUT',
@@ -34,7 +34,7 @@ export class Login{
         })
         return response
     }
-
+    
     localStorageConfig(data) { 
             localStorage.clear();
             localStorage.setItem('token', data.session);

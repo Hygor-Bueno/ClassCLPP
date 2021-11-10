@@ -20,12 +20,13 @@ export class WebSocketCLPP {
         }
         ws.send(JSON.stringify(jsonString))
         isConnected = true
+        console.log(isConnected)
     }
     OnError(ev) {
         console.log(ev.data, true)
     }
     OnClose(){
-        setTimeout(()=>{conectar()}, 1000)
+        setTimeout(()=>{this.connectWebSocket()}, 1000)
         isConnected = false
     }
     async OnMessage(ev) {

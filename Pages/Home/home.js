@@ -5,14 +5,12 @@ import { UserAccess } from "../../Connection/UserAccess.js"
 import { Message } from "../../Connection/Message.js";
 import { MessageList } from "../../Components/messageList.js";
 import { SettingHome } from "./settingHome.js";
-
 var employee = new Employee;
 var usefulComponents = new UsefulComponents;
 var checklist = new Checklist
 var userAccess = new UserAccess;
 var message = new Message;
 var listMessage = new MessageList()
-
 export class HomePage extends SettingHome {
     userJson;
     accessClpp;
@@ -20,11 +18,11 @@ export class HomePage extends SettingHome {
     message;
 
     async main() {
-        this.userJson = await employee.get();
+        this.userJson = await employee.get(true);
         this.accessClpp = await userAccess.get('&application_id=7&web');
-       
+
         let nameUser = usefulComponents.splitStringName(this.userJson.name, " ")
-       
+
         let response =
             `
         <div id="homeDiv">
@@ -67,7 +65,7 @@ export class HomePage extends SettingHome {
     async messageReceived() {
         await listMessage.separator(await message.get("&id=" + localStorage.getItem('id')))
         console.log(listMessage.notSeen())
-        if(document.getElementById('bodyChDiv')) document.getElementById('bodyChDiv').innerHTML = ""
+        if (document.getElementById('bodyChDiv')) document.getElementById('bodyChDiv').innerHTML = ""
         return listMessage.notSeen().map((element) => (
             `
             <div class="cardMessageUser" id="user_${element.id_user}">
@@ -77,9 +75,9 @@ export class HomePage extends SettingHome {
             `
         )).join("")
     }
-    async checklistCreated(){
+    async checklistCreated() {
         this.checklistJson = await checklist.get('&web&userId=' + localStorage.getItem('id'));
-        if( this.checklistJson){
+        if (this.checklistJson) {
             return this.checklistJson.map((element) => (
                 `<div class="cardCheck" id="check_${element.id}">
                     <header><p>${element.description.slice(0, 14) + "..."}</p></header>
@@ -88,7 +86,7 @@ export class HomePage extends SettingHome {
                         <p><b>Data:</b><br/> ${element.date_init ? "Inicial: " + element.date_init + " <br/> " + "Final:  " + element.date_final : "Não Possuí Válidade Definida."}</P>
                     </section>
                 </div>`
-                )).join("")
+            )).join("")
         }
     }
 }

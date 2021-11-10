@@ -60,7 +60,7 @@ export class MessageList {
         let getMessage =await messages.get(`&id_user=${localStorage.getItem('id')}&id_send=${senderObject.id}&pages=1`)
         getMessage.reverse()
         let response =
-            `
+        `
         <section>
             ${getMessage.map((element)=>(`
                 <div class="${element.id_user != localStorage.getItem('id')?"messageReceived":"messageSend"}">
