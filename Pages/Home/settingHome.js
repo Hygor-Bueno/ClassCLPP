@@ -27,9 +27,7 @@ export class SettingHome {
     eventNotifyMessage(){
         let notify = $_all('.cardMessageUser')
         for (const iterator of notify) {
-            let objectSenders = {}
-            objectSenders.id = usefulComponents.splitString(iterator.getAttribute('id'), "_")[1]
-            objectSenders.name = $(`#${iterator.getAttribute('id')} p`).innerText
+            let objectSenders = usefulComponents.createObject([['id',usefulComponents.splitString(iterator.getAttribute('id'), "_")[1]],['name',$(`#${iterator.getAttribute('id')} p`).innerText]])
             iterator.addEventListener('click', async () => {
                 this.openMessage();
                 if (document.querySelector('#message :first-child')) document.querySelector('#message :first-child').remove();

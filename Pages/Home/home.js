@@ -20,9 +20,7 @@ export class HomePage extends SettingHome {
     async main() {
         this.userJson = await employee.get(true);
         this.accessClpp = await userAccess.get('&application_id=7&web');
-
         let nameUser = usefulComponents.splitStringName(this.userJson.name, " ")
-
         let response =
             `
         <div id="homeDiv">
@@ -96,5 +94,5 @@ export class HomePage extends SettingHome {
         }else{
             return object;
         }
-    }
+    } 
 }
