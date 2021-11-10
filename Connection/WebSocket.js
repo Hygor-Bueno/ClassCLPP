@@ -40,10 +40,18 @@ export class WebSocketCLPP {
         if (getNotify.objectType == 'notification') {
             console.log('vizualizaram sua mensagem')
         }else if (getNotify.message) {
+            console.log(getNotify.message)
             var home = new HomePage;
             //Você recebeu uma mensagem...            
             console.log('Você recebeu uma mensagem') 
-            if(document.getElementById('bodyChDiv')) {document.getElementById('bodyChDiv').insertAdjacentHTML('beforeend',await home.messageReceived()); home.settings()}   
+            if(document.getElementById('bodyChDiv')) {
+                document.getElementById('bodyChDiv').insertAdjacentHTML('beforeend',await home.messageReceived()); 
+                home.settings();
+                if(document.getElementById('bodyMessageDiv')){
+                    
+                    
+                }
+            }   
         }
     }
     // "Eu visualizei a mensagem"

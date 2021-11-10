@@ -62,6 +62,7 @@ export class HomePage extends SettingHome {
     }
     async messageReceived() {
         await listMessage.separator(await message.get("&id=" + localStorage.getItem('id')))
+        console.log(listMessage.notSeen())
         if (document.getElementById('bodyChDiv')) document.getElementById('bodyChDiv').innerHTML = ""        
         return this.validatorChat(listMessage.notSeen()).map((element) => (            
             `

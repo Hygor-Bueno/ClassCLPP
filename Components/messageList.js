@@ -9,7 +9,7 @@ export class MessageList {
   
     notSeen() {
         return this.messages.filter(
-            (element) => element.notification == 1
+            (element) => element.notification == 0
         )
     }
     notSeenGroup() {
@@ -22,17 +22,19 @@ export class MessageList {
             (element) => element.notification == 1
         )
     }
-    async separator(messages) {
+    async separator(listUser) {
         this.messages = []
-        for (const iterator of messages) {
+        for (const iterator of listUser) {
             if (iterator.id_group) {
-                this.groups.push(iterator)
+                iterator.photo = {'src':"./assets/images/logoCLPP.png" }
+                this.groups.push(iterator)                
             } else {
                 iterator.photo = await employeePhoto.getPhoto('&id=' + iterator.id_user)
                 this.users.push(iterator)
-                this.messages.push(iterator)
             }
+            this.messages.push(iterator)
         }
+        console.log(this.messages)
     }
     async chatCLPP(senderObject) {
         let response =
@@ -81,7 +83,7 @@ export class MessageList {
         `
         return response;
     }
-    addMessage(message){
-        document.querySelector('#bodyMessageDiv section').insertAdjacentHTML('beforeend',`<div class="messageSend"><p>${message}</p></div>`)
+    addMessage(message,classMessage){
+        document.querySelector('#bodyMessageDiv section').insertAdjacentHTML('beforeend',`<div class="${classMessage}"><p>${message}</p></div>`)
     }
 }
