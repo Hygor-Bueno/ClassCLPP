@@ -8,15 +8,17 @@ var principal = new Template();
 var version = new AppVersion();
 var webSocket = new WebSocketCLPP();
 
-if(localStorage.getItem('token')){
-    if(!localStorage.getItem('router')) localStorage.setItem('router','home')
-    await principal.main() 
+(async function app(){
     webSocket.connectWebSocket();
-}else{
-    if(await version.main()){
-        document.querySelector('body').insertAdjacentHTML('beforeend',pageLogin.main())
-        pageLogin.buttonLogin()
+    if(localStorage.getItem('token')){
+        if(!localStorage.getItem('router')) localStorage.setItem('router','home')
+        await principal.main() 
     }else{
-        alert("Atenção! Sua versão está desatualizada.")
+        if(await version.main()){
+            document.querySelector('body').insertAdjacentHTML('beforeend',pageLogin.main())
+            pageLogin.buttonLogin()
+        }else{
+            alert("Atenção! Sua versão está desatualizada.")
+        }
     }
-}
+})()

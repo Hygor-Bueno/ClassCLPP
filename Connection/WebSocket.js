@@ -1,9 +1,6 @@
 import { HomePage } from "../Pages/Home/home.js";
-
 var ws
 var isConnected = false;
-
-
 export class WebSocketCLPP {
     connectWebSocket() {
         try {
@@ -23,12 +20,13 @@ export class WebSocketCLPP {
         }
         ws.send(JSON.stringify(jsonString))
         isConnected = true
+        console.log(isConnected)
     }
     OnError(ev) {
         console.log(ev.data, true)
     }
     OnClose(){
-        setTimeout(()=>{conectar()}, 1000)
+        setTimeout(()=>{this.connectWebSocket()}, 1000)
         isConnected = false
     }
     async OnMessage(ev) {

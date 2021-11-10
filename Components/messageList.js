@@ -48,7 +48,7 @@ export class MessageList {
     headerChat(senderObject) {
         let response =
         `
-        <header>
+        <header data-id="${senderObject.id}">
             <p><b>${senderObject.name}</b></p>
             <img id="buttonReply" src="assets/images/reply.svg" title="Fechar Mensagem"/>
         </header>
@@ -60,7 +60,7 @@ export class MessageList {
         let getMessage =await messages.get(`&id_user=${localStorage.getItem('id')}&id_send=${senderObject.id}&pages=1`)
         getMessage.reverse()
         let response =
-            `
+        `
         <section>
             ${getMessage.map((element)=>(`
                 <div class="${element.id_user != localStorage.getItem('id')?"messageReceived":"messageSend"}">
