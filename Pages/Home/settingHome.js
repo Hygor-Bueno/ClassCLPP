@@ -35,7 +35,6 @@ export class SettingHome {
                     ['name',$(`#${iterator.getAttribute('id')} p`).innerText],
                     ['destiny', split[0] == 'user' ? '&id_send=' :'&id_group=']
                 ])
-                console.log(objectSenders)
             iterator.addEventListener('click', async () => {
                 this.openMessage(); // Abre a tela de chat
                 if (document.querySelector('#message :first-child')) document.querySelector('#message :first-child').remove(); // se já houver um susário carregado na tela, ele remove esse usuário.

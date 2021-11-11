@@ -27,9 +27,7 @@ export class MessagePage extends SettingMessage{
                 </div>
             </div>
             <div class="part2">
-                <header class="colabHead">
-                    <div class="photoColab"></div>
-                    <img class="notifyMsg" src="./assets/images/notification.svg">
+                <header class="colabHead">                    
                 </header>
                 <div class="msg_in">
                     <div class="msg_out"></div>
