@@ -15,6 +15,7 @@ export class Message {
                 req = body.data
             })
             .catch(erro => {
+                console.log(erro)
                 if (err) errorHandling.main(erro)
             })
         return req;

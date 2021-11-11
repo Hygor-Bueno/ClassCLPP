@@ -62,6 +62,7 @@ export class MessageList {
         let messages = new Message;
         let getMessage = await messages.get(`&id_user=${localStorage.getItem('id')}${senderObject.destiny}${senderObject.id}&pages=${page}`)
         getMessage.reverse()
+
         let response =
         `<section>
             ${getMessage.map((element)=>(`
