@@ -35,12 +35,12 @@ export class MessageList {
             this.messages.push(iterator)
         }
     }
-    async chatCLPP(senderObject) {
+    async chatCLPP(senderObject,page) {
         let response =
         `
             <div id="bodyMessageDiv">
                 ${this.headerChat(senderObject)}
-                ${await this.bodyChat(senderObject)}
+                ${await this.bodyChat(senderObject,page)}
                 ${this.footerChat()}
             </div>
         `
@@ -56,20 +56,21 @@ export class MessageList {
         `
         return response;
     }
-    async bodyChat(senderObject) {
+    async bodyChat(senderObject,page) {
+        if(!page) page=1
+        console.log(senderObject)
         let messages = new Message;
-        let getMessage =await messages.get(`&id_user=${localStorage.getItem('id')}&id_send=${senderObject.id}&pages=1`);
-        getMessage.reverse();
+        let getMessage = await messages.get(`&id_user=${localStorage.getItem('id')}${senderObject.destiny}${senderObject.id}&pages=${page}`)
+        getMessage.reverse()
+
         let response =
-        `
-        <section>
+        `<section>
             ${getMessage.map((element)=>(`
                 <div class="${element.id_user != localStorage.getItem('id')?"messageReceived":"messageSend"}">
                     <p>${element.message}</p>
                 </div>
             `)).join("")}
-        </section>
-        `
+        </section>`
         return response;
     }
     footerChat(){

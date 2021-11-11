@@ -34,6 +34,7 @@ export class Routers {
                     result = new MessagePage;
                     document.getElementById('StylePages').setAttribute('href',"./Pages/Message/message.css")
                     local.insertAdjacentHTML("beforeend", await result.main());
+                    result.setting()
                     break;
             }
             return result;

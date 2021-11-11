@@ -4,6 +4,7 @@ var errorHandling = new ErrorHandling();
 export class Message {
     URL;
     async get(params, err) {
+        console.log(params)
         typeof params === "string" || typeof params === "object" ? params : err = params;
         this.settingUrl('/Controller/CLPP/Message.php?app_id=7&AUTH=', params)
         let req;
