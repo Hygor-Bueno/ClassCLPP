@@ -2,12 +2,13 @@ import { MessageList } from "../../Components/messageList.js";
 import { EmployeePhoto } from "../../Connection/EmployeePhoto.js";
 import { Message } from "../../Connection/Message.js";
 import { SettingMessage } from "./settingMessage.js";
-
+import { UsefulComponents } from "../../Util/usefulComponents.js";
 
 export class MessagePage extends SettingMessage{
     message = new Message();
     employeePhoto = new EmployeePhoto();
     messageList = new MessageList();
+    usefulComponents = new UsefulComponents();
 
     async main(){
         document.getElementById('message').setAttribute('style', 'display:none'); 
@@ -44,14 +45,14 @@ export class MessagePage extends SettingMessage{
         return response;
     }
 
-    async userReceived(obj){
+    async userReceived(obj){   
         await this.messageList.separator(obj)
-         return obj.map((element) => (
+        return obj.map((element) => (
             `
-            <div class="divUser">
-                <div class="divColab">
-                    <img id="photoUser" src="${element.photo.src}"/>
-                     <p>${element.description}</p>
+            <div class="divUser" id="${element.id_user ? 'user_' + element.id_user :'group_' + element.id_group}">
+            <div class="divColab">
+            <img id="photoUser" src="${element.photo.src}"/>
+                    <p>${this.usefulComponents.splitStringName(element.description," ")}</p>
                 </div>
                 <img class="notifyMsg" src="./assets/images/notification.svg">
             </div>
