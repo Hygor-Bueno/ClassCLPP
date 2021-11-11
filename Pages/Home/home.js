@@ -5,12 +5,14 @@ import { UserAccess } from "../../Connection/UserAccess.js"
 import { Message } from "../../Connection/Message.js";
 import { MessageList } from "../../Components/messageList.js";
 import { SettingHome } from "./settingHome.js";
+
 var employee = new Employee;
 var usefulComponents = new UsefulComponents;
 var checklist = new Checklist
 var userAccess = new UserAccess;
 var message = new Message;
 var listMessage = new MessageList()
+
 export class HomePage extends SettingHome {
     userJson;
     accessClpp;
@@ -62,9 +64,9 @@ export class HomePage extends SettingHome {
     }
     async messageReceived() {
         await listMessage.separator(await message.get("&id=" + localStorage.getItem('id')))
-        console.log(listMessage.notSeen())
-        if (document.getElementById('bodyChDiv')) document.getElementById('bodyChDiv').innerHTML = ""        
-        return this.validatorChat(listMessage.notSeen()).map((element) => (            
+        // console.log(listMessage.notSeen())
+        if (document.getElementById('bodyChDiv')) document.getElementById('bodyChDiv').innerHTML = ""
+        return this.validatorChat(listMessage.notSeen()).map((element) => (
             `
             <div class="cardMessageUser" id="user_${element.id_user}">
                     <img class="photosUsers" src ="${element.photo.src}" />
@@ -87,13 +89,23 @@ export class HomePage extends SettingHome {
             )).join("")
         }
     }
-    validatorChat(object){
-        if(document.querySelector('#bodyMessageDiv header')){
+    validatorChat(object) {
+        if (document.querySelector('#bodyMessageDiv header')) {
             let exception = document.querySelector('#bodyMessageDiv header').getAttribute('data-id');
             let response = object.filter((element) => element.id_user != exception)
             return response;
-        }else{
+        } else {
             return object;
         }
-    } 
+    }
+    async upMsgReceived(getNotify) {
+        if (document.getElementById('bodyChDiv')) {
+            document.getElementById('bodyChDiv').insertAdjacentHTML('beforeend', await this.messageReceived());
+            this.settings();
+            if (document.getElementById('bodyMessageDiv') && document.querySelector('#bodyMessageDiv header').getAttribute('data-id') == getNotify.send_user) {
+                document.querySelector('#bodyMessageDiv section').remove()
+                document.querySelector('#bodyMessageDiv header').insertAdjacentHTML('afterend',await listMessage.bodyChat({'id':getNotify.send_user}))                
+            }
+        }
+    }
 }

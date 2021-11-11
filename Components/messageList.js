@@ -58,8 +58,8 @@ export class MessageList {
     }
     async bodyChat(senderObject) {
         let messages = new Message;
-        let getMessage =await messages.get(`&id_user=${localStorage.getItem('id')}&id_send=${senderObject.id}&pages=1`)
-        getMessage.reverse()
+        let getMessage =await messages.get(`&id_user=${localStorage.getItem('id')}&id_send=${senderObject.id}&pages=1`);
+        getMessage.reverse();
         let response =
         `
         <section>
