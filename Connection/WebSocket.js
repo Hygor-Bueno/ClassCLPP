@@ -38,9 +38,9 @@ export class WebSocketCLPP {
         // console.log(getNotify)
         //Mensagem vizualizada
         if (getNotify.objectType == 'notification') {
-            console.log('vizualizaram sua mensagem')
+            console.log(' ****** vizualizaram sua mensagem ****** ')
         }else if (getNotify.message) {
-            console.log('Você recebeu uma mensagem') 
+            console.log(' ****** Você recebeu uma mensagem ****** ') 
             console.log('---------------------------------------------------') 
             console.log(getNotify)
             //Você recebeu uma mensagem...            
