@@ -18,6 +18,7 @@ export class MessagePage extends SettingMessage{
         <div class="containerMsg">
             <div class="part1">
                 <header class="searchHead">
+                    <img class="searchName" src="./assets/images/Search.svg">
                     <input type="text" class="searchUserBar">
                     <img class="searchUser" src="./assets/images/person_black_24dp.svg">
                     <img class="searchGroup" src="./assets/images/groups_black_24dp.svg">
@@ -32,9 +33,9 @@ export class MessagePage extends SettingMessage{
                 <div class="msg_in">
                     <div class="msg_out"></div>
                     <footer class="footSend">
-                        <img class="fileSend" src="./assets/images/clip.svg">
-                        <input type="text" class="msg_write" maxlength="200">
-                        <img class="msgSend" src="./assets/images/enviar.svg">
+                        <img class="fileButton" src="./assets/images/clip.svg">
+                        <input type="text" class="msg_write" id='inputSend' maxlength="200">
+                        <img class="buttonSendMsg" id='buttonSend' src="./assets/images/enviar.svg">
                     </footer>
                 </div>
             </div>

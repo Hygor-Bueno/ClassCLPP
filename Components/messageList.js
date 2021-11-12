@@ -58,7 +58,6 @@ export class MessageList {
     }
     async bodyChat(senderObject,page) {
         if(!page) page=1
-        console.log(senderObject)
         let messages = new Message;
         let getMessage = await messages.get(`&id_user=${localStorage.getItem('id')}${senderObject.destiny}${senderObject.id}&pages=${page}`)
         getMessage.reverse()
@@ -83,7 +82,7 @@ export class MessageList {
         `
         return response;
     }
-    addMessage(message,classMessage){
-        document.querySelector('#bodyMessageDiv section').insertAdjacentHTML('beforeend',`<div class="${classMessage}"><p>${message}</p></div>`)
+    addMessage(local,message,classMessage){
+        document.querySelector(local).insertAdjacentHTML('beforeend',`<div class="${classMessage}"><p>${message}</p></div>`)
     }
 }

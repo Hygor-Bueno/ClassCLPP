@@ -22,6 +22,25 @@
     height: 13%;
 }
 
+.searchName{
+    height:33%;
+    cursor:pointer;
+}
+
+.searchUserBar{
+    width: 55%;
+}
+
+.searchUser{
+    height:33%;
+    cursor:pointer;
+}
+
+.searchGroup{
+    height:33%;
+    cursor:pointer;
+}
+
 .user_in{
     overflow-y: auto;
     margin: 2px;
@@ -132,7 +151,7 @@
     height: 12%;
 }
 
-.fileSend{
+.fileButton{
     cursor:pointer;
     margin: 40px;
 }
@@ -142,7 +161,7 @@
     height:30%
 }
 
-.msgSend{
+.buttonSendMsg{
     cursor:pointer;
     margin: 40px;
 }
