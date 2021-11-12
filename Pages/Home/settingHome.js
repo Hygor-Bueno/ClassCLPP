@@ -49,19 +49,19 @@ export class SettingHome {
 
     settingsButtonChat(idSender) {
         getB_id('buttonReply').addEventListener('click', () => this.closeMessage());
-        this.buttonSend(idSender);
+        this.buttonSend(idSender,'#bodyMessageDiv section');
     }
 
-    buttonSend(idSender) {
+    buttonSend(idSender, local,localScroll) {
         getB_id('buttonSend').addEventListener('click', async () => {
             let input = getB_id('inputSend')
             if (validator.minLength(input.value, 0) && validator.maxLength(input.value, 200)) {
                 let objectSend = [['id_user', localStorage.getItem('id')], ['id_sender', idSender], ['message', input.value], ['type', '1']]
-                let req=await messages.post(usefulComponents.createObject(objectSend))
-                listMessage.addMessage(input.value,'messageSend')
+                let req=await messages.post(usefulComponents.createObject(objectSend),true)
+                listMessage.addMessage(local,input.value,'messageSend')
                 webSocket.informSending(req.last_id,idSender)
                 input.value = ""
-                document.querySelector('#bodyMessageDiv section').scrollTop = document.querySelector('#bodyMessageDiv section').scrollHeight;
+                document.querySelector(localScroll?localScroll:local).scrollTop = document.querySelector(localScroll?localScroll:local).scrollHeight;
             } else {
                 this.error('Atenção! \n O campo de envio não pode estar vazio... E não deve utrapassar 200 caracteres')
             }
