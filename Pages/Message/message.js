@@ -3,18 +3,22 @@ import { EmployeePhoto } from "../../Connection/EmployeePhoto.js";
 import { Message } from "../../Connection/Message.js";
 import { SettingMessage } from "./settingMessage.js";
 import { UsefulComponents } from "../../Util/usefulComponents.js";
+import { $ } from "../../Util/compressSyntaxe.js";
 
-export class MessagePage extends SettingMessage{
+export class MessagePage extends SettingMessage {
     message = new Message();
     employeePhoto = new EmployeePhoto();
     messageList = new MessageList();
     usefulComponents = new UsefulComponents();
     
-    async main(){
-        document.getElementById('message').setAttribute('style', 'display:none'); 
+    async main() {
         const id = localStorage.getItem('id')
-        let response = 
-        `
+        const getInfo = await this.message.get("&id=" + id)
+        await this.messageList.separator(getInfo)
+        document.getElementById('message').setAttribute('style', 'display:none');
+
+        let response =
+            `
         <div class="containerMsg">
             <div class="part1">
                 <header class="searchHead">
@@ -24,10 +28,10 @@ export class MessagePage extends SettingMessage{
                     <img class="searchGroup" src="./assets/images/groups_black_24dp.svg">
                 </header>
                 <div class="user_in" style="display:flex">
-                    ${await this.userReceived(await this.message.get("&id=" + id),true)}
+                    ${this.userReceived(getInfo)}
                 </div>
                 <div class="templateSearchUser" style="display:none">
-                    ${await this.userReceived(await this.message.get("&id=" + id),false)}
+                    ${this.userReceived(getInfo)}                    
                 </div>
             </div>
             <div class="part2">
@@ -48,19 +52,19 @@ export class MessagePage extends SettingMessage{
         return response;
     }
 
-    async userReceived(obj,value){   
-        await this.messageList.separator(obj)
+    userReceived(obj) {
         return obj.map((element) => (
             `
-            <div class="divUser" id="${element.id_user ? 'user_' + element.id_user :'group_' + element.id_group}">
+            <div class="divUser" id="${element.id_user ? 'user_' + element.id_user : 'group_' + element.id_group}">
                 <div class="divColab">
-                    <img id="photoUser" src="${element.photo.src}"/>
-                    <p>${this.usefulComponents.splitStringName(element.description," ")}</p>
+                    <img id="photoUser" src="${element.photo.src}">
+                    <p>${this.usefulComponents.splitStringName(element.description, " ")}</p>
                 </div>
-                <div class="notifyMsg">${value ? `<img class="imgNotify" src="./assets/images/notification.svg">`:" "}</div>
+                <div class="notifyMsg">
+                    <img class="imgNotify" src="${element.notification == 0 ? `./assets/images/notification.svg`:`./assets/images/notify.svg`}">
+                </div>
             </div>
             `
         )).join('')
     }
-
 }
