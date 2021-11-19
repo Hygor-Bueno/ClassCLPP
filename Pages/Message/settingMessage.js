@@ -81,7 +81,7 @@ export class SettingMessage {
         $('.msg_out').addEventListener('scroll', () => {
             const sectionPage = $_all('.msg_out section')
             const beatTop = $('.msg_out').scrollTop 
-            sectionPage.forEach(element => beatTop > element.offsetTop ? console.log(beatTop) : console.log(element.innerHeight), "element")
+            sectionPage.forEach(element => {console.log(element)})
         })
     }
 }
