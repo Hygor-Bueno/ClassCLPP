@@ -8,6 +8,8 @@ export class Routers {
     async routers(params) {
         localStorage.setItem('router',params)
         let local = document.getElementById('content');
+        // document.querySelector('.principal').setAttribute('style','display:none;');
+        console.log('clicando')
         if (local) {
             let result;
             local.innerHTML = "";
@@ -37,6 +39,7 @@ export class Routers {
                     result.setting()
                     break;
             }
+            document.querySelector('.principal').setAttribute('style','display:flex;');
             return result;
         }
     }

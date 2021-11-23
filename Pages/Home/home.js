@@ -24,7 +24,7 @@ export class HomePage extends SettingHome {
         this.accessClpp = await userAccess.get('&application_id=7&web');
         let nameUser = usefulComponents.splitStringName(this.userJson.name, " ")
         let response =
-            `
+        `
         <div id="homeDiv">
             <section id="homeLeft">
                 <header id="welcom">
@@ -75,7 +75,7 @@ export class HomePage extends SettingHome {
         )).join("")
     }
     async checklistCreated() {
-        this.checklistJson = await checklist.get('&web&userId=' + localStorage.getItem('id'));
+        this.checklistJson = await checklist.get('&web&id_user=' + localStorage.getItem('id'),true);
         if (this.checklistJson) {
             return this.checklistJson.map((element) => (
                 `<div class="cardCheck" id="check_${element.id}">
@@ -102,8 +102,7 @@ export class HomePage extends SettingHome {
             document.getElementById('bodyChDiv').insertAdjacentHTML('beforeend', await this.messageReceived());
             this.settings();
             if (document.getElementById('bodyMessageDiv') && document.querySelector('#bodyMessageDiv header').getAttribute('data-id') == getNotify.send_user) {
-                document.querySelector('#bodyMessageDiv section').remove()
-                document.querySelector('#bodyMessageDiv header').insertAdjacentHTML('afterend',await listMessage.bodyChat({'destiny':'&id_send=','id':getNotify.send_user}))                
+                console.log(getNotify)                
             }
         }
     }
