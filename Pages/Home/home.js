@@ -75,7 +75,7 @@ export class HomePage extends SettingHome {
         )).join("")
     }
     async checklistCreated() {
-        this.checklistJson = await checklist.get('&web&userId=' + localStorage.getItem('id'));
+        this.checklistJson = await checklist.get('&web&id_user=' + localStorage.getItem('id'));
         if (this.checklistJson) {
             return this.checklistJson.map((element) => (
                 `<div class="cardCheck" id="check_${element.id}">

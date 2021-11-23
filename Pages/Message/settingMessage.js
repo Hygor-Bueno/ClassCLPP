@@ -18,11 +18,16 @@ export class SettingMessage {
     divUserAll;
     pages=1;
 
+    chatIdSender;
+    chatIdPage;
+    chatScroll;
     async setting() {
         this.clickDivUser()
         this.searchUser()
         this.searchName(await this.message.get("&id=" + id),false)
         this.scrollMsg()
+        getB_id('buttonSend').addEventListener('click', ()=>this.settingHome.buttonSend(this.chatIdSender,  this.chatIdPage,  this.chatScroll));
+        getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
     clickDivUser() {
         this.divUserAll = $_all('.divUser')
@@ -36,7 +41,10 @@ export class SettingMessage {
                 await this.chargePageMsg(this.usefulComponents.splitString(element.getAttribute('id'), '_'))
                 $(`#${element.getAttribute('id')} .notifyMsg img`).setAttribute('src', './assets/images/notification.svg')
                 $('.msg_out ').scrollTop = $('.msg_out ').scrollHeight;
-            })
+                this.chatIdSender=this.usefulComponents.splitString($('.colabHead ').getAttribute('data-id'), "_")[1];
+                this.chatIdPage=`#${$('.msg_out section').getAttribute('id')}`;
+                this.chatScroll=`.${$('.msg_out ').getAttribute('class')}`;
+            }) 
         )
     }
     async chargePageMsg(element) {
@@ -44,7 +52,7 @@ export class SettingMessage {
         let object = split[0] == 'user' ? { 'id': split[1], 'destiny': '&id_send=' } : { 'id': split[1], 'destiny': '&id_group=' };
         $('.msg_out').insertAdjacentHTML('beforeend', await this.messageList.bodyChat(object,this.pages))
         $('.msg_out section').setAttribute('id', `pages_${this.pages}`)
-        this.settingHome.buttonSend(this.usefulComponents.splitString($('.colabHead ').getAttribute('data-id'), "_")[1], `#${$('.msg_out section').getAttribute('id')}`, `.${$('.msg_out ').getAttribute('class')}`)
+        
     }
     changeHeader(element) {
         $('.colabHead').setAttribute('data-id', element.getAttribute('id'))
