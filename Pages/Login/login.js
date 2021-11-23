@@ -26,7 +26,6 @@ export class LoginPage extends SettingLogin{
             <div class="logo_lef">
                 <img class='logoE' src='assets/images/logoE.png' title="Logo CheckList Peg Pese" />
             </div>
-            <div class="container"></div>
         </main>
        `
         return response;
