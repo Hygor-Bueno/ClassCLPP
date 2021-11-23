@@ -17,7 +17,11 @@ export class Message {
             })
         return req;
     }
-    async post(params) {
+  
+    async post(params, err) {
+        console.log(params, err)
+        typeof params === "string" || typeof params === "object" ? params : err = params;
+
         let req
         this.settingUrl('/Controller/CLPP/Message.php?app_id=7&AUTH=');
         await fetch(this.URL,{
