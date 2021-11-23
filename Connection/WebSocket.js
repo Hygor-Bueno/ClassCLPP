@@ -1,4 +1,5 @@
 import { HomePage } from "../Pages/Home/home.js";
+import { SettingMessage } from "../Pages/Message/settingMessage.js";
 var ws
 var isConnected = false;
 export class WebSocketCLPP {
@@ -43,9 +44,14 @@ export class WebSocketCLPP {
             console.log(' ****** Você recebeu uma mensagem ****** ') 
             console.log('---------------------------------------------------') 
             console.log(getNotify)
-            //Você recebeu uma mensagem...            
+            //Você recebeu uma mensagem... 
+            if(localStorage.getItem('router') == 'message'){
+                const settingMessage = new SettingMessage()
+                settingMessage.setNotification(getNotify)
+            }      
             var home = new HomePage;
             home.upMsgReceived(getNotify)  
+
         }
     }
     // "Eu visualizei a mensagem"
