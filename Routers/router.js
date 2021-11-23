@@ -6,7 +6,10 @@ import { RecordPage } from "../Pages/Record/record.js"
 export class Routers {
 
     async routers(params) {
+        localStorage.setItem('router',params)
         let local = document.getElementById('content');
+        // document.querySelector('.principal').setAttribute('style','display:none;');
+        console.log('clicando')
         if (local) {
             let result;
             local.innerHTML = "";
@@ -31,9 +34,12 @@ export class Routers {
                     break;
                 case 'message':
                     result = new MessagePage;
-                    local.insertAdjacentHTML("beforeend", result.main());
+                    document.getElementById('StylePages').setAttribute('href',"./Pages/Message/message.css")
+                    local.insertAdjacentHTML("beforeend", await result.main());
+                    result.setting()
                     break;
             }
+            document.querySelector('.principal').setAttribute('style','display:flex;');
             return result;
         }
     }
