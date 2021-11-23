@@ -6,7 +6,7 @@ export class MessageList {
     groups = [];
     users = [];
     messages = [];
-  
+
     notSeen() {
         return this.messages.filter(
             (element) => element.notification == 1
@@ -26,8 +26,8 @@ export class MessageList {
         this.messages = []
         for (const iterator of listUser) {
             if (iterator.id_group) {
-                iterator.photo = {'src':"./assets/images/logoCLPP.png" }
-                this.groups.push(iterator)                
+                iterator.photo = { 'src': "./assets/images/logoCLPP.png" }
+                this.groups.push(iterator)
             } else {
                 iterator.photo = await employeePhoto.getPhoto('&id=' + iterator.id_user)
                 this.users.push(iterator)
@@ -35,12 +35,12 @@ export class MessageList {
             this.messages.push(iterator)
         }
     }
-    async chatCLPP(senderObject,page) {
+    async chatCLPP(senderObject, page) {
         let response =
-        `
+            `
             <div id="bodyMessageDiv">
                 ${this.headerChat(senderObject)}
-                ${await this.bodyChat(senderObject,page)}
+                ${await this.bodyChat(senderObject, page)}
                 ${this.footerChat()}
             </div>
         `
@@ -48,7 +48,7 @@ export class MessageList {
     }
     headerChat(senderObject) {
         let response =
-        `
+            `
         <header data-id="${senderObject.id}">
             <p><b>${senderObject.name}</b></p>
             <img id="buttonReply" src="assets/images/reply.svg" title="Fechar Mensagem"/>
@@ -56,25 +56,30 @@ export class MessageList {
         `
         return response;
     }
-    async bodyChat(senderObject,page) {
-        if(!page) page=1
-        let messages = new Message;
-        let getMessage = await messages.get(`&id_user=${localStorage.getItem('id')}${senderObject.destiny}${senderObject.id}&pages=${page}`)
-        getMessage.reverse()
+    async bodyChat(senderObject, page) {
+        let response
+        try {
+            if (!page) page = 1
+            let messages = new Message;
+            let getMessage = await messages.get(`&id_user=${localStorage.getItem('id')}${senderObject.destiny}${senderObject.id}&pages=${page}`) 
+            getMessage.reverse()
 
-        let response =
-        `<section>
-            ${getMessage.map((element)=>(`
-                <div class="${element.id_user != localStorage.getItem('id')?"messageReceived":"messageSend"}">
-                    <p>${element.message}</p>
-                </div>
-            `)).join("")}
-        </section>`
+            response =
+                `<section>
+                    ${getMessage.map((element) => (`
+                    <div class="${element.id_user != localStorage.getItem('id') ? "messageReceived" : "messageSend"}">
+                        <p>${element.message}</p>
+                    </div>`)).join("")}
+                </section>`
+        } catch (e) {
+            console.log(e);
+            response = `<section><p class="errorReqMessage">Desculpe. Você não possuí conversas com esse colaborador.</p></section>`;
+        }
         return response;
     }
-    footerChat(){
-        let response= 
-        `
+    footerChat() {
+        let response =
+            `
         <footer>
             <input id="inputSend" type="text" placeholder="Digite sua mensagem aqui."></input>
             <button id="buttonSend" type="button"><img src="assets/images/enviar.svg" title="Enviar Mensagem"></img></button>
@@ -82,7 +87,7 @@ export class MessageList {
         `
         return response;
     }
-    addMessage(local,message,classMessage){
-        document.querySelector(local).insertAdjacentHTML('beforeend',`<div class="${classMessage}"><p>${message}</p></div>`)
+    addMessage(local, message, classMessage) {
+        document.querySelector(local).insertAdjacentHTML('beforeend', `<div class="${classMessage}"><p>${message}</p></div>`)
     }
 }

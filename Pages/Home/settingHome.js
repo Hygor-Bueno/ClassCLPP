@@ -65,6 +65,7 @@ export class SettingHome {
             webSocket.informSending(req.last_id, idSender)
             input.value = ""
             document.querySelector(localScroll ? localScroll : local).scrollTop = document.querySelector(localScroll ? localScroll : local).scrollHeight;
+            $('.errorReqMessage') &&  $('.errorReqMessage').remove();
         } else {
             this.error('Atenção! \n O campo de envio não pode estar vazio... E não deve utrapassar 200 caracteres')
         }        
