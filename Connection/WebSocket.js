@@ -1,6 +1,9 @@
 import { HomePage } from "../Pages/Home/home.js";
+
 var ws
 var isConnected = false;
+
+
 export class WebSocketCLPP {
     connectWebSocket() {
         try {
@@ -25,7 +28,7 @@ export class WebSocketCLPP {
         console.log(ev.data, true)
     }
     OnClose(){
-        setTimeout(()=>{this.connectWebSocket()}, 1000)
+        setTimeout(()=>{conectar()}, 1000)
         isConnected = false
     }
     async OnMessage(ev) {
@@ -34,17 +37,15 @@ export class WebSocketCLPP {
             return
         }
         let getNotify = JSON.parse(ev.data)
-        // console.log(getNotify)
+        console.log(getNotify)
         //Mensagem vizualizada
         if (getNotify.objectType == 'notification') {
-            console.log(' ****** vizualizaram sua mensagem ****** ')
+            console.log('vizualizaram sua mensagem')
         }else if (getNotify.message) {
-            console.log(' ****** Você recebeu uma mensagem ****** ') 
-            console.log('---------------------------------------------------') 
-            console.log(getNotify)
-            //Você recebeu uma mensagem...            
             var home = new HomePage;
-            home.upMsgReceived(getNotify)  
+            //Você recebeu uma mensagem...            
+            console.log('Você recebeu uma mensagem') 
+            if(document.getElementById('bodyChDiv')) {document.getElementById('bodyChDiv').insertAdjacentHTML('beforeend',await home.messageReceived()); home.settings()}   
         }
     }
     // "Eu visualizei a mensagem"

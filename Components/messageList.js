@@ -22,25 +22,24 @@ export class MessageList {
             (element) => element.notification == 1
         )
     }
-    async separator(listUser) {
+    async separator(messages) {
         this.messages = []
-        for (const iterator of listUser) {
+        for (const iterator of messages) {
             if (iterator.id_group) {
-                iterator.photo = {'src':"./assets/images/logoCLPP.png" }
-                this.groups.push(iterator)                
+                this.groups.push(iterator)
             } else {
                 iterator.photo = await employeePhoto.getPhoto('&id=' + iterator.id_user)
                 this.users.push(iterator)
+                this.messages.push(iterator)
             }
-            this.messages.push(iterator)
         }
     }
-    async chatCLPP(senderObject,page) {
+    async chatCLPP(senderObject) {
         let response =
         `
             <div id="bodyMessageDiv">
                 ${this.headerChat(senderObject)}
-                ${await this.bodyChat(senderObject,page)}
+                ${await this.bodyChat(senderObject)}
                 ${this.footerChat()}
             </div>
         `
@@ -49,27 +48,27 @@ export class MessageList {
     headerChat(senderObject) {
         let response =
         `
-        <header data-id="${senderObject.id}">
+        <header>
             <p><b>${senderObject.name}</b></p>
             <img id="buttonReply" src="assets/images/reply.svg" title="Fechar Mensagem"/>
         </header>
         `
         return response;
     }
-    async bodyChat(senderObject,page) {
-        if(!page) page=1
+    async bodyChat(senderObject) {
         let messages = new Message;
-        let getMessage = await messages.get(`&id_user=${localStorage.getItem('id')}${senderObject.destiny}${senderObject.id}&pages=${page}`)
+        let getMessage =await messages.get(`&id_user=${localStorage.getItem('id')}&id_send=${senderObject.id}&pages=1`)
         getMessage.reverse()
-
         let response =
-        `<section>
+            `
+        <section>
             ${getMessage.map((element)=>(`
                 <div class="${element.id_user != localStorage.getItem('id')?"messageReceived":"messageSend"}">
                     <p>${element.message}</p>
                 </div>
             `)).join("")}
-        </section>`
+        </section>
+        `
         return response;
     }
     footerChat(){
@@ -82,7 +81,7 @@ export class MessageList {
         `
         return response;
     }
-    addMessage(local,message,classMessage){
-        document.querySelector(local).insertAdjacentHTML('beforeend',`<div class="${classMessage}"><p>${message}</p></div>`)
+    addMessage(message){
+        document.querySelector('#bodyMessageDiv section').insertAdjacentHTML('beforeend',`<div class="messageSend"><p>${message}</p></div>`)
     }
 }
