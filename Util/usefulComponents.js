@@ -1,16 +1,7 @@
-import { Validation } from "./validation.js";
-var validation = new Validation();
 export class UsefulComponents {
-    
-    splitString(stringToSplit, separator) {        
-        try{
-            if (validation.mandatoryMethods(stringToSplit, separator)) throw new Error('Atenção. Falha ao realizar a ação! São obrigatórios dois parâmentros para execução dos métodos "splitString" e "splitStringName". (Util/UsefulComponents)')
-            return stringToSplit.split(separator);
-        }catch(e) {
-            console.error(e)
-        }
+    splitString(stringToSplit, separator) {
+        return stringToSplit.split(separator);
     }
-
     splitStringName(stringToSplit, separator) {
         var arrayOfStrings = this.splitString(stringToSplit, separator)
         if (arrayOfStrings.length - 1 == 0) {

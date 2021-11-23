@@ -12,11 +12,4 @@ export class Validation{
         if(firstValue !== secondValue){response=false;}
         return response;
     }
-    mandatoryMethods(...mothods){
-        let response = false;
-        for (const iterator of mothods) {
-            if(iterator == undefined) response = true
-        }
-        return response;
-    }
 }
