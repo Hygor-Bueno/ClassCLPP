@@ -69,7 +69,7 @@ export class HomePage extends SettingHome {
             `
             <div class="cardMessageUser" id="user_${element.id_user}">
                     <img class="photosUsers" src ="${element.photo.src}" />
-                    <p>${usefulComponents.splitStringName(element.description," ")}</p>
+                    <p>${usefulComponents.splitStringName(element.description, " ")}</p>
             </div>
             `
         )).join("")
@@ -103,7 +103,7 @@ export class HomePage extends SettingHome {
             this.settings();
             if (document.getElementById('bodyMessageDiv') && document.querySelector('#bodyMessageDiv header').getAttribute('data-id') == getNotify.send_user) {
                 document.querySelector('#bodyMessageDiv section').remove()
-                document.querySelector('#bodyMessageDiv header').insertAdjacentHTML('afterend',await listMessage.bodyChat({'destiny':'&id_send=','id':getNotify.send_user}))                
+                document.querySelector('#bodyMessageDiv header').insertAdjacentHTML('afterend', await listMessage.bodyChat({ 'destiny': '&id_send=', 'id': getNotify.send_user }))
             }
         }
     }

@@ -14,11 +14,10 @@ export class MessagePage extends SettingMessage {
     
     async main() {
         var userAccess = new UserAccess
-        //var employeeAccess = await userAccess.get(true);
+        var employeeAccess = await userAccess.get('&application_id=7&web',false);
         const id = localStorage.getItem('id')
         const getInfo = await this.message.get("&id=" + id)
         await this.messageList.separator(getInfo)
-        
 
         let response =
             `
