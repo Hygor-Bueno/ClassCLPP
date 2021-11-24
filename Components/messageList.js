@@ -57,11 +57,12 @@ export class MessageList {
         return response;
     }
     async bodyChat(senderObject, page) {
+        console.log(senderObject)
         let response
         try {
             if (!page) page = 1
             let messages = new Message;
-            let getMessage = await messages.get(`&id_user=${localStorage.getItem('id')}${senderObject.destiny}${senderObject.id}&pages=${page}`) 
+            let getMessage = await messages.get(`&id_user=${localStorage.getItem('id')}${senderObject.destiny}${senderObject.id}&pages=${page}`,true) 
             getMessage.reverse()
 
             response =

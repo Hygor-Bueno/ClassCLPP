@@ -1,6 +1,10 @@
 import { HomePage } from "../Pages/Home/home.js";
+import { MessagePage } from "../Pages/Message/message.js";
+
 var ws
 var isConnected = false;
+
+
 export class WebSocketCLPP {
     connectWebSocket() {
         try {
@@ -43,16 +47,21 @@ export class WebSocketCLPP {
             console.log(' ****** Você recebeu uma mensagem ****** ') 
             console.log('---------------------------------------------------') 
             console.log(getNotify)
-            //Você recebeu uma mensagem...            
+            //Você recebeu uma mensagem... 
+            if (getNotify.objectType == 'message') {
+                const Msg = new MessagePage;
+                Msg.userReceived(getNotify);
+            }  
             var home = new HomePage;
             home.upMsgReceived(getNotify)  
         }
     }
     // "Eu visualizei a mensagem"
     informPreview(idSender) {
+        console.log(idSender)
         let jsonString = {
             type: 3,
-            send_id: idSender
+            send_id: idSender[1]
         }
         ws.send(JSON.stringify(jsonString))
     }

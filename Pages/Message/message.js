@@ -55,9 +55,10 @@ export class MessagePage extends SettingMessage {
     }
 
     userReceived(obj) {
+        console.log(obj);
         return obj.map((element) => (
             `
-            <div class="divUser" id="${element.id_user ? 'user_' + element.id_user : 'group_' + element.id_group}">
+            <div class="divUser" id="${element.id_user ? 'sender_' + element.id_user : 'group_' + element.id_group}">
                 <div class="divColab">
                     <img id="photoUser" src="${element.photo.src}">
                     <p>${this.usefulComponents.splitStringName(element.description, " ")}</p>
