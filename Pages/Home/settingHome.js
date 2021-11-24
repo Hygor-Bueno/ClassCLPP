@@ -40,13 +40,13 @@ export class SettingHome {
     }
     eventNotifyMessage(iterator, objectSenders) {
         iterator.addEventListener('click', async () => {
-            this.openMessage(); // Abre a tela de chat
-            if (document.querySelector('#message :first-child')) document.querySelector('#message :first-child').remove(); // se já houver um susário carregado na tela, ele remove esse usuário.
-            getB_id('message').insertAdjacentHTML('beforeend', await listMessage.chatCLPP(objectSenders, 1)) // adiciono o template chat dentro da área de mensagens.
-            getB_id(`${iterator.getAttribute('id')}`).remove() // remove o usuário da lista de mensagens não vizualizadas.
-            this.settingsButtonChat(objectSenders.id) // Atribui as funcionalidades aos botões do Chat.
-            document.querySelector('#bodyMessageDiv section').scrollTop = document.querySelector('#bodyMessageDiv section').scrollHeight; // Faz com que o Scroll preaneça sempre em baixo.
-            webSocket.informPreview(objectSenders.id) //informa so websocket que o usuário abriu uma mensagem, passando por parâmento o destinatário da mensagem.
+            this.openMessage();                                                                                                             // Abre a tela de chat
+            if (document.querySelector('#message :first-child')) document.querySelector('#message :first-child').remove();                  // se já houver um susário carregado na tela, ele remove esse usuário.
+            getB_id('message').insertAdjacentHTML('beforeend', await listMessage.chatCLPP(objectSenders, 1))                                // adiciono o template chat dentro da área de mensagens.
+            getB_id(`${iterator.getAttribute('id')}`).remove()                                                                              // remove o usuário da lista de mensagens não vizualizadas.
+            this.settingsButtonChat(objectSenders.id)                                                                                       // Atribui as funcionalidades aos botões do Chat.
+            document.querySelector('#bodyMessageDiv section').scrollTop = document.querySelector('#bodyMessageDiv section').scrollHeight;   // Faz com que o Scroll preaneça sempre em baixo.
+            webSocket.informPreview(objectSenders.id)                                                                                       //informa so websocket que o usuário abriu uma mensagem, passando por parâmento o destinatário da mensagem.
         })
     }
 
@@ -55,7 +55,6 @@ export class SettingHome {
         getB_id('buttonSend').addEventListener('click', () => {this.buttonSend(idSender, '#bodyMessageDiv section')}); 
         getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
-
     async buttonSend(idSender, local, localScroll) {
         let input = getB_id('inputSend')
         if (validator.minLength(input.value, 0) && validator.maxLength(input.value, 200)) {
@@ -70,8 +69,6 @@ export class SettingHome {
             this.error('Atenção! \n O campo de envio não pode estar vazio... E não deve utrapassar 200 caracteres')
         }        
     }
-
-
     error(message) {
         openModal(generalModal.main(message, true))
         generalModal.close()

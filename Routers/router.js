@@ -4,9 +4,9 @@ import { ChecklistCreatedPage } from "../Pages/Checklist/ChecklistCriated/checkl
 import { MessagePage } from "../Pages/Message/message.js"
 import { RecordPage } from "../Pages/Record/record.js"
 export class Routers {
-
     async routers(params) {
         localStorage.setItem('router',params)
+        document.getElementById('message').setAttribute('style', 'display:none')
         let local = document.getElementById('content');
         if (local) {
             let result;
