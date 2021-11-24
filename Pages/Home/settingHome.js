@@ -52,10 +52,11 @@ export class SettingHome {
 
     settingsButtonChat(idSender) {
         getB_id('buttonReply').addEventListener('click', () => this.closeMessage());
-        this.buttonSend(idSender);
+        getB_id('buttonSend').addEventListener('click',  () => {this.buttonSend(idSender)});
+        getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
-    buttonSend(idSender) {
-        getB_id('buttonSend').addEventListener('click', async () => {
+    async buttonSend(idSender) {
+        console.log('qualquer coisa ai ')
             let input = getB_id('inputSend')
             if (validator.minLength(input.value, 0) && validator.maxLength(input.value, 200)) {
                 let objectSend = [['id_user', localStorage.getItem('id')], ['id_sender', idSender], ['message', input.value], ['type', '1']]
@@ -67,8 +68,8 @@ export class SettingHome {
             } else {
                 this.error('Atenção! \n O campo de envio não pode estar vazio... E não deve utrapassar 200 caracteres')
             }
-        })
-        getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
+        
+
     }
 
     async buttonSend(idSender, local, localScroll) {
