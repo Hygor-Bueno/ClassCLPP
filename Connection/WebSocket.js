@@ -1,7 +1,10 @@
 import { HomePage } from "../Pages/Home/home.js";
 import { SettingMessage } from "../Pages/Message/settingMessage.js";
+
 var ws
 var isConnected = false;
+
+
 export class WebSocketCLPP {
     connectWebSocket() {
         try {
@@ -21,13 +24,12 @@ export class WebSocketCLPP {
         }
         ws.send(JSON.stringify(jsonString))
         isConnected = true
-        console.log(isConnected)
     }
     OnError(ev) {
         console.log(ev.data, true)
     }
     OnClose(){
-        setTimeout(()=>{this.connectWebSocket()}, 1000)
+        setTimeout(()=>{conectar()}, 1000)
         isConnected = false
     }
     async OnMessage(ev) {
@@ -36,10 +38,10 @@ export class WebSocketCLPP {
             return
         }
         let getNotify = JSON.parse(ev.data)
-        // console.log(getNotify)
+        console.log(getNotify)
         //Mensagem vizualizada
         if (getNotify.objectType == 'notification') {
-            console.log(' ****** vizualizaram sua mensagem ****** ')
+            console.log('vizualizaram sua mensagem')
         }else if (getNotify.message) {
             console.log(' ****** Você recebeu uma mensagem ****** ') 
             console.log('---------------------------------------------------') 
@@ -51,7 +53,6 @@ export class WebSocketCLPP {
             }      
             var home = new HomePage;
             home.upMsgReceived(getNotify)  
-
         }
     }
     // "Eu visualizei a mensagem"

@@ -1,3 +1,4 @@
+
 import { $, $_all, getB_id } from "../../Util/compressSyntaxe.js"
 import { MessageList } from "../../Components/messageList.js";
 import { UsefulComponents } from "../../Util/usefulComponents.js";
@@ -6,8 +7,6 @@ import { SettingHome } from "../Home/settingHome.js";
 import { Message } from "../../Connection/Message.js";
 import { ListUser } from "../../Components/listUser.js";
 import { WebSocketCLPP } from "../../Connection/WebSocket.js";
-
-const id = localStorage.getItem('id')
 
 export class SettingMessage {
     validation = new Validation();
@@ -88,4 +87,5 @@ export class SettingMessage {
             sectionPage.forEach(a => {console.log(a)})
         })
     }
+
 }

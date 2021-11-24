@@ -2,24 +2,17 @@ import { ErrorHandling } from "../Util/errorHandling.js";
 
 export class Checklist {
     errorHandling = new ErrorHandling()
-    URL
-    async get(params,err) {
-        typeof params === "string" || typeof params === "object" ? params : err = params;
-        this.settingUrl('/Controller/CLPP/Checklist.php?app_id=7&AUTH=',params)
+    async get(params) {
+        let URL = localStorage.getItem('server') + '/Controller/CLPP/Checklist.php?app_id=7&AUTH=' + localStorage.getItem('token')
         let response
-        await fetch(this.URL + params)
+        await fetch(URL + params)
             .then(response => response.json())
             .then(body => {
                 if (body.error) throw new Error(body.message)
                 response = body.data
             }).catch(erro => {
-                if(err) this.errorHandling.main(erro)
+                this.errorHandling.main(erro)
             })
         return response
-    }
-    settingUrl(middlewer, params) {
-        let server = localStorage.getItem('server');
-        let token = localStorage.getItem('token');
-        this.URL = server + middlewer + token + params
     }
 }

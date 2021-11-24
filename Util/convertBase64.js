@@ -13,7 +13,7 @@ export class convertBase64{
             response = image;
         } else {
             let imgVazia = document.createElement('img');
-            imgVazia.src = "../assets/images/user.png";
+            imgVazia.src = "../assets/image/user.png";
             response = imgVazia;
         }
         return response;

@@ -16,7 +16,7 @@ export class Template {
             document.querySelector('body').insertAdjacentHTML("beforeend", this.header.template(photoUser.src))
             this.header.setting()            
             document.querySelector('body').insertAdjacentHTML("beforeend", this.body.template())
-            this.pagesRouter.routers(localStorage.getItem('router'))
+            this.pagesRouter.routers('home')
         }
     }
 }
