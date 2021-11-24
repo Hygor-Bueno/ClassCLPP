@@ -13,6 +13,7 @@ export class SettingLogin {
             let req = await login.post(loginUser)
             
             if (req && !req.error){
+                localStorage.setItem('router','home')
                 let principal = new Template()
                 await principal.main()
             } 

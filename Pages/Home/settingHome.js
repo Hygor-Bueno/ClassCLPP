@@ -15,7 +15,7 @@ var webSocket = new WebSocketCLPP;
 
 export class SettingHome {
     settings() {
-        this.eventNotifyMessage();
+        this.notifyMessage();
     }
     openMessage() {
         getB_id('message').setAttribute('style', 'display:flex')
@@ -24,23 +24,32 @@ export class SettingHome {
         getB_id('message').setAttribute('style', 'display:none')
         document.querySelector('#message :first-child').remove()
     }
-    eventNotifyMessage(){
+    notifyMessage() {
         let notify = $_all('.cardMessageUser')
         for (const iterator of notify) {
-            let objectSenders = {}
-            objectSenders.id = usefulComponents.splitString(iterator.getAttribute('id'), "_")[1]
-            objectSenders.name = $(`#${iterator.getAttribute('id')} p`).innerText
-            iterator.addEventListener('click', async () => {
-                this.openMessage();
-                if (document.querySelector('#message :first-child')) document.querySelector('#message :first-child').remove();
-                getB_id('message').insertAdjacentHTML('beforeend', await listMessage.chatCLPP(objectSenders))
-                getB_id(`${iterator.getAttribute('id')}`).remove()
-                this.settingsButtonChat(objectSenders.id)
-                document.querySelector('#bodyMessageDiv section').scrollTop = document.querySelector('#bodyMessageDiv section').scrollHeight;
-                webSocket.informPreview(objectSenders.id)
-            })
+            var usefulComponentsSplit = new UsefulComponents;
+            let split = usefulComponentsSplit.splitString(iterator.getAttribute('id'), '_')
+            let objectSenders = usefulComponents.createObject(
+                [
+                    ['id', usefulComponents.splitString(iterator.getAttribute('id'), "_")[1]],
+                    ['name', $(`#${iterator.getAttribute('id')} p`).innerText],
+                    ['destiny', split[0] == 'user' ? '&id_send=' : '&id_group=']
+                ])
+            this.eventNotifyMessage(iterator, objectSenders);
         }
     }
+    eventNotifyMessage(iterator, objectSenders) {
+        iterator.addEventListener('click', async () => {
+            this.openMessage(); // Abre a tela de chat
+            if (document.querySelector('#message :first-child')) document.querySelector('#message :first-child').remove(); // se já houver um susário carregado na tela, ele remove esse usuário.
+            getB_id('message').insertAdjacentHTML('beforeend', await listMessage.chatCLPP(objectSenders, 1)) // adiciono o template chat dentro da área de mensagens.
+            getB_id(`${iterator.getAttribute('id')}`).remove() // remove o usuário da lista de mensagens não vizualizadas.
+            this.settingsButtonChat(objectSenders.id) // Atribui as funcionalidades aos botões do Chat.
+            document.querySelector('#bodyMessageDiv section').scrollTop = document.querySelector('#bodyMessageDiv section').scrollHeight; // Faz com que o Scroll preaneça sempre em baixo.
+            webSocket.informPreview(objectSenders.id) //informa so websocket que o usuário abriu uma mensagem, passando por parâmento o destinatário da mensagem.
+        })
+    }
+
     settingsButtonChat(idSender) {
         getB_id('buttonReply').addEventListener('click', () => this.closeMessage());
         this.buttonSend(idSender);
@@ -61,6 +70,23 @@ export class SettingHome {
         })
         getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
+
+    async buttonSend(idSender, local, localScroll) {
+        let input = getB_id('inputSend')
+        if (validator.minLength(input.value, 0) && validator.maxLength(input.value, 200)) {
+            let objectSend = [['id_user', localStorage.getItem('id')], ['id_sender', idSender], ['message', input.value], ['type', '1']]
+            let req = await messages.post(usefulComponents.createObject(objectSend), true)
+            listMessage.addMessage(local, input.value, 'messageSend')
+            webSocket.informSending(req.last_id, idSender)
+            input.value = ""
+            document.querySelector(localScroll ? localScroll : local).scrollTop = document.querySelector(localScroll ? localScroll : local).scrollHeight;
+            $('.errorReqMessage') &&  $('.errorReqMessage').remove();
+        } else {
+            this.error('Atenção! \n O campo de envio não pode estar vazio... E não deve utrapassar 200 caracteres')
+        }        
+    }
+
+
     error(message) {
         openModal(generalModal.main(message, true))
         generalModal.close()
