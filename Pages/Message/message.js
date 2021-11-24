@@ -4,7 +4,8 @@ import { Message } from "../../Connection/Message.js";
 import { SettingMessage } from "./settingMessage.js";
 import { UsefulComponents } from "../../Util/usefulComponents.js";
 import { $ } from "../../Util/compressSyntaxe.js";
-
+import { UserAccess } from "../../Connection/UserAccess.js";
+//Modificado por Hygor: Correção do templateSearchUser 
 export class MessagePage extends SettingMessage {
     message = new Message();
     employeePhoto = new EmployeePhoto();
@@ -12,10 +13,12 @@ export class MessagePage extends SettingMessage {
     usefulComponents = new UsefulComponents();
     
     async main() {
+        var userAccess = new UserAccess
+        //var employeeAccess = await userAccess.get(true);
         const id = localStorage.getItem('id')
         const getInfo = await this.message.get("&id=" + id)
         await this.messageList.separator(getInfo)
-        document.getElementById('message').setAttribute('style', 'display:none');
+        
 
         let response =
             `
@@ -53,9 +56,10 @@ export class MessagePage extends SettingMessage {
     }
 
     userReceived(obj) {
+        console.log(obj);
         return obj.map((element) => (
             `
-            <div class="divUser" id="${element.id_user ? 'user_' + element.id_user : 'group_' + element.id_group}">
+            <div class="divUser" id="${element.id_user ? 'sender_' + element.id_user : 'group_' + element.id_group}">
                 <div class="divColab">
                     <img id="photoUser" src="${element.photo.src}">
                     <p>${this.usefulComponents.splitStringName(element.description, " ")}</p>

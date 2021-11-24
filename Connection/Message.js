@@ -12,7 +12,6 @@ export class Message {
             .then(body => {
                 if (body.error) throw new Error(body.message)
                 req = body.data
-                console.log(req)
             })
             .catch(erro => {
                 console.log(erro)
@@ -21,8 +20,7 @@ export class Message {
         return req;
     }
     async post(params, err) {
-        console.log(params, err)
-        typeof params === "string" || typeof params === "object" ? params : err = params;
+        typeof params === "string" || typeof params === "object" ? params=params : err = params;
         let req
         this.settingUrl('/Controller/CLPP/Message.php?app_id=7&AUTH=');
         await fetch(this.URL, {
@@ -38,6 +36,7 @@ export class Message {
         return req;
     }
     settingUrl(middlewer, params) {
+        if(!params) params = ""
         let server = localStorage.getItem('server');
         let token = localStorage.getItem('token');
         this.URL = server + middlewer + token + params
