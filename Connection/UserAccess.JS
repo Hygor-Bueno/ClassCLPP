@@ -10,7 +10,6 @@ export class UserAccess{
             .then(body =>{
                 if (body.error) throw new Error(body.message);
                 req = body
-                console.log(body)
             })
             .catch(erro =>{
                 if(err) this.errorHandling.main(erro)

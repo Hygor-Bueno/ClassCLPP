@@ -81,11 +81,11 @@ export class MessageList {
     footerChat() {
         let response =
             `
-        <footer>
-            <input id="inputSend" type="text" placeholder="Digite sua mensagem aqui."></input>
-            <button id="buttonSend" type="button"><img src="assets/images/enviar.svg" title="Enviar Mensagem"></img></button>
-        </footer>
-        `
+                <footer>
+                    <input id="inputSend" type="text" placeholder="Digite sua mensagem aqui."></input>
+                    <button id="buttonSend" type="button"><img src="assets/images/enviar.svg" title="Enviar Mensagem"></img></button>
+                </footer>
+            `
         return response;
     }
     addMessage(local, message, classMessage) {

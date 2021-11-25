@@ -24,7 +24,6 @@ export class WebSocketCLPP {
         }
         ws.send(JSON.stringify(jsonString))
         isConnected = true
-        console.log(isConnected)
     }
     OnError(ev) {
         console.log(ev.data, true)
