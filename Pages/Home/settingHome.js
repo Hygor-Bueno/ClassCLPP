@@ -37,9 +37,8 @@ export class SettingHome {
             this.eventNotifyMessage(iterator, objectSenders);
         }
     }
-    
+
     eventNotifyMessage(iterator, objectSenders) {
-        console.log(objectSenders)
         iterator.addEventListener('click', async () => {
             this.openMessage();                                                                                                             // Abre a tela de chat
             if (document.querySelector('#message :first-child')) document.querySelector('#message :first-child').remove();                  // se já houver um susário carregado na tela, ele remove esse usuário.
@@ -60,10 +59,9 @@ export class SettingHome {
         let input = getB_id('inputSend')
         if (validator.minLength(input.value, 0) && validator.maxLength(input.value, 200)) {
             let objectSend = [['id_sender', localStorage.getItem('id')], [idSender[0] == 'group'?"id_group":`id_user`, idSender[1]], ['message', input.value], ['type', '1']]            
-            console.log(objectSend)
             let req = await messages.post(usefulComponents.createObject(objectSend), true)
             listMessage.addMessage(local, input.value, 'messageSend')
-            webSocket.informSending(req.last_id, idSender)
+            webSocket.informSending(req.last_id, idSender[1])
             input.value = ""
             document.querySelector(localScroll ? localScroll : local).scrollTop = document.querySelector(localScroll ? localScroll : local).scrollHeight;
             $('.errorReqMessage') &&  $('.errorReqMessage').remove();

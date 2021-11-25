@@ -63,6 +63,7 @@ export class HomePage extends SettingHome {
         return response;
     }
     async messageReceived() {
+        console.log(await message.get("&id=" + localStorage.getItem('id')))
         await listMessage.separator(await message.get("&id=" + localStorage.getItem('id')))
         if (document.getElementById('bodyChDiv')) document.getElementById('bodyChDiv').innerHTML = ""
         return this.validatorChat(listMessage.notSeen()).map((element) => (
@@ -98,6 +99,7 @@ export class HomePage extends SettingHome {
         }
     }
     async upMsgReceived(getNotify) {
+        console.log(getNotify)
         if (document.getElementById('bodyChDiv')) {
             document.getElementById('bodyChDiv').insertAdjacentHTML('beforeend', await this.messageReceived());
             this.settings();

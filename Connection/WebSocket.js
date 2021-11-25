@@ -44,20 +44,20 @@ export class WebSocketCLPP {
             console.log(' ****** vizualizaram sua mensagem ****** ')
         }else if (getNotify.message) {
             console.log(' ****** Você recebeu uma mensagem ****** ') 
-            console.log('---------------------------------------------------') 
+            console.log('---------------------------------------------------')
+            var home = new HomePage;
+            home.upMsgReceived(getNotify)   
             console.log(getNotify)
             //Você recebeu uma mensagem... 
             if (getNotify.objectType == 'message') {
                 const Msg = new MessagePage;
-                Msg.userReceived(getNotify);
+                //Msg.userReceived(getNotify);
             }  
-            var home = new HomePage;
-            home.upMsgReceived(getNotify)  
+           
         }
     }
     // "Eu visualizei a mensagem"
     informPreview(idSender) {
-        console.log(idSender)
         let jsonString = {
             type: 3,
             send_id: idSender[1]
