@@ -49,14 +49,15 @@ export class WebSocketCLPP {
             Msg.visualizationMsg(getNotify)
         }else if (getNotify.message) {
             console.log(' ****** Você recebeu uma mensagem ****** ') 
-            console.log('---------------------------------------------------') 
+            console.log('---------------------------------------------------')
+            var home = new HomePage;
+            home.upMsgReceived(getNotify)   
             console.log(getNotify)
             //Você recebeu uma mensagem... 
             if (getNotify.objectType == 'message') {
                 Msg.userReceived(await message.get("&id=" + id));
             }  
-            var home = new HomePage;
-            home.upMsgReceived(getNotify)  
+           
         }
     }
     // "Eu visualizei a mensagem"

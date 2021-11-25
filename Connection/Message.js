@@ -8,15 +8,15 @@ export class Message {
         this.settingUrl('/Controller/CLPP/Message.php?app_id=7&AUTH=', params)
         let req;
         await fetch(this.URL)
-            .then(response => response.json())
-            .then(body => {
-                if (body.error) throw new Error(body.message)
-                req = body.data
-            })
-            .catch(erro => {
-                console.log(erro)
-                if (err) errorHandling.main(erro)
-            })
+                .then(response => response.json())
+                .then(body => {
+                    if (body.error) throw new Error(body.message)
+                    req = body.data
+                })
+                .catch(erro => {
+                    console.log(erro)
+                    if (err) errorHandling.main(erro)
+                })
         return req;
     }
     async post(params, err) {

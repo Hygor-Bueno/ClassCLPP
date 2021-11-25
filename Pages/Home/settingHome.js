@@ -37,9 +37,8 @@ export class SettingHome {
             this.eventNotifyMessage(iterator, objectSenders);
         }
     }
-    
+
     eventNotifyMessage(iterator, objectSenders) {
-        console.log(objectSenders)
         iterator.addEventListener('click', async () => {
             this.openMessage();                                                                                                             // Abre a tela de chat
             if (document.querySelector('#message :first-child')) document.querySelector('#message :first-child').remove();                  // se já houver um susário carregado na tela, ele remove esse usuário.
