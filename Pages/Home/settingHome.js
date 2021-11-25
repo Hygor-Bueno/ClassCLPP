@@ -29,15 +29,15 @@ export class SettingHome {
         for (const iterator of notify) {
             var usefulComponentsSplit = new UsefulComponents;
             let split = usefulComponentsSplit.splitString(iterator.getAttribute('id'), '_')
-            let objectSenders = usefulComponents.createObject(
-                [
-                    ['id', usefulComponents.splitString(iterator.getAttribute('id'), "_")],
+            let objectSenders = usefulComponents.createObject([
+                    ['id', split[1]],
                     ['name', $(`#${iterator.getAttribute('id')} p`).innerText],
-                    ['destiny', split[0] == 'user' ? '&id_send=' : '&id_group=']
+                    ['destiny', `&id_${split[0]}=`]
                 ])
             this.eventNotifyMessage(iterator, objectSenders);
         }
     }
+    
     eventNotifyMessage(iterator, objectSenders) {
         console.log(objectSenders)
         iterator.addEventListener('click', async () => {
@@ -50,18 +50,17 @@ export class SettingHome {
             webSocket.informPreview(objectSenders.id)                                                                                       //informa so websocket que o usuário abriu uma mensagem, passando por parâmento o destinatário da mensagem.
         })
     }
-
     settingsButtonChat(idSender) {
         getB_id('buttonReply').addEventListener('click', () => this.closeMessage());
         getB_id('buttonSend').addEventListener('click',  () => {this.buttonSend(idSender)});
         getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
-    async buttonSend(idSender, local, localScroll) {
-        console.log(idSender)
+    async buttonSend(idSender, local, localScroll) {    
+         
         let input = getB_id('inputSend')
         if (validator.minLength(input.value, 0) && validator.maxLength(input.value, 200)) {
-            let objectSend = [['id_user', localStorage.getItem('id')], [`id_${idSender[0]}`, idSender[1]], ['message', input.value], ['type', '1']]
-            console.log(usefulComponents.createObject(objectSend))
+            let objectSend = [['id_sender', localStorage.getItem('id')], [idSender[0] == 'group'?"id_group":`id_user`, idSender[1]], ['message', input.value], ['type', '1']]            
+            console.log(objectSend)
             let req = await messages.post(usefulComponents.createObject(objectSend), true)
             listMessage.addMessage(local, input.value, 'messageSend')
             webSocket.informSending(req.last_id, idSender)
