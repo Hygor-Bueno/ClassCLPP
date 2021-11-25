@@ -37,6 +37,7 @@ export class SettingHome {
             this.eventNotifyMessage(iterator, objectSenders);
         }
     }
+    
     eventNotifyMessage(iterator, objectSenders) {
         console.log(objectSenders)
         iterator.addEventListener('click', async () => {
