@@ -87,9 +87,7 @@ export class SettingMessage {
                 this.clickDivUser();
         })
         $('.searchUserBar').addEventListener('keypress', (e) => {if (e.key === 'Enter') $('.searchName').click()})
-    }
-    
-      
+    }     
     scrollMsg(){
         $('.msg_out').addEventListener('scroll', () => {
             const sectionPage = $_all('.msg_out section')
