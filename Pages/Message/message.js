@@ -5,6 +5,7 @@ import { SettingMessage } from "./settingMessage.js";
 import { UsefulComponents } from "../../Util/usefulComponents.js";
 import { $ } from "../../Util/compressSyntaxe.js";
 import { UserAccess } from "../../Connection/UserAccess.js";
+
 //Modificado por Hygor: Correção do templateSearchUser 
 export class MessagePage extends SettingMessage {
     message = new Message();
@@ -15,6 +16,7 @@ export class MessagePage extends SettingMessage {
     async main() {
         var userAccess = new UserAccess
         var employeeAccess = await userAccess.get('&application_id=7&web',false);
+        console.log(employeeAccess.data)
         const id = localStorage.getItem('id')
         const getInfo = await this.message.get("&id=" + id)
         await this.messageList.separator(getInfo)
@@ -53,9 +55,7 @@ export class MessagePage extends SettingMessage {
         `
         return response;
     }
-
     userReceived(obj) {
-        console.log(obj);
         return obj.map((element) => (
             `
             <div class="divUser" id="${element.id_user ? 'sender_' + element.id_user : 'group_' + element.id_group}">
@@ -69,5 +69,8 @@ export class MessagePage extends SettingMessage {
             </div>
             `
         )).join('')
+    }
+    methodUnited(){
+
     }
 }

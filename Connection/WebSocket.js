@@ -1,8 +1,10 @@
 import { HomePage } from "../Pages/Home/home.js";
 import { MessagePage } from "../Pages/Message/message.js";
+import { Message } from "./Message.js";
 
 var ws
 var isConnected = false;
+const id = localStorage.getItem('id')
 
 
 export class WebSocketCLPP {
@@ -33,6 +35,8 @@ export class WebSocketCLPP {
         isConnected = false
     }
     async OnMessage(ev) {
+        const Msg = new MessagePage;
+        const message = new Message();
         if (ev.data.toString() == "__pong__") {
             pong()
             return
@@ -42,6 +46,7 @@ export class WebSocketCLPP {
         //Mensagem vizualizada
         if (getNotify.objectType == 'notification') {
             console.log(' ****** vizualizaram sua mensagem ****** ')
+            Msg.visualizationMsg(getNotify)
         }else if (getNotify.message) {
             console.log(' ****** Você recebeu uma mensagem ****** ') 
             console.log('---------------------------------------------------')
@@ -50,8 +55,7 @@ export class WebSocketCLPP {
             console.log(getNotify)
             //Você recebeu uma mensagem... 
             if (getNotify.objectType == 'message') {
-                const Msg = new MessagePage;
-                //Msg.userReceived(getNotify);
+                Msg.userReceived(await message.get("&id=" + id));
             }  
            
         }
