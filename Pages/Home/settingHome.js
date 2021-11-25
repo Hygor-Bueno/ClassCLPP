@@ -55,15 +55,13 @@ export class SettingHome {
         getB_id('buttonSend').addEventListener('click',  () => {this.buttonSend(idSender)});
         getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
-    async buttonSend(idSender, local, localScroll) {    
-         
+    async buttonSend(idSender, local, localScroll) {       
         let input = getB_id('inputSend')
         if (validator.minLength(input.value, 0) && validator.maxLength(input.value, 200)) {
-            let objectSend = [['id_sender', localStorage.getItem('id')], [idSender[0] == 'group'?"id_group":`id_user`, idSender[1]], ['message', input.value], ['type', '1']]            
-            console.log(objectSend)
+            let objectSend = [['id_sender', localStorage.getItem('id')], [idSender[0] == 'group'?"id_group":`id_user`, idSender[1]], ['message', input.value], ['type', '1']]
             let req = await messages.post(usefulComponents.createObject(objectSend), true)
             listMessage.addMessage(local, input.value, 'messageSend')
-            webSocket.informSending(req.last_id, idSender)
+            webSocket.informSending(req.last_id, idSender[1])
             input.value = ""
             document.querySelector(localScroll ? localScroll : local).scrollTop = document.querySelector(localScroll ? localScroll : local).scrollHeight;
             $('.errorReqMessage') &&  $('.errorReqMessage').remove();
