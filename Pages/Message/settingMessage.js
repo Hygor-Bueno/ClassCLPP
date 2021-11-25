@@ -20,16 +20,16 @@ export class SettingMessage {
     listUser = new ListUser;
     divUserAll;
     pages=1;
-
     chatIdSender;
     chatIdPage;
     chatScroll;
+
     async setting() {
         this.clickDivUser()
         this.searchUser()
-        this.searchName(await this.message.get("&id=" + id),false)
         this.scrollMsg()
-        getB_id('buttonSend').addEventListener('click', ()=> this.settingHome.buttonSend(this.chatIdSender,  this.chatIdPage,  this.chatScroll));
+        this.searchName(await this.message.get("&id=" + id),false)
+        getB_id('buttonSend').addEventListener('click', ()=> {this.settingHome.buttonSend(this.chatIdSender,  this.chatIdPage,  this.chatScroll), this.notificationMsg()});
         getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
     clickDivUser() {
@@ -43,19 +43,17 @@ export class SettingMessage {
                 await this.chargePageMsg(this.usefulComponents.splitString(element.getAttribute('id'), '_'))
                 $(`#${element.getAttribute('id')} .notifyMsg img`).setAttribute('src', './assets/images/notification.svg')
                 $('.msg_out ').scrollTop = $('.msg_out ').scrollHeight;
-                this.chatIdSender=this.usefulComponents.splitString($('.colabHead ').getAttribute('data-id'), "_");
-                this.chatIdPage=`#${$('.msg_out section').getAttribute('id')}`;
-                this.chatScroll=`.${$('.msg_out ').getAttribute('class')}`;
+                this.chatIdSender = this.usefulComponents.splitString($('.colabHead ').getAttribute('data-id'), "_");
+                this.chatIdPage = `#${$('.msg_out section').getAttribute('id')}`;
+                this.chatScroll = `.${$('.msg_out ').getAttribute('class')}`;
                 this.ws.informPreview(this.chatIdSender)
             }) 
         )
     }
     async chargePageMsg(split) {
-        console.log(split)
         let object = split[0] == 'sender' ? { 'id': split[1], 'destiny': '&id_send=' } : { 'id': split[1], 'destiny': '&id_group=' };
         $('.msg_out').insertAdjacentHTML('beforeend', await this.messageList.bodyChat(object,this.pages))
-        $('.msg_out section').setAttribute('id', `pages_${this.pages}`)
-        
+        $('.msg_out section').setAttribute('id', `pages_${this.pages}`) 
     }
     changeHeader(element) {
         $('.colabHead').setAttribute('data-id', element.getAttribute('id'))
@@ -87,7 +85,13 @@ export class SettingMessage {
                 this.clickDivUser();
         })
         $('.searchUserBar').addEventListener('keypress', (e) => {if (e.key === 'Enter') $('.searchName').click()})
-    }     
+    }
+    visualizationMsg(params){
+        if($('.colabHead') && $('.colabHead').getAttribute('data-id').split('_')[1] == params.user)$('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notification.svg')
+    }
+    notificationMsg(){
+        $('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notify.svg')
+    }
     scrollMsg(){
         $('.msg_out').addEventListener('scroll', () => {
             const sectionPage = $_all('.msg_out section')
