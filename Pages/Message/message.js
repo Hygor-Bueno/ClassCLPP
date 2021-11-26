@@ -5,6 +5,8 @@ import { SettingMessage } from "./settingMessage.js";
 import { UsefulComponents } from "../../Util/usefulComponents.js";
 import { $ } from "../../Util/compressSyntaxe.js";
 import { UserAccess } from "../../Connection/UserAccess.js";
+import { Users } from "../../Components/objects/user.js";
+import { ListUser } from "../../Components/listUser.js";
 
 //Modificado por Hygor: Correção do templateSearchUser 
 export class MessagePage extends SettingMessage {
@@ -12,11 +14,10 @@ export class MessagePage extends SettingMessage {
     employeePhoto = new EmployeePhoto();
     messageList = new MessageList();
     usefulComponents = new UsefulComponents();
-    
+
     async main() {
         var userAccess = new UserAccess
-        var employeeAccess = await userAccess.get('&application_id=7&web',false);
-        console.log(employeeAccess.data)
+        var employeeAccess = await userAccess.get('&application_id=7&web', false);
         const id = localStorage.getItem('id')
         const getInfo = await this.message.get("&id=" + id)
         await this.messageList.separator(getInfo)
@@ -35,7 +36,7 @@ export class MessagePage extends SettingMessage {
                     ${this.userReceived(getInfo)}
                 </div>
                 <div class="templateSearchUser" style="display:none">
-                    ${this.userReceived(getInfo)}                    
+                    ${await this.methodUnited(employeeAccess)}                    
                 </div>
             </div>
             <div class="part2">
@@ -64,13 +65,18 @@ export class MessagePage extends SettingMessage {
                     <p>${this.usefulComponents.splitStringName(element.description, " ")}</p>
                 </div>
                 <div class="notifyMsg">
-                    <img class="imgNotify" src="${element.notification == 0 ? `./assets/images/notification.svg`:`./assets/images/notify.svg`}">
+                    <img class="imgNotify" src="${element.notification == 0 ? `./assets/images/notification.svg` : `./assets/images/notify.svg`}">
                 </div>
             </div>
             `
         )).join('')
     }
-    methodUnited(){
-
+    async methodUnited(id) {
+        let response = ""
+        const listUser = new ListUser;   
+        for (const iterator of id.data) {           
+            response+=(await listUser.main(iterator.id))
+        }
+        return response;
     }
 }
