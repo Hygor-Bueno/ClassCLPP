@@ -106,15 +106,5 @@ export class HomePage extends SettingHome {
             return object;
         }
     }
-    async upMsgReceived(getNotify) {
-        console.log(getNotify)
-        if (document.getElementById('bodyChDiv')) {
-            document.getElementById('bodyChDiv').insertAdjacentHTML('beforeend', await this.messageReceived());
-            this.settings();
-            if (document.getElementById('bodyMessageDiv') && document.querySelector('#bodyMessageDiv header').getAttribute('data-id') == getNotify.send_user) {
-                document.querySelector('#bodyMessageDiv section').remove()
-                document.querySelector('#bodyMessageDiv header').insertAdjacentHTML('afterend', await listMessage.bodyChat({ 'destiny': '&id_send=', 'id': getNotify.send_user }))
-            }
-        }
-    }
+    
 }

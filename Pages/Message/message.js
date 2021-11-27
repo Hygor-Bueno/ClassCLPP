@@ -57,6 +57,7 @@ export class MessagePage extends SettingMessage {
         return response;
     }
     userReceived(obj) {
+        console.log(obj);
         return obj.map((element) => (
             `
             <div class="divUser" id="${element.id_user ? 'sender_' + element.id_user : 'group_' + element.id_group}">

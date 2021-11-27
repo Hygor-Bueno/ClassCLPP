@@ -1,3 +1,4 @@
+/* PARTE RESPONSÁVEL POR FORMATAR O ESTILO DO FORMULÁRIO DO CHECKLIST */
 #formCheclist{
     display: flex;
     justify-content: space-between;
@@ -20,4 +21,10 @@
 }
 #groupFormDate{
     display: flex;
+}
+
+/* FORMATAÇÕES GERAIS DO CHECKLIST */
+#checkCreateDiv button{
+    border:none;
+    background:none;
 }

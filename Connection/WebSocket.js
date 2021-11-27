@@ -51,13 +51,28 @@ export class WebSocketCLPP {
             console.log(' ****** Você recebeu uma mensagem ****** ') 
             console.log('---------------------------------------------------')
             var home = new HomePage;
-            home.upMsgReceived(getNotify)   
+            home.upMsgReceived(getNotify,document.getElementById('bodyChDiv'))   
             console.log(getNotify)
             //Você recebeu uma mensagem... 
             if (getNotify.objectType == 'message') {
                 Msg.userReceived(await message.get("&id=" + id));
             }  
            
+        }
+    }
+    routerSettings(page,path){
+        page += path
+        console.log(page)
+        switch (page){
+            case 'home':
+
+                break;
+            case 'message':
+
+                break;
+            default:
+                console.error('Atenção, página não encontrada ou inválida!')
+                break;
         }
     }
     // "Eu visualizei a mensagem"

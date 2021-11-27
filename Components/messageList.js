@@ -87,6 +87,20 @@ export class MessageList {
         return response;
     }
     addMessage(local, message, classMessage) {
+        console.log(local)
         document.querySelector(local).insertAdjacentHTML('beforeend', `<div class="${classMessage}"><p>${message}</p></div>`)
+    }
+
+    async upMsgReceived(getNotify, local) {
+        console.log(getNotify, document.getElementById('bodyChDiv'))
+        if (document.getElementById('bodyChDiv')) {
+            document.getElementById('bodyChDiv').insertAdjacentHTML('beforeend', await this.messageReceived());
+            this.settings();
+            if (document.getElementById('bodyMessageDiv') && document.querySelector('#bodyMessageDiv header').getAttribute('data-id') == getNotify.send_user) {
+                document.querySelector('#bodyMessageDiv section').remove()
+                document.querySelector('#bodyMessageDiv header').insertAdjacentHTML('afterend', await listMessage.bodyChat({ 'destiny': '&id_send=', 'id': getNotify.send_user }))
+                document.querySelector('#bodyMessageDiv section').scrollTop = document.querySelector('#bodyMessageDiv section').scrollHeight;
+            }
+        }
     }
 }
