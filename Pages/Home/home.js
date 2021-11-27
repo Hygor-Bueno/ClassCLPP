@@ -20,7 +20,7 @@ export class HomePage extends SettingHome {
     message;
 
     async main() {
-        this.userJson = await employee.get(true);
+        this.userJson = await employee.get("&id=" + localStorage.getItem("id"),true);
         this.accessClpp = await userAccess.get('&application_id=7&web');
         let nameUser = usefulComponents.splitStringName(this.userJson.name, " ")
         let response =
