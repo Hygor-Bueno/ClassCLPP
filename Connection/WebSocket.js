@@ -11,15 +11,15 @@ export class WebSocketCLPP {
     connectWebSocket() {
         try {
             ws = new WebSocket('ws://192.168.0.99:9191')
-            ws.onopen =    () => {this.OnOpen()}
-            ws.onerror =   (ev) => {this.OnError(ev)}
-            ws.onclose =   () => {this.OnClose()}
-            ws.onmessage = (ev) => {this.OnMessage(ev);}
+            ws.onopen = () => { this.OnOpen() }
+            ws.onerror = (ev) => { this.OnError(ev) }
+            ws.onclose = () => { this.OnClose() }
+            ws.onmessage = (ev) => { this.OnMessage(ev); }
         } catch (error) {
             console.log(error, true)
         }
     }
-    OnOpen(){
+    OnOpen() {
         let jsonString = {
             auth: localStorage.getItem('token'),
             app_id: 7
@@ -30,45 +30,51 @@ export class WebSocketCLPP {
     OnError(ev) {
         console.log(ev.data, true)
     }
-    OnClose(){
-        setTimeout(()=>{this.connectWebSocket()}, 1000)
+    OnClose() {
+        setTimeout(() => { this.connectWebSocket() }, 1000)
         isConnected = false
     }
-    async OnMessage(ev) {
-        const Msg = new MessagePage;
-        const message = new Message();
+    async OnMessage(ev) {        
         if (ev.data.toString() == "__pong__") {
             pong()
             return
         }
         let getNotify = JSON.parse(ev.data)
         // console.log(getNotify)
-        //Mensagem vizualizada
         if (getNotify.objectType == 'notification') {
             console.log(' ****** vizualizaram sua mensagem ****** ')
-            Msg.visualizationMsg(getNotify)
-        }else if (getNotify.message) {
-            console.log(' ****** Você recebeu uma mensagem ****** ') 
-            console.log('---------------------------------------------------')
-            var home = new HomePage;
-            home.upMsgReceived(getNotify,document.getElementById('bodyChDiv'))   
-            console.log(getNotify)
-            //Você recebeu uma mensagem... 
-            if (getNotify.objectType == 'message') {
-                Msg.userReceived(await message.get("&id=" + id));
-            }  
-           
+            this.routerSettingsWs(localStorage.getItem('router'), '_viewed',getNotify)
+        } else if (getNotify.message) {
+            console.log(' ****** Você recebeu uma mensagem ****** ')
+            this.routerSettingsWs(localStorage.getItem('router'), '_received',getNotify)
         }
     }
-    routerSettings(page,path){
+    messageViewed(param){
+        const Msg = new MessagePage;
+        Msg.visualizationMsg(param)
+    }
+    async messageReceived(param){
+        const Msg = new MessagePage;
+        const message = new Message();
+        Msg.userReceived(await message.get("&id=" + id));
+    }
+    homeReceived(param){
+        var home = new HomePage;
+        home.upMsgReceived(param, document.getElementById('bodyChDiv'))
+    }
+    routerSettingsWs(page, path,param) {
+        console.log(page)
         page += path
         console.log(page)
-        switch (page){
-            case 'home':
-
+        switch (page) {
+            case 'message_viewed':
+                this.messageViewed(param);
                 break;
-            case 'message':
-
+            case 'message_received':
+                this.messageReceived(param);
+                break;
+            case 'home_received':
+                this.homeReceived(param);
                 break;
             default:
                 console.error('Atenção, página não encontrada ou inválida!')
