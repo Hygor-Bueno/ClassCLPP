@@ -31,6 +31,7 @@ export class SettingHome {
             let split = usefulComponentsSplit.splitString(iterator.getAttribute('id'), '_')
             let objectSenders = usefulComponents.createObject([
                     ['id', split[1]],
+                    ['temp',split],
                     ['name', $(`#${iterator.getAttribute('id')} p`).innerText],
                     ['destiny', `&id_${split[0]}=`]
                 ])
@@ -39,25 +40,29 @@ export class SettingHome {
     }
 
     eventNotifyMessage(iterator, objectSenders) {
+        let temp = objectSenders.temp        
+        delete objectSenders['temp']
         iterator.addEventListener('click', async () => {
             this.openMessage();                                                                                                             // Abre a tela de chat
             if (document.querySelector('#message :first-child')) document.querySelector('#message :first-child').remove();                  // se já houver um susário carregado na tela, ele remove esse usuário.
             getB_id('message').insertAdjacentHTML('beforeend', await listMessage.chatCLPP(objectSenders, 1))                                // adiciono o template chat dentro da área de mensagens.
             getB_id(`${iterator.getAttribute('id')}`).remove()                                                                              // remove o usuário da lista de mensagens não vizualizadas.
-            this.settingsButtonChat(objectSenders.id)                                                                                       // Atribui as funcionalidades aos botões do Chat.
+            this.settingsButtonChat(temp)                                                                                       // Atribui as funcionalidades aos botões do Chat.
             document.querySelector('#bodyMessageDiv section').scrollTop = document.querySelector('#bodyMessageDiv section').scrollHeight;   // Faz com que o Scroll preaneça sempre em baixo.
             webSocket.informPreview(objectSenders.id)                                                                                       //informa so websocket que o usuário abriu uma mensagem, passando por parâmento o destinatário da mensagem.
         })
     }
     settingsButtonChat(idSender) {
         getB_id('buttonReply').addEventListener('click', () => this.closeMessage());
-        getB_id('buttonSend').addEventListener('click',  () => {this.buttonSend(idSender)});
+        getB_id('buttonSend').addEventListener('click',  () => {this.buttonSend(idSender,'#bodyMessageDiv section')});
         getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
-    async buttonSend(idSender, local, localScroll) {       
+    async buttonSend(idSender, local, localScroll) { 
+        console.log(idSender, local, localScroll)      
         let input = getB_id('inputSend')
         if (validator.minLength(input.value, 0) && validator.maxLength(input.value, 200)) {
             let objectSend = [['id_sender', localStorage.getItem('id')], [idSender[0] == 'group'?"id_group":`id_user`, idSender[1]], ['message', input.value], ['type', '1']]
+            console.log(objectSend)
             let req = await messages.post(usefulComponents.createObject(objectSend), true)
             listMessage.addMessage(local, input.value, 'messageSend')
             webSocket.informSending(req.last_id, idSender[1])

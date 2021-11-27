@@ -126,3 +126,9 @@ body{
     color: #fff;
     background-color: #ee0000aa;
 }
+
+.ErrorPageDefault{
+    color: #999;
+    width: 100%;
+    height: 100%;
+}
