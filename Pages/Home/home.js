@@ -11,7 +11,7 @@ var usefulComponents = new UsefulComponents;
 var checklist = new Checklist
 var userAccess = new UserAccess;
 var message = new Message;
-var listMessage = new MessageList()
+var listMessage = new MessageList;
 
 export class HomePage extends SettingHome {
     userJson;
