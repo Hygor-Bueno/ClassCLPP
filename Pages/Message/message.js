@@ -66,7 +66,7 @@ export class MessagePage extends SettingMessage {
                     <p>${this.usefulComponents.splitStringName(element.description, " ")}</p>
                 </div>
                 <div class="notifyMsg">
-                    <img class="imgNotify" src="${element.notification == 0 ? `./assets/images/notification.svg` : `./assets/images/notify.svg`}">
+                    <img class="imgNotify" src="${element.notification == 0 ? `assets/images/notification.svg` : `assets/images/notify.svg`}">
                 </div>
             </div>
             `

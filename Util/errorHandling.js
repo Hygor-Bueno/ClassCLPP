@@ -5,13 +5,11 @@ import { Translate } from "./translate.js";
 import { GeneralModal } from "../Components/generalModal/modal_geral.js";
 import { closeModal } from "../Util/compressSyntaxe.js"
 
-export class ErrorHandling {
-    
+export class ErrorHandling {    
     main(error) {
         let translate = new Translate();
         let modal = new GeneralModal();
         let responseTranslate = translate.main(error)
-
         switch (error) {
             case "Authorization denied":
                 let body =  document.querySelector('body')
@@ -37,7 +35,6 @@ export class ErrorHandling {
                 break;
         }
     }
-
     defaultPassword() {
         let modalPassDefault = new PassDefault();
         let updatePass = new Login();
