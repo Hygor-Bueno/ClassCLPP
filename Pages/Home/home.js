@@ -106,12 +106,14 @@ export class HomePage extends SettingHome {
             return object;
         }
     }
-    async upMsgReceived(getNotify, local) {
+    async upMsgReceived(getNotify) {
         console.log(getNotify)
         if (document.getElementById('bodyChDiv')) {
+            console.log('Entrei no primeiro if')
             document.getElementById('bodyChDiv').insertAdjacentHTML('beforeend', await this.messageReceived());
             this.settings();
             if (document.getElementById('bodyMessageDiv') && document.querySelector('#bodyMessageDiv header').getAttribute('data-id') == getNotify.send_user) {
+                console.log('Entrei no segundo if')
                 document.querySelector('#bodyMessageDiv section').insertAdjacentHTML('beforeend', `<div class= "messageReceived"><p>${getNotify.message}</p></div>`)
                 document.querySelector('#bodyMessageDiv section').scrollTop = document.querySelector('#bodyMessageDiv section').scrollHeight;
             }
