@@ -3,7 +3,6 @@ import { EmployeePhoto } from "./EmployeePhoto.js"
 
 export class Employee extends EmployeePhoto{
     async get(params, err){ 
-        console.log(params)
         typeof params === "string" || typeof params === "object" ? params : err = params;
         let URL = localStorage.getItem("server") + "/Controller/CCPP/Employee.php?app_id=7&AUTH=" + localStorage.getItem("token")+ params;
         let req 
