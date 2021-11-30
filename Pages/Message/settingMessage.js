@@ -6,11 +6,12 @@ import { SettingHome } from "../Home/settingHome.js";
 import { Message } from "../../Connection/Message.js";
 import { ListUser } from "../../Components/listUser.js";
 import { WebSocketCLPP } from "../../Connection/WebSocket.js";
-
+import { UserAccess } from "../../Connection/UserAccess.js";
 
 const id = localStorage.getItem("id")
 
 export class SettingMessage {
+    userAccess = new UserAccess;
     validation = new Validation;
     messageList = new MessageList;
     usefulComponents = new UsefulComponents;
@@ -18,17 +19,20 @@ export class SettingMessage {
     message = new Message;
     ws = new WebSocketCLPP;
     listUser = new ListUser;
+    employeeAccess;
+    templateUser; 
     divUserAll;
     pages=1;
     chatIdSender;
     chatIdPage;
     chatScroll;
 
+    //await this.message.get("&id=" + id),false
     async setting() {
         this.clickDivUser()
         this.searchUser()
         this.scrollMsg()
-        this.searchName(await this.message.get("&id=" + id),false)
+        this.searchName()
         getB_id('buttonSend').addEventListener('click', ()=> {this.settingHome.buttonSend(this.chatIdSender,  this.chatIdPage,  this.chatScroll), this.notificationMsg()});
         getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
@@ -66,23 +70,33 @@ export class SettingMessage {
         $('.searchUser').addEventListener('click', async () => {
             if ($('.user_in').style.display == 'flex') {
                 $('.user_in').setAttribute('style', 'display:none')
-                $('.templateSearchUser').setAttribute('style', 'display:flex')
+                $('.templateSearchUser').setAttribute('style', 'display:flex')               
                 this.clickDivUser();
             } else {
                 $('.user_in').setAttribute('style', 'display:flex')
                 $('.templateSearchUser').setAttribute('style', 'display:none')
             }
         })
-    } 
-    searchName(obj){
+    }
+    createListUser(){
+        let nameArray =[]
+        const divArray = document.querySelectorAll('.templateSearchUser .divUser')
+        for (let index = 0; index < divArray.length; index++) {
+            nameArray.push({'name':$(`#${divArray[index].getAttribute('id')} p`).innerText, 'id': divArray[index].getAttribute('id').replace('user_', ' ')})
+        }
+        return nameArray
+    }
+    searchName(){
         $('.searchName').addEventListener('click', async () => {
-                $('.templateSearchUser').innerHTML = " "
-                let searchName = $('.searchUserBar').value
-                let findName = obj.filter(valor => valor.description.toLowerCase().includes(searchName.toLowerCase()))
-                $('.user_in').setAttribute('style', 'display:none')
-                $('.templateSearchUser').setAttribute('style', 'display:flex')
-                $('.templateSearchUser').insertAdjacentHTML("afterbegin", await this.listUser.main(findName)) 
-                this.clickDivUser();
+            let searchName = $('.searchUserBar').value
+            let findName = this.createListUser().filter(valor => valor.name.toLowerCase().includes(searchName.toLowerCase()))
+            $('.user_in').setAttribute('style', 'display:none')
+            $('.templateSearchUser').innerHTML = " "
+            $('.templateSearchUser').setAttribute('style', 'display:flex')
+            for(let i = 0; i < findName.length; i++) {                
+               if(!findName[i].id.includes(localStorage.getItem('id')))  $('.templateSearchUser').insertAdjacentHTML("afterbegin", await this.listUser.main(findName[i].id)) 
+            }
+            this.clickDivUser();
         })
         $('.searchUserBar').addEventListener('keypress', (e) => {if (e.key === 'Enter') $('.searchName').click()})
     }
@@ -91,6 +105,13 @@ export class SettingMessage {
     }
     notificationMsg(){
         $('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notify.svg')
+    }
+    async methodUnited(id) {
+        let response = "" 
+        for (const iterator of id.data) {           
+            response+=(await this.listUser.main(iterator.id))
+        }
+        return response;
     }
     scrollMsg(){
         $('.msg_out').addEventListener('scroll', () => {

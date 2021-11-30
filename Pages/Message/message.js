@@ -16,11 +16,10 @@ export class MessagePage extends SettingMessage {
     usefulComponents = new UsefulComponents();
 
     async main() {
-        var userAccess = new UserAccess
-        var employeeAccess = await userAccess.get('&application_id=7&web', false);
         const id = localStorage.getItem('id')
         const getInfo = await this.message.get("&id=" + id)
         await this.messageList.separator(getInfo)
+        this.employeeAccess = await this.userAccess.get('&application_id=7&web', false);
 
         let response =
             `
@@ -35,8 +34,8 @@ export class MessagePage extends SettingMessage {
                 <div class="user_in" style="display:flex">
                     ${this.userReceived(getInfo)}
                 </div>
-                <div class="templateSearchUser" style="display:none">
-                    ${await this.methodUnited(employeeAccess)}                    
+                <div class="templateSearchUser" style="display:none"> 
+                    ${await this.methodUnited(this.employeeAccess)}           
                 </div>
             </div>
             <div class="part2">
@@ -57,7 +56,6 @@ export class MessagePage extends SettingMessage {
         return response;
     }
     userReceived(obj) {
-        console.log(obj);
         return obj.map((element) => (
             `
             <div class="divUser" id="${element.id_user ? 'sender_' + element.id_user : 'group_' + element.id_group}">
@@ -71,13 +69,5 @@ export class MessagePage extends SettingMessage {
             </div>
             `
         )).join('')
-    }
-    async methodUnited(id) {
-        let response = ""
-        const listUser = new ListUser;   
-        for (const iterator of id.data) {           
-            response+=(await listUser.main(iterator.id))
-        }
-        return response;
     }
 }
