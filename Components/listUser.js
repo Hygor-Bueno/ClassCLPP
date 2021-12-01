@@ -1,21 +1,24 @@
 import { UsefulComponents } from "../Util/usefulComponents.js"
 import { MessageList } from "./messageList.js";
+import { Users } from "./objects/user.js";
 
 export class ListUser {
     messageList = new MessageList;
     usefulComponents = new UsefulComponents;
-    async main(obj) {
-        await this.messageList.separator(obj)
-        return obj.map((element) => (
-            `
-            <div class="divUser" id="${element.id_user ? 'user_' + element.id_user : 'group_' + element.id_group}">
+    
+    async main(id_user) {
+        const user=  new Users(id_user);
+        await user.populate();
+        let data = `
+        <div class="divUser" id="user_${user.getId_user()}">
             <div class="divColab">
-            <img id="photoUser" src="${element.photo.src}"/>
-            <p>${this.usefulComponents.splitStringName(element.description, " ")}</p>
+            <img id="photoUser" src="${user.getPhoto().src}"/>
+            <p>${user.getName()}</p>
             </div>
-            <div class="notifyMsg"></div>
-            </div>
-            `
-        )).join('')
+        </div>                
+        ` 
+        return  data         
     }
+
+    
 }

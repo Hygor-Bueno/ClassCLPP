@@ -168,7 +168,9 @@ b {
 #bodyCheckDiv {
     display: grid;
     width: 100%;
-    justify-content: space-around;
+    height: 89%;
+    justify-content: center;
+    align-items: center;
     grid-template-areas: "cardCheck cardCheck cardCheck";
 }
 .cardCheck header {

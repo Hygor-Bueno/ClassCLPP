@@ -1,10 +1,9 @@
 export class RecordPage{
     
-    main(){
-        document.getElementById('message').setAttribute('style', 'display:none')
+    main(){       
         let response = 
         `
-        <h1>Pagina de Relatórios</h1>        
+            <h1>Pagina de Relatórios</h1>        
         `
         return response;
     }

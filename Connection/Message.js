@@ -8,21 +8,19 @@ export class Message {
         this.settingUrl('/Controller/CLPP/Message.php?app_id=7&AUTH=', params)
         let req;
         await fetch(this.URL)
-            .then(response => response.json())
-            .then(body => {
-                if (body.error) throw new Error(body.message)
-                req = body.data
-            })
-            .catch(erro => {
-                console.log(erro)
-                if (err) errorHandling.main(erro)
-            })
+                .then(response => response.json())
+                .then(body => {
+                    if (body.error) throw new Error(body.message)
+                    req = body.data
+                })
+                .catch(erro => {
+                    console.log(erro)
+                    if (err) errorHandling.main(erro)
+                })
         return req;
     }
     async post(params, err) {
-        console.log(params, err)
-        typeof params === "string" || typeof params === "object" ? params : err = params;
-        console.log(typeof params)
+        typeof params === "string" || typeof params === "object" ? params=params : err = params;
         let req
         this.settingUrl('/Controller/CLPP/Message.php?app_id=7&AUTH=');
         await fetch(this.URL, {
@@ -34,10 +32,12 @@ export class Message {
             .then(body => {
                 if (body.error) throw Error(body.message)
                 req = body;
-            }).catch(error => { if (err) errorHandling.main(error) })
+                console.log(req)
+            }).catch(error => { console.log(error); if (error) errorHandling.main(error) })
         return req;
     }
     settingUrl(middlewer, params) {
+        if(!params) params = ""
         let server = localStorage.getItem('server');
         let token = localStorage.getItem('token');
         this.URL = server + middlewer + token + params
