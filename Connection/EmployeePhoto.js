@@ -16,4 +16,5 @@ export class EmployeePhoto {
             })
         return this.toConvert.convert(response);
     }
+    
 }

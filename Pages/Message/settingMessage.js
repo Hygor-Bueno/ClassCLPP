@@ -5,35 +5,33 @@ import { Validation } from "../../Util/validation.js";
 import { SettingHome } from "../Home/settingHome.js";
 import { Message } from "../../Connection/Message.js";
 import { ListUser } from "../../Components/listUser.js";
-import { WebSocketCLPP } from "../../Connection/WebSocket.js";
 
-
-const id = localStorage.getItem("id")
+const id = localStorage.getItem('id')
 
 export class SettingMessage {
-    validation = new Validation;
-    messageList = new MessageList;
-    usefulComponents = new UsefulComponents;
-    settingHome = new SettingHome;
-    message = new Message;
-    ws = new WebSocketCLPP;
+    validation = new Validation();
+    messageList = new MessageList();
+    usefulComponents = new UsefulComponents();
+    settingHome = new SettingHome();
+    message = new Message();
     listUser = new ListUser;
     divUserAll;
     pages=1;
+
     chatIdSender;
     chatIdPage;
     chatScroll;
-
     async setting() {
         this.clickDivUser()
         this.searchUser()
-        this.scrollMsg()
         this.searchName(await this.message.get("&id=" + id),false)
-        getB_id('buttonSend').addEventListener('click', ()=> {this.settingHome.buttonSend(this.chatIdSender,  this.chatIdPage,  this.chatScroll), this.notificationMsg()});
+        this.scrollMsg()
+        getB_id('buttonSend').addEventListener('click', ()=>this.settingHome.buttonSend(this.chatIdSender,  this.chatIdPage,  this.chatScroll));
         getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
     clickDivUser() {
-        $_all('.divUser').forEach(element =>
+        this.divUserAll = $_all('.divUser')
+        this.divUserAll.forEach(element =>
             element.addEventListener('click', async () => {
                 this.pages=1;
                 this.changeHeader(element)
@@ -43,17 +41,18 @@ export class SettingMessage {
                 await this.chargePageMsg(this.usefulComponents.splitString(element.getAttribute('id'), '_'))
                 $(`#${element.getAttribute('id')} .notifyMsg img`).setAttribute('src', './assets/images/notification.svg')
                 $('.msg_out ').scrollTop = $('.msg_out ').scrollHeight;
-                this.chatIdSender = this.usefulComponents.splitString($('.colabHead ').getAttribute('data-id'), "_");
-                this.chatIdPage = `#${$('.msg_out section').getAttribute('id')}`;
-                this.chatScroll = `.${$('.msg_out ').getAttribute('class')}`;
-                this.ws.informPreview(this.chatIdSender)
+                this.chatIdSender=this.usefulComponents.splitString($('.colabHead ').getAttribute('data-id'), "_")[1];
+                this.chatIdPage=`#${$('.msg_out section').getAttribute('id')}`;
+                this.chatScroll=`.${$('.msg_out ').getAttribute('class')}`;
             }) 
         )
     }
-    async chargePageMsg(split) {
-        let object = split[0] == 'sender' ? { 'id': split[1], 'destiny': '&id_send=' } : { 'id': split[1], 'destiny': '&id_group=' };
+    async chargePageMsg(element) {
+        let split = element
+        let object = split[0] == 'user' ? { 'id': split[1], 'destiny': '&id_send=' } : { 'id': split[1], 'destiny': '&id_group=' };
         $('.msg_out').insertAdjacentHTML('beforeend', await this.messageList.bodyChat(object,this.pages))
-        $('.msg_out section').setAttribute('id', `pages_${this.pages}`) 
+        $('.msg_out section').setAttribute('id', `pages_${this.pages}`)
+        
     }
     changeHeader(element) {
         $('.colabHead').setAttribute('data-id', element.getAttribute('id'))
@@ -85,12 +84,6 @@ export class SettingMessage {
                 this.clickDivUser();
         })
         $('.searchUserBar').addEventListener('keypress', (e) => {if (e.key === 'Enter') $('.searchName').click()})
-    }
-    visualizationMsg(params){
-        if($('.colabHead') && $('.colabHead').getAttribute('data-id').split('_')[1] == params.user)$('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notification.svg')
-    }
-    notificationMsg(){
-        $('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notify.svg')
     }
     scrollMsg(){
         $('.msg_out').addEventListener('scroll', () => {
