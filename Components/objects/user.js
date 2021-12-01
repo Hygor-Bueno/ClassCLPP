@@ -16,11 +16,10 @@ export class Users {
     async populate(){
         let employee = new Employee();  
         let usefulComponents = new UsefulComponents();      
-        let object = await employee.get("&id=" + this.id_user);
+        let object = await employee.get("&id=" + this.id_user,true);
         this.id_user = object.id;
         this.name = usefulComponents.splitStringName(object.name, " ");
         this.photo = object.photo;
-        console.log(this.id_user)
     }
     getId_user() { return this.id_user; }
     getName() { return this.name; }
