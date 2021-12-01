@@ -85,7 +85,7 @@ export class WebSocketCLPP {
     informPreview(idSender) {
         let jsonString = {
             type: 3,
-            send_id: idSender[1]
+            send_id: idSender
         }
         ws.send(JSON.stringify(jsonString))
     }
