@@ -29,23 +29,24 @@ export class SettingMessage {
 
     //await this.message.get("&id=" + id),false
     async setting() {
+        this.clickSend()
         this.clickDivUser()
         this.searchUser()
         this.scrollMsg()
         this.searchName()
+    }
+    clickSend(){
         getB_id('buttonSend').addEventListener('click', ()=> {this.settingHome.buttonSend(this.chatIdSender,  this.chatIdPage,  this.chatScroll), this.notificationMsg()});
         getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
     clickDivUser() {
-        $_all('.divUser').forEach(element =>
-            element.addEventListener('click', async () => {
+        $_all('.divUser').forEach(element => element.addEventListener('click', async () => {
                 this.pages=1;
                 this.changeHeader(element)
                 $('.user_in').setAttribute('style', 'display:flex')
                 $('.templateSearchUser').setAttribute('style', 'display:none')
                 $('.msg_out :first-child') && $('.msg_out section').remove()
                 await this.chargePageMsg(this.usefulComponents.splitString(element.getAttribute('id'), '_'))
-                // $(`#${element.getAttribute('id')} .notifyMsg img`).setAttribute('src', './assets/images/notification.svg')
                 $('.msg_out ').scrollTop = $('.msg_out ').scrollHeight;
                 this.chatIdSender = this.usefulComponents.splitString($('.colabHead ').getAttribute('data-id'), "_");
                 this.chatIdPage = `#${$('.msg_out section').getAttribute('id')}`;
@@ -62,7 +63,6 @@ export class SettingMessage {
     changeHeader(element) {
         $('.colabHead').setAttribute('data-id', element.getAttribute('id'))
         $('.colabHead').innerHTML = element.innerHTML
-        console.log(element.getAttribute('id'))
         $(`.part2 .notifyMsg`) && $(`.part2 .notifyMsg`).remove();
         $('.part2 .colabHead').insertAdjacentHTML('beforeend',` 
         <div class="notifyMsg">
@@ -108,6 +108,10 @@ export class SettingMessage {
     }
     notificationMsg(){
         $('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notify.svg')
+    }
+    notificationUser(par){
+        
+        if(par.notification == 1) $(`.user_in #sender_${par.id_user} img`).setAttribute('src', './assets/images/notify.svg')
     }
     async methodUnited(id) {
         let response = "" 
