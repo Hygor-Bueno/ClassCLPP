@@ -6,7 +6,6 @@ var ws
 var isConnected = false;
 const id = localStorage.getItem('id')
 
-
 export class WebSocketCLPP {
     connectWebSocket() {
         try {

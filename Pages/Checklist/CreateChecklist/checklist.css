@@ -1,30 +1,125 @@
 /* PARTE RESPONSÁVEL POR FORMATAR O ESTILO DO FORMULÁRIO DO CHECKLIST */
-#formCheclist{
+#formCheclist {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: aquamarine;  
-    margin: 5px;
+    border-bottom: 1px solid rgb(178, 178, 178);
+    width:99%;
+    margin: 5px 0;
 }
-#formCheclist button{
+
+#formCheclist button {
     margin: 0 5px;
 }
-#groupForm{
+
+#groupForm {
     display: flex;
+    padding-bottom: 5px;
 }
-#groupFormDate{
+#groupButtons{
+    padding-bottom: 5px;
+}
+
+#groupFormDate {
     display: flex;
     align-items: center;
 }
-#groupFormDate input{
+
+#groupFormDate input {
     margin: 0 5px;
 }
-#groupFormDate{
+
+#groupFormDate {
     display: flex;
 }
 
 /* FORMATAÇÕES GERAIS DO CHECKLIST */
-#checkCreateDiv button{
-    border:none;
-    background:none;
+#checkCreateDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 97%;
+    width:100%;
+}
+
+#checkCreateDiv button {
+    border: none;
+    background: none;
+}
+
+
+/*CORPO DO CHECKLIST */
+#bodyCheckEditable {
+    display: flex;
+    flex-direction: row;
+    width:99%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+/*FORMATAÇÃO DO SECTION CHECKLIST */
+#questionCreated {
+    border-right: 1px solid rgb(178, 178, 178);
+    margin-right:5px;
+    width: 60%;
+    height: 100%;
+}
+
+/*FORMATAÇÃO DO ASIDE CHECKLIST */
+#bodyCheckEditable aside {
+    height: 100%;
+    width: 40%;
+}
+
+/*CORPO DA ASIDE CHECKLIST */
+#editableQuestion header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background:WHITE;
+    padding: 5px;
+}
+
+#typeQuestion{
+    padding:5px;    
+}
+#headerQuestion{   
+    margin-top:10px; 
+    display: flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:5px;
+    background: white;
+    border-bottom: 1px solid rgb(178, 178, 178);
+}
+#headerQuestion input{
+    margin-left: 16px;
+}
+
+#bodyQuestion{ 
+    background: white; 
+    padding:5px;
+}
+
+.sectionOption{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    
+}
+.footerOption{
+    border-bottom: 1px solid rgb(178, 178, 178);
+    margin-bottom: 5px;
+}
+
+.footerOption {
+    font-size: 14px;
+    margin: 5px 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+.checkPhoto, .checkObservation{
+    margin: 5px;
 }
