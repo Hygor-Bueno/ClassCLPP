@@ -52,9 +52,10 @@ export class WebSocketCLPP {
         Msg.visualizationMsg(param)
     }
     async messageReceived(param){
-        const Msg = new MessagePage;
+        const msg = new MessagePage;
         const message = new Message();
         // Msg.userReceived(await message.get("&id=" + id));
+        this.msg.notificationUser(await message.get("&id=" + id))
     }
     homeReceived(param){
         var home = new HomePage;
@@ -67,7 +68,6 @@ export class WebSocketCLPP {
                 this.messageViewed(param);
                 break;
             case 'message_received':
-                console.log('Aqui',param)
                 this.messageReceived(param);
                 break;
             case 'home_received':
@@ -80,7 +80,7 @@ export class WebSocketCLPP {
     }
     // "Eu visualizei a mensagem"
     informPreview(idSender) {
-        let jsonString = {}
+        const jsonString = {}
         jsonString.type = 3;
         jsonString[idSender[0] == 'sender' ? 'send_id': 'id_group'] = idSender[1]
         ws.send(JSON.stringify(jsonString))
@@ -92,7 +92,6 @@ export class WebSocketCLPP {
             send_id: idUserSend,
             last_id: idMessage
         }
-        console.log(jsonString)
         ws.send(JSON.stringify(jsonString))
     }
 }
