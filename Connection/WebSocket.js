@@ -9,7 +9,7 @@ const id = localStorage.getItem('id')
 export class WebSocketCLPP {
     connectWebSocket() {
         try {
-            ws = new WebSocket('ws://192.168.0.99:9191')
+            ws = new WebSocket('ws://192.168.0.99:9193')
             ws.onopen = () => { this.OnOpen() }
             ws.onerror = (ev) => { this.OnError(ev) }
             ws.onclose = () => { this.OnClose() }
