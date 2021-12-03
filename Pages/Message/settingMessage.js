@@ -62,10 +62,10 @@ export class SettingMessage {
     changeHeader(element) {
         $('.colabHead').setAttribute('data-id', element.getAttribute('id'))
         $('.colabHead').innerHTML = element.innerHTML
-        $('.colabHead .notifyMsg img').setAttribute('src','./assets/images/notification.svg')
+        //$('.colabHead .notifyMsg img').setAttribute('src','./assets/images/notification.svg')
     }
     searchUser() {
-        const getAllNotify =  document.querySelectorAll('.templateSearchUser .notifyMsg');
+        const getAllNotify =  $_all('.templateSearchUser .notifyMsg img');
         getAllNotify.forEach(a => a.remove());
         $('.searchUser').addEventListener('click', async () => {
             if ($('.user_in').style.display == 'flex') {
@@ -80,7 +80,7 @@ export class SettingMessage {
     }
     createListUser(){
         let nameArray =[]
-        const divArray = document.querySelectorAll('.templateSearchUser .divUser')
+        const divArray = $_all('.templateSearchUser .divUser')
         for (let index = 0; index < divArray.length; index++) {
             nameArray.push({'name':$(`#${divArray[index].getAttribute('id')} p`).innerText, 'id': divArray[index].getAttribute('id').replace('user_', ' ')})
         }

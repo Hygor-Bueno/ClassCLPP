@@ -12,8 +12,11 @@ export class ListUser {
         let data = `
         <div class="divUser" id="user_${user.getId_user()}">
             <div class="divColab">
-            <img id="photoUser" src="${user.getPhoto().src}"/>
-            <p>${user.getName()}</p>
+                <img id="photoUser" src="${user.getPhoto().src}"/>
+                <p>${user.getName()}</p>
+            </div>
+            <div class="notifyMsg">
+                <img class="imgNotify" src=./assets/images/notification.svg>
             </div>
         </div>                
         ` 

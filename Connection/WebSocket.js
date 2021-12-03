@@ -40,7 +40,6 @@ export class WebSocketCLPP {
             return
         }
         let getNotify = JSON.parse(ev.data)
-        // console.log(getNotify)
         if (getNotify.objectType == 'notification') {
             console.log(' ****** vizualizaram sua mensagem ****** ')
             this.routerSettingsWs(localStorage.getItem('router'), '_viewed',getNotify)
@@ -62,10 +61,8 @@ export class WebSocketCLPP {
         var home = new HomePage;
         home.upMsgReceived(param, document.getElementById('bodyChDiv'))
     }
-    routerSettingsWs(page, path,param) {
-        console.log(page)
+    routerSettingsWs(page, path, param) {
         page += path
-        console.log(page)
         switch (page) {
             case 'message_viewed':
                 this.messageViewed(param);
@@ -85,7 +82,7 @@ export class WebSocketCLPP {
     informPreview(idSender) {
         let jsonString = {
             type: 3,
-            send_id: idSender[1]
+            send_id: idSender
         }
         ws.send(JSON.stringify(jsonString))
     }
