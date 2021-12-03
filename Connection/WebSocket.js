@@ -9,7 +9,7 @@ const id = localStorage.getItem('id')
 export class WebSocketCLPP {
     connectWebSocket() {
         try {
-            ws = new WebSocket('ws://192.168.0.99:9191')
+            ws = new WebSocket('ws://192.168.0.99:9193')
             ws.onopen = () => { this.OnOpen() }
             ws.onerror = (ev) => { this.OnError(ev) }
             ws.onclose = () => { this.OnClose() }
@@ -54,7 +54,7 @@ export class WebSocketCLPP {
     async messageReceived(param){
         const Msg = new MessagePage;
         const message = new Message();
-        Msg.userReceived(await message.get("&id=" + id));
+        // Msg.userReceived(await message.get("&id=" + id));
     }
     homeReceived(param){
         var home = new HomePage;
@@ -67,6 +67,7 @@ export class WebSocketCLPP {
                 this.messageViewed(param);
                 break;
             case 'message_received':
+                console.log('Aqui',param)
                 this.messageReceived(param);
                 break;
             case 'home_received':
@@ -79,10 +80,9 @@ export class WebSocketCLPP {
     }
     // "Eu visualizei a mensagem"
     informPreview(idSender) {
-        let jsonString = {
-            type: 3,
-            send_id: idSender
-        }
+        let jsonString = {}
+        jsonString.type = 3;
+        jsonString[idSender[0] == 'sender' ? 'send_id': 'id_group'] = idSender[1]
         ws.send(JSON.stringify(jsonString))
     }
     // Eu estou enviando a mensagem  
@@ -92,6 +92,7 @@ export class WebSocketCLPP {
             send_id: idUserSend,
             last_id: idMessage
         }
+        console.log(jsonString)
         ws.send(JSON.stringify(jsonString))
     }
 }

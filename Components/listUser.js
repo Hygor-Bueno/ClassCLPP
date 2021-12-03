@@ -15,9 +15,6 @@ export class ListUser {
                 <img id="photoUser" src="${user.getPhoto().src}"/>
                 <p>${user.getName()}</p>
             </div>
-            <div class="notifyMsg">
-                <img class="imgNotify" src=./assets/images/notification.svg>
-            </div>
         </div>                
         ` 
         return  data         

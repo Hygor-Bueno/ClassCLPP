@@ -45,7 +45,7 @@ export class SettingMessage {
                 $('.templateSearchUser').setAttribute('style', 'display:none')
                 $('.msg_out :first-child') && $('.msg_out section').remove()
                 await this.chargePageMsg(this.usefulComponents.splitString(element.getAttribute('id'), '_'))
-                $(`#${element.getAttribute('id')} .notifyMsg img`).setAttribute('src', './assets/images/notification.svg')
+                // $(`#${element.getAttribute('id')} .notifyMsg img`).setAttribute('src', './assets/images/notification.svg')
                 $('.msg_out ').scrollTop = $('.msg_out ').scrollHeight;
                 this.chatIdSender = this.usefulComponents.splitString($('.colabHead ').getAttribute('data-id'), "_");
                 this.chatIdPage = `#${$('.msg_out section').getAttribute('id')}`;
@@ -62,11 +62,14 @@ export class SettingMessage {
     changeHeader(element) {
         $('.colabHead').setAttribute('data-id', element.getAttribute('id'))
         $('.colabHead').innerHTML = element.innerHTML
-        //$('.colabHead .notifyMsg img').setAttribute('src','./assets/images/notification.svg')
+        console.log(element.getAttribute('id'))
+        $(`.part2 .notifyMsg`) && $(`.part2 .notifyMsg`).remove();
+        $('.part2 .colabHead').insertAdjacentHTML('beforeend',` 
+        <div class="notifyMsg">
+            <img class="imgNotify" src=./assets/images/notification.svg>
+        </div>` )
     }
     searchUser() {
-        const getAllNotify =  $_all('.templateSearchUser .notifyMsg img');
-        getAllNotify.forEach(a => a.remove());
         $('.searchUser').addEventListener('click', async () => {
             if ($('.user_in').style.display == 'flex') {
                 $('.user_in').setAttribute('style', 'display:none')
