@@ -22,6 +22,7 @@ export class Routers {
 					result = new ChecklistCreatePage;
 					document.getElementById('StylePages').setAttribute('href',"./Pages/Checklist/CreateChecklist/checklist.css")
 					local.insertAdjacentHTML("beforeend", result.main());
+					result.setting();
 					break;
 				case 'checklistCreated':
 					result = new ChecklistCreatedPage;
