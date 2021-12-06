@@ -56,7 +56,8 @@ export class MessagePage extends SettingMessage {
         return response;
     }
     userReceived(obj) {
-        return obj.map((element) => (
+        let receiv = obj.sort((a,b) =>  {if(a.notification > b.notification) return -1})
+        return receiv.map((element) => (
             `
             <div class="divUser" id="${element.id_user ? 'sender_' + element.id_user : 'group_' + element.id_group}">
                 <div class="divColab">
