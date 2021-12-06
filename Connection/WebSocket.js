@@ -52,10 +52,10 @@ export class WebSocketCLPP {
         Msg.visualizationMsg(param)
     }
     async messageReceived(param){
+       
         const msg = new MessagePage;
         const message = new Message();
-        // Msg.userReceived(await message.get("&id=" + id));
-        this.msg.notificationUser(await message.get("&id=" + id))
+        msg.notificationUser(param)
     }
     homeReceived(param){
         var home = new HomePage;
