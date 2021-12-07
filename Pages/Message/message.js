@@ -14,13 +14,28 @@ export class MessagePage extends SettingMessage {
     employeePhoto = new EmployeePhoto();
     messageList = new MessageList();
     usefulComponents = new UsefulComponents();
+    userJson = {}
+    arrayUser = []
 
     async main() {
+        this.employeeAccess = await this.userAccess.get('&application_id=7&web', false);
         const id = localStorage.getItem('id')
         const getInfo = await this.message.get("&id=" + id)
         await this.messageList.separator(getInfo)
-        this.employeeAccess = await this.userAccess.get('&application_id=7&web', false);
-
+        getInfo.forEach(objs => { 
+            const user = new Users();
+            user.userInner(objs)
+            this.userJson[objs.id_user ? 'user_' + objs.id_user :'group_'+ objs.id_group] = user.classObj()
+            this.arrayUser.push(user.classObj())
+        })
+        
+        const user = new Users();
+        user.teste(this.userJson.user_148)
+        user.setNotification(1)
+        this.userJson.user_148 =user.classObj()
+        console.log(this.userJson.user_148)
+        console.log(this.arrayUser) 
+       
         let response =
             `
         <div class="containerMsg">
@@ -57,7 +72,7 @@ export class MessagePage extends SettingMessage {
     }
     userReceived(obj) {
         let receiv = obj.sort((a,b) =>  {if(a.notification > b.notification) return -1})
-        return receiv.map((element) => (
+        const conversation = receiv.map((element) => (
             `
             <div class="divUser" id="${element.id_user ? 'sender_' + element.id_user : 'group_' + element.id_group}">
                 <div class="divColab">
@@ -70,5 +85,6 @@ export class MessagePage extends SettingMessage {
             </div>
             `
         )).join('')
+        return conversation;
     }
 }

@@ -29,6 +29,7 @@ export class SettingMessage {
 
     //await this.message.get("&id=" + id),false
     async setting() {
+        this.notificationUser()
         this.clickSend()
         this.clickDivUser()
         this.searchUser()
@@ -112,11 +113,15 @@ export class SettingMessage {
     }
     notificationUser(par) {
         let response;
-        let each = par.send_user ? '#sender_' + par.send_user : '#group_' + par.send_group
-        $(each).querySelector('.imgNotify').setAttribute('src', './assets/images/notify.svg')
-        response = $(each)
-        $(each).remove();
-        $('.user_in').insertAdjacentHTML('afterbegin', `<div class="divUser" id="${response.getAttribute('id')}">${response.innerHTML}</div>`)
+        const user = $_all('.user_in .divUser')
+        user.forEach(user => {console.log(user)})
+
+
+        //let sel = par.send_user ? '#sender_' + par.send_user : '#group_' + par.send_group
+        // $(sel).querySelector('.imgNotify').setAttribute('src', './assets/images/notify.svg')
+        // response = $(sel)
+        // $(sel).remove();
+        //$('.user_in').insertAdjacentHTML('afterbegin', `<div class="divUser" id="${response.getAttribute('id')}">${response.innerHTML}</div>`)
     }
     async methodUnited(id) {
         let response = ""
