@@ -51,8 +51,7 @@ export class WebSocketCLPP {
         const Msg = new MessagePage;
         Msg.visualizationMsg(param)
     }
-    async messageReceived(param){
-       
+    async messageReceived(param){       
         const msg = new MessagePage;
         const message = new Message();
         msg.notificationUser(param)
