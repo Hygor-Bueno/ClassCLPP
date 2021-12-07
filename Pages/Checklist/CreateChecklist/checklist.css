@@ -4,7 +4,7 @@
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid rgb(178, 178, 178);
-    width:99%;
+    width: 99%;
     margin: 5px 0;
 }
 
@@ -16,7 +16,8 @@
     display: flex;
     padding-bottom: 5px;
 }
-#groupButtons{
+
+#groupButtons {
     padding-bottom: 5px;
 }
 
@@ -39,7 +40,7 @@
     flex-direction: column;
     align-items: center;
     height: 97%;
-    width:100%;
+    width: 100%;
 }
 
 #checkCreateDiv button {
@@ -52,7 +53,7 @@
 #bodyCheckEditable {
     display: flex;
     flex-direction: row;
-    width:99%;
+    width: 99%;
     height: 100%;
     align-items: center;
     justify-content: center;
@@ -61,7 +62,7 @@
 /*FORMATAÇÃO DO SECTION CHECKLIST */
 #questionCreated {
     border-right: 1px solid rgb(178, 178, 178);
-    margin-right:5px;
+    margin-right: 5px;
     width: 60%;
     height: 100%;
 }
@@ -73,42 +74,56 @@
 }
 
 /*CORPO DA ASIDE CHECKLIST */
-#editableQuestion header{
+#editableQuestion header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background:WHITE;
+    background: WHITE;
     padding: 5px;
 }
 
-#typeQuestion{
-    padding:5px;    
+#typeQuestion {
+    padding: 5px;
 }
-#headerQuestion{   
-    margin-top:10px; 
+
+#headerQuestion {
+    margin-top: 10px;
     display: flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:5px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
     background: white;
     border-bottom: 1px solid rgb(178, 178, 178);
 }
-#headerQuestion input{
+
+#headerQuestion input {
     margin-left: 16px;
 }
-
-#bodyQuestion{ 
-    background: white; 
-    padding:5px;
+#containerBodyQuestion{
+    overflow-y: auto;
+    height:360px;
 }
 
-.sectionOption{
+#bodyQuestion {
+    background: white;
+    padding: 5px;
+}
+
+.sectionOption {
     width: 100%;
     display: flex;
     justify-content: space-between;
-    
+
 }
-.footerOption{
+
+.optionEditable input {
+    background: none;
+}
+.inputEditable{
+    width:110px;
+    margin-right: 15px;
+}
+.footerOption {
     border-bottom: 1px solid rgb(178, 178, 178);
     margin-bottom: 5px;
 }
@@ -120,6 +135,19 @@
     flex-direction: row;
     align-items: center;
 }
-.checkPhoto, .checkObservation{
+
+.checkPhoto, .checkObservation {
     margin: 5px;
+}
+#settingFooterButton{
+    border-top: 1px solid rgb(178, 178, 178);
+    display: flex;
+    justify-content: space-around;
+}
+#btnAddQuestion, #btnSalveChecklist {
+    margin-top: 5px;
+    opacity: 0.8;  
+    height: 7vh;
+    width: 8vw; 
+    border-radius: 5px;
 }

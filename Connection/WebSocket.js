@@ -73,7 +73,7 @@ export class WebSocketCLPP {
                 this.homeReceived(param);
                 break;
             default:
-                console.error('Atenção, página não encontrada ou inválida!')
+                console.error('Atenção, página não encontrada ou inválida! Pagina: '+page)
                 break;
         }
     }
