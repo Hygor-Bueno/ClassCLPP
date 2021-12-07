@@ -70,8 +70,8 @@ export class HomePage extends SettingHome {
             return this.validatorChat(listMessage.notSeen()).map((element) => (
                 `
                 <div class="cardMessageUser" id="${element.id_user? `send_${element.id_user}` :`group_${element.id_group}`}">
-                <img class="photosUsers" src ="${element.photo.src}" />
-                <p>${usefulComponents.splitStringName(element.description, " ")}</p>
+                    <img class="photosUsers" src ="${element.photo.src}" />
+                    <p>${usefulComponents.splitStringName(element.description, " ")}</p>
                 </div>
                 `
             )).join("")

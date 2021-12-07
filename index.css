@@ -108,6 +108,20 @@ body{
     height:100%;
 }
 
+button{
+    cursor: default;    
+    background: -webkit-linear-gradient(bottom, #E0E0E0, #F9F9F9 70%);
+    border: 1px solid #CCCCCE;
+    border-radius: 3px;
+    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.2);
+    color: #666;
+    font-weight: bold;    
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    text-shadow:1px 1px 0 #FFF;    
+}
+
 @media screen and (min-width:1451px){ 
     .nav{
         height: 7%;
