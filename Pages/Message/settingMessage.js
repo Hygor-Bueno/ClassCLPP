@@ -7,6 +7,7 @@ import { Message } from "../../Connection/Message.js";
 import { ListUser } from "../../Components/listUser.js";
 import { WebSocketCLPP } from "../../Connection/WebSocket.js";
 import { UserAccess } from "../../Connection/UserAccess.js";
+import { Users } from "../../Components/objects/user.js";
 
 const id = localStorage.getItem("id")
 
@@ -29,7 +30,6 @@ export class SettingMessage {
 
     //await this.message.get("&id=" + id),false
     async setting() {
-        this.notificationUser()
         this.clickSend()
         this.clickDivUser()
         this.searchUser()
@@ -106,27 +106,15 @@ export class SettingMessage {
         $('.searchUserBar').addEventListener('keypress', (e) => { if (e.key === 'Enter') $('.searchName').click() })
     }
     visualizationMsg(params) {
-        if ($('.colabHead') && $('.colabHead').getAttribute('data-id').split('_')[1] == params.user) $('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notification.svg')
+        if ($('.colabHead .divColab') && $('.colabHead').getAttribute('data-id').split('_')[1] == params.user) $('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notification.svg')
     }
     notificationMsg() {
         $('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notify.svg')
     }
-    notificationUser(par) {
-        let response;
-        const user = $_all('.user_in .divUser')
-        user.forEach(user => {console.log(user)})
-
-
-        //let sel = par.send_user ? '#sender_' + par.send_user : '#group_' + par.send_group
-        // $(sel).querySelector('.imgNotify').setAttribute('src', './assets/images/notify.svg')
-        // response = $(sel)
-        // $(sel).remove();
-        //$('.user_in').insertAdjacentHTML('afterbegin', `<div class="divUser" id="${response.getAttribute('id')}">${response.innerHTML}</div>`)
-    }
-    async methodUnited(id) {
+    async methodUnited(dataId) {
         let response = ""
-        for (const iterator of id.data) {
-            response += (await this.listUser.main(iterator.id))
+        for (const iterator of dataId.data) {
+            if(id != iterator.id)response += await this.listUser.main(iterator.id)
         }
         return response;
     }
@@ -136,5 +124,11 @@ export class SettingMessage {
             const beatTop = $('.msg_out').scrollTop
             sectionPage.forEach(element => { console.log(element) })
         })
+    }
+    convertArray(obj){
+        let response=[],key;
+        key = Object.keys(obj)
+        key.forEach(valor => {response.push(obj[valor])})
+        return response
     }
 }

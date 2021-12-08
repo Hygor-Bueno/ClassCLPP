@@ -53,8 +53,7 @@ export class WebSocketCLPP {
     }
     async messageReceived(param){       
         const msg = new MessagePage;
-        const message = new Message();
-        msg.notificationUser(param)
+        msg.setNotify(param)
     }
     homeReceived(param){
         var home = new HomePage;
