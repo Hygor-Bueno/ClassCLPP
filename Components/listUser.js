@@ -1,10 +1,8 @@
-import { UsefulComponents } from "../Util/usefulComponents.js"
 import { MessageList } from "./messageList.js";
 import { Users } from "./objects/user.js";
 
 export class ListUser {
     messageList = new MessageList;
-    usefulComponents = new UsefulComponents;
     
     async main(id_user) {
         const user=  new Users;

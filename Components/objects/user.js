@@ -1,5 +1,4 @@
 import { Employee } from "../../Connection/Employee.js";
-import { Message } from "../../Connection/Message.js";
 import { UsefulComponents } from "../../Util/usefulComponents.js";
 
 
@@ -40,23 +39,21 @@ export class Users {
             description:this.#name
         }
     }
-    teste(object){
+    setObj(object){
         this.#id = object.id_user || object.id_group;
         this.#name = object.description;
         this.#photo = object.photo;
         this.#notification = object.notification;
-        this.#group = object.id_group? true:false;
+        this.#group = object.id_group ? true:false;
     }
-
-
-    getId_user() { return this.#id; }
-    getName() { return this.#name; }
-    getPhoto() { return this.#photo; }
-    getNotification() { return this.#notification; }
+    getId_user() {return this.#id;}
+    getName() {return this.#name;}
+    getPhoto() {return this.#photo;}
+    getNotification() {return this.#notification;}
     getgroup() {return this.group}
 
-    setId_user(id) { this.#id = id}
-    setName(name) { this.#name = name}
-    setPhoto(photo) { this.#photo = photo}
-    setNotification(notification) { this.#notification = notification}
+    setId_user(id) {this.#id = id}
+    setName(name) {this.#name = name}
+    setPhoto(photo) {this.#photo = photo}
+    setNotification(notification) {this.#notification = notification}
 }
