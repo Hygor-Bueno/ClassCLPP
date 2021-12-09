@@ -8,19 +8,26 @@ import { UserAccess } from "../../Connection/UserAccess.js";
 import { Users } from "../../Components/objects/user.js";
 import { ListUser } from "../../Components/listUser.js";
 
-//Modificado por Hygor: Correção do templateSearchUser 
+var userJson = {}
+
 export class MessagePage extends SettingMessage {
     message = new Message();
     employeePhoto = new EmployeePhoto();
     messageList = new MessageList();
     usefulComponents = new UsefulComponents();
-
+    
+    
     async main() {
+        this.employeeAccess = await this.userAccess.get('&application_id=7&web', false);
         const id = localStorage.getItem('id')
         const getInfo = await this.message.get("&id=" + id)
-        await this.messageList.separator(getInfo)
-        this.employeeAccess = await this.userAccess.get('&application_id=7&web', false);
-
+        await this.messageList.separator(getInfo)        
+        const user = new Users();
+        getInfo.forEach(objs => { 
+            user.userInner(objs)
+            userJson[objs.id_user ? 'user_' + objs.id_user :'group_'+ objs.id_group] = user.classObj()
+        })
+        this.setNotify()
         let response =
             `
         <div class="containerMsg">
@@ -32,7 +39,7 @@ export class MessagePage extends SettingMessage {
                     <img class="searchGroup" src="./assets/images/groups_black_24dp.svg">
                 </header>
                 <div class="user_in" style="display:flex">
-                    ${this.userReceived(getInfo)}
+                    ${this.userReceived(this.convertArray(userJson))}
                 </div>
                 <div class="templateSearchUser" style="display:none"> 
                     ${await this.methodUnited(this.employeeAccess)}           
@@ -56,7 +63,8 @@ export class MessagePage extends SettingMessage {
         return response;
     }
     userReceived(obj) {
-        return obj.map((element) => (
+        let receiv = obj.sort((a,b) =>  {if(a.notification > b.notification) return -1})
+        const conversation = receiv.map((element) => (
             `
             <div class="divUser" id="${element.id_user ? 'sender_' + element.id_user : 'group_' + element.id_group}">
                 <div class="divColab">
@@ -69,5 +77,11 @@ export class MessagePage extends SettingMessage {
             </div>
             `
         )).join('')
+        return conversation;
     }
+    setNotify(notify){
+        console.log(notify)
+        console.log(this.convertArray(userJson))
+    }
+
 }

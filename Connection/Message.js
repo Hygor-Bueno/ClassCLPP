@@ -16,7 +16,7 @@ export class Message {
                 .catch(erro => {
                     console.log(erro)
                     if (err) errorHandling.main(erro)
-                })
+                })     
         return req;
     }
     async post(params, err) {
