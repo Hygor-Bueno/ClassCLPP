@@ -7,33 +7,26 @@
     width: 99%;
     margin: 5px 0;
 }
-
 #formCheclist button {
     margin: 0 5px;
 }
-
 #groupForm {
     display: flex;
     padding-bottom: 5px;
 }
-
 #groupButtons {
     padding-bottom: 5px;
 }
-
 #groupFormDate {
     display: flex;
     align-items: center;
 }
-
 #groupFormDate input {
     margin: 0 5px;
 }
-
 #groupFormDate {
     display: flex;
 }
-
 /* FORMATAÇÕES GERAIS DO CHECKLIST */
 #checkCreateDiv {
     display: flex;
@@ -42,13 +35,10 @@
     height: 97%;
     width: 100%;
 }
-
 #checkCreateDiv button {
     border: none;
     background: none;
 }
-
-
 /*CORPO DO CHECKLIST */
 #bodyCheckEditable {
     display: flex;
@@ -58,7 +48,6 @@
     align-items: center;
     justify-content: center;
 }
-
 /*FORMATAÇÃO DO SECTION CHECKLIST */
 #questionCreated {
     border-right: 1px solid rgb(178, 178, 178);
@@ -66,13 +55,51 @@
     width: 60%;
     height: 100%;
 }
+#questionCreated{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+    background:white;
+}
+.containerQuestionCreated header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding:5px;
+    border-bottom: 1px solid rgb(178, 178, 178);
+}
+.containerQuestionCreated section{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding:5px; 
+}
+.containerQuestionCreated section input{
+    margin-right: 5px;
+}
+#questionCreated h1{
+    font-size:22px;
+    font-weight:bold;
+}
+#questionCreated p{
+    font-size:18px;
+
+}
+.questionCreated{
+    background:#f1f2f5;
+    width: 70%;
+    padding:5px;
+    margin:5px;
+    border-radius: 5px;
+}
+
 
 /*FORMATAÇÃO DO ASIDE CHECKLIST */
 #bodyCheckEditable aside {
     height: 100%;
     width: 40%;
 }
-
 /*CORPO DA ASIDE CHECKLIST */
 #editableQuestion header {
     display: flex;

@@ -1,11 +1,16 @@
 export class ObjectChecklist{
-    titulo;
-    questions = [];
-    addQuestion(questionJson){
-        console.log(questionJson)
-        this.questions.push(questionJson)
+    #title;
+    #questions = [];
+    addQuestion(questionJson){        
+        this.#questions.push(questionJson)
     }
     delete(idQuestion){
-        delete this.questions[idQuestion];
+        delete this.#questions[idQuestion];
     }
+
+    getTitle(){return this.#title}
+    getQuestion(){return this.#questions}
+
+    setTitle(title){this.#title = title}
+    setQuestion(question){this.#questions= question}
 }
