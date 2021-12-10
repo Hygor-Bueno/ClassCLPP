@@ -67,7 +67,7 @@ export class MessageList {
             response =
                 `<section>
                     ${getMessage.map((element) => (`
-                    <div class="${element.id_user != localStorage.getItem('id') ? "messageReceived" : "messageSend"}">
+                    <div class="${element.id_user != localStorage.getItem('id') ? "messageReceived" : "messageSend"}" data-view ='${element.notification}'>
                         <p>${element.message}</p>
                     </div>`)).join("")}
                 </section>`
