@@ -25,41 +25,41 @@ export class HomePage extends SettingHome {
         let nameUser = usefulComponents.splitStringName(this.userJson.name, " ")
         let response =
             `
-        <div id="homeDiv">
-            <section id="homeLeft">
-                <header id="welcom">
-                    <h1>Bem Vindo, ${nameUser} ao CLPP</h1>
-                    <p><b>Informações:</b> ${this.userJson.company + " -> " + this.userJson.shop + " -> " + this.userJson.departament + " -> " + this.userJson.sub}</p>
-                </header>
-                <div id="bodyHome">
-                    <div id="messageDiv">
-                        <header class= "dashboardHome">
-                            <h1> Mensagens não Visualizadas: </h1>
-                        </header>
-                        <div id="bodyChDiv">
-                            ${await this.messageReceived()}
+            <div id="homeDiv">
+                <section id="homeLeft">
+                    <header id="welcom">
+                        <h1>Bem Vindo, ${nameUser} ao CLPP</h1>
+                        <p><b>Informações:</b> ${this.userJson.company + " -> " + this.userJson.shop + " -> " + this.userJson.departament + " -> " + this.userJson.sub}</p>
+                    </header>
+                    <div id="bodyHome">
+                        <div id="messageDiv">
+                            <header class= "dashboardHome">
+                                <h1> Mensagens não Visualizadas: </h1>
+                            </header>
+                            <div id="bodyChDiv">
+                                ${await this.messageReceived()}
+                            </div>
+                        </div>
+                        <div id="checkResponseDiv">
+                            <header class= "dashboardHome">
+                                <h1> Checklist Respondidos: </h1>
+                            </header>
                         </div>
                     </div>
-                    <div id="checkResponseDiv">
-                        <header class= "dashboardHome">
-                            <h1> Checklist Respondidos: </h1>
-                        </header>
+                </section>
+                <aside id="homeRight">
+                    <div id="checkDiv">
+                        <header><h1>Cabeçalho do Checklist</h1></header>
+                        <div id=bodyCheckDiv>
+                            ${await this.checklistCreated() || `<p></p>`}
+                        </div>   
                     </div>
-                </div>
-            </section>
-            <aside id="homeRight">
-                <div id="checkDiv">
-                    <header><h1>Cabeçalho do Checklist</h1></header>
-                    <div id=bodyCheckDiv>
-                        ${await this.checklistCreated() || `<p></p>`}
-                    </div>   
-                </div>
-                <div id="recordDiv">
-                    <header><h1>Cabeçalho dos Relatórios </h1></header>
-                </div>
-            </aside>
-        </div>
-        `
+                    <div id="recordDiv">
+                        <header><h1>Cabeçalho dos Relatórios </h1></header>
+                    </div>
+                </aside>
+            </div>
+            `
         return response;
     }
     async messageReceived() {
