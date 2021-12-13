@@ -28,10 +28,9 @@ export class SettingMessage {
     chatIdPage;
     chatScroll;
 
-    //await this.message.get("&id=" + id),false
     async setting() {
         this.clickSend()
-        this.clickDivUser()
+        this.clickDivUser('.divUser')
         this.searchUser()
         this.scrollMsg()
         this.searchName()
@@ -40,13 +39,13 @@ export class SettingMessage {
         getB_id('buttonSend').addEventListener('click', () => { this.settingHome.buttonSend(this.chatIdSender, this.chatIdPage, this.chatScroll), this.notificationMsg() });
         getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
-    clickDivUser() {
-        $_all('.divUser').forEach(element => element.addEventListener('click', async () => {
+    clickDivUser(local) {
+        $_all(local).forEach(element => element.addEventListener('click', async () => {
             this.pages = 1;
             this.changeHeader(element)
             $('.user_in').setAttribute('style', 'display:flex')
             $('.templateSearchUser').setAttribute('style', 'display:none')
-            $('.user_in .imgNotify').setAttribute('src', './assets/images/notification.svg')
+            element.querySelector('.imgNotify').setAttribute('src', './assets/images/notification.svg')
             $('.msg_out :first-child') && $('.msg_out section').remove()
             await this.chargePageMsg(this.usefulComponents.splitString(element.getAttribute('id'), '_'))
             $('.msg_out ').scrollTop = $('.msg_out ').scrollHeight;
@@ -106,6 +105,7 @@ export class SettingMessage {
         $('.searchUserBar').addEventListener('keypress', (e) => { if (e.key === 'Enter') $('.searchName').click() })
     }
     visualizationMsg(params) {
+        console.log($_all('.messageSend'))
         if ($('.colabHead .divColab') && $('.colabHead').getAttribute('data-id').split('_')[1] == params.user) $('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notification.svg')
     }
     notificationMsg() {
