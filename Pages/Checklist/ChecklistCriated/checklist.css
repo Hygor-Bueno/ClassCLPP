@@ -1,0 +1,62 @@
+#form {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgb(255, 255, 255);
+  margin: 10px;
+  height: 40px;
+  border-radius: 5px;
+}
+
+#inputCheck {
+  width:25%;
+  text-align: center;
+  margin-left: 10px;
+} 
+
+#inputCheckkList {
+  width:100%;
+  margin-top: 2px;
+}
+
+#date {
+  display: flex;
+  flex-direction: row;
+  width: 50%;
+  align-items: center;
+  text-align: center;
+  margin-left: 50px;
+}
+
+#date p{
+  margin-right: 30px;
+  margin-left: 10px;
+}
+
+#search  {
+  width: 15%;
+  display: flex;
+  justify-content: flex-end;
+  cursor:pointer;
+}
+
+#getCheckList {
+  background-color: rgb(255, 255, 255);
+  margin: 10px;
+  border-radius: 5px
+}
+
+#checklist{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+#getCheckList h1{
+  font-weight: bold;
+}

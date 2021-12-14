@@ -8,7 +8,7 @@ import { SettingHome } from "./settingHome.js";
 
 var employee = new Employee;
 var usefulComponents = new UsefulComponents;
-var checklist = new Checklist
+var checklist = new Checklist;
 var userAccess = new UserAccess;
 var message = new Message;
 var listMessage = new MessageList;
