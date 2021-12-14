@@ -1,5 +1,5 @@
 export class ObjectChecklist{
-    
+    #indexEditQuestion;
     #title;
     #questions = [];
 
@@ -14,8 +14,8 @@ export class ObjectChecklist{
     }
     queryQuestion(idQuestion){
         let response;
-        this.#questions.forEach((element) => {
-            if(element.id == idQuestion) response = element
+        this.#questions.forEach((element,index) => {
+            if(element.id == idQuestion){ response = element ; this.#questions[index] = [].this.#indexEditQuestion= index}
         });
         return response;
     }

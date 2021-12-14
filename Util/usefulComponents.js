@@ -43,8 +43,6 @@ export class UsefulComponents {
         div.classList.add('error-text')
         field.insertAdjacentElement('afterend', div)
     }
-}
-
 
     convertObjForArray(obj){
         let response=[],key;

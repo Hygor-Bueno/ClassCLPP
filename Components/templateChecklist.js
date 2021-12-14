@@ -209,7 +209,15 @@ export class TemplateChecklist {
         this.enabledButtonInit();
         getB_id('typeQuestion').onchange = () => { this.alterTypeQuestion(); this.enabledButtonInit(); $('#headerQuestion input').value="";$('#headerQuestion input').setAttribute('disabled',true) }
         getB_id('btnSalveChecklist').addEventListener('click', () => this.completedChecklist())
-        getB_id('salveQuestion').addEventListener('click', () => { this.addQuestion(this.idQuestion); this.alterTypeQuestion(); this.enabledButtonInit(); this.resetInput('#headerQuestion input') })
+        getB_id('salveQuestion').addEventListener('click', () => { 
+            let object = this.addQuestion(this.idQuestion); 
+            this.checklist.addQuestion(object);
+            getB_id('questionCreated').insertAdjacentHTML('beforeend', this.questionsCreated([object], this.idQuestion));
+            this.alterTypeQuestion(); 
+            this.enabledButtonInit(); 
+            this.btnQuestionCreated();
+            this.resetInput('#headerQuestion input') 
+        })
     }
     buttonSalveHeaderCheck() {
         getB_id('salveChecklist').addEventListener('click', () => {
@@ -322,12 +330,8 @@ export class TemplateChecklist {
             let note = element.querySelector(`#checkObservation_${values}`);
             object[`op_${values}`] = { type: this.getValueSelect("#typeQuestion"), description: desc, photo: photo.checked ? 1 : 0, observe: note.checked ? 1 : 0, value: selectOption }
         });
-        this.checklist.addQuestion(object);
-        getB_id('questionCreated').insertAdjacentHTML('beforeend', this.questionsCreated([object], value))
-        this.btnQuestionCreated();
-
+        return object;        
     }
-
     //Função resposavel por finalizar o checklist!
     completedChecklist() {
         console.log(this.checklist)
@@ -338,7 +342,7 @@ export class TemplateChecklist {
         let btnEdit = getB_id(`editQuestionBtn_${value}`);
         let btnDelete = getB_id(`deleteQuestionBtn_${value}`);
         btnDelete.addEventListener('click', () => { getB_id(`questionCreated_${value}`).remove(); this.checklist.deleteQuestion(value) });
-        btnEdit.addEventListener('click', () => { this.editQuestion(this.checklist.queryQuestion(value)) });
+        btnEdit.addEventListener('click', () => {this.editQuestion(this.checklist.queryQuestion(value))});
     }
 
     editQuestion(objectQuestion) {
