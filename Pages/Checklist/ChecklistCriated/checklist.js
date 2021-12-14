@@ -4,6 +4,7 @@ export class ChecklistCreatedPage {
     let response = `
         <h1>Pagina dos Checklists Criados</h1>        
         <h1>Pagina dos Checklists Criados</h1>        
+        <h1>Pagina dos Checklists Criados</h1>        
         `;
     return response;
   }
