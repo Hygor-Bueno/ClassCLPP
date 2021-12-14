@@ -25,6 +25,7 @@ export class UsefulComponents {
         }
         return response
     }
+
     checkField(local){
         let valid = true;
 
@@ -43,3 +44,13 @@ export class UsefulComponents {
         field.insertAdjacentElement('afterend', div)
     }
 }
+
+
+    convertObjForArray(obj){
+        let response=[],key;
+        key = Object.keys(obj)
+        key.forEach(valor => {response.push(obj[valor])})
+        return response
+    }
+}
+
