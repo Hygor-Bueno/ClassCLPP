@@ -25,4 +25,11 @@ export class UsefulComponents {
         }
         return response
     }
+
+    convertObjForArray(obj){
+        let response=[],key;
+        key = Object.keys(obj)
+        key.forEach(valor => {response.push(obj[valor])})
+        return response
+    }
 }
