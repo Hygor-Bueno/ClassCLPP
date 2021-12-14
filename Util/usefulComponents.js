@@ -25,4 +25,32 @@ export class UsefulComponents {
         }
         return response
     }
+
+    checkField(local){
+        let valid = true;
+
+        for(let field of this.formular.querySelectorAll(local)){
+            const label = field.previousElementSibling.innerText;
+            if(!field.value){
+                this.createError(field, `Campo ${label} não pode estar em branco.`)
+                valid = false;
+            }
+        }
+    }
+    createError(field,msg){
+        const div = document.createElement('div')
+        div.innerHTML = msg;
+        div.classList.add('error-text')
+        field.insertAdjacentElement('afterend', div)
+    }
 }
+
+
+    convertObjForArray(obj){
+        let response=[],key;
+        key = Object.keys(obj)
+        key.forEach(valor => {response.push(obj[valor])})
+        return response
+    }
+}
+
