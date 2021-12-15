@@ -8,9 +8,10 @@ export class MessageList {
     messages = [];
 
     notSeen() {
+        console.log(this.messages)     
         return this.messages.filter(
             (element) => element.notification == 1
-        )
+        )   
     }
     notSeenGroup() {
         return this.groups.filter(
@@ -66,7 +67,7 @@ export class MessageList {
             response =
                 `<section>
                     ${getMessage.map((element) => (`
-                    <div class="${element.id_user != localStorage.getItem('id') ? "messageReceived" : "messageSend"}">
+                    <div class="${element.id_user != localStorage.getItem('id') ? "messageReceived" : "messageSend"}" data-view ='${element.notification}'>
                         <p>${element.message}</p>
                     </div>`)).join("")}
                 </section>`
@@ -83,7 +84,7 @@ export class MessageList {
                     <input id="inputSend" type="text" placeholder="Digite sua mensagem aqui."></input>
                     <button id="buttonSend" type="button"><img src="assets/images/enviar.svg" title="Enviar Mensagem"></img></button>
                 </footer>
-                `
+            `
         return response;
     }
     addMessage(local, message, classMessage) {

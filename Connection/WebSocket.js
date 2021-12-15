@@ -6,11 +6,10 @@ var ws
 var isConnected = false;
 const id = localStorage.getItem('id')
 
-
 export class WebSocketCLPP {
     connectWebSocket() {
         try {
-            ws = new WebSocket('ws://192.168.0.99:9191')
+            ws = new WebSocket('ws://192.168.0.99:9193')
             ws.onopen = () => { this.OnOpen() }
             ws.onerror = (ev) => { this.OnError(ev) }
             ws.onclose = () => { this.OnClose() }
@@ -40,7 +39,6 @@ export class WebSocketCLPP {
             return
         }
         let getNotify = JSON.parse(ev.data)
-        // console.log(getNotify)
         if (getNotify.objectType == 'notification') {
             console.log(' ****** vizualizaram sua mensagem ****** ')
             this.routerSettingsWs(localStorage.getItem('router'), '_viewed',getNotify)
@@ -53,19 +51,16 @@ export class WebSocketCLPP {
         const Msg = new MessagePage;
         Msg.visualizationMsg(param)
     }
-    async messageReceived(param){
-        const Msg = new MessagePage;
-        const message = new Message();
-        Msg.userReceived(await message.get("&id=" + id));
+    async messageReceived(param){       
+        const msg = new MessagePage;
+        msg.setNotify(param)
     }
     homeReceived(param){
         var home = new HomePage;
         home.upMsgReceived(param, document.getElementById('bodyChDiv'))
     }
-    routerSettingsWs(page, path,param) {
-        console.log(page)
+    routerSettingsWs(page, path, param) {
         page += path
-        console.log(page)
         switch (page) {
             case 'message_viewed':
                 this.messageViewed(param);
@@ -77,16 +72,15 @@ export class WebSocketCLPP {
                 this.homeReceived(param);
                 break;
             default:
-                console.error('Atenção, página não encontrada ou inválida!')
+                console.error('Atenção, página não encontrada ou inválida! Pagina: '+page)
                 break;
         }
     }
     // "Eu visualizei a mensagem"
     informPreview(idSender) {
-        let jsonString = {
-            type: 3,
-            send_id: idSender[1]
-        }
+        const jsonString = {}
+        jsonString.type = 3;
+        jsonString[idSender[0] == 'sender' ? 'send_id': 'id_group'] = idSender[1]
         ws.send(JSON.stringify(jsonString))
     }
     // Eu estou enviando a mensagem  
