@@ -1,4 +1,5 @@
 export class ObjectChecklist{
+
     #indexEditQuestion;
     #title;
     #questions = [];
@@ -6,9 +7,10 @@ export class ObjectChecklist{
     addQuestion(questionJson){        
         this.#questions.push(questionJson)
     }
+
     updateQuestoin(arrayQuestion){
-        console.log(arrayQuestion,this.question[this.#indexEditQuestion])
-        this.question[this.#indexEditQuestion] = arrayQuestion;
+        this.#questions[this.#indexEditQuestion] = arrayQuestion;
+        console.log(this.#questions[this.#indexEditQuestion])
     }   
 
     deleteQuestion(idQuestion){
@@ -16,12 +18,12 @@ export class ObjectChecklist{
             if(element.id == idQuestion) {this.#questions.splice(index,1),console.log(element)}
         });
     }
+
     queryQuestion(idQuestion){
         let response;
         this.#questions.forEach((element,index) => {
             if(element.id == idQuestion){ 
                 response = element ; 
-                this.#questions[index] = [];
                 this.#indexEditQuestion= index;
             }
         });
@@ -33,4 +35,5 @@ export class ObjectChecklist{
 
     setTitle(title){this.#title = title}
     setQuestion(question){this.#questions= question}
+
 }
