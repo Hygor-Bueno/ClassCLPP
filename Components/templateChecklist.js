@@ -184,7 +184,12 @@ export class TemplateChecklist {
                 `
     }
     editQuestionCreated(objectQuestion) {
-        console.log(objectQuestion, $('#headerQuestion form input'))
+        console.log(objectQuestion)
+        let updateBtn = this.tempButtonUpdate()
+        console.log(updateBtn)
+        getB_id('salveQuestion').remove();
+        getB_id('btnQuestion').insertAdjacentHTML('beforeend',updateBtn)
+        getB_id('updateQuestion').addEventListener('click',()=>{ this.checklist.updateQuestoin(this.addQuestion(objectQuestion.id))})
         $('#headerQuestion form input').value = objectQuestion.title
         $('#bodyQuestion').remove();
         getB_id('containerBodyQuestion').insertAdjacentHTML('beforeend', `<div id="bodyQuestion"></div>`)
@@ -196,6 +201,12 @@ export class TemplateChecklist {
             }
         })
         this.enabledButtonInit();
+    }
+    tempButtonUpdate(){
+        return `
+        <button type="button" id="updateQuestion">
+            <img src="./assets/images/salve.svg" title="alterar Questão."/>
+        </button>`
     }
     //FUNCIONALIDADES DOS TEMPLATES: 
     setValueSelect() {
@@ -210,12 +221,9 @@ export class TemplateChecklist {
         getB_id('typeQuestion').onchange = () => { this.alterTypeQuestion(); this.enabledButtonInit(); $('#headerQuestion input').value="";$('#headerQuestion input').setAttribute('disabled',true) }
         getB_id('btnSalveChecklist').addEventListener('click', () => this.completedChecklist())
         getB_id('salveQuestion').addEventListener('click', () => { 
-            let object = this.addQuestion(this.idQuestion); 
-            this.checklist.addQuestion(object);
-            getB_id('questionCreated').insertAdjacentHTML('beforeend', this.questionsCreated([object], this.idQuestion));
+            this.auxAddQuestion(this.idQuestion); 
             this.alterTypeQuestion(); 
             this.enabledButtonInit(); 
-            this.btnQuestionCreated();
             this.resetInput('#headerQuestion input') 
         })
     }
@@ -330,7 +338,14 @@ export class TemplateChecklist {
             let note = element.querySelector(`#checkObservation_${values}`);
             object[`op_${values}`] = { type: this.getValueSelect("#typeQuestion"), description: desc, photo: photo.checked ? 1 : 0, observe: note.checked ? 1 : 0, value: selectOption }
         });
-        return object;        
+        console.log(object);
+        return object;
+    }
+    auxAddQuestion(value){
+        let object = this.addQuestion(value);
+        this.checklist.addQuestion(object);
+        getB_id('questionCreated').insertAdjacentHTML('beforeend', this.questionsCreated([object], value))
+        this.btnQuestionCreated();
     }
     //Função resposavel por finalizar o checklist!
     completedChecklist() {
