@@ -7,7 +7,7 @@ export class ChecklistCreatePage extends SettingChecklist{
 		let response =
 			`	
 			<div id="checkCreateDiv">				 
-				${templateChecklist.main()}
+				${templateChecklist.main()}				
 			</div>      
 		`
 		return response;
