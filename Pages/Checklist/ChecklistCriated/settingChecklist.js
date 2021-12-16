@@ -2,13 +2,16 @@ import { ChecklistCreatedPage } from "./checklist.js";
 import { getB_id, $ } from "../../../Util/compressSyntaxe.js";
 import { Checklist } from "../../../Connection/Checklist.js";
 import { UsefulComponents } from "../../../Util/usefulComponents.js";
+import { UserAccess } from "../../../Connection/UserAccess.js";
+import { ListUser } from "../../../Components/listUser.js";
 
 export class SettingChecklist {
   searchCheck;
   searchDateInit;
   searchDateFinal;
   checklist = new Checklist();
-
+  listUser = new ListUser();
+  accessClpp;
   setting() {
     this.queryButton();
   }
@@ -16,25 +19,59 @@ export class SettingChecklist {
   queryButton() {
     let searchCheck;
     getB_id("searchName").addEventListener("click", async () => {
-        this.searchCheck = $("#inputCheckList").value;
-        this.searchDateInit = $("#dateInit").value || "";
-        this.searchDateFinal = $("#dateFinal").value || "";
-        searchCheck = await this.checklist.get(  "&web&check_name=" +    this.searchCheck +    "&date_ini=" +    this.searchDateInit +    "&date_final=" +    this.searchDateFinal +    "&id_user=" + localStorage.getItem("id"), true)
-        this.clean();
-        this.popIclude(searchCheck);
+      this.searchCheck = $("#inputCheckList").value;
+      this.searchDateInit = $("#dateInit").value || "";
+      this.searchDateFinal = $("#dateFinal").value || "";
+      searchCheck = await this.checklist.get(
+        "&web&check_name=" +
+          this.searchCheck +
+          "&date_ini=" +
+          this.searchDateInit +
+          "&date_final=" +
+          this.searchDateFinal +
+          "&id_user=" +
+          localStorage.getItem("id"),
+        true
+      );
+      this.clean();
+      this.popIclude(searchCheck);
     });
-    }
-  clean(){
-    getB_id('getCheckList').innerHTML = "";
+  }
+  clean() {
+    getB_id("getCheckList").innerHTML = "";
   }
 
-  popIclude(objectCheck){
-    getB_id('getCheckList').insertAdjacentHTML('beforeend',this.getCheckListCreted(objectCheck))
+  popIclude(objectCheck) {
+    getB_id("getCheckList").insertAdjacentHTML(
+      "beforeend",
+      this.getCheckListCreted(objectCheck)
+    );
   }
+
+
+
+
+  listUsers() {
+    getB_id("groups").addEventListener("click", async () => {
+        getB_id("groups").setAttribute("groups", "style", "display=flex")
+      this.accessClpp = access.get("&application_id=7&web");
+      let response = new ListUser(this.accessClpp).map(
+        () =>
+          `
+          <div id="listUser">
+            ${users}
+          </div>
+          `
+      );
+      return response;
+    });
+  }
+
+
+
 
   getCheckListCreted(checklists) {
     let userful = new UsefulComponents();
-    console.log(checklists);
     let response = checklists
       .map(
         (checklist) =>
@@ -65,9 +102,9 @@ export class SettingChecklist {
                 }</p>
             </div>
             <div id="function">
-            <button type="button"><img src="./assets/images/groups_black_24dp.svg"/></button>
+            <button type="button" id="groups"><img src="./assets/images/groups_black_24dp.svg"/></button>
             <button type="button"><img src="./assets/images/olho.svg"/></button>
-            <button type="button"><img src="./assets/images/delete.svg"/></button>
+            <button type="button" ><img src="./assets/images/delete.svg"/></button>
             </div>
 
         </div>
