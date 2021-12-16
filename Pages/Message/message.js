@@ -86,6 +86,4 @@ export class MessagePage extends SettingMessage {
             this.clickDivUser('.user_in .divUser')
         }
     }
-
-
 }

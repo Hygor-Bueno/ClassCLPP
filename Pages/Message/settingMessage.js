@@ -29,14 +29,16 @@ export class SettingMessage {
     chatScroll;
 
     async setting() {
-        this.clickSend()
+        this.targetEvent()
         this.clickDivUser('.divUser')
+        this.clickSend()
         this.searchUser()
         this.scrollMsg()
         this.searchName()
     }
     clickSend() {
-        getB_id('buttonSend').addEventListener('click', () => { this.settingHome.buttonSend(this.chatIdSender, this.chatIdPage, this.chatScroll), this.notificationMsg() });
+        getB_id('buttonSend').addEventListener('click', () => {
+            this.settingHome.buttonSend(this.chatIdSender, this.chatIdPage, this.chatScroll), this.notificationMsg() });
         getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
     clickDivUser(local) {
@@ -49,7 +51,7 @@ export class SettingMessage {
             $('.msg_out :first-child') && $('.msg_out section').remove()
             await this.chargePageMsg(this.usefulComponents.splitString(element.getAttribute('id'), '_'))
             $('.msg_out ').scrollTop = $('.msg_out ').scrollHeight;
-            this.chatIdSender = this.usefulComponents.splitString($('.colabHead ').getAttribute('data-id'), "_");
+            this.chatIdSender = this.usefulComponents.splitString(element.getAttribute('id'), "_");
             this.chatIdPage = `#${$('.msg_out section').getAttribute('id')}`;
             this.chatScroll = `.${$('.msg_out ').getAttribute('class')}`;
             this.ws.informPreview(this.chatIdSender)
@@ -75,7 +77,6 @@ export class SettingMessage {
             if ($('.user_in').style.display == 'flex') {
                 $('.user_in').setAttribute('style', 'display:none')
                 $('.templateSearchUser').setAttribute('style', 'display:flex')
-                this.clickDivUser();
             } else {
                 $('.user_in').setAttribute('style', 'display:flex')
                 $('.templateSearchUser').setAttribute('style', 'display:none')
@@ -100,7 +101,6 @@ export class SettingMessage {
             for (let i = 0; i < findName.length; i++) {
                 if (!findName[i].id.includes(localStorage.getItem('id'))) $('.templateSearchUser').insertAdjacentHTML("afterbegin", await this.listUser.main(findName[i].id))
             }
-            this.clickDivUser();
         })
         $('.searchUserBar').addEventListener('keypress', (e) => { if (e.key === 'Enter') $('.searchName').click() })
     }
@@ -130,5 +130,12 @@ export class SettingMessage {
         key = Object.keys(obj)
         key.forEach(valor => {response.push(obj[valor])})
         return response
+    }
+    targetEvent(){
+        document.addEventListener('click', e=>{console.log(e.target.tagName);
+            if(e.target){
+                console.log("foi")
+            }
+        })
     }
 }

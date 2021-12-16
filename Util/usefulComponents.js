@@ -11,6 +11,11 @@ export class UsefulComponents {
         }
     }
 
+    convertData(stringToSplit, separator){
+        let response = this.splitString(stringToSplit, separator)
+        return response[2] + "/"+ response[1] + "/" + response[0]
+    }
+
     splitStringName(stringToSplit, separator) {
         var arrayOfStrings = this.splitString(stringToSplit, separator)
         if (arrayOfStrings.length - 1 == 0) {
