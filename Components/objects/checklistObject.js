@@ -2,6 +2,9 @@ export class ObjectChecklist{
 
     #indexEditQuestion;
     #title;
+    #date_init;
+    #date_final;
+    #notification;
     #questions = [];
 
     addQuestion(questionJson){        
@@ -10,7 +13,6 @@ export class ObjectChecklist{
 
     updateQuestoin(arrayQuestion){
         this.#questions[this.#indexEditQuestion] = arrayQuestion;
-        console.log(this.#questions[this.#indexEditQuestion])
     }   
 
     deleteQuestion(idQuestion){
@@ -32,8 +34,13 @@ export class ObjectChecklist{
     
     getTitle(){return this.#title}
     getQuestion(){return this.#questions}
+    getNotification(){return this.#notification}
+    getDate_init(){return this.#date_init}
+    getDate_final(){return this.#date_final}
 
     setTitle(title){this.#title = title}
     setQuestion(question){this.#questions= question}
-
+    setNotification(notification){this.#notification = notification}
+    setDate_init(date_init){this.#date_init = date_init}
+    setDate_final(date_final){this.#date_final = date_final}
 }

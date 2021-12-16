@@ -7,16 +7,16 @@ export class TemplateChecklist {
     checklist = new ObjectChecklist;
     usefulComponents = new UsefulComponents;
     idQuestion = 1;
-    pathImgEdit = "./assets/images/pencil.svg"
-    pathImgAlert = "./assets/images/alertNotify.svg"
-    pathImgSalve = "./assets/images/salve.svg"
-    pathImgDelete = "./assets/images/delete.svg"
+    pathImgEdit = "./assets/images/pencil.svg";
+    pathImgAlert = "./assets/images/alertNotify.svg";
+    pathImgSalve = "./assets/images/salve.svg";
+    pathImgDelete = "./assets/images/delete.svg";
     main() {
         let response =
-            `<form id="formCheclist">		
+            `<div id="formCheclist">		
                     <div id="groupForm">
                         <input type="text" placeholder="Digite o Título do Checklist" id="nameChecklist" disabled=false>
-                        <button type="button"><img src=${this.pathImgEdit} title="Editar Nome do checklist" /></button>
+                        <button type="button" title="Edita nome do checklist" id="btnNameChecklist"><img src=${this.pathImgEdit} title="Editar Nome do checklist" /></button>
                         <div id="groupFormDate">
                             <p>Data Inicial: </p> <input type="date" id="dateInicial"/>
                             <p>Data Final: </p> <input type="date" id="dateFinal"/>
@@ -24,10 +24,10 @@ export class TemplateChecklist {
                     </div>
                     <div id="groupButtons">
                         <button type="button" id="notifyChecklist"><img src=${this.pathImgAlert} title="Noftificar quando checklist for respondido" /></button>
-                        <button type="button" id="salveChecklist"><img src=${this.pathImgSalve} title="Salvar checklist" /></button>
+                        
                         <button type="button" id="deleteChecklist"><img src=${this.pathImgDelete} title="Excluir checklist" /></button>
                     </div>
-                </form>
+                </div>
                 <div id="bodyCheckEditable">
                     <section id="questionCreated">
                     </section>
@@ -55,12 +55,12 @@ export class TemplateChecklist {
     headerQuestion() {
         return `
                     <div id="headerQuestion">
-                        <form>
+                        <div id="divForm">
                             <input type="text" placeholder="Digite o Título da questão" disabled/>
                             <button type="button" id="btnEnabledInput">
                                 <img src="./assets/images/pencil.svg" title="Editar título da questão."/>
                             </button>
-                        </form>  
+                        </div>  
                         <asind id="btnQuestion">
                             <button type="button" id="addNewOption">
                                 <img src="./assets/images/add.svg" title="Adicionar Nova Opção de Resposta."/>
@@ -131,11 +131,12 @@ export class TemplateChecklist {
                                 <img src="./assets/images/pencil.svg" title="Editar" />
                             </button>
                                 ${btnDelete
-                ? `
+                        ? `
+
                                     <button type="button" class="btnsQuestion btnDelete" id="btnDelete_${indexOption}" value="${indexOption}">
                                         <img src="./assets/images/delete.svg" title="Editar" />
                                     </button>` : ""
-            }  
+                    }  
                         </div>  
                         ${objQuestion.type == 1 ?
                 `
@@ -193,11 +194,12 @@ export class TemplateChecklist {
         getB_id('salveQuestion').remove();
         getB_id('btnQuestion').insertAdjacentHTML('beforeend',updateBtn);
         this.btnUpdate(objectQuestion,'updateQuestion');        
-        $('#headerQuestion form input').value = objectQuestion.title
+        $('#divForm input').value = objectQuestion.title
         $('#bodyQuestion').remove();
         getB_id('containerBodyQuestion').insertAdjacentHTML('beforeend', `<div id="bodyQuestion"></div>`)
         this.populateOptions(objectQuestion,'bodyQuestion')        
-        this.configBtnQuestion();        
+        this.configBtnQuestion();     
+        this.disableButtons(['#questionCreated','#formCheclist','#settingFooterButton']) 
     }
     resetQuestionCreate(){
         $('#headerQuestion input').value ="";
@@ -207,17 +209,17 @@ export class TemplateChecklist {
         this.salveQuestion('salveQuestion')
         this.alterTypeQuestion();    
         //getB_id('btnSalveChecklist').addEventListener('click', () => this.completedChecklist())
-        this.enabledButtonInit();
+        this.enabledButtonInit();        
     }
     btnUpdate(objectQuestion,local){
         getB_id(local).addEventListener('click',()=>{
-            console.log('você atualizou a questão!')
             this.checklist.updateQuestoin(this.addQuestion(objectQuestion.id));
             let editedQuestion = this.containerQuestionCreate([this.checklist.queryQuestion(objectQuestion.id)],objectQuestion.id)
             getB_id(`questionCreated_${objectQuestion.id}`).innerHTML = "";
             getB_id(`questionCreated_${objectQuestion.id}`).insertAdjacentHTML('beforeend',editedQuestion)
             this.resetQuestionCreate();
             this.btnQuestionCreated(objectQuestion.id);
+            this.enableButtons(['#questionCreated','#formCheclist','#settingFooterButton'])
         })
     }
     populateOptions(objectQuestion,local){
@@ -239,16 +241,28 @@ export class TemplateChecklist {
         `
     }
     //FUNCIONALIDADES DOS TEMPLATES: 
-    setValueSelect() {
+    disableButtons(places) {
+        places.forEach((place) => {
+            let buttons = $_all(`${place} button`);
+            buttons.forEach((button) => { button.disabled =true; button.setAttribute('style', 'opacity:0.2')})
+        })
+    }
+    enableButtons(places){
+        places.forEach((place) => {
+            let buttons = $_all(`${place} button`);
+            buttons.forEach((button) => { button.disabled =false; button.setAttribute('style', 'opacity:1')})
+        })
     }
     settingButton() {
         // Botões do cabeçalho:
-        this.buttonSalveHeaderCheck();
+        getB_id('btnNameChecklist').addEventListener('click', () => {getB_id('nameChecklist').disabled=false; getB_id('nameChecklist').focus()})
         //Botões da caixa de perguntas editáveis;
         getB_id('addNewOption').addEventListener('click', () => { this.addOptions('bodyQuestion'); this.enabledOptionButton(); this.deleteOptionButton() })
-        getB_id('btnEnabledInput').addEventListener('click', () => { this.enabledInputQuestion('#headerQuestion form input') })
+        getB_id('btnEnabledInput').addEventListener('click', () => { this.enabledInputQuestion('#divForm input') })
         this.enabledButtonInit();
         getB_id('typeQuestion').onchange = () => { this.alterTypeQuestion(); this.enabledButtonInit(); $('#headerQuestion input').value="";$('#headerQuestion input').setAttribute('disabled',true) }
+        this.changeNameChecklist();
+        this.changeDatesChecklist();
         getB_id('btnSalveChecklist').addEventListener('click', () => this.completedChecklist())
         this.salveQuestion('salveQuestion')
     }
@@ -260,13 +274,30 @@ export class TemplateChecklist {
             this.resetInput('#headerQuestion input') 
         })
     }
-    buttonSalveHeaderCheck() {
-        getB_id('salveChecklist').addEventListener('click', () => {
-            if (this.controllerCheck) {
-                this.controllerCheck = false;
-                this.checklist.setTitle(getB_id('nameChecklist').getAttribute('value'));
-            }
-        })
+    // buttonSalveHeaderCheck() {
+    //     getB_id('salveChecklist').addEventListener('click', () => {          
+    //         this.changeNameChecklist();
+    //     })
+    // <button type="button" id="salveChecklist"><img src=${this.pathImgSalve} title="Salvar checklist" /></button> // -CASO FOR UTILIZAR O BOTÃO DEVOLVER NO TAMPLATE;
+    // }
+    changeNameChecklist(){
+        getB_id('nameChecklist').onchange= () =>{
+            this.checklist.setTitle(getB_id('nameChecklist').value);
+            getB_id('nameChecklist').disabled = true;
+            console.log(this.checklist)
+        }
+    }
+    changeDatesChecklist(){
+        getB_id('dateInicial').onchange= () =>{
+            this.checklist.setDate_init(getB_id('dateInicial').value)
+        }
+        getB_id('dateFinal').onchange= () =>{
+            this.checklist.setDate_final(getB_id('dateFinal').value)
+        } 
+    }
+    changeNotificationChecklist(){
+        console.log(getB_id('dateFinal').valueAsDate = new Date())
+         
     }
     desmemberObjQuestion(question) {
         let response = [];
