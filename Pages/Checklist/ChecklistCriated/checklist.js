@@ -1,4 +1,5 @@
 import { Checklist } from "../../../Connection/Checklist.js";
+import { UsefulComponents } from "../../../Util/usefulComponents.js";
 
 export class ChecklistCreatedPage {
   getChecklist = new Checklist();
@@ -31,31 +32,36 @@ export class ChecklistCreatedPage {
     return response;
   }
   async getCheckListCreted(){  
+    let userful = new UsefulComponents;
     let checklists =   await this.getChecklist.get('&web&id_user=' + localStorage.getItem('id'))
-    let response = `
-          <div id="checklist">
+    console.log(checklists)
+    let response = checklists.map((checklist) => (
+      `
+    <div id="checklist">
 
-          <div>
-            <h1>${checklists[0].description}</h1> 
-          </div>
+    <div>
+      <h1>${checklist.description}</h1> 
+    </div>
 
-          <div>
-            <img src=${checklists[0].notification == 0? "./assets/images/alertNotify.svg" : "./assets/images/alertNotifyOn.svg"}/>
-          </div>
+    <div>
+      <img src="${checklist.notification == 0? `assets/images/alertNotify.svg` : `assets/images/alertNotifyOn.svg`}"/>
+    </div>
 
-          <div id="date">
-            <p>Data Inicial: 10/11/2021</p>
-            <p>Data Final: 14/12/2021</p>
-          </div>
+    <div id="date">
+      <p>Data Inicial: ${checklist.date_init != null ? userful.convertData(checklist.date_init, "-") :"Não possuí validade"}</p>
+      <p>Data Final: 14/12/2021</p>
+    </div>
 
-          <div>
-            <img src="./assets/images/person_black_24dp.svg"/>
-            <img src="./assets/images/olho.svg"/>
-            <img src="./assets/images/delete.svg"/>
-          </div>
+    <div>
+      <img src="./assets/images/person_black_24dp.svg"/>
+      <img src="./assets/images/olho.svg"/>
+      <img src="./assets/images/delete.svg"/>
+    </div>
 
-      </div>
-    `
+</div>
+`)).join("")
+    
+    
 
     return response
   }
