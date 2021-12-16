@@ -10,14 +10,12 @@
 }
 
 #inputCheck {
-  width:25%;
-  text-align: center;
   margin-left: 10px;
-} 
+  width: 350px
+}
 
-#inputCheckkList {
-  width:100%;
-  margin-top: 2px;
+#inputCheckList {
+width: 90%
 }
 
 #date {
@@ -29,34 +27,56 @@
   margin-left: 50px;
 }
 
-#date p{
+#date1 {
+  display: flex;
+  flex-direction: row;
+  width: 25%;
+  margin-left: 100px;
+}
+
+#date2 {
+  display: flex;
+  flex-direction: row;
+  width: 25%;
+  margin-right: 100px;
+}
+
+#date p {
   margin-right: 30px;
   margin-left: 10px;
 }
 
-#search  {
+#search {
   width: 15%;
   display: flex;
   justify-content: flex-end;
-  cursor:pointer;
+  cursor: pointer;
 }
 
 #getCheckList {
-  background-color: rgb(255, 255, 255);
-  margin: 10px;
-  border-radius: 5px
+  overflow-y: auto;
+  height: 80%;
 }
 
-#checklist{
+.checklistCreated {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
   height: 50px;
-  margin-left: 20px;
-  margin-right: 20px;
+  margin: 5px 10px;
+  background-color: rgb(255, 255, 255);
 }
 
-#getCheckList h1{
+#description {
   font-weight: bold;
+  width: 400px;
+  margin-left: 10px;
+}
+
+#function {
+  width: 180px;
+}
+
+#function button {
+  cursor: pointer;
 }
