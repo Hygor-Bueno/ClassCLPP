@@ -5,7 +5,7 @@ export class ListUser {
     messageList = new MessageList;
     
     async main(id_user) {
-        const user=  new Users;
+        const user = new Users;
         await user.populate(id_user);
         let data = `
         <div class="divUser" id="sender_${user.getId_user()}">

@@ -40,7 +40,7 @@ export class SettingMessage {
         getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
     clickDivUser(local) {
-        $_all(local).forEach(element => element.addEventListener('click',  () => {this.clickEvents(element); this.chergeSendButtom()}))
+        $_all(local).forEach(element => element.addEventListener('click',  () => {this.clickEvents(element); this.chergeSendButtom(); console.log(element)}))
     }
     async clickEvents(element){
         this.pages = 1;
@@ -56,6 +56,7 @@ export class SettingMessage {
         this.chatIdPage = `#${$('.msg_out section').getAttribute('id')}`;
         this.chatScroll = `.${$('.msg_out ').getAttribute('class')}`;
         this.ws.informPreview(this.chatIdSender)
+        this.notificationMsg()
         this.clickSend();
     }
     chergeSendButtom(){
@@ -80,7 +81,7 @@ export class SettingMessage {
         $('.part2 .colabHead').insertAdjacentHTML('beforeend', 
         `<div class="notifyMsg">
             <img class="imgNotify" src=./assets/images/notification.svg>
-        </div>` )
+        </div>`)
     }
     searchUser() {
         $('.searchUser').addEventListener('click', () => {
@@ -98,7 +99,8 @@ export class SettingMessage {
         let nameArray = []
         const divArray = $_all('.templateSearchUser .divUser')
         for (let index = 0; index < divArray.length; index++) {
-            nameArray.push({ 'name': $(`#${divArray[index].getAttribute('id')} p`).innerText, 'id': divArray[index].getAttribute('id').replace('user_', ' ') })
+            nameArray.push({ 'name': $(`#${divArray[index].getAttribute('id')} p`).innerText, 'id': divArray[index].getAttribute('id')
+            .replace('sender_', ' ') })
         }
         return nameArray
     }
@@ -115,16 +117,22 @@ export class SettingMessage {
                     if (!findName[i].id.includes(localStorage.getItem('id'))) $('.searchUnic').insertAdjacentHTML("afterbegin", await this.listUser.main(findName[i].id))
                 }
             }
+            this.clickDivUser('.searchUnic')
         })
         $('.searchUserBar').addEventListener('keypress', (e) => { if (e.key === 'Enter') $('.searchName').click() })
     }
     visualizationMsg(params) {
-        if ($('.colabHead .divColab') && $('.colabHead').getAttribute('data-id').split('_')[1] == params.user) $('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notification.svg')
+        if ($('.colabHead .divColab') && $('.colabHead').getAttribute('data-id').split('_')[1] == params.user){
+            $_all('.messageSend')[$_all('.messageSend').length - 1].setAttribute('data-view', '0')
+            this.notificationMsg()
+        }
     }
     notificationMsg() {
         let notific = $_all('.messageSend')[$_all('.messageSend').length - 1].getAttribute('data-view')
         if(notific == 1){
             $('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notify.svg')
+        }else{
+            $('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notification.svg')
         }
     }
     async methodUnited(dataId) {
