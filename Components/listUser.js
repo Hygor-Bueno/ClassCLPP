@@ -2,7 +2,6 @@ import { MessageList } from "./messageList.js";
 import { Users } from "./objects/user.js";
 
 export class ListUser {
-feature/checklist-create
   messageList = new MessageList();
 
   async main(id_user) {
