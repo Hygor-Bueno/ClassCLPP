@@ -88,8 +88,7 @@ export class MessageList {
         return response;
     }
     addMessage(local, message, classMessage) {
-        console.log(local)
-        document.querySelector(local).insertAdjacentHTML('beforeend', `<div class="${classMessage}"><p>${message}</p></div>`)
+        document.querySelector(local).insertAdjacentHTML('beforeend', `<div class="${classMessage}" data-view="1"><p>${message}</p></div>`)
     }
 
 }
