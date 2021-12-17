@@ -2,6 +2,7 @@ import { MessageList } from "./messageList.js";
 import { Users } from "./objects/user.js";
 
 export class ListUser {
+feature/checklist-create
   messageList = new MessageList();
 
   async main(id_user) {
@@ -10,6 +11,7 @@ export class ListUser {
 
     let data = `
         <div class="divUser" id="user_${user.getId_user()}">
+
             <div class="divColab">
                 <img id="photoUser" src="${user.getPhoto().src}"/>
                 <p>${user.getName()}</p>
