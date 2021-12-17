@@ -14,9 +14,27 @@ export class ListUser {
                 <p>${user.getName()}</p>
             </div>
         </div>                
-        ` 
-        return  data         
+        `;
+    return data;
+  }
+  async checkBoxUser(ids, local) {
+    let response = "";
+    document
+      .querySelector(".container")
+      .insertAdjacentHTML("beforeend", '<div id="listUser"></div>');
+    for (const element of ids) {
+      response += `${await this.main(element.id)}`;
     }
-
+    document
+      .querySelector("#listUser")
+      .insertAdjacentHTML("beforeend", `${response}`);
+    let list = document.querySelectorAll(".divUser");
     
+    for (const iterator of list) {
+        
+      iterator.insertAdjacentHTML("beforeend", `<input type="checkbox"/>`);
+    }
+    document.querySelector(".container").insertAdjacentHTML("afterbegin", `<header id="headerUserList"><h1>Incluir sem vergonha</h1></header>`);
+    document.querySelector(".container").setAttribute("style", "display:flex");
+  }
 }

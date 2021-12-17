@@ -1,3 +1,4 @@
+import { Routers } from '../Routers/router.js';
 import { getB_id, $, $_all } from '../Util/compressSyntaxe.js'
 import { UsefulComponents } from '../Util/usefulComponents.js';
 import { ObjectChecklist } from './objects/checklistObject.js';
@@ -6,13 +7,15 @@ export class TemplateChecklist {
     controllerCheck = true;
     checklist = new ObjectChecklist;
     usefulComponents = new UsefulComponents;
+    routers = new Routers;
     idQuestion = 1;
     notification = true;
+    // this.routes.routers(router[index])
     pathImgEdit = "./assets/images/pencil.svg";
     pathImgSalve = "./assets/images/salve.svg";
     pathImgDelete = "./assets/images/delete.svg";
     pathImgNotify = "./assets/images/alertNotify.svg";
-    pathImgNotifyOn = "./assets/images/alertNotify.svg";
+    pathImgNotifyOn = "./assets/images/alertNotifyOn.svg";
     main() {
         let response =
             `<div id="formCheclist">		
@@ -133,12 +136,12 @@ export class TemplateChecklist {
                                 <img src="./assets/images/pencil.svg" title="Editar" />
                             </button>
                                 ${btnDelete
-                        ? `
+                ? `
 
                                     <button type="button" class="btnsQuestion btnDelete" id="btnDelete_${indexOption}" value="${indexOption}">
                                         <img src="./assets/images/delete.svg" title="Editar" />
                                     </button>` : ""
-                    }  
+            }  
                         </div>  
                         ${objQuestion.type == 1 ?
                 `
@@ -168,12 +171,12 @@ export class TemplateChecklist {
                     </div>
                 `
     }
-    containerQuestionCreate(objectCheck, value){
+    containerQuestionCreate(objectCheck, value) {
         return `
                 <div class="containerQuestionCreated">
                         ${objectCheck.map((element) => {
-                        let groupOption = this.desmemberObjQuestion(element)
-                            return `
+            let groupOption = this.desmemberObjQuestion(element)
+            return `
                                     <header>
                                         <h1>${element.title}</h1>
                                         <div class="divGroupButton">
@@ -182,60 +185,59 @@ export class TemplateChecklist {
                                         </div>
                                     </header>                                        
                                 ${groupOption.map((options) => (
-                                options.type == 1 ?
-                                    `<section><input type="radio" title="input"/><p>${options.description}</p></section>`
-                                    :
-                                    `<section><input type="checkbox" title="input"/><p>${options.description}</p></section>`)
-                            ).join("")}`
-                        }).join("")}
+                options.type == 1 ?
+                    `<section><input type="radio" title="input"/><p>${options.description}</p></section>`
+                    :
+                    `<section><input type="checkbox" title="input"/><p>${options.description}</p></section>`)
+            ).join("")}`
+        }).join("")}
                     </div>
                 `
     }
-    editQuestionCreated(objectQuestion) {       
+    editQuestionCreated(objectQuestion) {
         let updateBtn = this.tempButtonUpdate('updateQuestion')
         getB_id('salveQuestion').remove();
-        getB_id('btnQuestion').insertAdjacentHTML('beforeend',updateBtn);
-        this.btnUpdate(objectQuestion,'updateQuestion');        
+        getB_id('btnQuestion').insertAdjacentHTML('beforeend', updateBtn);
+        this.btnUpdate(objectQuestion, 'updateQuestion');
         $('#divForm input').value = objectQuestion.title
         $('#bodyQuestion').remove();
         getB_id('containerBodyQuestion').insertAdjacentHTML('beforeend', `<div id="bodyQuestion"></div>`)
-        this.populateOptions(objectQuestion,'bodyQuestion')        
-        this.configBtnQuestion();     
-        this.disableButtons(['#questionCreated','#formCheclist','#settingFooterButton']) 
+        this.populateOptions(objectQuestion, 'bodyQuestion')
+        this.configBtnQuestion();
+        this.disableButtons(['#questionCreated', '#formCheclist', '#settingFooterButton'])
     }
-    resetQuestionCreate(){
-        $('#headerQuestion input').value ="";
+    resetQuestionCreate() {
+        $('#headerQuestion input').value = "";
         let updateBtn = this.tempButtonUpdate("salveQuestion")
         getB_id('updateQuestion').remove();
-        getB_id('btnQuestion').insertAdjacentHTML('beforeend',updateBtn);
+        getB_id('btnQuestion').insertAdjacentHTML('beforeend', updateBtn);
         this.salveQuestion('salveQuestion')
-        this.alterTypeQuestion();    
-        //getB_id('btnSalveChecklist').addEventListener('click', () => this.completedChecklist())
-        this.enabledButtonInit();        
+        this.alterTypeQuestion();
+        this.enabledButtonInit();
     }
-    btnUpdate(objectQuestion,local){
-        getB_id(local).addEventListener('click',()=>{
+    btnUpdate(objectQuestion, local) {
+        getB_id(local).addEventListener('click', () => {
             this.checklist.updateQuestoin(this.addQuestion(objectQuestion.id));
-            let editedQuestion = this.containerQuestionCreate([this.checklist.queryQuestion(objectQuestion.id)],objectQuestion.id)
+            let editedQuestion = this.containerQuestionCreate([this.checklist.queryQuestion(objectQuestion.id)], objectQuestion.id)
             getB_id(`questionCreated_${objectQuestion.id}`).innerHTML = "";
-            getB_id(`questionCreated_${objectQuestion.id}`).insertAdjacentHTML('beforeend',editedQuestion)
+            getB_id(`questionCreated_${objectQuestion.id}`).insertAdjacentHTML('beforeend', editedQuestion)
             this.resetQuestionCreate();
             this.btnQuestionCreated(objectQuestion.id);
-            this.enableButtons(['#questionCreated','#formCheclist','#settingFooterButton'])
+            this.enableButtons(['#questionCreated', '#formCheclist', '#settingFooterButton'])
         })
     }
-    populateOptions(objectQuestion,local){
+    populateOptions(objectQuestion, local) {
         let aux = objectQuestion.type == 1 ? 2 : 1
         let index = 0;
         this.usefulComponents.convertObjForArray(objectQuestion).forEach((element) => {
             if (typeof element == 'object') {
                 index++;
-                getB_id(local).insertAdjacentHTML('beforeend', `${this.editOption(element, aux > 0 ? false : true, objectQuestion,index)}`)
+                getB_id(local).insertAdjacentHTML('beforeend', `${this.editOption(element, aux > 0 ? false : true, objectQuestion, index)}`)
                 aux--;
             }
         })
     }
-    tempButtonUpdate(id){
+    tempButtonUpdate(id) {
         return `
             <button type="button" id='${id}'>
                 <img src="./assets/images/salve.svg" title="alterar Questão."/>
@@ -246,32 +248,34 @@ export class TemplateChecklist {
     disableButtons(places) {
         places.forEach((place) => {
             let buttons = $_all(`${place} button`);
-            buttons.forEach((button) => { button.disabled =true; button.setAttribute('style', 'opacity:0.2')})
+            buttons.forEach((button) => { button.disabled = true; button.setAttribute('style', 'opacity:0.2') })
         })
     }
-    enableButtons(places){
+    enableButtons(places) {
         places.forEach((place) => {
             let buttons = $_all(`${place} button`);
-            buttons.forEach((button) => { button.disabled =false; button.setAttribute('style', 'opacity:1')})
+            buttons.forEach((button) => { button.disabled = false; button.setAttribute('style', 'opacity:1') })
         })
     }
-    settingButton() {       
+    settingButton() {
         this.enableInputTitle();
+        this.changeNotification();
         this.addNewOption();
-        getB_id('btnEnabledInput').addEventListener('click', () => { this.enabledInputQuestion('#divForm input') })
         this.enabledButtonInit();
         this.changeTypeQuestion();
         this.changeNameChecklist();
         this.changeDatesChecklist();
-        getB_id('btnSalveChecklist').addEventListener('click', () => this.completedChecklist())
         this.salveQuestion('salveQuestion')
+        getB_id('btnEnabledInput').addEventListener('click', () => this.enabledInputQuestion('#divForm input'))
+        getB_id('deleteChecklist').addEventListener('click', () => this.routers.routers(localStorage.getItem('router')))
+        getB_id('btnSalveChecklist').addEventListener('click', () => this.completedChecklist())
     }
-    salveQuestion(idButton){
-        getB_id(idButton).addEventListener('click', () => { 
-            this.auxAddQuestion(this.idQuestion); 
-            this.alterTypeQuestion(); 
-            this.enabledButtonInit(); 
-            this.resetInput('#headerQuestion input') 
+    salveQuestion(idButton) {
+        getB_id(idButton).addEventListener('click', () => {
+            this.auxAddQuestion(this.idQuestion);
+            this.alterTypeQuestion();
+            this.enabledButtonInit();
+            this.resetInput('#headerQuestion input')
         })
     }
     // buttonSalveHeaderCheck() {
@@ -280,46 +284,51 @@ export class TemplateChecklist {
     //     })
     // <button type="button" id="salveChecklist"><img src=${this.pathImgSalve} title="Salvar checklist" /></button> // -CASO FOR UTILIZAR O BOTÃO DEVOLVER NO TAMPLATE;
     // }
-    addNewOption(){
+    addNewOption() {
         getB_id('addNewOption').addEventListener('click', () => {
             this.addOptions('bodyQuestion');
-            this.enabledOptionButton(); 
-            this.deleteOptionButton() 
+            this.enabledOptionButton();
+            this.deleteOptionButton()
         })
     }
-    enableInputTitle(){
+    enableInputTitle() {
         getB_id('btnNameChecklist').addEventListener('click', () => {
-            getB_id('nameChecklist').disabled=false; 
+            getB_id('nameChecklist').disabled = false;
             getB_id('nameChecklist').focus()
         })
-    } 
-    changeTypeQuestion(){
-        getB_id('typeQuestion').onchange = () => { 
-            this.alterTypeQuestion(); 
-            this.enabledButtonInit(); 
-            $('#headerQuestion input').value="";
-            $('#headerQuestion input').setAttribute('disabled',true) 
+    }
+    changeNotification() {
+        getB_id('notifyChecklist').addEventListener("click", () => {
+            this.notification ? $('#notifyChecklist img').setAttribute('src',this.pathImgNotifyOn):$('#notifyChecklist img').setAttribute('src',this.pathImgNotify)
+            this.checklist.setNotification(this.notification ? 1 : 0)
+            console.log(this.checklist)
+            this.notification = !this.notification;
+        })
+    }
+    changeTypeQuestion() {
+        getB_id('typeQuestion').onchange = () => {
+            this.alterTypeQuestion();
+            this.enabledButtonInit();
+            $('#headerQuestion input').value = "";
+            $('#headerQuestion input').setAttribute('disabled', true)
         }
     }
-    changeNameChecklist(){
-        getB_id('nameChecklist').onchange= () =>{
+    changeNameChecklist() {
+        getB_id('nameChecklist').onchange = () => {
             this.checklist.setTitle(getB_id('nameChecklist').value);
             getB_id('nameChecklist').disabled = true;
             console.log(this.checklist)
         }
     }
-    changeDatesChecklist(){
-        getB_id('dateInicial').onchange= () =>{
+    changeDatesChecklist() {
+        getB_id('dateInicial').onchange = () => {
             this.checklist.setDate_init(getB_id('dateInicial').value)
         }
-        getB_id('dateFinal').onchange= () =>{
+        getB_id('dateFinal').onchange = () => {
             this.checklist.setDate_final(getB_id('dateFinal').value)
-        } 
+        }
     }
-    changeNotificationChecklist(){
-        console.log(getB_id('dateFinal').valueAsDate = new Date())
-         
-    }
+   
     desmemberObjQuestion(question) {
         let response = [];
         Object.keys(question).forEach((element) => {
@@ -404,12 +413,12 @@ export class TemplateChecklist {
         let button = getB_id(`btnDelete_${value}`)
         button.addEventListener('click', () => { getB_id(`option_${value}`).remove(); })
     }
-    configBtnQuestion(){
+    configBtnQuestion() {
         this.enabledButtonInit();
         let array = $_all('.btnDelete');
         array.forEach(element => {
-            console.log(element.value,element);
-            element.addEventListener('click', ()=>{getB_id(`option_${element.value}`).remove();})
+            console.log(element.value, element);
+            element.addEventListener('click', () => { getB_id(`option_${element.value}`).remove(); })
         });
     }
     alterTypeQuestion() {
@@ -433,7 +442,7 @@ export class TemplateChecklist {
         });
         return object;
     }
-    auxAddQuestion(value){
+    auxAddQuestion(value) {
         let object = this.addQuestion(value);
         this.checklist.addQuestion(object);
         getB_id('questionCreated').insertAdjacentHTML('beforeend', this.questionsCreated([object], value))
@@ -449,7 +458,7 @@ export class TemplateChecklist {
         let btnEdit = getB_id(`editQuestionBtn_${value}`);
         let btnDelete = getB_id(`deleteQuestionBtn_${value}`);
         btnDelete.addEventListener('click', () => { getB_id(`questionCreated_${value}`).remove(); this.checklist.deleteQuestion(value) });
-        btnEdit.addEventListener('click', () => {this.editQuestion(this.checklist.queryQuestion(value))});
+        btnEdit.addEventListener('click', () => { this.editQuestion(this.checklist.queryQuestion(value)) });
     }
 
     editQuestion(objectQuestion) {
