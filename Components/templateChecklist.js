@@ -7,10 +7,12 @@ export class TemplateChecklist {
     checklist = new ObjectChecklist;
     usefulComponents = new UsefulComponents;
     idQuestion = 1;
+    notification = true;
     pathImgEdit = "./assets/images/pencil.svg";
-    pathImgAlert = "./assets/images/alertNotify.svg";
     pathImgSalve = "./assets/images/salve.svg";
     pathImgDelete = "./assets/images/delete.svg";
+    pathImgNotify = "./assets/images/alertNotify.svg";
+    pathImgNotifyOn = "./assets/images/alertNotify.svg";
     main() {
         let response =
             `<div id="formCheclist">		
@@ -23,7 +25,7 @@ export class TemplateChecklist {
                         </div>		
                     </div>
                     <div id="groupButtons">
-                        <button type="button" id="notifyChecklist"><img src=${this.pathImgAlert} title="Noftificar quando checklist for respondido" /></button>
+                        <button type="button" id="notifyChecklist"><img src=${this.pathImgNotify} title="Noftificar quando checklist for respondido" /></button>
                         
                         <button type="button" id="deleteChecklist"><img src=${this.pathImgDelete} title="Excluir checklist" /></button>
                     </div>
@@ -253,14 +255,12 @@ export class TemplateChecklist {
             buttons.forEach((button) => { button.disabled =false; button.setAttribute('style', 'opacity:1')})
         })
     }
-    settingButton() {
-        // Botões do cabeçalho:
-        getB_id('btnNameChecklist').addEventListener('click', () => {getB_id('nameChecklist').disabled=false; getB_id('nameChecklist').focus()})
-        //Botões da caixa de perguntas editáveis;
-        getB_id('addNewOption').addEventListener('click', () => { this.addOptions('bodyQuestion'); this.enabledOptionButton(); this.deleteOptionButton() })
+    settingButton() {       
+        this.enableInputTitle();
+        this.addNewOption();
         getB_id('btnEnabledInput').addEventListener('click', () => { this.enabledInputQuestion('#divForm input') })
         this.enabledButtonInit();
-        getB_id('typeQuestion').onchange = () => { this.alterTypeQuestion(); this.enabledButtonInit(); $('#headerQuestion input').value="";$('#headerQuestion input').setAttribute('disabled',true) }
+        this.changeTypeQuestion();
         this.changeNameChecklist();
         this.changeDatesChecklist();
         getB_id('btnSalveChecklist').addEventListener('click', () => this.completedChecklist())
@@ -280,6 +280,27 @@ export class TemplateChecklist {
     //     })
     // <button type="button" id="salveChecklist"><img src=${this.pathImgSalve} title="Salvar checklist" /></button> // -CASO FOR UTILIZAR O BOTÃO DEVOLVER NO TAMPLATE;
     // }
+    addNewOption(){
+        getB_id('addNewOption').addEventListener('click', () => {
+            this.addOptions('bodyQuestion');
+            this.enabledOptionButton(); 
+            this.deleteOptionButton() 
+        })
+    }
+    enableInputTitle(){
+        getB_id('btnNameChecklist').addEventListener('click', () => {
+            getB_id('nameChecklist').disabled=false; 
+            getB_id('nameChecklist').focus()
+        })
+    } 
+    changeTypeQuestion(){
+        getB_id('typeQuestion').onchange = () => { 
+            this.alterTypeQuestion(); 
+            this.enabledButtonInit(); 
+            $('#headerQuestion input').value="";
+            $('#headerQuestion input').setAttribute('disabled',true) 
+        }
+    }
     changeNameChecklist(){
         getB_id('nameChecklist').onchange= () =>{
             this.checklist.setTitle(getB_id('nameChecklist').value);
