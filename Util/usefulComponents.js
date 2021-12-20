@@ -52,12 +52,12 @@ export class UsefulComponents {
         return response
     }
     
-    currentDate() {
+    currentDate() {        
         let date = new Date();
         let day = String(date.getDate()).padStart(2, '0')
         let month = String(date.getMonth() + 1).padStart(2, '0')
         let year = date.getFullYear();
-        let date_Atual = year + '-' + month + '-' + day;
-        return date_Atual;
+        let current_date = year + '-' + month + '-' + day;
+        return current_date;
     }
 }
