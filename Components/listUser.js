@@ -10,7 +10,7 @@ export class ListUser {
     await user.populate(id_user);
 
     let data = `
-        <div class="divUser" id="user_${user.getId_user()}">
+        <div class="divUser" id="sender_${user.getId_user()}">
             <div class="divColab">
                 <img id="photoUser" src="${user.getPhoto().src}"/>
                 <p>${user.getName()}</p>
