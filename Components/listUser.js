@@ -18,7 +18,7 @@ export class ListUser {
         `;
     return data;
   }
-  async checkBoxUser(ids, local) {
+  async checkBoxUser(ids) {
     let response = "";
     document
       .querySelector(".container")

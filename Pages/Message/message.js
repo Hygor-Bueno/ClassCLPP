@@ -79,7 +79,7 @@ export class MessagePage extends SettingMessage {
     }
     setNotify(notify){
         if (notify){
-            if(document.querySelector('.user_in :first-child')) document.querySelector('.user_in :first-child').remove();
+            if(document.querySelector('.user_in :first-child')) document.querySelector('.user_in').innerHTML = ' ';
             userJson[notify.send_user?'user_'+ notify.send_user:'group_'+ notify.send_user].notification = 1
             $('.user_in').insertAdjacentHTML('beforeend', this.userReceived(this.convertArray(userJson)))
             this.clickDivUser('.user_in .divUser')

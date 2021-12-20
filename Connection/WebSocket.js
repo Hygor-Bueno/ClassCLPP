@@ -34,10 +34,6 @@ export class WebSocketCLPP {
         isConnected = false
     }
     async OnMessage(ev) {        
-        if (ev.data.toString() == "__pong__") {
-            pong()
-            return
-        }
         let getNotify = JSON.parse(ev.data)
         if (getNotify.objectType == 'notification') {
             console.log(' ****** vizualizaram sua mensagem ****** ')
@@ -85,6 +81,7 @@ export class WebSocketCLPP {
     }
     // Eu estou enviando a mensagem  
     informSending(idMessage, idUserSend) {
+        console.log(idMessage, idUserSend)
         let jsonString = {
             type: 2,
             send_id: idUserSend,

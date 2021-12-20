@@ -10,12 +10,10 @@ export class UsefulComponents {
             console.error(e)
         }
     }
-
     convertData(stringToSplit, separator){
         let response = this.splitString(stringToSplit, separator)
         return response[2] + "/"+ response[1] + "/" + response[0]
     }
-
     splitStringName(stringToSplit, separator) {
         var arrayOfStrings = this.splitString(stringToSplit, separator)
         if (arrayOfStrings.length - 1 == 0) {
@@ -30,7 +28,6 @@ export class UsefulComponents {
         }
         return response
     }
-
     checkField(local){
         let valid = true;
 
@@ -48,11 +45,19 @@ export class UsefulComponents {
         div.classList.add('error-text')
         field.insertAdjacentElement('afterend', div)
     }
-
     convertObjForArray(obj){
         let response=[],key;
         key = Object.keys(obj)
         key.forEach(valor => {response.push(obj[valor])})
         return response
+    }
+    
+    currentDate() {        
+        let date = new Date();
+        let day = String(date.getDate()).padStart(2, '0')
+        let month = String(date.getMonth() + 1).padStart(2, '0')
+        let year = date.getFullYear();
+        let current_date = year + '-' + month + '-' + day;
+        return current_date;
     }
 }
