@@ -32,7 +32,12 @@ export class Message {
             .then(body => {
                 if (body.error) throw Error(body.message)
                 req = body;
+<<<<<<< HEAD
+                console.log(req)
+            }).catch(error => { console.log(error); if (err) errorHandling.main(error) })
+=======
             }).catch(error => { console.log(error); if (error) errorHandling.main(error) })
+>>>>>>> 340d8bbd130b115722241366427d09eb21eec756
         return req;
     }
     settingUrl(middlewer, params) {
