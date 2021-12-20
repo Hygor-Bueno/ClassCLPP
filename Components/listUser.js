@@ -34,12 +34,8 @@ export class ListUser {
     for (const iterator of list) {
       iterator.insertAdjacentHTML("beforeend", `<input type="checkbox"/>`);
     }
-    document
-      .querySelector(".container")
-      .insertAdjacentHTML(
-        "afterbegin",
-        `<header id="headerUserList"><h1>Incluir sem vergonha</h1></header>`
-      );
+    document.querySelector(".container").insertAdjacentHTML("afterbegin",`<header id="headerUserList"><h1>Incluir sem vergonha</h1></header>`);
+    document.querySelector(".container").insertAdjacentHTML("beforeend",`<button id="headerUserList"><h1>Incluir sem vergonha</h1></button>`);
     document.querySelector(".container").setAttribute("style", "display:flex");
   }
 }

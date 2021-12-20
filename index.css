@@ -154,8 +154,8 @@ button{
     align-items: center;
     background: white;
     width: 35%;
-    height: 25%;
-    overflow-y: scroll;
+    height: 65%;
+    overflow-y: auto;
 }
 
 .divUser{
