@@ -154,8 +154,8 @@ button{
     align-items: center;
     background: white;
     width: 35%;
-    height: 65%;
-    overflow-y: scroll
+    height: 25%;
+    overflow-y: scroll;
 }
 
 .divUser{
@@ -172,4 +172,17 @@ button{
     display: flex;
     align-items: center;
     width: 100%;   
+}
+
+.style_scroll::-webkit-scrollbar {
+    width: 5px;
+}
+
+.style_scroll::-webkit-scrollbar-track{
+    background: transparent;
+}
+
+.style_scroll::-webkit-scrollbar-thumb{
+    background:#326744;
+    border-radius: 10px;
 }

@@ -22,7 +22,7 @@ export class ListUser {
     let response = "";
     document
       .querySelector(".container")
-      .insertAdjacentHTML("beforeend", '<div id="listUser"></div>');
+      .insertAdjacentHTML("beforeend", '<div id="listUser" class="style_scroll"></div>');
     for (const element of ids) {
       response += `${await this.main(element.id)}`;
     }
