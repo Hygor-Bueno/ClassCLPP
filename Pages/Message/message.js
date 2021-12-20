@@ -43,17 +43,16 @@ export class MessagePage extends SettingMessage {
                 <div class="templateSearchUser" style="display:none"> 
                     ${await this.methodUnited(this.employeeAccess)}           
                 </div>
+                <div class="searchUnic" style="display:none">
+                </div>
             </div>
             <div class="part2">
-                <header class="colabHead">                    
+                <header class="colabHead">
                 </header>
                 <div class="msg_in">
-                    <div class="msg_out" id="bodyMessageDiv"></div>
+                    <div class="msg_out" id="bodyMessageDiv">
+                    </div>
                     <footer class="footSend">
-                        <input type="file" accept=".doc, .pdf, image/png, image/jpg, image/jpeg, image/gif, video/mp4," id="file">
-                        <label for="file"><img class="fileButton" src="./assets/images/clip.svg"></label>
-                        <input type="text" class="msg_write" id='inputSend' maxlength="200">
-                        <img class="buttonSendMsg" id='buttonSend' src="./assets/images/enviar.svg">
                     </footer>
                 </div>
             </div>
@@ -76,16 +75,14 @@ export class MessagePage extends SettingMessage {
             </div>
             `
         )).join('')
-        return `<div> ${conversation} </div>`;
+        return `${conversation}`;
     }
     setNotify(notify){
         if (notify){
-            if(document.querySelector('.user_in :first-child')) document.querySelector('.user_in :first-child').remove();
+            if(document.querySelector('.user_in :first-child')) document.querySelector('.user_in').innerHTML = ' ';
             userJson[notify.send_user?'user_'+ notify.send_user:'group_'+ notify.send_user].notification = 1
-            $('.user_in').insertAdjacentHTML('beforeend', this.userReceived(this.convertArray(userJson))) 
+            $('.user_in').insertAdjacentHTML('beforeend', this.userReceived(this.convertArray(userJson)))
             this.clickDivUser('.user_in .divUser')
         }
     }
-
-
 }

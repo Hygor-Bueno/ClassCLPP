@@ -7,6 +7,7 @@ export class Checklist {
         typeof params === "string" || typeof params === "object" ? params : err = params;
         this.settingUrl('/Controller/CLPP/Checklist.php?app_id=7&AUTH=',params)
         let response
+        console.log(this.URL)
         await fetch(this.URL + params)
             .then(response => response.json())
             .then(body => {

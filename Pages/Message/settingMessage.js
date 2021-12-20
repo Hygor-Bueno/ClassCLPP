@@ -29,32 +29,45 @@ export class SettingMessage {
     chatScroll;
 
     async setting() {
-        this.clickSend()
         this.clickDivUser('.divUser')
         this.searchUser()
         this.scrollMsg()
         this.searchName()
     }
     clickSend() {
-        getB_id('buttonSend').addEventListener('click', () => { this.settingHome.buttonSend(this.chatIdSender, this.chatIdPage, this.chatScroll), this.notificationMsg() });
+        getB_id('buttonSend').addEventListener('click', () => {
+            this.settingHome.buttonSend(this.chatIdSender, this.chatIdPage, this.chatScroll), this.notificationMsg() });
         getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
     clickDivUser(local) {
-        $_all(local).forEach(element => element.addEventListener('click', async () => {
-            this.pages = 1;
-            this.changeHeader(element)
-            $('.user_in').setAttribute('style', 'display:flex')
-            $('.templateSearchUser').setAttribute('style', 'display:none')
-            element.querySelector('.imgNotify').setAttribute('src', './assets/images/notification.svg')
-            $('.msg_out :first-child') && $('.msg_out section').remove()
-            await this.chargePageMsg(this.usefulComponents.splitString(element.getAttribute('id'), '_'))
-            $('.msg_out ').scrollTop = $('.msg_out ').scrollHeight;
-            this.chatIdSender = this.usefulComponents.splitString($('.colabHead ').getAttribute('data-id'), "_");
-            this.chatIdPage = `#${$('.msg_out section').getAttribute('id')}`;
-            this.chatScroll = `.${$('.msg_out ').getAttribute('class')}`;
-            this.ws.informPreview(this.chatIdSender)
-        })
-        )
+        $_all(local).forEach(element => element.addEventListener('click',  () => {this.clickEvents(element); this.chergeSendButtom(); console.log(element)}))
+    }
+    async clickEvents(element){
+        this.pages = 1;
+        this.changeHeader(element)
+        $('.user_in').setAttribute('style', 'display:flex')
+        $('.templateSearchUser').setAttribute('style', 'display:none')
+        $('.searchUnic').setAttribute('style', 'display:none')
+        element.querySelector('.imgNotify') && element.querySelector('.imgNotify').setAttribute('src', './assets/images/notification.svg')
+        $('.msg_out :first-child') && $('.msg_out section').remove()
+        await this.chargePageMsg(this.usefulComponents.splitString(element.getAttribute('id'), '_'))
+        $('.msg_out ').scrollTop = $('.msg_out ').scrollHeight;
+        this.chatIdSender = this.usefulComponents.splitString(element.getAttribute('id'), '_');
+        this.chatIdPage = `#${$('.msg_out section').getAttribute('id')}`;
+        this.chatScroll = `.${$('.msg_out ').getAttribute('class')}`;
+        this.ws.informPreview(this.chatIdSender)
+        this.notificationMsg()
+        this.clickSend();
+    }
+    chergeSendButtom(){
+        $('.footSend').innerHTML = " "
+        const chargeButton = `                        
+            <input type="file" accept=".doc, .pdf, image/png, image/jpg, image/jpeg, image/gif, video/mp4," id="file">
+            <label for="file"><img class="fileButton" src="./assets/images/clip.svg"></label>
+            <input type="text" class="msg_write" id='inputSend' maxlength="200">
+            <img class="buttonSendMsg" id='buttonSend' src="./assets/images/enviar.svg">
+        `
+        $('.footSend').insertAdjacentHTML('beforeend', chargeButton)
     }
     async chargePageMsg(split) {
         let object = split[0] == 'sender' ? { 'id': split[1], 'destiny': '&id_send=' } : { 'id': split[1], 'destiny': '&id_group=' };
@@ -65,17 +78,17 @@ export class SettingMessage {
         $('.colabHead').setAttribute('data-id', element.getAttribute('id'))
         $('.colabHead').innerHTML = element.innerHTML
         $(`.part2 .notifyMsg`) && $(`.part2 .notifyMsg`).remove();
-        $('.part2 .colabHead').insertAdjacentHTML('beforeend', ` 
-        <div class="notifyMsg">
+        $('.part2 .colabHead').insertAdjacentHTML('beforeend', 
+        `<div class="notifyMsg">
             <img class="imgNotify" src=./assets/images/notification.svg>
-        </div>` )
+        </div>`)
     }
     searchUser() {
-        $('.searchUser').addEventListener('click', async () => {
+        $('.searchUser').addEventListener('click', () => {
+            $('.searchUnic').setAttribute('style', 'display:none')
             if ($('.user_in').style.display == 'flex') {
                 $('.user_in').setAttribute('style', 'display:none')
                 $('.templateSearchUser').setAttribute('style', 'display:flex')
-                this.clickDivUser();
             } else {
                 $('.user_in').setAttribute('style', 'display:flex')
                 $('.templateSearchUser').setAttribute('style', 'display:none')
@@ -86,30 +99,41 @@ export class SettingMessage {
         let nameArray = []
         const divArray = $_all('.templateSearchUser .divUser')
         for (let index = 0; index < divArray.length; index++) {
-            nameArray.push({ 'name': $(`#${divArray[index].getAttribute('id')} p`).innerText, 'id': divArray[index].getAttribute('id').replace('user_', ' ') })
+            nameArray.push({ 'name': $(`#${divArray[index].getAttribute('id')} p`).innerText, 'id': divArray[index].getAttribute('id')
+            .replace('sender_', ' ') })
         }
         return nameArray
     }
     searchName() {
         $('.searchName').addEventListener('click', async () => {
-            let searchName = $('.searchUserBar').value
-            let findName = this.createListUser().filter(valor => valor.name.toLowerCase().includes(searchName.toLowerCase()))
-            $('.user_in').setAttribute('style', 'display:none')
-            $('.templateSearchUser').innerHTML = " "
-            $('.templateSearchUser').setAttribute('style', 'display:flex')
-            for (let i = 0; i < findName.length; i++) {
-                if (!findName[i].id.includes(localStorage.getItem('id'))) $('.templateSearchUser').insertAdjacentHTML("afterbegin", await this.listUser.main(findName[i].id))
+            if($('.searchUserBar').value){
+                let searchName = $('.searchUserBar').value
+                let findName = this.createListUser().filter(valor => valor.name.toLowerCase().includes(searchName.toLowerCase()))
+                $('.user_in').setAttribute('style', 'display:none')
+                $('.templateSearchUser').setAttribute('style', 'display:none')
+                $('.searchUnic').innerHTML = " "
+                $('.searchUnic').setAttribute('style', 'display:flex')
+                for (let i = 0; i < findName.length; i++) {
+                    if (!findName[i].id.includes(localStorage.getItem('id'))) $('.searchUnic').insertAdjacentHTML("afterbegin", await this.listUser.main(findName[i].id))
+                }
             }
-            this.clickDivUser();
+            this.clickDivUser('.searchUnic')
         })
         $('.searchUserBar').addEventListener('keypress', (e) => { if (e.key === 'Enter') $('.searchName').click() })
     }
     visualizationMsg(params) {
-        console.log($_all('.messageSend'))
-        if ($('.colabHead .divColab') && $('.colabHead').getAttribute('data-id').split('_')[1] == params.user) $('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notification.svg')
+        if ($('.colabHead .divColab') && $('.colabHead').getAttribute('data-id').split('_')[1] == params.user){
+            $_all('.messageSend')[$_all('.messageSend').length - 1].setAttribute('data-view', '0')
+            this.notificationMsg()
+        }
     }
     notificationMsg() {
-        $('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notify.svg')
+        let notific = $_all('.messageSend')[$_all('.messageSend').length - 1].getAttribute('data-view')
+        if(notific == 1){
+            $('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notify.svg')
+        }else{
+            $('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notification.svg')
+        }
     }
     async methodUnited(dataId) {
         let response = ""
