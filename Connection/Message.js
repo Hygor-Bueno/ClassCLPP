@@ -33,7 +33,7 @@ export class Message {
                 if (body.error) throw Error(body.message)
                 req = body;
                 console.log(req)
-            }).catch(error => { console.log(error); if (error) errorHandling.main(error) })
+            }).catch(error => { console.log(error); if (err) errorHandling.main(error) })
         return req;
     }
     settingUrl(middlewer, params) {

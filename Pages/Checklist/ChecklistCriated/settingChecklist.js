@@ -9,6 +9,7 @@ export class SettingChecklist {
   searchCheck;
   searchDateInit;
   searchDateFinal;
+  idCheck;
   checklist = new Checklist();
   listUser = new ListUser();
   accessClpp = new UserAccess();
@@ -51,27 +52,25 @@ export class SettingChecklist {
 
   async listUsers() {
     getB_id("groups").addEventListener("click", async () => {
-      this.queryUser();
+      this.queryUser(getB_id("groups").getAttribute('data-id_check'));
     });
   }
 
-  async queryUser() {
+  async queryUser(idChecklist) {
     let accessCLPP = await this.accessClpp.get("&application_id=7&web");
+
     await this.listUser.checkBoxUser(
-      accessCLPP.data,
-      '<div id="listUser"></div>'
+      accessCLPP.data,idChecklist
     );
   }
 
   getCheckListCreted(checklists) {
-
-    try{
-
+    try {
       let userful = new UsefulComponents();
-    let response = checklists
-      .map(
-        (checklist) =>
-          `
+      let response = checklists
+        .map(
+          (checklist) =>
+            `
             <div class="checklistCreated" id="checklis_${checklist.id}">
               <div id="description">
                   <h1>${checklist.description}</h1> 
@@ -98,22 +97,19 @@ export class SettingChecklist {
                   }</p>
               </div>
               <div id="function">
-              <button type="button" id="groups"><img src="./assets/images/groups_black_24dp.svg"/></button>
+              <button type="button" data-id_check="${checklist.id}"  id="groups"><img src="./assets/images/groups_black_24dp.svg"/></button>
               <button type="button"><img src="./assets/images/olho.svg"/></button>
               <button type="button" ><img src="./assets/images/delete.svg"/></button>
               </div>
           </div>
         `
-      )
-      .join("");
+        )
+        .join("");
 
-    return response;
-  }
-
-    catch(e){
-      console.error(e + " : Falha ao realizar a requisição...")
-            return `<div class="ErrorPageDefault"><p>Desculpe, você não possui checklist...</p></div>`
+      return response;
+    } catch (e) {
+      console.error(e + " : Falha ao realizar a requisição...");
+      return `<div class="ErrorPageDefault"><p>Desculpe, você não possui checklist...</p></div>`;
     }
-    
-}
+  }
 }

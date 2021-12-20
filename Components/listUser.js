@@ -1,3 +1,4 @@
+import { UserCheckList } from "../Connection/UserCheckList.js";
 import { MessageList } from "./messageList.js";
 import { Users } from "./objects/user.js";
 
@@ -18,24 +19,40 @@ export class ListUser {
         `;
     return data;
   }
-  async checkBoxUser(ids) {
+
+  async checkBoxUser(ids,idChecklist) {
+    console.log(ids)
     let response = "";
-    document
-      .querySelector(".container")
-      .insertAdjacentHTML("beforeend", '<div id="listUser" class="style_scroll"></div>');
+    document.querySelector(".container").insertAdjacentHTML("beforeend", '<div id="listUser" class="style_scroll"></div>');
     for (const element of ids) {
       response += `${await this.main(element.id)}`;
     }
-    document
-      .querySelector("#listUser")
-      .insertAdjacentHTML("beforeend", `${response}`);
+    document.querySelector("#listUser").insertAdjacentHTML("beforeend", `${response}`);
     let list = document.querySelectorAll(".divUser");
-
+    let checkUser =  true;
     for (const iterator of list) {
-      iterator.insertAdjacentHTML("beforeend", `<input type="checkbox"/>`);
+      iterator.insertAdjacentHTML("beforeend", `<input type="checkbox" />`);
     }
-    document.querySelector(".container").insertAdjacentHTML("afterbegin",`<header id="headerUserList"><h1>Incluir sem vergonha</h1></header>`);
-    document.querySelector(".container").insertAdjacentHTML("beforeend",`<button id="headerUserList"><h1>Incluir sem vergonha</h1></button>`);
+    document.querySelector(".container").insertAdjacentHTML("afterbegin", this.buttonBack());
+    document.querySelector(".container").insertAdjacentHTML("beforeend",`<div id="buttonGroup"><button id="saveGroup">Salvar</button></div>`);
     document.querySelector(".container").setAttribute("style", "display:flex");
+    await this.validationUserChecklist(idChecklist);
   }
+
+  async validationUserChecklist(idCheck){
+    let userCheckList = new UserCheckList;
+    let userAccess = await userCheckList.get("&id_checklist=" + idCheck, true)    
+    userAccess.forEach(element => {document.querySelector(`#user_${element.id_user} input`).checked = true});
+  }
+
+  buttonBack(){
+    return`
+    <div id="displayHeader">  
+          <div id="borderBack" onClick="window.location.reload()">
+              <img src="../assets/images/setaLeft.svg" "/>
+          </div>
+          <header id="headerUserList"><h1>Incluir Usuario</h1></header>
+    </div>`
+  }
+
 }
