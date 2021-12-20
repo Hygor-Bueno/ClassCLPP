@@ -2,8 +2,7 @@ import { MessageList } from "./messageList.js";
 import { Users } from "./objects/user.js";
 
 export class ListUser {
-    messageList = new MessageList;
-    
+    messageList = new MessageList;    
     async main(id_user) {
         const user = new Users;
         await user.populate(id_user);
@@ -18,7 +17,7 @@ export class ListUser {
         `;
     return data;
   }
-  async checkBoxUser(ids, local) {
+  async checkBoxUser(ids) {
     let response = "";
     document
       .querySelector(".container")
