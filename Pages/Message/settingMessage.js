@@ -40,7 +40,7 @@ export class SettingMessage {
         getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
     clickDivUser(local) {
-        $_all(local).forEach(element => element.addEventListener('click',  () => {this.clickEvents(element); this.chergeSendButtom(); console.log(element)}))
+        $_all(local).forEach(element => element.addEventListener('click',  () => {this.clickEvents(element); this.chergeSendButtom();}))
     }
     async clickEvents(element){
         this.pages = 1;
@@ -54,7 +54,7 @@ export class SettingMessage {
         $('.msg_out ').scrollTop = $('.msg_out ').scrollHeight;
         this.chatIdSender = this.usefulComponents.splitString(element.getAttribute('id'), '_');
         this.chatIdPage = `#${$('.msg_out section').getAttribute('id')}`;
-        this.chatScroll = `.${$('.msg_out ').getAttribute('class')}`;
+        this.chatScroll = `.msg_out`;
         this.ws.informPreview(this.chatIdSender)
         this.notificationMsg()
         this.clickSend();
@@ -70,6 +70,7 @@ export class SettingMessage {
         $('.footSend').insertAdjacentHTML('beforeend', chargeButton)
     }
     async chargePageMsg(split) {
+        console.log(split)
         let object = split[0] == 'sender' ? { 'id': split[1], 'destiny': '&id_send=' } : { 'id': split[1], 'destiny': '&id_group=' };
         $('.msg_out').insertAdjacentHTML('beforeend', await this.messageList.bodyChat(object, this.pages))
         $('.msg_out section').setAttribute('id', `pages_${this.pages}`)
@@ -121,7 +122,7 @@ export class SettingMessage {
         })
         $('.searchUserBar').addEventListener('keypress', (e) => { if (e.key === 'Enter') $('.searchName').click() })
     }
-    visualizationMsg(params) {
+    async visualizationMsg(params) {
         if ($('.colabHead .divColab') && $('.colabHead').getAttribute('data-id').split('_')[1] == params.user){
             $_all('.messageSend')[$_all('.messageSend').length - 1].setAttribute('data-view', '0')
             this.notificationMsg()
@@ -146,7 +147,7 @@ export class SettingMessage {
         $('.msg_out').addEventListener('scroll', () => {
             const sectionPage = $_all('.msg_out section')
             const beatTop = $('.msg_out').scrollTop
-            sectionPage.forEach(element => { console.log(element) })
+            sectionPage.forEach(element => {console.log(element)})
         })
     }
     convertArray(obj){
