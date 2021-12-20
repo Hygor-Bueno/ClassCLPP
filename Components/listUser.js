@@ -30,12 +30,16 @@ export class ListUser {
       .querySelector("#listUser")
       .insertAdjacentHTML("beforeend", `${response}`);
     let list = document.querySelectorAll(".divUser");
-    
+
     for (const iterator of list) {
-        
       iterator.insertAdjacentHTML("beforeend", `<input type="checkbox"/>`);
     }
-    document.querySelector(".container").insertAdjacentHTML("afterbegin", `<header id="headerUserList"><h1>Incluir sem vergonha</h1></header>`);
+    document
+      .querySelector(".container")
+      .insertAdjacentHTML(
+        "afterbegin",
+        `<header id="headerUserList"><h1>Incluir sem vergonha</h1></header>`
+      );
     document.querySelector(".container").setAttribute("style", "display:flex");
   }
 }
