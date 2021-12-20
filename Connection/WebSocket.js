@@ -47,7 +47,7 @@ export class WebSocketCLPP {
         const Msg = new MessagePage;
         Msg.visualizationMsg(param)
     }
-    async messageReceived(param){       
+    async messageReceived(param){      
         const msg = new MessagePage;
         msg.setNotify(param)
     }
@@ -81,7 +81,6 @@ export class WebSocketCLPP {
     }
     // Eu estou enviando a mensagem  
     informSending(idMessage, idUserSend) {
-        console.log(idMessage, idUserSend)
         let jsonString = {
             type: 2,
             send_id: idUserSend,
