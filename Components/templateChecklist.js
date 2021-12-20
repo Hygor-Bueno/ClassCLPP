@@ -265,9 +265,9 @@ export class TemplateChecklist {
         this.changeTypeQuestion();
         this.changeNameChecklist();
         this.changeDatesChecklist();
-        this.salveQuestion('salveQuestion')
-        getB_id('btnEnabledInput').addEventListener('click', () => this.enabledInputQuestion('#divForm input'))
-        getB_id('deleteChecklist').addEventListener('click', () => this.routers.routers(localStorage.getItem('router')))
+        this.salveQuestion('salveQuestion');
+        this.deleteChecklist();
+        getB_id('btnEnabledInput').addEventListener('click', () => this.enabledInputQuestion('#divForm input'))        
         getB_id('btnSalveChecklist').addEventListener('click', () => this.completedChecklist())
     }
     salveQuestion(idButton) {
@@ -284,6 +284,11 @@ export class TemplateChecklist {
     //     })
     // <button type="button" id="salveChecklist"><img src=${this.pathImgSalve} title="Salvar checklist" /></button> // -CASO FOR UTILIZAR O BOTÃO DEVOLVER NO TAMPLATE;
     // }
+    deleteChecklist(){
+        getB_id('deleteChecklist').addEventListener('click', () => {
+            if(confirm('Deseja realmente deletar o checklist? ')) this.routers.routers(localStorage.getItem('router'))
+        })
+    }
     addNewOption() {
         getB_id('addNewOption').addEventListener('click', () => {
             this.addOptions('bodyQuestion');
@@ -448,10 +453,6 @@ export class TemplateChecklist {
         getB_id('questionCreated').insertAdjacentHTML('beforeend', this.questionsCreated([object], value))
         this.btnQuestionCreated();
     }
-    //Função resposavel por finalizar o checklist!
-    completedChecklist() {
-        console.log(this.checklist)
-    }
     btnQuestionCreated(values) {
         let array = $_all('.questionCreated')[$_all('.questionCreated').length - 1];
         let value = values || array.getAttribute('value');
@@ -460,9 +461,12 @@ export class TemplateChecklist {
         btnDelete.addEventListener('click', () => { getB_id(`questionCreated_${value}`).remove(); this.checklist.deleteQuestion(value) });
         btnEdit.addEventListener('click', () => { this.editQuestion(this.checklist.queryQuestion(value)) });
     }
-
     editQuestion(objectQuestion) {
         this.editQuestionCreated(objectQuestion)
-        // console.log(objectQuestion)
+        //console.log(objectQuestion)
+    }
+    //Função resposavel por finalizar o checklist!
+    completedChecklist() {
+        console.log(this.checklist)
     }
 }
