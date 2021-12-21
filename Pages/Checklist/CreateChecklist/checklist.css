@@ -93,8 +93,6 @@
     margin:5px;
     border-radius: 5px;
 }
-
-
 /*FORMATAÇÃO DO ASIDE CHECKLIST */
 #bodyCheckEditable aside {
     height: 100%;
@@ -108,11 +106,9 @@
     background: WHITE;
     padding: 5px;
 }
-
 #typeQuestion {
     padding: 5px;
 }
-
 #headerQuestion {
     margin-top: 10px;
     display: flex;
@@ -122,7 +118,6 @@
     background: white;
     border-bottom: 1px solid rgb(178, 178, 178);
 }
-
 #headerQuestion input {
     margin-left: 16px;
 }
@@ -135,14 +130,34 @@
     background: white;
     padding: 5px;
 }
-
+.handSignature{
+    display:flex;
+    align-items: center;
+    height:50px;
+}
+.handSignature input{
+    margin-left: 10px;
+    height: 18px;
+}
+.handSignature img{
+    margin-left: 10px;
+    width: 25px;
+    height: 25px;
+}
+#handSignatureImg{
+    margin-left: 10px;
+    width: 25px;
+    height: 25px;
+}
+.handSignatureCreated{
+    margin-top: 10px;
+}
 .sectionOption {
     width: 100%;
     display: flex;
     justify-content: space-between;
 
 }
-
 .optionEditable input {
     background: none;
 }
