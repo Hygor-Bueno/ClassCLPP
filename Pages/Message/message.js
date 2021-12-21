@@ -80,10 +80,9 @@ export class MessagePage extends SettingMessage {
     async setNotify(notify){
         if ($('.colabHead .divColab') && $('.colabHead').getAttribute('data-id').split('_')[1] == notify.send_user){
             $('.msg_out :first-child') && $('.msg_out section').remove()
-            await this.chargePageMsg(this.usefulComponents.splitString($('.colabHead').getAttribute('data-id'), '_'))
+            await this.chargePageMsg(this.usefulComponents.splitString($('.colabHead').getAttribute('data-id'), '_'),'beforeend')
             $('.msg_out ').scrollTop = $('.msg_out ').scrollHeight;
         }else{
-            console.log("foi")
             if(document.querySelector('.user_in :first-child')) document.querySelector('.user_in').innerHTML = ' ';
             userJson[notify.send_user?'user_'+ notify.send_user:'group_'+ notify.send_user].notification = 1
             $('.user_in').insertAdjacentHTML('beforeend', this.userReceived(this.convertArray(userJson)))

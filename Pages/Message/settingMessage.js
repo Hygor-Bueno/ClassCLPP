@@ -27,7 +27,7 @@ export class SettingMessage {
     chatIdSender;
     chatIdPage;
     chatScroll;
-
+    positionChat=0;
     async setting() {
         this.clickDivUser('.divUser')
         this.searchUser()
@@ -35,22 +35,24 @@ export class SettingMessage {
         this.searchName()
     }
     clickSend() {
-        getB_id('buttonSend').addEventListener('click', () => {
-            this.settingHome.buttonSend(this.chatIdSender, this.chatIdPage, this.chatScroll), this.notificationMsg() });
+        getB_id('buttonSend').addEventListener('click',async () => {
+            await this.settingHome.buttonSend(this.chatIdSender, this.chatIdPage, this.chatScroll);
+            this.notificationMsg();
+        });
         getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
     clickDivUser(local) {
-        $_all(local).forEach(element => element.addEventListener('click',  () => {this.clickEvents(element); this.chergeSendButtom();}))
+        $_all(local).forEach(element => element.addEventListener('click',  () => {this.clickEvents(element); this.chergeSendButtom()}))
     }
     async clickEvents(element){
         this.pages = 1;
+        $('.msg_out').innerHTML =""     
         this.changeHeader(element)
         $('.user_in').setAttribute('style', 'display:flex')
         $('.templateSearchUser').setAttribute('style', 'display:none')
         $('.searchUnic').setAttribute('style', 'display:none')
         element.querySelector('.imgNotify') && element.querySelector('.imgNotify').setAttribute('src', './assets/images/notification.svg')
-        $('.msg_out :first-child') && $('.msg_out section').remove()
-        await this.chargePageMsg(this.usefulComponents.splitString(element.getAttribute('id'), '_'))
+        await this.chargePageMsg(this.usefulComponents.splitString(element.getAttribute('id'), '_'),'beforeend')
         $('.msg_out ').scrollTop = $('.msg_out ').scrollHeight;
         this.chatIdSender = this.usefulComponents.splitString(element.getAttribute('id'), '_');
         this.chatIdPage = `#${$('.msg_out section').getAttribute('id')}`;
@@ -69,10 +71,10 @@ export class SettingMessage {
         `
         $('.footSend').insertAdjacentHTML('beforeend', chargeButton)
     }
-    async chargePageMsg(split) {
-        console.log(split)
-        let object = split[0] == 'sender' ? { 'id': split[1], 'destiny': '&id_send=' } : { 'id': split[1], 'destiny': '&id_group=' };
-        $('.msg_out').insertAdjacentHTML('beforeend', await this.messageList.bodyChat(object, this.pages))
+    async chargePageMsg(split, position) {
+        console.log(split, position, this.pages)
+        let object = split[0] == 'sender' ? { 'id': split[1], 'destiny': '&id_send=' } : { 'id': split[1], 'destiny': '&id_group=' };        
+        $('.msg_out').insertAdjacentHTML(position, await this.messageList.bodyChat(object, this.pages))
         $('.msg_out section').setAttribute('id', `pages_${this.pages}`)
     }
     changeHeader(element) {
@@ -129,7 +131,7 @@ export class SettingMessage {
         }
     }
     notificationMsg() {
-        let notific = $_all('.messageSend')[$_all('.messageSend').length - 1].getAttribute('data-view')
+        let notific = $_all('.msg_out section') && $_all('.messageSend')[$_all('.messageSend').length - 1].getAttribute('data-view')
         if(notific == 1){
             $('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notify.svg')
         }else{
@@ -144,10 +146,14 @@ export class SettingMessage {
         return response;
     }
     scrollMsg() {
-        $('.msg_out').addEventListener('scroll', () => {
-            const sectionPage = $_all('.msg_out section')
-            const beatTop = $('.msg_out').scrollTop
-            sectionPage.forEach(element => {console.log(element)})
+        $('.msg_out').addEventListener('scroll', async () => {
+            if($('.msg_out').scrollTop == 0){
+                this.pages++
+                await this.chargePageMsg(this.usefulComponents.splitString($('.colabHead').getAttribute('data-id'), '_'),'afterbegin')
+                //this.positionChat += parseInt($(`#pages_${this.pages-1}`).scrollHeight)
+                $('.msg_out').scrollTop = parseInt($(`#pages_${this.pages}`).scrollHeight)
+                // console.log(this.positionChat)
+            }
         })
     }
     convertArray(obj){

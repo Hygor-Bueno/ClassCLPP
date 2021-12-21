@@ -32,7 +32,6 @@ export class Message {
             .then(body => {
                 if (body.error) throw Error(body.message)
                 req = body;
-                console.log(req)
             }).catch(error => { console.log(error); if (err) errorHandling.main(error) })
         return req;
     }
