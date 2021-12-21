@@ -202,11 +202,21 @@ export class TemplateChecklist {
                 response = `<section><input type="checkbox" title="input"/><p>${options.description}</p></section>`
             break;
             case 3:
-                console.log(options.type)
                 response = `<div class="handSignatureCreated"><input type="text" placeholder="Assine Aqui..." disabled/><img id="handSignatureImg" src="${this.pathImgSignature}" title="Assinatura manual" /></div>`
-            break;
+                break;
             case 4:
-            break;
+                response = `
+                <div class="signatureCpfCreated"> 
+                    <div class="nameResponsible">
+                        <label>Nome: </label>
+                        <input type="text" placeholder="Assine Aqui, o nome do responseável..." disabled/>
+                    </div>
+                    <div class="cpfResponsible">
+                        <label>CPF: </label>
+                        <input type="text" placeholder="XXX.XXX.XXX-XX" disabled/>
+                    </div>
+                </div>`
+                break;
             default:
                 console.error('indice não encontrado {bodyCreated(options)} ')
         }
@@ -379,6 +389,17 @@ export class TemplateChecklist {
                 response = `<div id="bodyQuestion" class="handSignature"><input type="text" placeholder="Assine Aqui..." disabled/><img src="${this.pathImgSignature}" title="Assinatura manual" /></div>`
                 break;
             case 4:
+                response = `
+                <div class="signatureCpfCreated"> 
+                    <div class="nameResponsible">
+                        <label>Nome: </label>
+                        <input type="text" placeholder="Digite o nome do responseável." disabled/>
+                    </div>
+                    <div class="cpfResponsible">
+                        <label>CPF: </label>
+                        <input type="text" placeholder="XXX.XXX.XXX-XX" disabled/>
+                    </div>
+                </div>`
                 break;
             case 5:
                 input = `<input type=${this.getValueSelect('#typeQuestion') == 1 ? "radio" : "checkbox"} name="optionRadio" id="res_${id}" value='${id}' title="sim" />`;
