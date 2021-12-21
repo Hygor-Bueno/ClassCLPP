@@ -1,5 +1,5 @@
 import { ChecklistCreatedPage } from "./checklist.js";
-import { getB_id, $ } from "../../../Util/compressSyntaxe.js";
+import { getB_id, $, $_all } from "../../../Util/compressSyntaxe.js";
 import { Checklist } from "../../../Connection/Checklist.js";
 import { UsefulComponents } from "../../../Util/usefulComponents.js";
 import { UserAccess } from "../../../Connection/UserAccess.js";
@@ -13,7 +13,16 @@ export class SettingChecklist {
   checklist = new Checklist();
   listUser = new ListUser();
   accessClpp = new UserAccess();
-  setting() {
+  listsUsersCheck="";
+  
+  async list(){
+    let accessCLPP = await this.accessClpp.get("&application_id=7&web");
+    for (const iterator of accessCLPP.data) {
+      this.listsUsersCheck+= await this.listUser.main(iterator.id)
+    }
+  }
+  async setting() {
+    await this.list();
     this.queryButton();
     this.listUsers();
   }
@@ -50,17 +59,18 @@ export class SettingChecklist {
     );
   }
 
-  async listUsers() {
-    getB_id("groups").addEventListener("click", async () => {
-      this.queryUser(getB_id("groups").getAttribute('data-id_check'));
+  listUsers() {
+    $_all('.groups').forEach(element => {
+        element.addEventListener('click',   () => { 
+          this.queryUser(element.getAttribute('data-id_check'));
+          console.log(element)
+        })
     });
   }
 
   async queryUser(idChecklist) {
-    let accessCLPP = await this.accessClpp.get("&application_id=7&web");
-
     await this.listUser.checkBoxUser(
-      accessCLPP.data,idChecklist
+      this.listsUsersCheck ,idChecklist
     );
   }
 
@@ -97,7 +107,7 @@ export class SettingChecklist {
                   }</p>
               </div>
               <div id="function">
-              <button type="button" data-id_check="${checklist.id}"  id="groups"><img src="./assets/images/groups_black_24dp.svg"/></button>
+              <button type="button" data-id_check="${checklist.id}"  class="groups"><img src="./assets/images/groups_black_24dp.svg"/></button>
               <button type="button"><img src="./assets/images/olho.svg"/></button>
               <button type="button" ><img src="./assets/images/delete.svg"/></button>
               </div>
