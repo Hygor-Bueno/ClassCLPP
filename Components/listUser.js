@@ -21,15 +21,11 @@ export class ListUser {
   }
 
   async checkBoxUser(ids,idChecklist) {
-    console.log(ids)
-    let response = "";
-    document.querySelector(".container").insertAdjacentHTML("beforeend", '<div id="listUser" class="style_scroll"></div>');
-    for (const element of ids) {
-      response += `${await this.main(element.id)}`;
-    }
-    document.querySelector("#listUser").insertAdjacentHTML("beforeend", `${response}`);
+    console.log(ids, idChecklist)
+    
+    document.querySelector(".container").insertAdjacentHTML("beforeend", '<div id="listUser" class="style_scroll"></div>');    
+    document.querySelector("#listUser").insertAdjacentHTML("beforeend", `${ids}`);
     let list = document.querySelectorAll(".divUser");
-    let checkUser =  true;
     for (const iterator of list) {
       iterator.insertAdjacentHTML("beforeend", `<input type="checkbox" />`);
     }
@@ -42,7 +38,7 @@ export class ListUser {
   async validationUserChecklist(idCheck){
     let userCheckList = new UserCheckList;
     let userAccess = await userCheckList.get("&id_checklist=" + idCheck, true)    
-    userAccess.forEach(element => {document.querySelector(`#user_${element.id_user} input`).checked = true});
+    userAccess.forEach(element => {document.querySelector(`#sender_${element.id_user} input`).checked = true});
   }
 
   buttonBack(){
