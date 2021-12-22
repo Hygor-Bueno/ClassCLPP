@@ -43,4 +43,11 @@ export class ObjectChecklist{
     setNotification(notification){this.#notification = notification}
     setDate_init(date_init){this.#date_init = date_init}
     setDate_final(date_final){this.#date_final = date_final}
+
+    salveFullChecklist(){
+
+    }
+    salveChecklist(){
+        
+    }
 }
