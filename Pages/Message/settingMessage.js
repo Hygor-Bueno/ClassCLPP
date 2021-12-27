@@ -24,10 +24,12 @@ export class SettingMessage {
     templateUser;
     divUserAll;
     pages = 1;
+    typeMsg;
     chatIdSender;
     chatIdPage;
     chatScroll;
     positionChat=0;
+
     async setting() {
         this.clickDivUser('.divUser')
         this.searchUser()
@@ -36,7 +38,17 @@ export class SettingMessage {
     }
     clickSend() {
         getB_id('buttonSend').addEventListener('click',async () => {
-            await this.settingHome.buttonSend(this.chatIdSender, this.chatIdPage, this.chatScroll);
+            let imgSend;
+            if(getB_id('inputSend').value){
+                imgSend =getB_id('inputSend').value;
+                this.typeMsg = 1
+                console.log(this.typeMsg)
+            }else{
+                imgSend = this.previewFile(getB_id('file').files[0])
+                this.typeMsg = 2
+                console.log(imgSend)
+            }
+            await this.settingHome.buttonSend(this.chatIdSender, imgSend, this.typeMsg, this.chatIdPage, this.chatScroll);
             this.notificationMsg();
         });
         getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
@@ -46,7 +58,7 @@ export class SettingMessage {
     }
     async clickEvents(element){
         this.pages = 1;
-        $('.msg_out').innerHTML =""     
+        $('.msg_out').innerHTML = " "     
         this.changeHeader(element)
         $('.user_in').setAttribute('style', 'display:flex')
         $('.templateSearchUser').setAttribute('style', 'display:none')
@@ -71,8 +83,21 @@ export class SettingMessage {
         `
         $('.footSend').insertAdjacentHTML('beforeend', chargeButton)
     }
+    previewFile(imgFile){
+        let img = document.createElement('img')
+        const reader = new FileReader();
+        if (imgFile) {
+            reader.readAsDataURL(imgFile);
+        } else {
+            img.src = "";
+        }
+        reader.onloadend = function () {            
+            img.src = reader.result;            
+            return img.src.replace(/^data:image\/[a-z]+;base64,/,"")
+        }
+        
+    }
     async chargePageMsg(split, position) {
-        console.log(split, position, this.pages)
         let object = split[0] == 'sender' ? { 'id': split[1], 'destiny': '&id_send=' } : { 'id': split[1], 'destiny': '&id_group=' };        
         $('.msg_out').insertAdjacentHTML(position, await this.messageList.bodyChat(object, this.pages))
         $('.msg_out section').setAttribute('id', `pages_${this.pages}`)
@@ -147,12 +172,10 @@ export class SettingMessage {
     }
     scrollMsg() {
         $('.msg_out').addEventListener('scroll', async () => {
-            if($('.msg_out').scrollTop == 0){
+            if($('.msg_out').scrollTop == 0 && !$('.errorReqMessage')){
                 this.pages++
                 await this.chargePageMsg(this.usefulComponents.splitString($('.colabHead').getAttribute('data-id'), '_'),'afterbegin')
-                //this.positionChat += parseInt($(`#pages_${this.pages-1}`).scrollHeight)
                 $('.msg_out').scrollTop = parseInt($(`#pages_${this.pages}`).scrollHeight)
-                // console.log(this.positionChat)
             }
         })
     }

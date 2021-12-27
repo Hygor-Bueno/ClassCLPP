@@ -56,17 +56,16 @@ export class SettingHome {
     }
     settingsButtonChat(idSender) {
         getB_id('buttonReply').addEventListener('click', () => this.closeMessage());
-        getB_id('buttonSend').addEventListener('click',  () => {this.buttonSend(idSender,'#bodyMessageDiv section')});
+        getB_id('buttonSend').addEventListener('click',  () => {this.buttonSend(idSender,getB_id('inputSend').value,1,'#bodyMessageDiv section')});
         getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
-    async buttonSend(idSender, local, localScroll) {   
-        let input = getB_id('inputSend')
-        if (validator.minLength(input.value, 0) && validator.maxLength(input.value, 200)) {
-            let objectSend = [['id_sender', localStorage.getItem('id')], [idSender[0] == 'group'?"id_group":`id_user`, idSender[1]], ['message', input.value], ['type', '1']]
-            let req = await messages.post(usefulComponents.createObject(objectSend), true)
-            listMessage.addMessage(local, input.value, 'messageSend')
-            webSocket.informSending(req.last_id, idSender[1])
-            input.value = ""
+    async buttonSend(idSender, message, type, local, localScroll) {   
+        if (validator.minLength(message, 0) && validator.maxLength(message, 200)) {
+            let objectSend = [['id_sender', localStorage.getItem('id')], [idSender[0] == 'group'?"id_group":`id_user`, idSender[1]], ['message', message], ['type', type]]
+            let req = await messages.post(usefulComponents.createObject(objectSend), true);
+            listMessage.addMessage(local, message, 'messageSend');
+            webSocket.informSending(req.last_id, idSender[1]);
+            getB_id('inputSend').value = "";
             document.querySelector(localScroll ? localScroll : local).scrollTop = document.querySelector(localScroll ? localScroll : local).scrollHeight;
             $('.errorReqMessage') &&  $('.errorReqMessage').remove();
         } else {
