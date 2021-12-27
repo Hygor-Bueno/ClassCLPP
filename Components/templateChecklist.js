@@ -5,7 +5,7 @@ import { ObjectChecklist } from './objects/checklistObject.js';
 
 export class TemplateChecklist {
     controllerCheck = true;
-    checklist = new ObjectChecklist;
+    checklist = new ObjectChecklist(localStorage.getItem('id'));
     usefulComponents = new UsefulComponents;
     routers = new Routers;
     idQuestion = 1;
@@ -165,7 +165,6 @@ export class TemplateChecklist {
                 `
     }
     questionsCreated(objectCheck, value) {
-        this.checklist.setTitle("Testando metodo questionCreated")
         return `
                     <div class="questionCreated" id="questionCreated_${value}" value="${value}">
                         ${this.containerQuestionCreate(objectCheck, value)}
@@ -367,7 +366,7 @@ export class TemplateChecklist {
     desmemberObjQuestion(question) {
         let response = [];
         Object.keys(question).forEach((element) => {
-            if (element != 'title' && element != 'id' && element != 'id_qustion' && element != 'type') response.push(question[element])
+            if (element != 'title' && element != 'id' && element != 'id_question' && element != 'type') response.push(question[element])
         });
         return response;
     }
@@ -475,7 +474,7 @@ export class TemplateChecklist {
         this.idQuestion++;
         let object = {};
         object.id = value;
-        object.id_qustion = "";
+        object.id_question = "";
         object.type = this.getValueSelect(`#typeQuestion`);
         console.log(object.type)
         object.title = $('#headerQuestion input').value;
@@ -517,7 +516,9 @@ export class TemplateChecklist {
         //console.log(objectQuestion)
     }
     //Função resposavel por finalizar o checklist!
-    completedChecklist() {
-        console.log(this.checklist)
+    async completedChecklist() {
+        await this.checklist.salveChecklist();
+        this.checklist.salveQuestions();
+        // console.log(this.checklist)
     }
 }

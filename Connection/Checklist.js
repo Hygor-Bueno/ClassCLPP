@@ -1,7 +1,7 @@
 import { ErrorHandling } from "../Util/errorHandling.js";
 
 export class Checklist {
-    errorHandling = new ErrorHandling()
+    errorHandling = new ErrorHandling;
     URL
     async get(params,err) {
         typeof params === "string" || typeof params === "object" ? params : err = params;
@@ -29,9 +29,8 @@ export class Checklist {
             .then(response => response.json())
             .then(body => {
                 if (body.error) throw Error(body.message)
-                req = body
-                console.log(req)
-            }).catch(error => { console.log(error); if (error) errorHandling.main(error) })
+                req = body.last_id
+            }).catch(error => { console.log(error); if (err) this.errorHandling.main(error) })
         return req;
     }
     settingUrl(middlewer, params) {
