@@ -366,7 +366,7 @@ export class TemplateChecklist {
     desmemberObjQuestion(question) {
         let response = [];
         Object.keys(question).forEach((element) => {
-            if (element != 'title' && element != 'id' && element != 'id_qustion' && element != 'type') response.push(question[element])
+            if (element != 'title' && element != 'id' && element != 'id_question' && element != 'type') response.push(question[element])
         });
         return response;
     }
@@ -474,7 +474,7 @@ export class TemplateChecklist {
         this.idQuestion++;
         let object = {};
         object.id = value;
-        object.id_qustion = "";
+        object.id_question = "";
         object.type = this.getValueSelect(`#typeQuestion`);
         console.log(object.type)
         object.title = $('#headerQuestion input').value;
