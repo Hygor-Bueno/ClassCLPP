@@ -1,11 +1,10 @@
 import { ErrorHandling } from "../Util/errorHandling.js";
-
-export class Checklist {
-    errorHandling = new ErrorHandling;
+export class Question{
+    errorHandling = new ErrorHandling
     URL
     async get(params,err) {
         typeof params === "string" || typeof params === "object" ? params : err = params;
-        this.settingUrl('/Controller/CLPP/Checklist.php?app_id=7&AUTH=',params)
+        this.settingUrl('/Controller/CLPP/Question.php?app_id=7&AUTH=',params)
         let response
         await fetch(this.URL + params)
             .then(response => response.json())
@@ -19,7 +18,7 @@ export class Checklist {
     }
     async post(params,err) {
         typeof params === "string" || typeof params === "object" ? params : err = params;
-        this.settingUrl('/Controller/CLPP/Checklist.php?app_id=7&AUTH=')
+        this.settingUrl('/Controller/CLPP/Question.php?app_id=7&AUTH=')
         let req
         await fetch(this.URL, {
             method: 'POST',
@@ -36,6 +35,6 @@ export class Checklist {
     settingUrl(middlewer, params) {
         let server = localStorage.getItem('server');
         let token = localStorage.getItem('token');
-        this.URL = server + middlewer + token + params
+        this.URL = server + middlewer + token + (params ? params : "")
     }
 }
