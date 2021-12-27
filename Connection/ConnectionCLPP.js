@@ -1,13 +1,11 @@
 import { ErrorHandling } from "../Util/errorHandling.js";
 
 export class ConnectionCLPP {
-
     errorHandling = new ErrorHandling;
     URL;
     params;
     pathFile;
     err;
-
     async get(params, pathFile, err) {
         this.validationParams(params, pathFile, err);
         this.settingUrl(`/Controller/${this.pathFile}&AUTH=`, params)
@@ -25,7 +23,7 @@ export class ConnectionCLPP {
         return req;
     }
 
-    async asyncPost(params, pathFile, err) {
+    async post(params, pathFile, err) {
         console.log(params, pathFile, err);
         this.validationParams(params, pathFile, err);
         this.settingUrl(`/Controller/${this.pathFile}&AUTH=`)
@@ -44,27 +42,6 @@ export class ConnectionCLPP {
         this.cleanParams();
         return req;
     }
-
-    post(params, pathFile, err) {
-        console.log(params, pathFile, err);
-        this.validationParams(params, pathFile, err);
-        this.settingUrl(`/Controller/${this.pathFile}&AUTH=`)
-        let req
-        fetch(this.URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(this.params)
-        })
-        .then(response => response.json())
-        .then(body => {
-                if (body.error) throw Error(body.message)
-                console.log(body)
-                req = body;
-        }).catch(error => { console.log(error); if (this.err) this.errorHandling.main(error) })
-        this.cleanParams();
-        return req;
-    }
-
     validationParams(params, pathFile, err) {
         if (params) this.params = params;
         if (pathFile) this.pathFile = pathFile;

@@ -1,7 +1,6 @@
-import { Checklist } from "../../Connection/Checklist.js";
 import { ConnectionCLPP } from "../../Connection/ConnectionCLPP.js";
 
-export class ObjectChecklist {
+export class ObjectChecklist extends ConnectionCLPP{
 
 	#indexEditQuestion;
 	#title;
@@ -11,9 +10,10 @@ export class ObjectChecklist {
 	#questions = [];
 	#idChecklist;
 	#creatorId;
-	#apiCLPP = new ConnectionCLPP
+
 	constructor(id) {
-		this.#creatorId = id
+		super();
+		this.#creatorId = id;
 	}
 
 	addQuestion(questionJson) {
@@ -58,11 +58,9 @@ export class ObjectChecklist {
 	setCreatorId(creatorId) { this.#creatorId = creatorId }
 
 	salveFullChecklist() {
-
 	}
 
 	async salveChecklist() {
-		const connectChecklist = new Checklist;
 		let checklistJSON = {
 			"description": this.#title,
 			"date_init": this.#date_init,
@@ -70,8 +68,8 @@ export class ObjectChecklist {
 			"notification": toString(this.#notification),
 			"id_creator": this.#creatorId,
 		};
-		this.#idChecklist = await connectChecklist.post(checklistJSON);
-		console.log(this.#idChecklist + " <-- Este é o ID do checklist")
+		let req =await this.post(checklistJSON,"CLPP/Checklist.php?app_id=7");
+		this.#idChecklist = req.last_id ;
 	}
 	salveQuestions() {
 		this.#questions.forEach(async (question) => {
@@ -80,7 +78,7 @@ export class ObjectChecklist {
 				"id_checklist": this.#idChecklist,
 				"description": question.title
 			};
-			let req = await this.#apiCLPP.asyncPost(questionJSON,"CLPP/Question.php?app_id=7",true)
+			let req = await this.post(questionJSON,"CLPP/Question.php?app_id=7",true)
 			question.id_question = req.last_id
 			this.salveOption(this.filterOption(question),question.id_question)
 		});
@@ -88,7 +86,7 @@ export class ObjectChecklist {
 	salveOption(options,idQuestion){ 
 		options.forEach(element => {
 			element.id_question = idQuestion;
-			this.#apiCLPP.asyncPost(element,"CLPP/Option.php?app_id=7");
+			this.post(element,"CLPP/Option.php?app_id=7");
 		});
 	}
 	filterOption(question) {
