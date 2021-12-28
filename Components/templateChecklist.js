@@ -1,6 +1,8 @@
 import { Routers } from '../Routers/router.js';
 import { getB_id, $, $_all } from '../Util/compressSyntaxe.js'
+import { ErrorHandling } from '../Util/errorHandling.js';
 import { UsefulComponents } from '../Util/usefulComponents.js';
+import { Validation } from '../Util/validation.js';
 import { ObjectChecklist } from './objects/checklistObject.js';
 
 export class TemplateChecklist {
@@ -8,8 +10,10 @@ export class TemplateChecklist {
     checklist = new ObjectChecklist(localStorage.getItem('id'));
     usefulComponents = new UsefulComponents;
     routers = new Routers;
-    idQuestion = 1;
+    validation = new Validation;
+    errorHandling = new ErrorHandling;
     notification = true;
+    idQuestion = 1;
     // this.routes.routers(router[index])
     pathImgEdit = "./assets/images/pencil.svg";
     pathImgSalve = "./assets/images/salve.svg";
@@ -21,7 +25,7 @@ export class TemplateChecklist {
         let response =
             `<div id="formCheclist">		
                     <div id="groupForm">
-                        <input type="text" placeholder="Digite o Título do Checklist" id="nameChecklist" disabled=false>
+                        <input type="text" placeholder="Digite o Título do Checklist" id="nameChecklist" class="inputRiquered" disabled=false>
                         <button type="button" title="Edita nome do checklist" id="btnNameChecklist"><img src=${this.pathImgEdit} title="Editar Nome do checklist" /></button>
                         <div id="groupFormDate">
                             <p>Data Inicial: </p> <input type="date" id="dateInicial" min="${this.usefulComponents.currentDate()}"/>
@@ -62,7 +66,7 @@ export class TemplateChecklist {
         return `
                     <div id="headerQuestion">
                         <div id="divForm">
-                            <input type="text" placeholder="Digite o Título da questão" disabled/>
+                            <input type="text" class="inputRiquered" placeholder="Digite o Título da questão" disabled/>
                             <button type="button" id="btnEnabledInput">
                                 <img src="./assets/images/pencil.svg" title="Editar título da questão."/>
                             </button>
@@ -95,7 +99,7 @@ export class TemplateChecklist {
                     <section class="sectionOption">    
                         <div>                    
                             ${inputGeneral}
-                            <input type="text" placeholder="Editável" class="inputEditable" id="inputOption${id}"
+                            <input type="text" placeholder="Editável" class="inputEditable inputRiquered" id="inputOption${id}"
                                 title="Editável" disabled />
                             <button type="button" class="btnsQuestion" id="btnEditabled_${id}">
                                 <img src="./assets/images/pencil.svg" title="Editar" />
@@ -131,7 +135,7 @@ export class TemplateChecklist {
                     <section class="sectionOption">    
                         <div>                    
                         ${objQuestion.type == 1 ? `<input type="radio" title="input"/>` : `<input type="checkbox" title="input"/>`}
-                            <input type="text" placeholder="Editável" class="inputEditable" id="inputOption${indexOption}"
+                            <input type="text" placeholder="Editável" class="inputEditable inputRiquered" id="inputOption${indexOption}"
                                 title="Editável" disabled value="${objectQuestion.description}"/>
                             <button type="button" class="btnsQuestion" id="btnEditabled_${indexOption}">
                                 <img src="./assets/images/pencil.svg" title="Editar" />
@@ -172,7 +176,7 @@ export class TemplateChecklist {
                 `
     }
     containerQuestionCreate(objectCheck, value) {
-      
+
         return `
                 <div class="containerQuestionCreated">
                         ${objectCheck.map((element) => {
@@ -186,20 +190,21 @@ export class TemplateChecklist {
                                             <button  id="deleteQuestionBtn_${value}" type="button" title="excluir questão"><img src=${this.pathImgDelete} title="Editar Image"/></button>
                                         </div>
                                     </header>                                        
-                                ${groupOption.map((options) => (this.bodyCreated(options))).join("")}`}).join("")}
+                                ${groupOption.map((options) => (this.bodyCreated(options))).join("")}`
+        }).join("")}
                     </div>
                 `
     }
-    bodyCreated(options){
+    bodyCreated(options) {
         let response;
         console.log(options.type)
-        switch(parseInt(options.type)) {
-            case 1 : 
+        switch (parseInt(options.type)) {
+            case 1:
                 response = `<section><input type="radio" title="input"/><p>${options.description}</p></section>`
-            break;
-            case 2 : 
+                break;
+            case 2:
                 response = `<section><input type="checkbox" title="input"/><p>${options.description}</p></section>`
-            break;
+                break;
             case 3:
                 response = `<div class="handSignatureCreated"><input type="text" placeholder="Assine Aqui..." disabled/><img id="handSignatureImg" src="${this.pathImgSignature}" title="Assinatura manual" /></div>`
                 break;
@@ -244,7 +249,6 @@ export class TemplateChecklist {
         this.enabledButtonInit();
     }
     btnUpdate(objectQuestion, local) {
-        
         getB_id(local).addEventListener('click', () => {
             this.checklist.updateQuestoin(this.addQuestion(objectQuestion.id));
             let editedQuestion = this.containerQuestionCreate([this.checklist.queryQuestion(objectQuestion.id)], objectQuestion.id)
@@ -296,26 +300,48 @@ export class TemplateChecklist {
         this.changeDatesChecklist();
         this.salveQuestion('salveQuestion');
         this.deleteChecklist();
-        getB_id('btnEnabledInput').addEventListener('click', () => this.enabledInputQuestion('#divForm input'))        
+        getB_id('btnEnabledInput').addEventListener('click', () => this.enabledInputQuestion('#divForm input'))
         getB_id('btnSalveChecklist').addEventListener('click', () => this.completedChecklist())
     }
     salveQuestion(idButton) {
-        getB_id(idButton).addEventListener('click', () => {
-            this.auxAddQuestion(this.idQuestion);
-            this.alterTypeQuestion();
-            this.enabledButtonInit();
-            this.resetInput('#headerQuestion input')
+        getB_id(idButton).addEventListener('click', () => {  
+            let methods = [
+                [this.validation.requiredFields, ["#editableQuestion .inputRiquered"], " preencha todos os campos de texto. <br>"],
+                [this.validation.maxLength, [$("#divForm input").value, 100], " o título da questão não pode ter mais que 100 caracteres e não pode estar vazio <br>"],
+                [this.validation.multipleInputMaxLength, [".inputEditable", 45], " o título da questão não pode ter mais que 100 caracteres e não pode estar vazio <br>"]
+            ]          
+            if (this.validation()) {
+                this.auxAddQuestion(this.idQuestion);
+                this.alterTypeQuestion();
+                this.enabledButtonInit();
+                this.resetInput('#headerQuestion input')
+            }else{
+
+            }
         })
     }
+
+    // validationFinal(methods){
+        // let methods = [
+        //     [this.validation.requiredFields, ["#editableQuestion .inputRiquered"], "Atenção preencha todos os campos de texto. <br>"],
+        //     [this.validation.maxLength, [$("#divForm input").value, 100], "Atenção o título da questão não pode ter mais que 100 caracteres e não pode estar vazio <br>"]
+        // ]
+        // let result = this.validation.validationFinal(methods)
+        // !result.error && this.errorHandling.main(result.data);
+    // }
+    //-----------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------
+    //-----------------------------------------------------------------------------------------------------------
+
     // buttonSalveHeaderCheck() {
     //     getB_id('salveChecklist').addEventListener('click', () => {          
     //         this.changeNameChecklist();
     //     })
     // <button type="button" id="salveChecklist"><img src=${this.pathImgSalve} title="Salvar checklist" /></button> // -CASO FOR UTILIZAR O BOTÃO DEVOLVER NO TAMPLATE;
     // }
-    deleteChecklist(){
+    deleteChecklist() {
         getB_id('deleteChecklist').addEventListener('click', () => {
-            if(confirm('Deseja realmente deletar o checklist? ')) this.routers.routers(localStorage.getItem('router'))
+            if (confirm('Deseja realmente deletar o checklist? ')) this.routers.routers(localStorage.getItem('router'))
         })
     }
     addNewOption() {
@@ -334,7 +360,7 @@ export class TemplateChecklist {
     // Funcçoes que alteram o objeto checklist.
     changeNotification() {
         getB_id('notifyChecklist').addEventListener("click", () => {
-            this.notification ? $('#notifyChecklist img').setAttribute('src',this.pathImgNotifyOn):$('#notifyChecklist img').setAttribute('src',this.pathImgNotify)
+            this.notification ? $('#notifyChecklist img').setAttribute('src', this.pathImgNotifyOn) : $('#notifyChecklist img').setAttribute('src', this.pathImgNotify)
             this.checklist.setNotification(this.notification ? 1 : 0)
             console.log(this.checklist)
             this.notification = !this.notification;
@@ -362,7 +388,7 @@ export class TemplateChecklist {
         getB_id('dateFinal').onchange = () => {
             this.checklist.setDate_final(getB_id('dateFinal').value)
         }
-    }   
+    }
     desmemberObjQuestion(question) {
         let response = [];
         Object.keys(question).forEach((element) => {
@@ -470,7 +496,7 @@ export class TemplateChecklist {
         getB_id('bodyQuestion').innerHTML = "";
         getB_id('bodyQuestion').insertAdjacentHTML('beforeend', this.filterType(parseInt(this.getValueSelect('#typeQuestion')), 1));
     }
-    addQuestion(value) {  
+    addQuestion(value) {
         this.idQuestion++;
         let object = {};
         object.id = value;
@@ -478,24 +504,24 @@ export class TemplateChecklist {
         object.type = this.getValueSelect(`#typeQuestion`);
         console.log(object.type)
         object.title = $('#headerQuestion input').value;
-        if(object.type < 3){
+        if (object.type < 3) {
             $_all('.optionEditable').forEach(element => {
                 let values = element.getAttribute('value');
-                console.log('value ->',value,'VALUES ->',values)
+                console.log('value ->', value, 'VALUES ->', values)
                 let desc = element.querySelector('.inputEditable').value
                 let selectOption
-                object.type == 1? selectOption = this.getValueSelect(`#selectOption_${values}`) :selectOption = this.calculateCheckboxValue('inputEditable');
+                object.type == 1 ? selectOption = this.getValueSelect(`#selectOption_${values}`) : selectOption = this.calculateCheckboxValue('inputEditable');
                 let photo = element.querySelector(`#checkPhoto_${values}`);
                 let note = element.querySelector(`#checkObservation_${values}`);
                 object[`op_${values}`] = { type: this.getValueSelect("#typeQuestion"), description: desc, photo: photo.checked ? 1 : 0, observe: note.checked ? 1 : 0, value: selectOption }
             });
-        }else{
-            object[`op_${value}`] = { type: this.getValueSelect("#typeQuestion"), description: 'Assinatura manual', photo: 0, observe: 0, value: 0}
+        } else {
+            object[`op_${value}`] = { type: this.getValueSelect("#typeQuestion"), description: 'Assinatura manual', photo: 0, observe: 0, value: 0 }
         }
         return object;
-    }    
-    calculateCheckboxValue(optionClass){
-        return parseFloat((1/$_all(`.${optionClass}`).length).toFixed(2))
+    }
+    calculateCheckboxValue(optionClass) {
+        return parseFloat((1 / $_all(`.${optionClass}`).length).toFixed(2))
     }
     auxAddQuestion(value) {
         let object = this.addQuestion(value);
