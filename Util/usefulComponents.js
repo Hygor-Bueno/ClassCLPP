@@ -60,4 +60,7 @@ export class UsefulComponents {
         let current_date = year + '-' + month + '-' + day;
         return current_date;
     }
+    currentDateBR(){
+        return this.convertData(this.currentDate(),"-")
+    }
 }
