@@ -306,39 +306,22 @@ export class TemplateChecklist {
     salveQuestion(idButton) {
         getB_id(idButton).addEventListener('click', () => {  
             let methods = [
-                [this.validation.requiredFields, ["#editableQuestion .inputRiquered"], " preencha todos os campos de texto. <br>"],
-                [this.validation.maxLength, [$("#divForm input").value, 100], " o título da questão não pode ter mais que 100 caracteres e não pode estar vazio <br>"],
-                [this.validation.multipleInputMaxLength, [".inputEditable", 45], " o título da questão não pode ter mais que 100 caracteres e não pode estar vazio <br>"]
-            ]          
-            if (this.validation()) {
+                [this.validation.requiredFields, ["#editableQuestion .inputRiquered"], " Preencha todos os campos de texto. <br>"],
+                [this.validation.maxLength, [$("#divForm input").value, 100], " O título da questão não pode conter mais que 100 caracteres <br>"],
+                [this.validation.multipleInputMaxLength, [".inputEditable", 45], " As opções de resposta não podem conter mais que 45 caracteres <br>"]
+            ]   
+            let result = this.validation.multipleValidation(methods)       
+            if (result.error) {
                 this.auxAddQuestion(this.idQuestion);
                 this.alterTypeQuestion();
                 this.enabledButtonInit();
                 this.resetInput('#headerQuestion input')
             }else{
-
+                this.errorHandling.main(result.data)
             }
         })
     }
 
-    // validationFinal(methods){
-        // let methods = [
-        //     [this.validation.requiredFields, ["#editableQuestion .inputRiquered"], "Atenção preencha todos os campos de texto. <br>"],
-        //     [this.validation.maxLength, [$("#divForm input").value, 100], "Atenção o título da questão não pode ter mais que 100 caracteres e não pode estar vazio <br>"]
-        // ]
-        // let result = this.validation.validationFinal(methods)
-        // !result.error && this.errorHandling.main(result.data);
-    // }
-    //-----------------------------------------------------------------------------------------------------------
-    //-----------------------------------------------------------------------------------------------------------
-    //-----------------------------------------------------------------------------------------------------------
-
-    // buttonSalveHeaderCheck() {
-    //     getB_id('salveChecklist').addEventListener('click', () => {          
-    //         this.changeNameChecklist();
-    //     })
-    // <button type="button" id="salveChecklist"><img src=${this.pathImgSalve} title="Salvar checklist" /></button> // -CASO FOR UTILIZAR O BOTÃO DEVOLVER NO TAMPLATE;
-    // }
     deleteChecklist() {
         getB_id('deleteChecklist').addEventListener('click', () => {
             if (confirm('Deseja realmente deletar o checklist? ')) this.routers.routers(localStorage.getItem('router'))
