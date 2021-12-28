@@ -40,7 +40,6 @@ export class SettingHome {
             this.eventNotifyMessage(iterator, objectSenders);
         }
     }
-
     eventNotifyMessage(iterator, objectSenders) {
         let temp = objectSenders.temp        
         delete objectSenders['temp']
@@ -60,17 +59,17 @@ export class SettingHome {
         getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
     async buttonSend(idSender, message, type, local, localScroll) {   
-        if (validator.minLength(message, 0) && validator.maxLength(message, 200)) {
+        if (type == 2 ? true : validator.minLength(message, 0) && validator.maxLength(message, 200)) {
             let objectSend = [['id_sender', localStorage.getItem('id')], [idSender[0] == 'group'?"id_group":`id_user`, idSender[1]], ['message', message], ['type', type]]
             let req = await messages.post(usefulComponents.createObject(objectSend), true);
-            listMessage.addMessage(local, message, 'messageSend');
+            listMessage.addMessage(local, message, 'messageSend',type);
             webSocket.informSending(req.last_id, idSender[1]);
             getB_id('inputSend').value = "";
-            document.querySelector(localScroll ? localScroll : local).scrollTop = document.querySelector(localScroll ? localScroll : local).scrollHeight;
             $('.errorReqMessage') &&  $('.errorReqMessage').remove();
         } else {
             this.error('Atenção! \n O campo de envio não pode estar vazio... E não deve utrapassar 200 caracteres')
-        }        
+        }  
+        document.querySelector(localScroll ? localScroll : local).scrollTop = document.querySelector(localScroll ? localScroll : local).scrollHeight;
     }
     error(message) {
         openModal(generalModal.main(message, true))

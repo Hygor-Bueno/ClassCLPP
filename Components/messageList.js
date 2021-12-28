@@ -1,5 +1,6 @@
 import { EmployeePhoto } from "../Connection/EmployeePhoto.js";
 import { Message } from "../Connection/Message.js";
+import { convertBase64 } from "../Util/convertBase64.js";
 var employeePhoto = new EmployeePhoto;
 
 export class MessageList {
@@ -58,17 +59,18 @@ export class MessageList {
         return response;
     }
     async bodyChat(senderObject, page) {
-        let response
+        let response, src="http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/";
         try {
             if (!page) page = 1
             let messages = new Message;
             let getMessage = await messages.get(`&id_user=${localStorage.getItem('id')}${senderObject.destiny}${senderObject.id}&pages=${page}`) 
+            console.log(getMessage)
             getMessage.reverse()
             response =
                 `<section>
                     ${getMessage.map((element) => (`
-                    <div class="${element.id_user != localStorage.getItem('id') ? "messageReceived" : "messageSend"}" data-view ='${element.notification}'>
-                        <p>${element.message}</p>
+                    <div class="${element.id_user != localStorage.getItem('id') ? "messageReceived" : "messageSend"} ${element.type == 2 ? "formatImg":''}" data-view ='${element.notification}'>
+                        ${element.type == 1 ? `<p>${element.message}</p>`: `<img scr="${src}${element.message}"/>`}
                     </div>`)).join("")}
                 </section>`
         } catch (e) {
@@ -87,8 +89,9 @@ export class MessageList {
             `
         return response;
     }
-    addMessage(local, message, classMessage) {
-        document.querySelector(local).insertAdjacentHTML('beforeend', `<div class="${classMessage}" data-view="1"><p>${message}</p></div>`)
+    addMessage(local, message, classMessage,type) {
+        const converImgBase64 = new convertBase64;
+        document.querySelector(local).insertAdjacentHTML('beforeend', `<div class="${classMessage}" data-view="1">${type == 2 ?converImgBase64.convert(message).outerHTML:`<p>${message}</p>`}</div>`)
     }
 
 }
