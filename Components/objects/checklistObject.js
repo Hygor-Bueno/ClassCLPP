@@ -10,7 +10,6 @@ export class ObjectChecklist extends ConnectionCLPP{
 	#questions = [];
 	#idChecklist;
 	#creatorId;
-
 	constructor(id) {
 		super();
 		this.#creatorId = id;
@@ -56,9 +55,6 @@ export class ObjectChecklist extends ConnectionCLPP{
 	setDate_final(date_final) { this.#date_final = date_final }
 	setIdCHecklist(idChecklist) { this.#idChecklist = idChecklist }
 	setCreatorId(creatorId) { this.#creatorId = creatorId }
-
-	salveFullChecklist() {
-	}
 
 	async salveChecklist() {
 		let checklistJSON = {

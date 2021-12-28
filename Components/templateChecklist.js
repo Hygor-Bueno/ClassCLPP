@@ -24,8 +24,8 @@ export class TemplateChecklist {
                         <input type="text" placeholder="Digite o Título do Checklist" id="nameChecklist" disabled=false>
                         <button type="button" title="Edita nome do checklist" id="btnNameChecklist"><img src=${this.pathImgEdit} title="Editar Nome do checklist" /></button>
                         <div id="groupFormDate">
-                            <p>Data Inicial: </p> <input type="date" id="dateInicial"/>
-                            <p>Data Final: </p> <input type="date" id="dateFinal"/>
+                            <p>Data Inicial: </p> <input type="date" id="dateInicial" min="${this.usefulComponents.currentDate()}"/>
+                            <p>Data Final: </p> <input type="date" id="dateFinal" min="${this.usefulComponents.currentDate()}"/>
                         </div>		
                     </div>
                     <div id="groupButtons">
