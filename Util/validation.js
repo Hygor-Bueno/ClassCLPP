@@ -1,7 +1,9 @@
 export class Validation{
     maxLength(value,size){
         let response=true
-        if(!value || value.length > size){response=false;}
+        if(value){
+            if(value.length > size){response=false;}
+        }
         return response;
     }
     minLength(value,size){
@@ -36,7 +38,8 @@ export class Validation{
         let response = true;
         array.forEach(element => {
             if(element.value){
-                if(element.value.length < maxLength) {response =false}
+                console.log(element.value.length + " <------",maxLength)
+                if(element.value.length > maxLength) {response =false}
             }
         });
         return response;
@@ -44,10 +47,11 @@ export class Validation{
 
     multipleValidation(methods){ 
         let response = true;
-        let message="Atenção ";
+        let message="";
+        let cont=0
         methods.forEach((element,index) => {
             if(!element[0](...element[1])){
-                message += (index+1) + " - "+element[2];
+                message += (cont+=1) + " - "+element[2];
                 console.log(message)
                 response = false
             } 
