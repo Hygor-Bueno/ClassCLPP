@@ -22,7 +22,6 @@ export class ConnectionCLPP {
         this.cleanParams();
         return req;
     }
-
     async post(params, pathFile, err) {
         console.log(params, pathFile, err);
         this.validationParams(params, pathFile, err);
