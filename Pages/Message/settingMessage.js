@@ -8,6 +8,7 @@ import { ListUser } from "../../Components/listUser.js";
 import { WebSocketCLPP } from "../../Connection/WebSocket.js";
 import { UserAccess } from "../../Connection/UserAccess.js";
 import { Users } from "../../Components/objects/user.js";
+import { convertBase64 } from "../../Util/convertBase64.js";
 
 const id = localStorage.getItem("id")
 
@@ -37,53 +38,34 @@ export class SettingMessage {
         this.searchName()
     }
     clickSend() {
-        getB_id('buttonSend').addEventListener('click',async () => {
-            let imgSend;
-            if(getB_id('inputSend').value){
-                imgSend =getB_id('inputSend').value;
-                this.typeMsg = 1
-                console.log(this.typeMsg)
-            }else{
-                imgSend = this.previewFile(getB_id('file').files[0])
-                this.typeMsg = 2
-                console.log(imgSend)
-            }
-            await this.settingHome.buttonSend(this.chatIdSender, imgSend, this.typeMsg, this.chatIdPage, this.chatScroll);
+        getB_id('buttonSend').addEventListener('click', () => {
+            this.sendMsg();
             this.notificationMsg();
         });
         getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
-    clickDivUser(local) {
-        $_all(local).forEach(element => element.addEventListener('click',  () => {this.clickEvents(element); this.chergeSendButtom()}))
-    }
-    async clickEvents(element){
-        this.pages = 1;
-        $('.msg_out').innerHTML = " "     
-        this.changeHeader(element)
-        $('.user_in').setAttribute('style', 'display:flex')
-        $('.templateSearchUser').setAttribute('style', 'display:none')
-        $('.searchUnic').setAttribute('style', 'display:none')
-        element.querySelector('.imgNotify') && element.querySelector('.imgNotify').setAttribute('src', './assets/images/notification.svg')
-        await this.chargePageMsg(this.usefulComponents.splitString(element.getAttribute('id'), '_'),'beforeend')
-        $('.msg_out ').scrollTop = $('.msg_out ').scrollHeight;
-        this.chatIdSender = this.usefulComponents.splitString(element.getAttribute('id'), '_');
-        this.chatIdPage = `#${$('.msg_out section').getAttribute('id')}`;
-        this.chatScroll = `.msg_out`;
-        this.ws.informPreview(this.chatIdSender)
-        this.notificationMsg()
-        this.clickSend();
-    }
     chergeSendButtom(){
-        $('.footSend').innerHTML = " "
+        $('.footSend').innerHTML = " ";
         const chargeButton = `                        
-            <input type="file" accept=".doc, .pdf, image/png, image/jpg, image/jpeg, image/gif, video/mp4," id="file">
-            <label for="file"><img class="fileButton" src="./assets/images/clip.svg"></label>
-            <input type="text" class="msg_write" id='inputSend' maxlength="200">
-            <img class="buttonSendMsg" id='buttonSend' src="./assets/images/enviar.svg">
-        `
-        $('.footSend').insertAdjacentHTML('beforeend', chargeButton)
+        <input type="file" accept=".doc, .pdf, image/png, image/jpg, image/jpeg, image/gif, video/mp4," id="file">
+        <label for="file"><img class="fileButton" src="./assets/images/clip.svg"></label>
+        <input type="text" class="msg_write" id='inputSend' maxlength="200">
+        <img class="buttonSendMsg" id='buttonSend' src="./assets/images/enviar.svg">
+        `;
+        $('.footSend').insertAdjacentHTML('beforeend', chargeButton);
+        this.clickSend()
     }
-    previewFile(imgFile){
+    async sendMsg(){
+        let sending = getB_id('inputSend').value
+        if(sending) {
+            this.typeMsg = 1
+            await this.settingHome.buttonSend(this.chatIdSender, sending, this.typeMsg, this.chatIdPage, this.chatScroll);
+        }else {
+            this.previewFile(getB_id('file').files[0])
+            this.typeMsg = 2
+        }
+    }
+     previewFile(imgFile){
         let img = document.createElement('img')
         const reader = new FileReader();
         if (imgFile) {
@@ -91,11 +73,29 @@ export class SettingMessage {
         } else {
             img.src = "";
         }
-        reader.onloadend = function () {            
-            img.src = reader.result;            
-            return img.src.replace(/^data:image\/[a-z]+;base64,/,"")
-        }
-        
+        reader.onloadend = async () => {            
+            img.src = reader.result;   
+            await this.settingHome.buttonSend(this.chatIdSender, img.src.replace(/^data:image\/[a-z]+;base64,/,""), this.typeMsg, this.chatIdPage, this.chatScroll);         
+        } 
+    }
+    clickDivUser(local) {
+        $_all(local).forEach(element => element.addEventListener('click',  () => {this.clickEvents(element); this.chergeSendButtom()}))
+    }
+    async clickEvents(element){
+        this.pages = 1;
+        $('.msg_out').innerHTML = "";   
+        this.changeHeader(element);
+        $('.user_in').setAttribute('style', 'display:flex');
+        $('.templateSearchUser').setAttribute('style', 'display:none');
+        $('.searchUnic').setAttribute('style', 'display:none');
+        element.querySelector('.imgNotify') && element.querySelector('.imgNotify').setAttribute('src', './assets/images/notification.svg');
+        await this.chargePageMsg(this.usefulComponents.splitString(element.getAttribute('id'), '_'),'beforeend');
+        $('.msg_out ').scrollTop = $('.msg_out ').scrollHeight;
+        this.chatIdSender = this.usefulComponents.splitString(element.getAttribute('id'), '_');
+        this.chatIdPage = `#${$('.msg_out section').getAttribute('id')}`;
+        this.chatScroll = `.msg_out`;
+        this.ws.informPreview(this.chatIdSender);
+        this.notificationMsg();
     }
     async chargePageMsg(split, position) {
         let object = split[0] == 'sender' ? { 'id': split[1], 'destiny': '&id_send=' } : { 'id': split[1], 'destiny': '&id_group=' };        
@@ -155,8 +155,17 @@ export class SettingMessage {
             this.notificationMsg()
         }
     }
+    scrollMsg() {
+        $('.msg_out').addEventListener('scroll', async () => {
+            if($('.msg_out').scrollTop == 0 && !$('.errorReqMessage')){
+                this.pages++
+                await this.chargePageMsg(this.usefulComponents.splitString($('.colabHead').getAttribute('data-id'), '_'),'afterbegin')
+                $('.msg_out').scrollTop = parseInt($(`#pages_${this.pages}`).scrollHeight)
+            }
+        })
+    }
     notificationMsg() {
-        let notific = $_all('.msg_out section') && $_all('.messageSend')[$_all('.messageSend').length - 1].getAttribute('data-view')
+        let notific = $('.messageSend') && $_all('.messageSend')[$_all('.messageSend').length - 1].getAttribute('data-view')
         if(notific == 1){
             $('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notify.svg')
         }else{
@@ -169,15 +178,6 @@ export class SettingMessage {
             if(id != iterator.id)response += await this.listUser.main(iterator.id)
         }
         return response;
-    }
-    scrollMsg() {
-        $('.msg_out').addEventListener('scroll', async () => {
-            if($('.msg_out').scrollTop == 0 && !$('.errorReqMessage')){
-                this.pages++
-                await this.chargePageMsg(this.usefulComponents.splitString($('.colabHead').getAttribute('data-id'), '_'),'afterbegin')
-                $('.msg_out').scrollTop = parseInt($(`#pages_${this.pages}`).scrollHeight)
-            }
-        })
     }
     convertArray(obj){
         let response=[],key;
