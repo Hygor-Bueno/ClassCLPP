@@ -32,7 +32,19 @@ export class Validation{
         });
         return response;
     }
-
+    validationDataInicialFinal(dates){
+        console.log(dates)
+        let response = true;
+        if(dates[0].value > dates[1].value) response=false; 
+        if(dates[0].value != "" || dates[1].value != ""){
+            dates.forEach(element => {
+                if(element.value == ""){
+                    response = false;
+                }
+            });
+        }
+        return response;
+    }
     multipleInputMaxLength(local,maxLength) {
         let array = document.querySelectorAll(local);
         let response = true;
@@ -49,7 +61,7 @@ export class Validation{
         let response = true;
         let message="";
         let cont=0
-        methods.forEach((element,index) => {
+        methods.forEach((element) => {
             if(!element[0](...element[1])){
                 message += (cont+=1) + " - "+element[2];
                 console.log(message)
