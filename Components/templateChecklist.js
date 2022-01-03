@@ -181,7 +181,6 @@ export class TemplateChecklist {
                 <div class="containerQuestionCreated">
                         ${objectCheck.map((element) => {
             let groupOption = this.desmemberObjQuestion(element)
-            console.log(groupOption, '<- goupOptions')
             return `
                                     <header>
                                         <h1>${element.title}</h1>
@@ -197,7 +196,6 @@ export class TemplateChecklist {
     }
     bodyCreated(options) {
         let response;
-        console.log(options.type)
         switch (parseInt(options.type)) {
             case 1:
                 response = `<section><input type="radio" title="input"/><p>${options.description}</p></section>`
@@ -224,7 +222,6 @@ export class TemplateChecklist {
             default:
                 console.error('indice não encontrado {bodyCreated(options)} ')
         }
-        console.log(response)
         return response;
     }
     editQuestionCreated(objectQuestion) {
@@ -345,7 +342,6 @@ export class TemplateChecklist {
         getB_id('notifyChecklist').addEventListener("click", () => {
             this.notification ? $('#notifyChecklist img').setAttribute('src', this.pathImgNotifyOn) : $('#notifyChecklist img').setAttribute('src', this.pathImgNotify)
             this.checklist.setNotification(this.notification ? 1 : 0)
-            console.log(this.checklist)
             this.notification = !this.notification;
         })
     }
@@ -361,7 +357,6 @@ export class TemplateChecklist {
         getB_id('nameChecklist').onchange = () => {
             this.checklist.setTitle(getB_id('nameChecklist').value);
             getB_id('nameChecklist').disabled = true;
-            console.log(this.checklist)
         }
     }
     changeDatesChecklist() {
@@ -485,12 +480,10 @@ export class TemplateChecklist {
         object.id = value;
         object.id_question = "";
         object.type = this.getValueSelect(`#typeQuestion`);
-        console.log(object.type)
         object.title = $('#headerQuestion input').value;
         if (object.type < 3) {
             $_all('.optionEditable').forEach(element => {
                 let values = element.getAttribute('value');
-                console.log('value ->', value, 'VALUES ->', values)
                 let desc = element.querySelector('.inputEditable').value
                 let selectOption
                 object.type == 1 ? selectOption = this.getValueSelect(`#selectOption_${values}`) : selectOption = this.calculateCheckboxValue('inputEditable');
@@ -522,14 +515,20 @@ export class TemplateChecklist {
     }
     editQuestion(objectQuestion) {
         this.editQuestionCreated(objectQuestion)
-        //console.log(objectQuestion)
+ 
     }
     //Função resposavel por finalizar o checklist!
     async completedChecklist() {
-        if(!this.validation.validationDataInicialFinal($_all('input[type="date"]'))){
-            alert('Deu ruim')
+        let methods = [
+            [this.validation.minLength, [$("#nameChecklist").value, 1], " O título do Checklist não estar vazio. <br>"],
+            [this.validation.maxLength, [$("#nameChecklist").value, 45], " O título do Checklist não pode conter mais que 45 caracteres. <br>"],
+            [this.validation.validationDataInicialFinal, [$_all("input[type='date']")], " A data inicial não pode ser maior que a data final. <br> Caso um campo seja preenchido o outro se torna obrigatório.<br>"]
+        ] 
+        let result = this.validation.multipleValidation(methods) 
+        if(result.error){
+            console.log(this.checklist)
         }else{
-            alert('Datas Ok')
+            this.errorHandling.main(result.data)
         }
         // await this.checklist.salveChecklist();
         // this.checklist.salveQuestions();
