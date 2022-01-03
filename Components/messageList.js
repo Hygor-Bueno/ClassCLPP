@@ -70,7 +70,7 @@ export class MessageList {
                 `<section>
                     ${getMessage.map((element) => (`
                     <div class="${element.id_user != localStorage.getItem('id') ? "messageReceived" : "messageSend"} ${element.type == 2 ? "formatImg":''}" data-view ='${element.notification}'>
-                        ${element.type == 1 ? `<p>${element.message}</p>`: `<img scr="${src}${element.message}"/>`}
+                        ${element.type == 1 ? `<p>${element.message}</p>`: `<img src="${src}${element.message}"/>`}
                     </div>`)).join("")}
                 </section>`
         } catch (e) {
