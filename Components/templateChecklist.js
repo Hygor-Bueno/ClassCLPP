@@ -526,8 +526,13 @@ export class TemplateChecklist {
     }
     //Função resposavel por finalizar o checklist!
     async completedChecklist() {
-        await this.checklist.salveChecklist();
-        this.checklist.salveQuestions();
+        if(!this.validation.validationDataInicialFinal($_all('input[type="date"]'))){
+            alert('Deu ruim')
+        }else{
+            alert('Datas Ok')
+        }
+        // await this.checklist.salveChecklist();
+        // this.checklist.salveQuestions();
         // console.log(this.checklist)
     }
 }
