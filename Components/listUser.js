@@ -1,10 +1,11 @@
 import { UserCheckList } from "../Connection/UserCheckList.js";
+import { Routers } from "../Routers/router.js";
 import { MessageList } from "./messageList.js";
 import { Users } from "./objects/user.js";
 
 export class ListUser {
   messageList = new MessageList();
-
+  router = new Routers;
   async main(id_user) {
     const user = new Users();
     await user.populate(id_user);
@@ -29,7 +30,7 @@ export class ListUser {
     for (const iterator of list) {
       iterator.insertAdjacentHTML("beforeend", `<input type="checkbox" />`);
     }
-    document.querySelector(".container").insertAdjacentHTML("afterbegin", this.buttonBack());
+    document.querySelector(".container").insertAdjacentHTML("afterbegin", this.buttonBack(),);
     document.querySelector(".container").insertAdjacentHTML("beforeend",`<div id="buttonGroup"><button id="saveGroup">Salvar</button></div>`);
     document.querySelector(".container").setAttribute("style", "display:flex");
     await this.validationUserChecklist(idChecklist);
@@ -41,14 +42,14 @@ export class ListUser {
     userAccess && userAccess.forEach(element => {document.querySelector(`#sender_${element.id_user} input`).checked = true});
   }
 
-  buttonBack(){
+  buttonBack(){ 
     return`
     <div id="displayHeader">  
-          <div id="borderBack" onClick="window.location.reload()">
+          <div id="borderBack">
               <img src="../assets/images/setaLeft.svg" "/>
           </div>
           <header id="headerUserList"><h1>Incluir Usuario</h1></header>
     </div>`
   }
 
-}
+};
