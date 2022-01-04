@@ -341,7 +341,7 @@ export class TemplateChecklist {
         let response = true
         let method = [this.validation.requiredFields, this.validation.maxLength, this.validation.multipleInputMaxLength]
         let params = [["#editableQuestion .inputRiquered"], [$("#divForm input").value, 100], [".inputEditable", 45]]
-        let message = [" Preencha todos os campos de texto. <br>", " O título da questão não pode conter mais que 100 caracteres <br>", " As opções de resposta não podem conter mais que 45 caracteres <br>"]
+        let message = [" Preencha todos os campos de texto. <br> ", " O título da questão não pode conter mais que 100 caracteres <br> ", " As opções de resposta não podem conter mais que 45 caracteres <br> "]
         let methods = this.validationMultiple_error(method, params, message)
         let result = this.validation.multipleValidation(methods)
         if (!result.error) {

@@ -37,8 +37,8 @@ export class ListUser {
 
   async validationUserChecklist(idCheck){
     let userCheckList = new UserCheckList;
-    let userAccess = await userCheckList.get("&id_checklist=" + idCheck, true)    
-    userAccess.forEach(element => {document.querySelector(`#sender_${element.id_user} input`).checked = true});
+    let userAccess = await userCheckList.get("&id_checklist=" + idCheck)    
+    userAccess && userAccess.forEach(element => {document.querySelector(`#sender_${element.id_user} input`).checked = true});
   }
 
   buttonBack(){
