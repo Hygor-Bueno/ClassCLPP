@@ -10,17 +10,43 @@ export class ObjectChecklist extends ConnectionCLPP{
 	#questions = [];
 	#idChecklist;
 	#creatorId;
+
 	constructor(id) {
 		super();
 		this.#creatorId = id;
 	}
+	checklistJSON(){ 
+		let response = {};
+		response.nameChecklist = this.#title;
+		response.dataInit= this.#date_init;
+		response.dataFinal= this.#date_final;
+		response.notify= this.#notification
+		response.questions = this.#questions;
+		response.notify= this.#notification;
+		response.creatorId= this.#creatorId;
+		return response;
+	}
 
+	loadingChecklist(object){ 
+		if(object.nameChecklist)this.#title = object.nameChecklist;
+		if(object.dataInit)  this.#date_init = object.dataInit;
+		if(object.dataFinal)  this.#date_final = object.dataFinal;
+		if(object.notify)  this.#notification = object.notify;
+		if(object.questions)  this.#questions = object.questions;
+		if(object.notify)  this.#notification = object.notify;
+		if(object.creatorId)  this.#notification = object.creatorId;
+	}
+	// <===-- | --===> 
+	loadingCheckDataBase(id_checklist){ 
+		
+	}
+	
 	addQuestion(questionJson) {
 		this.#questions.push(questionJson)
 	}
 
 	updateQuestoin(arrayQuestion) {
-		this.#questions[this.#indexEditQuestion] = arrayQuestion;
+		this.#questions[this.#indexEditQuestion] = arrayQuestion
 	}
 
 	deleteQuestion(idQuestion) {
@@ -56,7 +82,7 @@ export class ObjectChecklist extends ConnectionCLPP{
 	setIdCHecklist(idChecklist) { this.#idChecklist = idChecklist }
 	setCreatorId(creatorId) { this.#creatorId = creatorId }
 
-	async salveChecklist() {
+	async saveChecklist() {
 		let checklistJSON = {
 			"description": this.#title,
 			"date_init": this.#date_init,
@@ -67,7 +93,7 @@ export class ObjectChecklist extends ConnectionCLPP{
 		let req =await this.post(checklistJSON,"CLPP/Checklist.php?app_id=7");
 		this.#idChecklist = req.last_id ;
 	}
-	salveQuestions() {
+	async saveQuestions() {
 		this.#questions.forEach(async (question) => {
 			let questionJSON = {
 				"type": question.type,
@@ -76,10 +102,10 @@ export class ObjectChecklist extends ConnectionCLPP{
 			};
 			let req = await this.post(questionJSON,"CLPP/Question.php?app_id=7",true)
 			question.id_question = req.last_id
-			this.salveOption(this.filterOption(question),question.id_question)
+			this.saveOption(this.filterOption(question),question.id_question)
 		});
 	}
-	salveOption(options,idQuestion){ 
+	saveOption(options,idQuestion){ 
 		options.forEach(element => {
 			element.id_question = idQuestion;
 			this.post(element,"CLPP/Option.php?app_id=7");

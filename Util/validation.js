@@ -2,12 +2,14 @@ export class Validation{
     maxLength(value,size){
         let response=true
         if(value){
-            if(value.length > size){response=false;}
+            if(value.length > size){response=false}
         }
         return response;
     }
-    minLength(value,size){
-        return !this.maxLength(value,size)
+    minLength(value,size){                     
+        let response=true     
+        if(value.length < size){response=false}        
+        return response;
     }
     equalsString(firstValue,secondValue){
         let response=true;
@@ -33,7 +35,6 @@ export class Validation{
         return response;
     }
     validationDataInicialFinal(dates){
-        console.log(dates)
         let response = true;
         if(dates[0].value > dates[1].value) response=false; 
         if(dates[0].value != "" || dates[1].value != ""){
@@ -50,7 +51,6 @@ export class Validation{
         let response = true;
         array.forEach(element => {
             if(element.value){
-                console.log(element.value.length + " <------",maxLength)
                 if(element.value.length > maxLength) {response =false}
             }
         });
