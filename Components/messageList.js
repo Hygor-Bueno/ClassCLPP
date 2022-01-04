@@ -59,15 +59,15 @@ export class MessageList {
         return response;
     }
     async bodyChat(senderObject, page) {
+        console.log(senderObject, page)
         let response, src="http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/";
         try {
             if (!page) page = 1
             let messages = new Message;
             let getMessage = await messages.get(`&id_user=${localStorage.getItem('id')}${senderObject.destiny}${senderObject.id}&pages=${page}`) 
-            console.log(getMessage)
             getMessage.reverse()
             response =
-                `<section>
+                `<section class="showMsg">
                     ${getMessage.map((element) => (`
                     <div class="${element.id_user != localStorage.getItem('id') ? "messageReceived" : "messageSend"} ${element.type == 2 ? "formatImg":''}" data-view ='${element.notification}'>
                         ${element.type == 1 ? `<p>${element.message}</p>`: `<img src="${src}${element.message}"/>`}
@@ -75,7 +75,7 @@ export class MessageList {
                 </section>`
         } catch (e) {
             console.log(e);
-            response = `<section><p class="errorReqMessage">Desculpe. Você não possuí conversas com esse colaborador.</p></section>`;
+            response = `<section><p class="errorReqMessage">Desculpe. Não há dados encontrados.</p></section>`;
         }
         return response;
     }
@@ -91,7 +91,7 @@ export class MessageList {
     }
     addMessage(local, message, classMessage,type) {
         const converImgBase64 = new convertBase64;
-        document.querySelector(local).insertAdjacentHTML('beforeend', `<div class="${classMessage}" data-view="1">${type == 2 ?converImgBase64.convert(message).outerHTML:`<p>${message}</p>`}</div>`)
+        document.querySelector(local).insertAdjacentHTML('beforeend', `<div class="${type == 2 ? classMessage + " formatImg": classMessage}" data-view="1">${type == 2 ?converImgBase64.convert(message).outerHTML:`<p>${message}</p>`}</div>`)
     }
 
 }
