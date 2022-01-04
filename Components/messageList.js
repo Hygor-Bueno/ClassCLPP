@@ -59,12 +59,12 @@ export class MessageList {
         return response;
     }
     async bodyChat(senderObject, page) {
+        console.log(senderObject, page)
         let response, src="http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/";
         try {
             if (!page) page = 1
             let messages = new Message;
-            let getMessage = await messages.get(`&id_user=${localStorage.getItem('id')}${senderObject.destiny}${senderObject.id}&pages=${page}`,true) 
-            console.log(getMessage)
+            let getMessage = await messages.get(`&id_user=${localStorage.getItem('id')}${senderObject.destiny}${senderObject.id}&pages=${page}`) 
             getMessage.reverse()
             response =
                 `<section class="showMsg">
@@ -75,7 +75,7 @@ export class MessageList {
                 </section>`
         } catch (e) {
             console.log(e);
-            response = `<section><p class="errorReqMessage">Desculpe. Você não possuí conversas com esse colaborador.</p></section>`;
+            response = `<section><p class="errorReqMessage">Desculpe. Não há dados encontrados.</p></section>`;
         }
         return response;
     }

@@ -149,6 +149,13 @@ export class SettingMessage {
         })
         $('.searchUserBar').addEventListener('keypress', (e) => { if (e.key === 'Enter') $('.searchName').click() })
     }
+    searchGroup(){
+        $('.searchGroup').addEventListener('click', () => {
+           const users =  $_all('.templateSearchUser')
+           console.log(users)
+           //this.listUser.checkBoxUser(await this.methodUnited(dataId))
+        })
+    }
     async visualizationMsg(params) {
         if ($('.colabHead .divColab') && $('.colabHead').getAttribute('data-id').split('_')[1] == params.user){
             $_all('.messageSend')[$_all('.messageSend').length - 1].setAttribute('data-view', '0')

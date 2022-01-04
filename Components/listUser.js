@@ -15,24 +15,25 @@ export class ListUser {
                 <img id="photoUser" src="${user.getPhoto().src}"/>
                 <p>${user.getName()}</p>
             </div>
+
         </div>                
         `;
     return data;
   }
 
-  async checkBoxUser(ids,idChecklist) {
-    console.log(ids, idChecklist)
+  async checkBoxUser(users,idChecklist) {
+    console.log(users, idChecklist)
     
     document.querySelector(".container").insertAdjacentHTML("beforeend", '<div id="listUser" class="style_scroll"></div>');    
-    document.querySelector("#listUser").insertAdjacentHTML("beforeend", `${ids}`);
+    document.querySelector("#listUser").insertAdjacentHTML("beforeend", `${users}`);
     let list = document.querySelectorAll(".divUser");
     for (const iterator of list) {
       iterator.insertAdjacentHTML("beforeend", `<input type="checkbox" />`);
     }
-    document.querySelector(".container").insertAdjacentHTML("afterbegin", this.buttonBack());
+    idChecklist && document.querySelector(".container").insertAdjacentHTML("afterbegin", this.buttonBack());
     document.querySelector(".container").insertAdjacentHTML("beforeend",`<div id="buttonGroup"><button id="saveGroup">Salvar</button></div>`);
     document.querySelector(".container").setAttribute("style", "display:flex");
-    await this.validationUserChecklist(idChecklist);
+    idChecklist && await this.validationUserChecklist(idChecklist);
   }
 
   async validationUserChecklist(idCheck){
