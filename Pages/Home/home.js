@@ -108,11 +108,15 @@ export class HomePage extends SettingHome {
     }
     async upMsgReceived(getNotify) {
         console.log(getNotify)
+        console.log(getNotify.message)
         if (document.getElementById('bodyChDiv')) {
             document.getElementById('bodyChDiv').insertAdjacentHTML('beforeend', await this.messageReceived());
             this.settings();
             if (document.getElementById('bodyMessageDiv') && document.querySelector('#bodyMessageDiv header').getAttribute('data-id') == getNotify.send_user) {
-                document.querySelector('#bodyMessageDiv section').insertAdjacentHTML('beforeend', `<div class= "messageReceived"><p>${getNotify.message}</p></div>`)
+                document.querySelector('#bodyMessageDiv section').insertAdjacentHTML('beforeend', `${getNotify.type == 2 ?
+                    `<div class="messageReceived formatImg"><img src=http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/${getNotify.message}></div>`
+                    :
+                    `<div class= "messageReceived"><p>${getNotify.message}</p></div>`}`)
                 document.querySelector('#bodyMessageDiv section').scrollTop = document.querySelector('#bodyMessageDiv section').scrollHeight;
             }
         }
