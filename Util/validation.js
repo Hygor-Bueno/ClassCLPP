@@ -7,13 +7,8 @@ export class Validation{
         return response;
     }
     minLength(value,size){                     
-        let response=true
-        value =""
-        console.log(value.length , size, " <-- Validation")
-        if(value){
-            if(value.length <= size){response=false}
-        }
-        console.log(response)
+        let response=true     
+        if(value.length < size){response=false}        
         return response;
     }
     equalsString(firstValue,secondValue){
@@ -56,7 +51,6 @@ export class Validation{
         let response = true;
         array.forEach(element => {
             if(element.value){
-                console.log(element.value.length + " <------",maxLength)
                 if(element.value.length > maxLength) {response =false}
             }
         });
