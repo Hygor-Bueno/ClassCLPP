@@ -131,8 +131,6 @@ export class TemplateChecklist {
 
     proceedChecklist(object) {
         this.checklist.loadingChecklist(object);
-        console.log(this.idQuestion)
-        // this.idQuestion = $_all('.questionCreated').length +1;
         getB_id('nameChecklist').value = object.nameChecklist
         if (object.notify != "0") {
             $('#notifyChecklist img').setAttribute('src', this.pathImgNotifyOn)
@@ -143,13 +141,7 @@ export class TemplateChecklist {
         let questions = "";
         object.questions.forEach((element) => { questions += this.questionsCreated([element], element.id);this.idQuestion =element.id+1;});
         getB_id('questionCreated').insertAdjacentHTML('beforeend', questions)
-        object.questions.forEach((element) =>{
-            this.btnQuestionCreated(element.id)
-        })
-    }
-
-    settingButtonProceedCheck(object){
-
+        object.questions.forEach((element) =>{this.btnQuestionCreated(element.id)})
     }
 
     editOption(objectQuestion, btnDelete, objQuestion, indexOption) {
@@ -261,7 +253,10 @@ export class TemplateChecklist {
         getB_id('btnSalveChecklist').addEventListener('click', () => this.completedChecklist())
         localStorage.getItem('checklist') ? this.proceedChecklist(JSON.parse(localStorage.getItem('checklist'))) : "";
     }
+    // <============================ | ============================>
     editQuestionCreated(objectQuestion) {
+        console.log(objectQuestion)
+        getB_id('typeQuestion').value = objectQuestion.type        
         let updateBtn = this.tempButtonUpdate('updateQuestion')
         getB_id('saveQuestion').remove();
         getB_id('btnQuestion').insertAdjacentHTML('beforeend', updateBtn);
@@ -272,6 +267,7 @@ export class TemplateChecklist {
         this.populateOptions(objectQuestion, 'bodyQuestion')
         this.configBtnQuestion();
         this.disableButtons(['#questionCreated', '#formCheclist', '#settingFooterButton'])
+        getB_id('typeQuestion').disabled = true;
     }
     resetQuestionCreate() {
         $('#headerQuestion input').value = "";
@@ -292,6 +288,7 @@ export class TemplateChecklist {
                 this.resetQuestionCreate();
                 this.btnQuestionCreated(objectQuestion.id);
                 this.enableButtons(['#questionCreated', '#formCheclist', '#settingFooterButton'])
+                getB_id('typeQuestion').disabled = false;
                 localStorage.setItem('checklist', JSON.stringify(this.checklist.checklistJSON()))
                 console.log(JSON.parse(localStorage.getItem('checklist')));
             }
@@ -335,6 +332,8 @@ export class TemplateChecklist {
                 this.alterTypeQuestion();
                 this.enabledButtonInit();
                 this.resetInput('#headerQuestion input')
+                localStorage.setItem('checklist', JSON.stringify(this.checklist.checklistJSON()))
+                console.log(JSON.parse(localStorage.getItem('checklist')));
             }
         })
     }
