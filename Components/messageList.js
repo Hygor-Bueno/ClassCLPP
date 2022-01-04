@@ -63,11 +63,11 @@ export class MessageList {
         try {
             if (!page) page = 1
             let messages = new Message;
-            let getMessage = await messages.get(`&id_user=${localStorage.getItem('id')}${senderObject.destiny}${senderObject.id}&pages=${page}`) 
+            let getMessage = await messages.get(`&id_user=${localStorage.getItem('id')}${senderObject.destiny}${senderObject.id}&pages=${page}`,true) 
             console.log(getMessage)
             getMessage.reverse()
             response =
-                `<section>
+                `<section class="showMsg">
                     ${getMessage.map((element) => (`
                     <div class="${element.id_user != localStorage.getItem('id') ? "messageReceived" : "messageSend"} ${element.type == 2 ? "formatImg":''}" data-view ='${element.notification}'>
                         ${element.type == 1 ? `<p>${element.message}</p>`: `<img src="${src}${element.message}"/>`}
@@ -91,7 +91,7 @@ export class MessageList {
     }
     addMessage(local, message, classMessage,type) {
         const converImgBase64 = new convertBase64;
-        document.querySelector(local).insertAdjacentHTML('beforeend', `<div class="${classMessage}" data-view="1">${type == 2 ?converImgBase64.convert(message).outerHTML:`<p>${message}</p>`}</div>`)
+        document.querySelector(local).insertAdjacentHTML('beforeend', `<div class="${type == 2 ? classMessage + " formatImg": classMessage}" data-view="1">${type == 2 ?converImgBase64.convert(message).outerHTML:`<p>${message}</p>`}</div>`)
     }
 
 }

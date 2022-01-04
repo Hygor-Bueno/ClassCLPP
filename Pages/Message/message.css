@@ -190,3 +190,16 @@
     cursor:pointer;
     margin: 20px;
 }
+
+#closeImg{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width: 600px;
+    height: 600px;
+}
+
+#closeImg img{
+    height: 100%;
+    width: 100%;
+}

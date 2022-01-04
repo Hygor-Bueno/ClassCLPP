@@ -1,4 +1,4 @@
-import { $, $_all, getB_id } from "../../Util/compressSyntaxe.js"
+import { $, $_all, getB_id, closeModal, openModal } from "../../Util/compressSyntaxe.js"
 import { MessageList } from "../../Components/messageList.js";
 import { UsefulComponents } from "../../Util/usefulComponents.js";
 import { Validation } from "../../Util/validation.js";
@@ -36,6 +36,7 @@ export class SettingMessage {
         this.searchUser()
         this.scrollMsg()
         this.searchName()
+        this.modalImg()
     }
     clickSend() {
         getB_id('buttonSend').addEventListener('click', () => {
@@ -56,16 +57,14 @@ export class SettingMessage {
         this.clickSend()
     }
     async sendMsg(){
-        let sending = getB_id('inputSend').value
-        if(sending) {
-            this.typeMsg = 1
-            await this.settingHome.buttonSend(this.chatIdSender, sending, this.typeMsg, this.chatIdPage, this.chatScroll);
-        }else {
-            this.previewFile(getB_id('file').files[0])
-            this.typeMsg = 2
-        }
+        let sending = getB_id('inputSend').value 
+        let sendImg = getB_id('file').files[0]
+        this.typeMsg = 1
+        sending && await this.settingHome.buttonSend(this.chatIdSender, sending, this.typeMsg, this.chatIdPage, this.chatScroll);
+        sendImg && this.previewFile(sendImg);
     }
-     previewFile(imgFile){
+    previewFile(imgFile){
+        this.typeMsg = 2
         let img = document.createElement('img')
         const reader = new FileReader();
         if (imgFile) {
@@ -77,6 +76,7 @@ export class SettingMessage {
             img.src = reader.result;   
             await this.settingHome.buttonSend(this.chatIdSender, img.src.replace(/^data:image\/[a-z]+;base64,/,""), this.typeMsg, this.chatIdPage, this.chatScroll);         
         } 
+        getB_id('file').value = ""  
     }
     clickDivUser(local) {
         $_all(local).forEach(element => element.addEventListener('click',  () => {this.clickEvents(element); this.chergeSendButtom()}))
@@ -184,5 +184,15 @@ export class SettingMessage {
         key = Object.keys(obj)
         key.forEach(valor => {response.push(obj[valor])})
         return response
+    }
+    modalImg() {
+        document.querySelector('.msg_out').addEventListener('click', (evt) => {
+            if (evt.target.tagName === 'IMG') {
+                openModal(`<div id="closeImg"> ${evt.target.outerHTML}</div>`)
+                $('.container').addEventListener('click', (events)=> {
+                    if($('#closeImg') && !$('#closeImg').contains(events.target)) closeModal()
+                })
+            }
+        })                                          
     }
 }
