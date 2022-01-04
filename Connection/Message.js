@@ -7,7 +7,6 @@ export class Message {
         typeof params === "string" || typeof params === "object" ? params : err = params;
         this.settingUrl('/Controller/CLPP/Message.php?app_id=7&AUTH=', params)
         let req;
-        console.log(this.URL)
         await fetch(this.URL)
                 .then(response => response.json())
                 .then(body => {

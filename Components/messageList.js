@@ -59,7 +59,6 @@ export class MessageList {
         return response;
     }
     async bodyChat(senderObject, page) {
-        console.log(senderObject, page)
         let response, src="http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/";
         try {
             if (!page) page = 1

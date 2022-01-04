@@ -37,6 +37,7 @@ export class SettingMessage {
         this.scrollMsg()
         this.searchName()
         this.modalImg()
+        this.searchGroup()
     }
     clickSend() {
         getB_id('buttonSend').addEventListener('click', () => {
@@ -150,10 +151,10 @@ export class SettingMessage {
         $('.searchUserBar').addEventListener('keypress', (e) => { if (e.key === 'Enter') $('.searchName').click() })
     }
     searchGroup(){
-        $('.searchGroup').addEventListener('click', () => {
-           const users =  $_all('.templateSearchUser')
-           console.log(users)
-           //this.listUser.checkBoxUser(await this.methodUnited(dataId))
+        let idsUsers = ""
+        $('.searchGroup').addEventListener('click', async () => {
+            $_all('.templateSearchUser .divUser').forEach((element) => idsUsers += element.outerHTML)
+            this.listUser.checkBoxUser(idsUsers)
         })
     }
     async visualizationMsg(params) {
