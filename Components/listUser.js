@@ -39,7 +39,7 @@ export class ListUser {
       document.querySelector("#tamplateListUser").insertAdjacentHTML("afterbegin", this.buttonBack());
       getB_id('borderBack').addEventListener("click", () => {closeModal()})
     }
-    document.querySelector("#tamplateListUser").insertAdjacentHTML("beforeend", `<div id="buttonGroup">=<button id="saveGroup">Salvar</button></div>`);
+    document.querySelector("#tamplateListUser").insertAdjacentHTML("beforeend", `<div id="buttonGroup"><button id="saveGroup">Salvar</button></div>`);
     document.querySelector(".container").setAttribute("style", "display:flex");
     idChecklist && await this.validationUserChecklist(idChecklist);
   }
@@ -57,7 +57,7 @@ export class ListUser {
     let userCheckList = new UserCheckList;
     let userAccess = await userCheckList.get("&id_checklist=" + idCheck)
     userAccess && userAccess.forEach(element => { 
-      document.querySelector(`#sender_${element.id_user} input`).checked = true 
+      this.markUser(`sender_${element.id_user}`)
 
     });
   }
@@ -66,7 +66,7 @@ export class ListUser {
     return `
     <div id="displayHeader">  
           <div id="borderBack">
-              <img src="../assets/images/setaLeft.svg" "/>
+              <img src="./assets/images/setaLeft.svg"/>
           </div>
           <header id="headerUserList"><h1>Incluir Usuario:</h1></header>
     </div>
