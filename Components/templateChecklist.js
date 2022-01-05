@@ -16,7 +16,7 @@ export class TemplateChecklist {
     idQuestion = 1;
     // this.routes.routers(router[index])
     pathImgEdit = "./assets/images/pencil.svg";
-    pathImgSalve = "./assets/images/save.svg";
+    pathImgSave = "./assets/images/save.svg";
     pathImgDelete = "./assets/images/delete.svg";
     pathImgNotify = "./assets/images/alertNotify.svg";
     pathImgNotifyOn = "./assets/images/alertNotifyOn.svg";
@@ -77,7 +77,7 @@ export class TemplateChecklist {
                                 <img src="./assets/images/add.svg" title="Adicionar Nova Opção de Resposta."/>
                             </button>
                             <button type="button" id="saveQuestion">
-                                <img src="./assets/images/save.svg" title="Salvar questão."/>
+                                <img src="${this.pathImgSave}" title="Salvar questão."/>
                             </button>
                         </asind>
                     </div>
@@ -308,7 +308,7 @@ export class TemplateChecklist {
     tempButtonUpdate(id) {
         return `
             <button type="button" id='${id}'>
-                <img src="./assets/images/save.svg" title="alterar Questão."/>
+                <img src="${this.pathImgSave}" title="alterar Questão."/>
             </button>
         `
     }
