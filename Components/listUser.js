@@ -22,15 +22,12 @@ export class ListUser {
   }
 
   async checkBoxUser(users, idChecklist) {
-    console.log(users, idChecklist)
-    document.querySelector(".container").insertAdjacentHTML("beforeend", "<div id='tamplateListUser'></div>")
+    document.querySelector(".container").insertAdjacentHTML("beforeend", "<div id='tamplateListUser'></div>");
     document.querySelector("#tamplateListUser").insertAdjacentHTML("beforeend", '<div id="listUser" class="style_scroll"></div>');
     document.querySelector("#listUser").insertAdjacentHTML("beforeend", `${users}`);
-    let list = document.querySelectorAll(".divUser");
+    let list = document.querySelectorAll("#tamplateListUser .divUser");
     for (const iterator of list) {
       iterator.addEventListener("click", () => {
-        // console.log(document.querySelector(`#${iterator.getAttribute('id')} input[checkbox]`))
-        console.log(iterator.getAttribute('id'))
         document.querySelector(`#${iterator.getAttribute('id')} input[type=checkbox]`).checked ? this.markoffUser(iterator.getAttribute('id')) : this.markUser(iterator.getAttribute('id'))
       })
       iterator.insertAdjacentHTML("beforeend", `<label class="labelCheck" style="display:none"> &#128504; </label><input type="checkbox" style="display:none"/>`);
@@ -39,7 +36,7 @@ export class ListUser {
       document.querySelector("#tamplateListUser").insertAdjacentHTML("afterbegin", this.buttonBack());
       getB_id('borderBack').addEventListener("click", () => {closeModal()})
     }
-    document.querySelector("#tamplateListUser").insertAdjacentHTML("beforeend", `<div id="buttonGroup">=<button id="saveGroup">Salvar</button></div>`);
+    document.querySelector("#tamplateListUser").insertAdjacentHTML("beforeend", `<div id="buttonGroup"><button id="saveGroup">Salvar</button></div>`);
     document.querySelector(".container").setAttribute("style", "display:flex");
     idChecklist && await this.validationUserChecklist(idChecklist);
   }

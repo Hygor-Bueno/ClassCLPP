@@ -8,9 +8,9 @@ export class ConnectionCLPP {
     err;
     async get(params, pathFile, err) {
         this.validationParams(params, pathFile, err);
-        this.settingUrl(`/Controller/${this.pathFile}&AUTH=`, params)
+        this.settingUrl(`/Controller/${this.pathFile}?AUTH=`, params)
         let req;
-        await fetch(this.URL + params)
+        await fetch(this.URL)
             .then(response => response.json())
             .then(body => {
                 if (body.error) throw new Error(body.message)

@@ -9,6 +9,7 @@ import { WebSocketCLPP } from "../../Connection/WebSocket.js";
 import { UserAccess } from "../../Connection/UserAccess.js";
 import { Users } from "../../Components/objects/user.js";
 import { convertBase64 } from "../../Util/convertBase64.js";
+import { GroupMessage } from "../../Components/objects/groupMessage.js";
 
 const id = localStorage.getItem("id")
 
@@ -37,7 +38,7 @@ export class SettingMessage {
         this.scrollMsg()
         this.searchName()
         this.modalImg()
-        this.searchGroup()
+        this.createGroup()
     }
     clickSend() {
         getB_id('buttonSend').addEventListener('click', () => {
@@ -150,12 +151,34 @@ export class SettingMessage {
         })
         $('.searchUserBar').addEventListener('keypress', (e) => { if (e.key === 'Enter') $('.searchName').click() })
     }
-    searchGroup(){
-        let idsUsers = ""
+    async createGroup(){
         $('.searchGroup').addEventListener('click', async () => {
-            $_all('.templateSearchUser .divUser').forEach((element) => idsUsers += element.outerHTML)
-            this.listUser.checkBoxUser(idsUsers)
+            const nameGroup = `
+            <div class="nameGroup">
+                <header><h1>Insira o nome do grupo</h1></header>
+                <input type="text">
+                <footer><button class="buttonProgress"><a>Continuar</a></button></footer>
+            </div>`
+            openModal(nameGroup)
+            let idGroup = new GroupMessage(localStorage.getItem('id'));
+            await idGroup.main("Grupo do grupo")
+            console.log(idGroup)
         })
+    }
+    usersInGroup(){
+        let idsUsers = ""
+        $_all('.templateSearchUser .divUser').forEach((element) => idsUsers += element.outerHTML)
+            this.listUser.checkBoxUser(idsUsers)
+            $('#tamplateListUser').insertAdjacentHTML("afterbegin",`
+            <div id="displayHeader">  
+                <div id="borderBack">
+                    <h1>X</h1>
+                </div>
+                <header id="headerUserList">
+                    <h1>Incluir Usuario:</h1>
+                </header>
+            </div>`)
+            getB_id('borderBack').addEventListener('click', () => closeModal())
     }
     async visualizationMsg(params) {
         if ($('.colabHead .divColab') && $('.colabHead').getAttribute('data-id').split('_')[1] == params.user){
