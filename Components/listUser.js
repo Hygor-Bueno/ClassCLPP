@@ -1,12 +1,10 @@
 import { UserCheckList } from "../Connection/UserCheckList.js";
-import { Routers } from "../Routers/router.js";
 import { closeModal, getB_id } from "../Util/compressSyntaxe.js";
 import { MessageList } from "./messageList.js";
 import { Users } from "./objects/user.js";
 
 export class ListUser {
   messageList = new MessageList();
-  router = new Routers;
   async main(id_user) {
     const user = new Users();
     await user.populate(id_user);
@@ -39,7 +37,7 @@ export class ListUser {
     }
     if (idChecklist) {
       document.querySelector("#tamplateListUser").insertAdjacentHTML("afterbegin", this.buttonBack());
-      getB_id('borderBack').addEventListener("click", () => { closeModal(); this.router.routers('checklistCreated') })
+      getB_id('borderBack').addEventListener("click", () => {closeModal()})
     }
     document.querySelector("#tamplateListUser").insertAdjacentHTML("beforeend", `<div id="buttonGroup">=<button id="saveGroup">Salvar</button></div>`);
     document.querySelector(".container").setAttribute("style", "display:flex");
