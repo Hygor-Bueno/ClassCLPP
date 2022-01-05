@@ -27,8 +27,9 @@ export class Routers {
 				case 'checklistCreated':
 					result = new ChecklistCreatedPage;
 					document.getElementById('StylePages').setAttribute('href',"./Pages/Checklist/ChecklistCriated/checklist.css")
-					local.insertAdjacentHTML("beforeend", await result.main());
-					result.setting();
+					let req = await result.arrayCheckList();
+					local.insertAdjacentHTML("beforeend", await result.main(req));
+					result.setting(req);
 					break;
 				case 'record':
 					result = new RecordPage;

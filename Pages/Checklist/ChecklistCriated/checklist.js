@@ -4,10 +4,9 @@ import { SettingChecklist } from "../ChecklistCriated/settingChecklist.js";
 export class ChecklistCreatedPage extends SettingChecklist{
   getChecklist = new Checklist();
   checklists;
-   async main() {
+   async main(checklist) {
     document.getElementById("message").setAttribute("style", "display:none");
-    this.checklists =  await this.getChecklist.get('&web&id_user=' + localStorage.getItem('id'))
-    
+    this.checklists = checklist;    
     let response = `
 
       <form id="form">
@@ -30,5 +29,9 @@ export class ChecklistCreatedPage extends SettingChecklist{
       </section>
         `;
     return response;
+  }
+  
+  async arrayCheckList(){
+    return await this.getChecklist.get('&web&id_user=' + localStorage.getItem('id')) 
   }
 }
