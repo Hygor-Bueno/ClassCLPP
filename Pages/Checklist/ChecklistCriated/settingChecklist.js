@@ -4,30 +4,54 @@ import { Checklist } from "../../../Connection/Checklist.js";
 import { UsefulComponents } from "../../../Util/usefulComponents.js";
 import { UserAccess } from "../../../Connection/UserAccess.js";
 import { ListUser } from "../../../Components/listUser.js";
+import { ObjectChecklist } from "../../../Components/objects/checklistObject.js";
+import { ConnectionCLPP } from "../../../Connection/ConnectionCLPP.js";
 
 export class SettingChecklist {
+  checklist = new Checklist();
+  listUser = new ListUser();
+  accessClpp = new UserAccess();
+  connectionCLPP = new ConnectionCLPP();
   searchCheck;
   searchDateInit;
   searchDateFinal;
   idCheck;
-  checklist = new Checklist();
-  listUser = new ListUser();
-  accessClpp = new UserAccess();
-  listsUsersCheck="";
-  
-  async list(){
+  checklistsUser = {};
+  listsUsersCheck = "";
+  arrayCheck;
+
+  async list() {
     let accessCLPP = await this.accessClpp.get("&application_id=7&web");
     for (const iterator of accessCLPP.data) {
-      this.listsUsersCheck+= await this.listUser.main(iterator.id)
+      this.listsUsersCheck += await this.listUser.main(iterator.id);
     }
   }
-  async setting() {
+
+  async constructorObject(array) {
+    //Esssa parte popula o checklist
+    await array.forEach(async (element) => {
+      let response = new ObjectChecklist();
+      await response.loadingCheckDataBase(element);
+      this.checklistsUser[element.id] = response;
+      console.log(response);
+    });
+
+    /* let response = new ObjectChecklist();
+    response.deleteOpitionDataBase(853); */
+  }
+
+  getQuestion(array) {}
+
+  getOption(array) {}
+
+  async setting(array) {
+    await this.constructorObject(array);
     await this.list();
-    this.queryButton();
+    await this.queryButton();
     this.listUsers();
   }
 
-  queryButton() {
+  async queryButton() {
     let searchCheck;
     getB_id("searchName").addEventListener("click", async () => {
       this.searchCheck = $("#inputCheckList").value;
@@ -46,6 +70,7 @@ export class SettingChecklist {
       );
       this.clean();
       this.popIclude(searchCheck);
+      this.listUsers();
     });
   }
   clean() {
@@ -60,18 +85,16 @@ export class SettingChecklist {
   }
 
   listUsers() {
-    $_all('.groups').forEach(element => {
-        element.addEventListener('click',   () => { 
-          this.queryUser(element.getAttribute('data-id_check'));
-          console.log(element)
-        })
+    $_all(".groups").forEach((element) => {
+      element.addEventListener("click", () => {
+        this.queryUser(element.getAttribute("data-id_check"));
+        console.log(element);
+      });
     });
   }
 
   async queryUser(idChecklist) {
-    await this.listUser.checkBoxUser(
-      this.listsUsersCheck ,idChecklist
-    );
+    await this.listUser.checkBoxUser(this.listsUsersCheck, idChecklist);
   }
 
   getCheckListCreted(checklists) {
@@ -107,9 +130,13 @@ export class SettingChecklist {
                   }</p>
               </div>
               <div id="function">
-              <button type="button" data-id_check="${checklist.id}"  class="groups"><img src="./assets/images/groups_black_24dp.svg"/></button>
-              <button type="button"><img src="./assets/images/olho.svg"/></button>
-              <button type="button" ><img src="./assets/images/delete.svg"/></button>
+                  <button type="button" data-id_check="${
+                    checklist.id
+                  }"  class="groups"><img src="./assets/images/groups_black_24dp.svg"/></button>
+                  <button type="button"><img src="./assets/images/olho.svg"/></button>
+                  <button type="button" class="delete" data-id_check="${
+                    checklist.id
+                  }"><img src="./assets/images/delete.svg"/></button>
               </div>
           </div>
         `
