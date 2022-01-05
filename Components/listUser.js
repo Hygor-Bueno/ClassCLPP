@@ -23,39 +23,56 @@ export class ListUser {
     return data;
   }
 
-  async checkBoxUser(users,idChecklist) {
+  async checkBoxUser(users, idChecklist) {
     console.log(users, idChecklist)
-    document.querySelector(".container").insertAdjacentHTML("beforeend","<div id='tamplateListUser'></div>")
-    document.querySelector("#tamplateListUser").insertAdjacentHTML("beforeend", '<div id="listUser" class="style_scroll"></div>');    
+    document.querySelector(".container").insertAdjacentHTML("beforeend", "<div id='tamplateListUser'></div>")
+    document.querySelector("#tamplateListUser").insertAdjacentHTML("beforeend", '<div id="listUser" class="style_scroll"></div>');
     document.querySelector("#listUser").insertAdjacentHTML("beforeend", `${users}`);
     let list = document.querySelectorAll(".divUser");
     for (const iterator of list) {
-      iterator.insertAdjacentHTML("beforeend", `<input type="checkbox" />`);
+      iterator.addEventListener("click", () => {
+        // console.log(document.querySelector(`#${iterator.getAttribute('id')} input[checkbox]`))
+        console.log(iterator.getAttribute('id'))
+        document.querySelector(`#${iterator.getAttribute('id')} input[type=checkbox]`).checked ? this.markoffUser(iterator.getAttribute('id')) : this.markUser(iterator.getAttribute('id'))
+      })
+      iterator.insertAdjacentHTML("beforeend", `<label class="labelCheck" style="display:none"> &#128504; </label><input type="checkbox" style="display:none"/>`);
     }
-    if(idChecklist) {
+    if (idChecklist) {
       document.querySelector("#tamplateListUser").insertAdjacentHTML("afterbegin", this.buttonBack());
-      getB_id('borderBack').addEventListener("click",() => {closeModal();this.router.routers('checklistCreated')})
-    } 
-    document.querySelector("#tamplateListUser").insertAdjacentHTML("beforeend",`<div id="buttonGroup"><button id="saveGroup">Salvar</button></div>`);
+      getB_id('borderBack').addEventListener("click", () => { closeModal(); this.router.routers('checklistCreated') })
+    }
+    document.querySelector("#tamplateListUser").insertAdjacentHTML("beforeend", `<div id="buttonGroup">=<button id="saveGroup">Salvar</button></div>`);
     document.querySelector(".container").setAttribute("style", "display:flex");
     idChecklist && await this.validationUserChecklist(idChecklist);
-
   }
 
-  async validationUserChecklist(idCheck){
+  markUser(idDivUser) {
+    document.querySelector(`#${idDivUser} input[type=checkbox]`).checked = true;
+    document.querySelector(`#${idDivUser} label`).setAttribute('style','display:flex');
+  }
+  markoffUser(idDivUser) {
+    document.querySelector(`#${idDivUser} input[type=checkbox]`).checked = false;
+    document.querySelector(`#${idDivUser} label`).setAttribute('style','display:none');
+  }
+
+  async validationUserChecklist(idCheck) {
     let userCheckList = new UserCheckList;
-    let userAccess = await userCheckList.get("&id_checklist=" + idCheck)    
-    userAccess && userAccess.forEach(element => {document.querySelector(`#sender_${element.id_user} input`).checked = true});
+    let userAccess = await userCheckList.get("&id_checklist=" + idCheck)
+    userAccess && userAccess.forEach(element => { 
+      document.querySelector(`#sender_${element.id_user} input`).checked = true 
+
+    });
   }
 
-  buttonBack(){ 
-    return`
+  buttonBack() {
+    return `
     <div id="displayHeader">  
           <div id="borderBack">
               <img src="../assets/images/setaLeft.svg" "/>
           </div>
           <header id="headerUserList"><h1>Incluir Usuario:</h1></header>
-    </div>`
+    </div>
+    `
   }
 
 };
