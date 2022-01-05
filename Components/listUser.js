@@ -1,10 +1,12 @@
 import { UserCheckList } from "../Connection/UserCheckList.js";
+import { Routers } from "../Routers/router.js";
+import { closeModal, getB_id } from "../Util/compressSyntaxe.js";
 import { MessageList } from "./messageList.js";
 import { Users } from "./objects/user.js";
 
 export class ListUser {
   messageList = new MessageList();
-
+  router = new Routers;
   async main(id_user) {
     const user = new Users();
     await user.populate(id_user);
@@ -23,33 +25,37 @@ export class ListUser {
 
   async checkBoxUser(users,idChecklist) {
     console.log(users, idChecklist)
-    
-    document.querySelector(".container").insertAdjacentHTML("beforeend", '<div id="listUser" class="style_scroll"></div>');    
+    document.querySelector(".container").insertAdjacentHTML("beforeend","<div id='tamplateListUser'></div>")
+    document.querySelector("#tamplateListUser").insertAdjacentHTML("beforeend", '<div id="listUser" class="style_scroll"></div>');    
     document.querySelector("#listUser").insertAdjacentHTML("beforeend", `${users}`);
     let list = document.querySelectorAll(".divUser");
     for (const iterator of list) {
       iterator.insertAdjacentHTML("beforeend", `<input type="checkbox" />`);
     }
-    idChecklist && document.querySelector(".container").insertAdjacentHTML("afterbegin", this.buttonBack());
-    document.querySelector(".container").insertAdjacentHTML("beforeend",`<div id="buttonGroup"><button id="saveGroup">Salvar</button></div>`);
+    if(idChecklist) {
+      document.querySelector("#tamplateListUser").insertAdjacentHTML("afterbegin", this.buttonBack());
+      getB_id('borderBack').addEventListener("click",() => {closeModal();this.router.routers('checklistCreated')})
+    } 
+    document.querySelector("#tamplateListUser").insertAdjacentHTML("beforeend",`<div id="buttonGroup"><button id="saveGroup">Salvar</button></div>`);
     document.querySelector(".container").setAttribute("style", "display:flex");
     idChecklist && await this.validationUserChecklist(idChecklist);
+
   }
 
   async validationUserChecklist(idCheck){
     let userCheckList = new UserCheckList;
-    let userAccess = await userCheckList.get("&id_checklist=" + idCheck, true)    
-    userAccess.forEach(element => {document.querySelector(`#sender_${element.id_user} input`).checked = true});
+    let userAccess = await userCheckList.get("&id_checklist=" + idCheck)    
+    userAccess && userAccess.forEach(element => {document.querySelector(`#sender_${element.id_user} input`).checked = true});
   }
 
-  buttonBack(){
+  buttonBack(){ 
     return`
     <div id="displayHeader">  
-          <div id="borderBack" onClick="window.location.reload()">
+          <div id="borderBack">
               <img src="../assets/images/setaLeft.svg" "/>
           </div>
-          <header id="headerUserList"><h1>Incluir Usuario</h1></header>
+          <header id="headerUserList"><h1>Incluir Usuario:</h1></header>
     </div>`
   }
 
-}
+};
