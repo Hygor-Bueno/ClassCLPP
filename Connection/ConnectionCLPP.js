@@ -23,7 +23,7 @@ export class ConnectionCLPP {
     }
     async post(params, pathFile, err) {
         this.validationParams(params, pathFile, err);
-        this.settingUrl(`/Controller/${this.pathFile}&AUTH=`)
+        this.settingUrl(`/Controller/${this.pathFile}?AUTH=`)
         let req
         await fetch(this.URL, {
             method: 'POST',
