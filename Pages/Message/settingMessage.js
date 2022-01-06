@@ -193,6 +193,7 @@ export class SettingMessage {
         closeModal()
         const routers = new Routers;
         routers.routers(localStorage.getItem('router'))
+        //novo metodo
         })
     }
     async visualizationMsg(params) {
