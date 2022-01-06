@@ -14,7 +14,6 @@ export class ConnectionCLPP {
             .then(response => response.json())
             .then(body => {
                 if (body.error) throw new Error(body.message)
-                console.log(body)
                 req = body;
             }).catch(erro => {
                 if (this.err) this.errorHandling.main(erro)
@@ -23,7 +22,6 @@ export class ConnectionCLPP {
         return req;
     }
     async post(params, pathFile, err) {
-        console.log(params, pathFile, err);
         this.validationParams(params, pathFile, err);
         this.settingUrl(`/Controller/${this.pathFile}&AUTH=`)
         let req
@@ -35,7 +33,6 @@ export class ConnectionCLPP {
             .then(response => response.json())
             .then(body => {
                 if (body.error) throw Error(body.message)
-                console.log(body)
                 req = body;
             }).catch(error => { console.log(error); if (this.err) this.errorHandling.main(error) })
         this.cleanParams();
@@ -43,7 +40,6 @@ export class ConnectionCLPP {
     }
     delete(params, pathFile, err) {
       this.validationParams(params, pathFile, err);
-      console.log(params, pathFile, err)
       this.settingUrl(`/Controller/${this.pathFile}?AUTH=`, params);
       let req;
   
@@ -55,7 +51,6 @@ export class ConnectionCLPP {
         .then((response) => response.json())
         .then((body) => {
           if (body.error) throw Error(body.message);
-          console.log(body);
           req = body;
         })
         .catch((error) => {

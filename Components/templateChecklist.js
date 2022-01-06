@@ -253,9 +253,7 @@ export class TemplateChecklist {
         getB_id('btnSalveChecklist').addEventListener('click', () => this.completedChecklist())
         localStorage.getItem('checklist') ? this.proceedChecklist(JSON.parse(localStorage.getItem('checklist'))) : "";
     }
-    // <============================ | ============================>
     editQuestionCreated(objectQuestion) {
-        console.log(objectQuestion)
         getB_id('typeQuestion').value = objectQuestion.type        
         let updateBtn = this.tempButtonUpdate('updateQuestion')
         getB_id('saveQuestion').remove();
@@ -290,7 +288,6 @@ export class TemplateChecklist {
                 this.enableButtons(['#questionCreated', '#formCheclist', '#settingFooterButton'])
                 getB_id('typeQuestion').disabled = false;
                 localStorage.setItem('checklist', JSON.stringify(this.checklist.checklistJSON()))
-                console.log(JSON.parse(localStorage.getItem('checklist')));
             }
         })
     }
@@ -333,7 +330,6 @@ export class TemplateChecklist {
                 this.enabledButtonInit();
                 this.resetInput('#headerQuestion input')
                 localStorage.setItem('checklist', JSON.stringify(this.checklist.checklistJSON()))
-                console.log(JSON.parse(localStorage.getItem('checklist')));
             }
         })
     }
@@ -495,7 +491,6 @@ export class TemplateChecklist {
         this.enabledButtonInit();
         let array = $_all('.btnDelete');
         array.forEach(element => {
-            console.log(element.value, element);
             element.addEventListener('click', () => { getB_id(`option_${element.value}`).remove(); })
         });
     }
@@ -552,7 +547,6 @@ export class TemplateChecklist {
         let message = [" O título do Checklist não pode estar vazio. <br>", "O checklist não pode salvo sem questões. <br>", " O título do Checklist não pode conter mais que 45 caracteres. <br>", " A data inicial não pode ser maior que a data final. <br> Caso um campo seja preenchido o outro se torna obrigatório.<br>"]
         let result = this.validation.multipleValidation(this.validationMultiple_error(method, params, message))
         if (result.error) {
-            // console.log(localStorage.getItem('checklist'))
             await this.checklist.saveChecklist();
             await this.checklist.saveQuestions();
             this.finalChecklist('finalizar')
