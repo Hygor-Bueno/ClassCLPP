@@ -281,7 +281,7 @@ export class TemplateChecklist {
     btnUpdate(objectQuestion, local) {
         getB_id(local).addEventListener('click', () => {
             if (this.validationQuestion()) {
-                this.checklist.updateQuestoin(this.addQuestion(objectQuestion.id));
+                this.checklist.updateQuestion(this.addQuestion(objectQuestion.id));
                 let editedQuestion = this.containerQuestionCreate([this.checklist.queryQuestion(objectQuestion.id)], objectQuestion.id)
                 getB_id(`questionCreated_${objectQuestion.id}`).innerHTML = "";
                 getB_id(`questionCreated_${objectQuestion.id}`).insertAdjacentHTML('beforeend', editedQuestion)

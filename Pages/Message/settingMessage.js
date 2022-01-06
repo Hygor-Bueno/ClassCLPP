@@ -169,7 +169,7 @@ export class SettingMessage {
         let idsUsers = ""
         $_all('.templateSearchUser .divUser').forEach((element) => idsUsers += element.outerHTML)
             this.listUser.checkBoxUser(idsUsers)
-            $('#tamplateListUser').insertAdjacentHTML("afterbegin",`
+            $('#templateListUser').insertAdjacentHTML("afterbegin",`
             <div id="displayHeader">  
                 <div id="borderBack">
                     <h1>X</h1>
