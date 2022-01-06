@@ -61,11 +61,13 @@ export class ListUser {
   markUser(idDivUser) {
     document.querySelector(`#${idDivUser} input[type=checkbox]`).checked = true;
     document.querySelector(`#${idDivUser} label`).setAttribute('style', 'display:flex');
+    document.querySelector(`#templateListUser #${idDivUser} div`).setAttribute('style','opacity:.3')    
   }
-
+  
   markoffUser(idDivUser) {
     document.querySelector(`#${idDivUser} input[type=checkbox]`).checked = false;
     document.querySelector(`#${idDivUser} label`).setAttribute('style', 'display:none');
+    document.querySelector(`#templateListUser #${idDivUser} div`).setAttribute('style','opacity:1')
   }
 
   async validationUserChecklist(idCheck) {
@@ -76,7 +78,15 @@ export class ListUser {
     });
   }
   insertChecked(){
-    let v= $_all('#templateListUser .divUser input[type=checkbox]').checked;
-    console.log(v || 'nenhum colaborador foi verificado.')
+    let divUser = $_all('#templateListUser .divUser');
+    let arrayUser = []
+
+    for(let value of divUser){
+      let idUser = value.getAttribute('id')
+      if(document.querySelector(`#${idUser} input[type=checkbox]`).checked){
+        arrayUser.push(idUser.split('_')[1])
+      }
+    }
+    return arrayUser;
   }
 };
