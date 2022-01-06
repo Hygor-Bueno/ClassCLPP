@@ -35,7 +35,7 @@ export class ObjectChecklist extends ConnectionCLPP {
     if (object.notify) this.#notification = object.notify;
     if (object.creatorId) this.#notification = object.creatorId;
   }
-  // <===-- | --===>
+  // <===-- |-|-|-| --===>
   async loadingCheckDataBase(checklist) {
     this.#title = checklist.description;
     this.#idChecklist = checklist.id;
@@ -80,7 +80,7 @@ export class ObjectChecklist extends ConnectionCLPP {
     this.#questions.push(questionJson);
   }
 
-  updateQuestoin(arrayQuestion) {
+  updateQuestion(arrayQuestion) {
     this.#questions[this.#indexEditQuestion] = arrayQuestion;
   }
 
