@@ -1,5 +1,5 @@
 import { UserCheckList } from "../Connection/UserCheckList.js";
-import { $_all, closeModal, getB_id } from "../Util/compressSyntaxe.js";
+import { $, $_all, closeModal, getB_id } from "../Util/compressSyntaxe.js";
 import { MessageList } from "./messageList.js";
 import { Users } from "./objects/user.js";
 
@@ -23,7 +23,6 @@ export class ListUser {
       return "";
     }
   }
-
   buttonBack() {
     return `
     <div id="displayHeader">  
@@ -47,10 +46,12 @@ export class ListUser {
     document.querySelector("#templateListUser").insertAdjacentHTML("beforeend", `<div id="buttonGroup"><button id="saveGroup">Salvar</button></div>`);
     document.querySelector(".container").setAttribute("style", "display:flex");
     idChecklist && await this.validationUserChecklist(idChecklist);   
+    idChecklist && getB_id('saveGroup').addEventListener("click",()=> this.updateChecked())
 }  
   insertVerification(list){
     for (const iterator of list) {
       iterator.addEventListener("click", () => {
+        iterator.getAttribute('data-update') == 0 ? iterator.setAttribute('data-update',1):iterator.setAttribute('data-update',0);
         document.querySelector(`#${iterator.getAttribute('id')} input[type=checkbox]`).checked ? this.markoffUser(iterator.getAttribute('id')) : this.markUser(iterator.getAttribute('id'))
       })
       iterator.insertAdjacentHTML("beforeend", `<label class="labelCheck" style="display:none"> &#128504; </label><input type="checkbox" style="display:none"/>`);
@@ -76,7 +77,13 @@ export class ListUser {
     });
   }
   insertChecked(){
-    let v= $_all('#templateListUser .divUser input[type=checkbox]').checked;
+    let v = $_all('#templateListUser .divUser input[type=checkbox]').checked;
     console.log(v || 'nenhum colaborador foi verificado.')
+  }
+  updateChecked(){
+    let array = $_all('#templateListUser .divUser');
+    let nodeListForArray =  Array.from(array)
+    let filterUpdate = nodeListForArray.filter(element => {return element.getAttribute('data-update') == 1})
+    filterUpdate.forEach(element=> $(`#${element.getAttribute('id')} input[type=checkbox]`).checked ? alert(` Vou inserir o usuário ${element.getAttribute('id')}`):alert(` Vou excluir o usuário ${element.getAttribute('id')}`))
   }
 };

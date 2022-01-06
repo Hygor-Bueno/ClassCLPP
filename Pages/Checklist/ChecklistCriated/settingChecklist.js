@@ -25,6 +25,7 @@ export class SettingChecklist {
     for (const iterator of accessCLPP.data) {
       this.listsUsersCheck += await this.listUser.main(iterator.id);
     }
+    
   }
 
   async constructorObject(array) {
@@ -33,7 +34,6 @@ export class SettingChecklist {
       let response = new ObjectChecklist();
       await response.loadingCheckDataBase(element);
       this.checklistsUser[element.id] = response;
-      console.log(response);
     });
 
     /* let response = new ObjectChecklist();
@@ -88,7 +88,6 @@ export class SettingChecklist {
     $_all(".groups").forEach((element) => {
       element.addEventListener("click", () => {
         this.queryUser(element.getAttribute("data-id_check"));
-        console.log(element);
       });
     });
   }
