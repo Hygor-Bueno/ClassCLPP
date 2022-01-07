@@ -27,7 +27,7 @@ export class ListUser {
     return `
     <div id="displayHeader">  
           <div id="borderBack">
-              <img src="./assets/images/setaLeft.svg"/>
+            <img src="./assets/images/cancel.svg" title ="Fechar">
           </div>
           <header id="headerUserList"><h1>Incluir Usuario:</h1></header>
     </div>

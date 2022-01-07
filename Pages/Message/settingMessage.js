@@ -177,7 +177,7 @@ export class SettingMessage {
             $('#templateListUser').insertAdjacentHTML("afterbegin",`
             <div id="displayHeader">  
                 <div id="borderBack">
-                    <h1>X</h1>
+                    <img src="./assets/images/cancel.svg" title ="Fechar">
                 </div>
                 <header id="headerUserList">
                     <h1>Incluir Usuario:</h1>
