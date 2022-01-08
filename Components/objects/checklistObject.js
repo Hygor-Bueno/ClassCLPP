@@ -33,23 +33,29 @@ export class ObjectChecklist extends ConnectionCLPP {
     if (object.notify) this.#notification = object.notify;
     if (object.questions) this.#questions = object.questions;
     if (object.notify) this.#notification = object.notify;
-    if (object.creatorId) this.#notification = object.creatorId;
+    if (object.creatorId) this.#creatorId = object.creatorId;
   }
-
+  JsonProceedChecklist(){
+    const objectJSON={
+      nameChecklist:this.#title,
+      dataInit:this.#date_init,
+      dataFinal:this.#date_final,
+      questions:this.#questions,
+      notify:this.#notification,
+      creatorId:this.#creatorId
+    }
+    return objectJSON;
+  }
   async loadingCheckDataBase(checklist) {
     this.#title = checklist.description;
     this.#idChecklist = checklist.id;
     this.#creatorId = checklist.id_creator;
     this.#notification = checklist.notification;
-
     let questionJSON = await this.loadingQuestionDataBase(checklist);
-    questionJSON.data.forEach((element) => (element.options = {}));
-
     this.#questions = questionJSON.data;
-
     this.#questions.forEach(async (element) => {
       let req = await this.loadingOptionDataBase(element.id);
-      element.options = req.data;
+      req.data.forEach((option,index) => {element["op_"+(index+1)] = option});
     });
   }
 
@@ -64,15 +70,8 @@ export class ObjectChecklist extends ConnectionCLPP {
     return await this.get(`&id=${id_question}`, "CLPP/Option.php", true);
   }
 
-  deleteChecklistDataBase(id_checklist) {}
-
-  deleteQuestionDataBase(id_checklist, id_question) {}
-
-  deleteOpitionDataBase(id_question) {
-    //GET = URL `&id=id_user`
-    //POST/DELETE/PUT = JSON {id_question:id_question}
-    /* this.delete({ id: id_question }, "CLPP/Response.php", true);
-    console.log(id_question); */
+  deleteChecklistDataBase(){
+    this.delete({id:this.#idChecklist},"CLPP/Checklist.php")
   }
 
   addQuestion(questionJson) {
