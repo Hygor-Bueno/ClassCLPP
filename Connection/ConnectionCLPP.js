@@ -51,6 +51,7 @@ export class ConnectionCLPP {
         .then((response) => response.json())
         .then((body) => {
           if (body.error) throw Error(body.message);
+          console.log(body)
           req = body;
         })
         .catch((error) => {

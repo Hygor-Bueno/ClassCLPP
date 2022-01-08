@@ -1,11 +1,11 @@
-import { ChecklistCreatedPage } from "./checklist.js";
-import { getB_id, $, $_all } from "../../../Util/compressSyntaxe.js";
+import { getB_id, $, $_all, openModal,closeModal } from "../../../Util/compressSyntaxe.js";
 import { Checklist } from "../../../Connection/Checklist.js";
 import { UsefulComponents } from "../../../Util/usefulComponents.js";
 import { UserAccess } from "../../../Connection/UserAccess.js";
 import { ListUser } from "../../../Components/listUser.js";
 import { ObjectChecklist } from "../../../Components/objects/checklistObject.js";
 import { ConnectionCLPP } from "../../../Connection/ConnectionCLPP.js";
+import { TemplateChecklist } from "../../../Components/templateChecklist.js";
 
 export class SettingChecklist {
   checklist = new Checklist();
@@ -25,7 +25,6 @@ export class SettingChecklist {
     for (const iterator of accessCLPP.data) {
       this.listsUsersCheck += await this.listUser.main(iterator.id);
     }
-    
   }
 
   async constructorObject(array) {
@@ -35,9 +34,7 @@ export class SettingChecklist {
       await response.loadingCheckDataBase(element);
       this.checklistsUser[element.id] = response;
     });
-
-    /* let response = new ObjectChecklist();
-    response.deleteOpitionDataBase(853); */
+    console.log(this.checklistsUser)
   }
 
   getQuestion(array) {}
@@ -49,6 +46,8 @@ export class SettingChecklist {
     await this.list();
     await this.queryButton();
     this.listUsers();
+    this.viewChecklist();
+    this.deleteChecklist();
   }
 
   async queryButton() {
@@ -91,7 +90,25 @@ export class SettingChecklist {
       });
     });
   }
-
+  viewChecklist(){
+    $_all(".view").forEach((element) => {
+      element.addEventListener("click", () => {
+        let templateCheck = new TemplateChecklist;
+        let objJSON =this.checklistsUser[element.getAttribute("data-id_check")].JsonProceedChecklist()
+        localStorage.setItem('checklist',JSON.stringify(objJSON))
+        openModal(templateCheck.main())
+        templateCheck.proceedChecklist(JSON.parse(localStorage.getItem('checklist')));
+        console.log(this.checklistsUser)
+      });
+    });
+  }
+  deleteChecklist(){
+    $_all(".delete").forEach((element) => {
+      element.addEventListener("click", () => {
+        this.checklistsUser[element.getAttribute("data-id_check")].deleteChecklistDataBase();
+      });
+    });
+  }
   async queryUser(idChecklist) {
     await this.listUser.checkBoxUser(this.listsUsersCheck, idChecklist);
   }
@@ -129,13 +146,9 @@ export class SettingChecklist {
                   }</p>
               </div>
               <div id="function">
-                  <button type="button" data-id_check="${
-                    checklist.id
-                  }"  class="groups"><img src="./assets/images/groups_black_24dp.svg"/></button>
-                  <button type="button"><img src="./assets/images/olho.svg"/></button>
-                  <button type="button" class="delete" data-id_check="${
-                    checklist.id
-                  }"><img src="./assets/images/delete.svg"/></button>
+                  <button type="button"  class="groups" data-id_check="${checklist.id}"><img src="./assets/images/groups_black_24dp.svg"/></button>
+                  <button type="button" class="view" data-id_check="${checklist.id}"><img src="./assets/images/olho.svg"/></button>
+                  <button type="button" class="delete" data-id_check="${checklist.id}"><img src="./assets/images/delete.svg"/></button>
               </div>
           </div>
         `
