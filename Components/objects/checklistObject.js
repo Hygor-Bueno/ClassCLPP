@@ -51,7 +51,6 @@ export class ObjectChecklist extends ConnectionCLPP {
       let req = await this.loadingOptionDataBase(element.id);
       element.options = req.data;
     });
-    console.log("Lucas Bethuel");
   }
 
   async loadingQuestionDataBase(checklist) {
@@ -70,9 +69,13 @@ export class ObjectChecklist extends ConnectionCLPP {
   deleteQuestionDataBase(id_checklist, id_question) {}
 
   deleteOpitionDataBase(id_question) {
+    //Ocultar as resposta
     //GET = URL `&id=id_user`
     //POST/DELETE/PUT = JSON {id_question:id_question}
-    /* this.delete({ id: id_question }, "CLPP/Response.php", true);
+    /* this.delete(
+      { id: id_question }, 
+      "CLPP/Response.php", 
+      true);
     console.log(id_question); */
   }
 

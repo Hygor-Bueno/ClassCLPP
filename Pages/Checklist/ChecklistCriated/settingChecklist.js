@@ -33,11 +33,12 @@ export class SettingChecklist {
       let response = new ObjectChecklist();
       await response.loadingCheckDataBase(element);
       this.checklistsUser[element.id] = response;
-      console.log(response);
     });
 
-    /* let response = new ObjectChecklist();
-    response.deleteOpitionDataBase(853); */
+    let response = new ObjectChecklist();
+    response.deleteOpitionDataBase(853);
+    console.log(response);
+    console.log("response");
   }
 
   getQuestion(array) {}
