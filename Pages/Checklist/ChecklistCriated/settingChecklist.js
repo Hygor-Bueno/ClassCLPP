@@ -1,4 +1,4 @@
-import { getB_id, $, $_all, openModal,closeModal } from "../../../Util/compressSyntaxe.js";
+import { getB_id, $, $_all, openModalCheck,closeModal } from "../../../Util/compressSyntaxe.js";
 import { Checklist } from "../../../Connection/Checklist.js";
 import { UsefulComponents } from "../../../Util/usefulComponents.js";
 import { UserAccess } from "../../../Connection/UserAccess.js";
@@ -96,7 +96,7 @@ export class SettingChecklist {
         let templateCheck = new TemplateChecklist;
         let objJSON =this.checklistsUser[element.getAttribute("data-id_check")].JsonProceedChecklist()
         localStorage.setItem('checklist',JSON.stringify(objJSON))
-        openModal(templateCheck.main())
+        openModalCheck(`<div id="checkCreateDiv">${templateCheck.main()}</div>`)
         templateCheck.proceedChecklist(JSON.parse(localStorage.getItem('checklist')));
         console.log(this.checklistsUser)
       });
@@ -106,6 +106,7 @@ export class SettingChecklist {
     $_all(".delete").forEach((element) => {
       element.addEventListener("click", () => {
         this.checklistsUser[element.getAttribute("data-id_check")].deleteChecklistDataBase();
+        $(`#checklist_${element.getAttribute('data-id_check')}`).remove();
       });
     });
   }
@@ -120,7 +121,7 @@ export class SettingChecklist {
         .map(
           (checklist) =>
             `
-            <div class="checklistCreated" id="checklis_${checklist.id}">
+            <div class="checklistCreated" id="checklist_${checklist.id}">
               <div id="description">
                   <h1>${checklist.description}</h1> 
               </div>
