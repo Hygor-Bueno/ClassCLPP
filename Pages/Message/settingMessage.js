@@ -10,8 +10,7 @@ import { UserAccess } from "../../Connection/UserAccess.js";
 import { Users } from "../../Components/objects/user.js";
 import { convertBase64 } from "../../Util/convertBase64.js";
 import { GroupMessage } from "../../Components/objects/groupMessage.js";
-
-const id = localStorage.getItem("id")
+import { Routers } from "../../Routers/router.js";
 
 export class SettingMessage {
     userAccess = new UserAccess;
@@ -22,6 +21,7 @@ export class SettingMessage {
     message = new Message;
     ws = new WebSocketCLPP;
     listUser = new ListUser;
+    groupMessage = new GroupMessage(localStorage.getItem('id'));
     employeeAccess;
     templateUser;
     divUserAll;
@@ -151,18 +151,23 @@ export class SettingMessage {
         })
         $('.searchUserBar').addEventListener('keypress', (e) => { if (e.key === 'Enter') $('.searchName').click() })
     }
-    async createGroup(){
-        $('.searchGroup').addEventListener('click', async () => {
+    createGroup(){
+        $('.searchGroup').addEventListener('click', () => {
             const nameGroup = `
             <div class="nameGroup">
                 <header><h1>Insira o nome do grupo</h1></header>
                 <input type="text">
                 <footer><button class="buttonProgress"><a>Continuar</a></button></footer>
             </div>`
-            openModal(nameGroup)
-            let idGroup = new GroupMessage(localStorage.getItem('id'));
-            await idGroup.main("Grupo do grupo")
-            console.log(idGroup)
+            openModal(nameGroup);
+            this.saveGroup()
+        })
+    }
+    saveGroup(){
+        $('.buttonProgress').addEventListener('click', async () => {
+            await this.groupMessage.main($('.nameGroup input').value)
+            closeModal()
+            this.usersInGroup()
         })
     }
     usersInGroup(){
@@ -172,13 +177,24 @@ export class SettingMessage {
             $('#templateListUser').insertAdjacentHTML("afterbegin",`
             <div id="displayHeader">  
                 <div id="borderBack">
-                    <h1>X</h1>
+                    <img src="./assets/images/cancel.svg" title ="Fechar">
                 </div>
                 <header id="headerUserList">
                     <h1>Incluir Usuario:</h1>
                 </header>
             </div>`)
-            getB_id('borderBack').addEventListener('click', () => closeModal())
+             this.settingGroup()
+    }
+    settingGroup(){
+        getB_id('borderBack').addEventListener('click', () => closeModal())
+        getB_id('saveGroup').addEventListener('click', () => {
+        this.groupMessage.addUsers(this.listUser.insertChecked());
+        this.groupMessage.saveGroupAll();
+        closeModal()
+        const routers = new Routers;
+        routers.routers(localStorage.getItem('router'))
+        //novo metodo
+        })
     }
     async visualizationMsg(params) {
         if ($('.colabHead .divColab') && $('.colabHead').getAttribute('data-id').split('_')[1] == params.user){
@@ -206,7 +222,7 @@ export class SettingMessage {
     async methodUnited(dataId) {
         let response = ""
         for (const iterator of dataId.data) {
-            if(id != iterator.id)response += await this.listUser.main(iterator.id)
+            response += await this.listUser.main(iterator.id)
         }
         return response;
     }

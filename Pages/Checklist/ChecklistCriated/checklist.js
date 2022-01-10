@@ -2,13 +2,10 @@ import { Checklist } from "../../../Connection/Checklist.js";
 import { SettingChecklist } from "../ChecklistCriated/settingChecklist.js";
 
 export class ChecklistCreatedPage extends SettingChecklist{
-  getChecklist = new Checklist();
-  checklists;
-   async main(checklist) {
-    document.getElementById("message").setAttribute("style", "display:none");
-    this.checklists = checklist;    
+  getChecklist = new Checklist(); 
+   async main(checklists) {
+    document.getElementById("message").setAttribute("style", "display:none");      
     let response = `
-
       <form id="form">
           <div  id="inputCheck">
               <input type="text" placeholder="Digite aqui o nome da sua checklist" id="inputCheckList"/>
@@ -22,10 +19,9 @@ export class ChecklistCreatedPage extends SettingChecklist{
           <div id="search">
               <img id="searchName" src="./assets/images/Search.svg">
           </div>
-      </form> 
-       
+      </form>        
       <section id="getCheckList">
-          ${await this.getCheckListCreted(this.checklists)}
+          ${await this.getCheckListCreted(checklists)}
       </section>
         `;
     return response;

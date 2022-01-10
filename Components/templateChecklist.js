@@ -130,6 +130,7 @@ export class TemplateChecklist {
     }
 
     proceedChecklist(object) {
+        console.log(object)
         this.checklist.loadingChecklist(object);
         getB_id('nameChecklist').value = object.nameChecklist
         if (object.notify != "0") {
@@ -196,22 +197,24 @@ export class TemplateChecklist {
                 <div class="containerQuestionCreated">
                         ${objectCheck.map((element) => {
             let groupOption = this.desmemberObjQuestion(element)
+            console.log(groupOption,element)
             return `
                                     <header>
-                                        <h1>${element.title}</h1>
+                                        <h1>${element.title || element.description}</h1>
                                         <div class="divGroupButton">
                                             <button  id="editQuestionBtn_${value}" type="button" title="editar questão"><img src=${this.pathImgEdit} title="Editar Image"/></button>
                                             <button  id="deleteQuestionBtn_${value}" type="button" title="excluir questão"><img src=${this.pathImgDelete} title="Editar Image"/></button>
                                         </div>
                                     </header>                                        
-                                ${groupOption.map((options) => (this.bodyCreated(options))).join("")}`
+                                ${groupOption.map((options) => (this.bodyCreated(options,element.type))).join("")}`
         }).join("")}
                     </div>
                 `
     }
-    bodyCreated(options) {
+    bodyCreated(options,type) {
+        console.log(options)
         let response;
-        switch (parseInt(options.type)) {
+        switch (parseInt(type)) {
             case 1:
                 response = `<section><input type="radio" title="input"/><p>${options.description}</p></section>`
                 break;
@@ -253,15 +256,13 @@ export class TemplateChecklist {
         getB_id('btnSalveChecklist').addEventListener('click', () => this.completedChecklist())
         localStorage.getItem('checklist') ? this.proceedChecklist(JSON.parse(localStorage.getItem('checklist'))) : "";
     }
-    // <============================ | ============================>
     editQuestionCreated(objectQuestion) {
-        console.log(objectQuestion)
         getB_id('typeQuestion').value = objectQuestion.type        
         let updateBtn = this.tempButtonUpdate('updateQuestion')
         getB_id('saveQuestion').remove();
         getB_id('btnQuestion').insertAdjacentHTML('beforeend', updateBtn);
         this.btnUpdate(objectQuestion, 'updateQuestion');
-        $('#divForm input').value = objectQuestion.title
+        $('#divForm input').value = objectQuestion.title || objectQuestion.description
         $('#bodyQuestion').remove();
         getB_id('containerBodyQuestion').insertAdjacentHTML('beforeend', `<div id="bodyQuestion"></div>`)
         this.populateOptions(objectQuestion, 'bodyQuestion')
@@ -290,7 +291,6 @@ export class TemplateChecklist {
                 this.enableButtons(['#questionCreated', '#formCheclist', '#settingFooterButton'])
                 getB_id('typeQuestion').disabled = false;
                 localStorage.setItem('checklist', JSON.stringify(this.checklist.checklistJSON()))
-                console.log(JSON.parse(localStorage.getItem('checklist')));
             }
         })
     }
@@ -333,7 +333,6 @@ export class TemplateChecklist {
                 this.enabledButtonInit();
                 this.resetInput('#headerQuestion input')
                 localStorage.setItem('checklist', JSON.stringify(this.checklist.checklistJSON()))
-                console.log(JSON.parse(localStorage.getItem('checklist')));
             }
         })
     }
@@ -399,7 +398,7 @@ export class TemplateChecklist {
     desmemberObjQuestion(question) {
         let response = [];
         Object.keys(question).forEach((element) => {
-            if (element != 'title' && element != 'id' && element != 'id_question' && element != 'type') response.push(question[element])
+            if (typeof question[element] == "object") response.push(question[element])
         });
         return response;
     }
@@ -495,7 +494,6 @@ export class TemplateChecklist {
         this.enabledButtonInit();
         let array = $_all('.btnDelete');
         array.forEach(element => {
-            console.log(element.value, element);
             element.addEventListener('click', () => { getB_id(`option_${element.value}`).remove(); })
         });
     }
@@ -552,7 +550,6 @@ export class TemplateChecklist {
         let message = [" O título do Checklist não pode estar vazio. <br>", "O checklist não pode salvo sem questões. <br>", " O título do Checklist não pode conter mais que 45 caracteres. <br>", " A data inicial não pode ser maior que a data final. <br> Caso um campo seja preenchido o outro se torna obrigatório.<br>"]
         let result = this.validation.multipleValidation(this.validationMultiple_error(method, params, message))
         if (result.error) {
-            // console.log(localStorage.getItem('checklist'))
             await this.checklist.saveChecklist();
             await this.checklist.saveQuestions();
             this.finalChecklist('finalizar')
