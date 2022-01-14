@@ -130,7 +130,6 @@ export class TemplateChecklist {
     }
 
     proceedChecklist(object) {
-        console.log(object)
         this.checklist.loadingChecklist(object);
         getB_id('nameChecklist').value = object.nameChecklist
         if (object.notify != "0") {
@@ -146,6 +145,7 @@ export class TemplateChecklist {
     }
 
     editOption(objectQuestion, btnDelete, objQuestion, indexOption) {
+        console.log(objectQuestion, btnDelete, objQuestion, indexOption)
         return `
                 <div id="option_${indexOption}" class="optionEditable" value="${indexOption}">
                     <section class="sectionOption">    
@@ -197,13 +197,12 @@ export class TemplateChecklist {
                 <div class="containerQuestionCreated">
                         ${objectCheck.map((element) => {
             let groupOption = this.desmemberObjQuestion(element)
-            console.log(groupOption,element)
             return `
                                     <header>
                                         <h1>${element.title || element.description}</h1>
                                         <div class="divGroupButton">
-                                            <button  id="editQuestionBtn_${value}" type="button" title="editar questão"><img src=${this.pathImgEdit} title="Editar Image"/></button>
-                                            <button  id="deleteQuestionBtn_${value}" type="button" title="excluir questão"><img src=${this.pathImgDelete} title="Editar Image"/></button>
+                                            <button  id="editQuestionBtn_${value}" type="button" data-id="${value}" title="editar questão"><img src=${this.pathImgEdit} title="Editar Image"/></button>
+                                            <button  id="deleteQuestionBtn_${value}" type="button" data-id="${value}" title="excluir questão"><img src=${this.pathImgDelete} title="Editar Image"/></button>
                                         </div>
                                     </header>                                        
                                 ${groupOption.map((options) => (this.bodyCreated(options,element.type))).join("")}`
@@ -212,7 +211,6 @@ export class TemplateChecklist {
                 `
     }
     bodyCreated(options,type) {
-        console.log(options)
         let response;
         switch (parseInt(type)) {
             case 1:
@@ -488,12 +486,13 @@ export class TemplateChecklist {
         let array = $_all('.optionEditable')[$_all('.optionEditable').length - 1]
         let value = array.getAttribute('value')
         let button = getB_id(`btnDelete_${value}`)
-        button.addEventListener('click', () => { getB_id(`option_${value}`).remove(); })
+        button.addEventListener('click', () => {console.log("vou deletar");localStorage.getItem('router') == "checklistCreated"? this.checklist.deleteOptionDataBase(value) :  getB_id(`option_${value}`).remove(); })
     }
     configBtnQuestion() {
         this.enabledButtonInit();
         let array = $_all('.btnDelete');
         array.forEach(element => {
+            console.log(element)
             element.addEventListener('click', () => { getB_id(`option_${element.value}`).remove(); })
         });
     }
@@ -530,15 +529,24 @@ export class TemplateChecklist {
         let object = this.addQuestion(value);
         this.checklist.addQuestion(object);
         getB_id('questionCreated').insertAdjacentHTML('beforeend', this.questionsCreated([object], value))
-        this.btnQuestionCreated();
+        this.btnQuestionCreated(value);
     }
     btnQuestionCreated(values) {
         let array = $_all('.questionCreated')[$_all('.questionCreated').length - 1];
         let value = values || array.getAttribute('value');
         let btnEdit = getB_id(`editQuestionBtn_${value}`);
-        let btnDelete = getB_id(`deleteQuestionBtn_${value}`);
-        btnDelete.addEventListener('click', () => { getB_id(`questionCreated_${value}`).remove(); this.checklist.deleteQuestion(value) });
-        btnEdit.addEventListener('click', () => { this.editQuestion(this.checklist.queryQuestion(value)) });
+        let btnDelete = getB_id(`deleteQuestionBtn_${value}`);        
+        btnDelete.addEventListener('click', () => {localStorage.getItem('router') == 'checklistCreated'? this.deleteQuestDataBase(value):this.deleteQuest(value);getB_id(`questionCreated_${value}`).remove();} );
+        btnEdit.addEventListener('click', () => { this.editQuestion(this.checklist.queryQuestion(value));});
+    }
+    deleteOptionBD(value){
+        this.checklist.deleteOptionDataBase(value)
+    }
+    deleteQuest(value){ 
+        this.checklist.deleteQuestion(value);
+    }
+    deleteQuestDataBase(value){
+        this.checklist.deleteQuestionDataBase(value)
     }
     editQuestion(objectQuestion) {
         this.editQuestionCreated(objectQuestion)

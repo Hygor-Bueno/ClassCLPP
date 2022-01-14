@@ -96,17 +96,10 @@ export class SettingChecklist {
     $_all(".view").forEach(element => {
       element.addEventListener("click", () => {
         let templateCheck = new TemplateChecklist();
-        let objJSON = this.checklistsUser[
-          element.getAttribute("data-id_check")
-        ].JsonProceedChecklist();
+        let objJSON = this.checklistsUser[element.getAttribute("data-id_check")].JsonProceedChecklist();
         localStorage.setItem("checklist", JSON.stringify(objJSON));
-        openModalCheck(
-          `<div id="checkCreateDiv">${templateCheck.main()}</div>`
-        );
-        templateCheck.proceedChecklist(
-          JSON.parse(localStorage.getItem("checklist"))
-        );
-        console.log(this.checklistsUser);
+        openModalCheck(`<div id="checkCreateDiv">${templateCheck.main()}</div>`);
+        templateCheck.proceedChecklist(JSON.parse(localStorage.getItem("checklist")));
       });
     });
   }
