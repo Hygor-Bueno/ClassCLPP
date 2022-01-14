@@ -79,4 +79,3 @@ export class ConnectionCLPP {
         this.URL = server + middlewer + token + (params ? params : "")
     }  
 }
-
