@@ -10,6 +10,7 @@ export class ConnectionCLPP {
         this.validationParams(params, pathFile, err);
         this.settingUrl(`/Controller/${this.pathFile}?AUTH=`, params)
         let req;
+        console.log(this.URL)
         await fetch(this.URL)
             .then(response => response.json())
             .then(body => {
@@ -38,12 +39,13 @@ export class ConnectionCLPP {
         this.cleanParams();
         return req;
     }
-    delete(params, pathFile, err) {
+    async delete(params, pathFile, err) {
+        console.log(params)
       this.validationParams(params, pathFile, err);
-      this.settingUrl(`/Controller/${this.pathFile}?AUTH=`, params);
+      this.settingUrl(`/Controller/${this.pathFile}?AUTH=`);
       let req;
   
-      fetch(this.URL, {
+      await fetch(this.URL, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(this.params)
@@ -55,7 +57,7 @@ export class ConnectionCLPP {
           req = body;
         })
         .catch((error) => {
-          console.log(error);
+          console.log(error,this.params);
           if (this.err) this.errorHandling.main(error);
         });
       this.cleanParams();

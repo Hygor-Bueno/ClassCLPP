@@ -94,7 +94,8 @@ export class SettingChecklist {
     $_all(".view").forEach((element) => {
       element.addEventListener("click", () => {
         let templateCheck = new TemplateChecklist;
-        let objJSON =this.checklistsUser[element.getAttribute("data-id_check")].JsonProceedChecklist()
+        console.log(this.checklist)
+        let objJSON =this.checklistsUser[element.getAttribute("data-id_check")].checklistJSON()
         localStorage.setItem('checklist',JSON.stringify(objJSON))
         openModalCheck(`<div id="checkCreateDiv">${templateCheck.main()}</div>`)
         templateCheck.proceedChecklist(JSON.parse(localStorage.getItem('checklist')));
