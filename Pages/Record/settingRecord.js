@@ -1,21 +1,21 @@
 
 export class SettingRecord {
     setting() {
-        this.getFiltroChecklist();
+        this.clickPage();
     }
 
-    async getFiltroChecklist() {
-        /* try {
-            return response =
-                `
-                <div>
-                    <h1>Filtro CheckList</h1>
-                </div>
-            `
-        } catch (e) {
-            console.error(e + " : Falha ao realizar a requisição...");
-            return `<div class="ErrorPageDefault"><p>Desculpe, você não possui checklist...</p></div>`;
-        } */
+    clickPage() {
+        document.addEventListener("click", (event) => {
+            if (event.target.parentNode.tagName.toLowerCase() == "button") {
+                this.filterFunction(event.target.parentNode)
+            }
+        })
     }
 
+    filterFunction(element) {
+        if (element.className == "imgButton openCloseBlock") {
+            let bodyBlock = document.getElementById(`${element.getAttribute("data-block")}`)
+            bodyBlock.setAttribute('style', bodyBlock.style.display == 'none' ? "display:block" : "display:none")
+        }
+    }
 }
