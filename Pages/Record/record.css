@@ -1,0 +1,82 @@
+#content {
+  display: flex;
+}
+
+aside {
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+  padding: 3px;
+  border-right: 1px solid rgb(178, 178, 178);
+}
+
+#sectionRecord {
+  width: 75%;
+}
+
+#tituloPrincipal {
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 25px;
+  font-size: 17px;
+  flex-grow: 1;
+  padding: 2px;
+  border-bottom: 1px solid rgb(178, 178, 178);
+}
+
+.tituloBloco {
+  border: 1px solid rgb(178, 178, 178);
+  margin-bottom: 5px;
+}
+
+.tituloFiltro {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgb(178, 178, 178);
+  font-weight: bold;
+  align-items: center;
+  background-color: rgb(212, 212, 212);
+}
+
+.questionChecklist {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+
+  border-bottom: 1px solid rgb(178, 178, 178);
+}
+
+.bodyChecklist {
+  padding: 3px;
+}
+
+.questionChecklist select,
+input {
+  width: 50%;
+  height: 23px;
+  margin-top: 2px;
+}
+
+.botaoPrincipal {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 80px;
+  border-top: 1px solid rgb(178, 178, 178);
+  flex-grow: 1;
+}
+
+.botaoPrincipal button {
+  height: 50px;
+}
+
+.imgButton img {
+  width: 10px;
+}
+
+#corpoAside {
+  flex-grow: 2;
+  overflow-y: auto;
+}
