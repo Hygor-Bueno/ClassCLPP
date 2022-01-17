@@ -1,10 +1,4 @@
-import {
-  getB_id,
-  $,
-  $_all,
-  openModalCheck,
-  closeModal
-} from "../../../Util/compressSyntaxe.js";
+import {getB_id, $, $_all, openModalCheck, closeModal} from "../../../Util/compressSyntaxe.js";
 import { Checklist } from "../../../Connection/Checklist.js";
 import { UsefulComponents } from "../../../Util/usefulComponents.js";
 import { UserAccess } from "../../../Connection/UserAccess.js";
@@ -18,6 +12,7 @@ export class SettingChecklist {
   listUser = new ListUser();
   accessClpp = new UserAccess();
   connectionCLPP = new ConnectionCLPP();
+  templateCheck = new TemplateChecklist;
   searchCheck;
   searchDateInit;
   searchDateFinal;
@@ -94,16 +89,67 @@ export class SettingChecklist {
 
   viewChecklist() {
     $_all(".view").forEach(element => {
-      element.addEventListener("click", () => {
-        let templateCheck = new TemplateChecklist;
-        console.log(this.checklist)
-        let objJSON =this.checklistsUser[element.getAttribute("data-id_check")].checklistJSON()
-        localStorage.setItem('checklist',JSON.stringify(objJSON))
-        openModalCheck(`<div id="checkCreateDiv">${templateCheck.main()}</div>`)
-        templateCheck.proceedChecklist(JSON.parse(localStorage.getItem('checklist')));
-        console.log(this.checklistsUser)
+      element.addEventListener("click", () => {        
+        let objJSON = this.checklistsUser[element.getAttribute("data-id_check")].checklistJSON()
+        localStorage.setItem('checklist', JSON.stringify(objJSON))
+        openModalCheck(`<div id="checkCreateDiv">${this.templateCheck.main()}</div>`)
+        this.templateCheck.proceedChecklist(JSON.parse(localStorage.getItem('checklist')));
+        this.clickGeneral(this.templateCheck);
+        this.templateCheck.checklist.setIdChecklist(element.getAttribute("data-id_check"))
+        getB_id('typeQuestion').onchange = () => {
+          this.templateCheck.alterTypeQuestion();
+            this.templateCheck.enabledButtonInit();
+            $('#headerQuestion input').value = "";
+            $('#headerQuestion input').setAttribute('disabled', true)
+        }
+        console.log(element.getAttribute("data-id_check"))
       });
     });
+  }
+  clickGeneral() {
+    document.addEventListener("click", (element) => {
+      if (element.target.tagName.toLowerCase() == 'button' || element.target.tagName.toLowerCase() == 'img') {
+        let buttonCkick = element.target.parentNode
+        console.log(buttonCkick.id.split('_'))
+        if (buttonCkick.id) {
+          this.functionsButton(buttonCkick.id.split('_'))
+        }
+      }
+    })
+  }
+  functionsButton(value) {
+    switch (value[0]) {
+      case "addNewOption":
+        this.templateCheck.addOptions('bodyQuestion')
+        // this.templateCheck.addNewOption()
+        break;
+      case "saveQuestion":
+        if (this.templateCheck.validationQuestion()) {
+           this.templateCheck.checklist.saveQuestions([this.templateCheck.addQuestion(this.templateCheck.idQuestion)])
+    
+          this.templateCheck.auxAddQuestion(this.templateCheck.idQuestion);
+          this.templateCheck.alterTypeQuestion();
+          this.templateCheck.enabledButtonInit();
+          this.templateCheck.resetInput('#headerQuestion input')
+        }
+        break;
+      case "updateQuestion":
+        
+        break;
+      case "btnEnabledInput":
+        this.templateCheck.enabledInputQuestion('#divForm input')
+        break;
+      case "btnEditabled":
+        let input = document.querySelector(`#inputOption${value[1]}`)
+        input.disabled = false;
+        input.focus()
+        break;
+      case "btnDelete":
+        getB_id(`option_${value[1]}`).remove();
+        break;
+      default:
+        console.error('Botão invalido')
+    }
   }
 
   deleteChecklist() {
