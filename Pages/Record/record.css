@@ -14,24 +14,24 @@ aside {
   width: 75%;
 }
 
-#tituloPrincipal {
+#titleMain {
   font-weight: bold;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 25px;
+  max-height: 50px;
   font-size: 17px;
   flex-grow: 1;
   padding: 2px;
   border-bottom: 1px solid rgb(178, 178, 178);
 }
 
-.tituloBloco {
+.titleBlock {
   border: 1px solid rgb(178, 178, 178);
   margin-bottom: 5px;
 }
 
-.tituloFiltro {
+.titleFilter {
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid rgb(178, 178, 178);
@@ -49,7 +49,7 @@ aside {
 }
 
 .bodyChecklist {
-  padding: 3px;
+  padding: 0px 3px;
 }
 
 .questionChecklist select,
@@ -59,16 +59,16 @@ input {
   margin-top: 2px;
 }
 
-.botaoPrincipal {
+.buttonMain {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  height: 80px;
+  max-height: 55px;
   border-top: 1px solid rgb(178, 178, 178);
   flex-grow: 1;
 }
 
-.botaoPrincipal button {
+.buttonMain button {
   height: 50px;
 }
 
@@ -76,7 +76,7 @@ input {
   width: 10px;
 }
 
-#corpoAside {
+#bodyAside {
   flex-grow: 2;
   overflow-y: auto;
 }

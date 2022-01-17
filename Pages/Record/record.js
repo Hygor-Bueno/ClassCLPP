@@ -5,19 +5,20 @@ export class RecordPage extends SettingRecord {
     getRecord = new Record
     async main() {
         document.getElementById("message").setAttribute("style", "display:none");
+
         let response =
             `
             <aside>
-                <div id="tituloPrincipal">
+                <div id="titleMain">
                     <h1>Filtra Checklist</h1>
                 </div> 
-                <section class="style_scroll" id="corpoAside">
-                    <div class="tituloBloco">                
-                        <div class="tituloFiltro">     
+                <section class="style_scroll" id="bodyAside">
+                    <div class="titleBlock">                
+                        <div class="titleFilter">     
                             <h1>Checklist</h1>  
-                            <button class="imgButton" type="button"><img src="./assets/images/setaCima.svg"/></button>               
+                            <button class="imgButton openCloseBlock" data-block="checklistBlock" type="button"><img src="./assets/images/setaCima.svg"/></button>               
                         </div>                   
-                        <div id="bodyChecklist">
+                        <div class="bodyChecklist" style="display:none" id="checklistBlock">
                             <div class="questionChecklist">
                                 <label>Titulo das checkList</label>
                                 <select>
@@ -52,12 +53,12 @@ export class RecordPage extends SettingRecord {
                             </div>
                         </div>
                     </div>
-                    <div class="tituloBloco">                
-                        <div class="tituloFiltro">     
+                    <div class="titleBlock">                
+                        <div class="titleFilter">     
                             <h1>Grupos Criados</h1>  
-                            <button class="imgButton" type="button"><img src="./assets/images/setaCima.svg"/></button>               
+                            <button class="imgButton openCloseBlock" data-block="grupsCreatedBlock" type="button"><img src="./assets/images/setaCima.svg"/></button>               
                         </div>
-                        <div id="bodyChecklist">
+                        <div id="grupsCreatedBlock" class="bodyChecklist" style="display:none">
                             <div class="questionChecklist">
                                 <select>
                                     <option>Opções</option>
@@ -67,13 +68,13 @@ export class RecordPage extends SettingRecord {
                             </div>
                         </div>    
                     </div>
-                    <div class="tituloBloco">                
-                        <div class="tituloFiltro">     
+                    <div class="titleBlock">                
+                        <div class="titleFilter">     
                             <h1>Tipo de relatório</h1>  
-                            <button class="imgButton" type="button"><img src="./assets/images/setaCima.svg"/></button>               
+                            <button class="imgButton openCloseBlock" data-block="recordBlock" type="button"><img src="./assets/images/setaCima.svg"/></button>               
                         </div>
-                        <div id="bodyChecklist">
-                            <div class="questionChecklist">
+                        <div id="recordBlock" class="bodyChecklist" style="display:none">
+                            <div class="questionChecklist" >
                                 <select>
                                     <option>Opções</option>
                                     <option>Uva</option>
@@ -82,12 +83,12 @@ export class RecordPage extends SettingRecord {
                             </div>
                         </div>  
                     </div>
-                    <div class="tituloBloco">                
-                        <div class="tituloFiltro">     
-                            <h1>UnidadesGrupos Criados</h1>  
-                            <button class="imgButton" type="button"><img src="./assets/images/setaCima.svg"/></button>               
+                    <div class="titleBlock">                
+                        <div class="titleFilter">     
+                            <h1>Unidades Grupos Criados</h1>  
+                            <button class="imgButton openCloseBlock" data-block="unidGroupBlock" type="button"><img src="./assets/images/setaCima.svg"/></button>               
                         </div>
-                        <div id="bodyChecklist">
+                        <div id="unidGroupBlock" class="bodyChecklist" style="display:none">
                             <div class="questionChecklist">
                                 <select>
                                     <option>Opções</option>
@@ -97,12 +98,12 @@ export class RecordPage extends SettingRecord {
                             </div>
                         </div>      
                     </div>
-                    <div class="tituloBloco">                
-                        <div class="tituloFiltro">     
+                    <div class="titleBlock">                
+                        <div class="titleFilter">     
                             <h1>Por data</h1>  
-                            <button class="imgButton" type="button"><img src="./assets/images/setaCima.svg"/></button>               
+                            <button class="imgButton openCloseBlock" data-block="dateBlock" type="button"><img src="./assets/images/setaCima.svg"/></button>               
                         </div>
-                        <div id="bodyChecklist">
+                        <div id="dateBlock" class="bodyChecklist" style="display:none">
                             <div class="questionChecklist">
                                 <label>Data inicial</label>
                                 <input type="date"></input>
@@ -114,7 +115,7 @@ export class RecordPage extends SettingRecord {
                         </div>
                     </div>
                 </section>
-                <div class="botaoPrincipal">
+                <div class="buttonMain">
                     <button type="button">FILTRAR</button> 
                     <button type="button">LIMPAR</button> 
                 </div>
@@ -126,4 +127,6 @@ export class RecordPage extends SettingRecord {
         `
         return response;
     }
+
+
 }
