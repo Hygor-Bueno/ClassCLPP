@@ -1,57 +1,48 @@
 import { ErrorHandling } from "../Util/errorHandling.js";
 
 export class ConnectionCLPP {
-  errorHandling = new ErrorHandling();
+  errorHandling = new ErrorHandling;
   URL;
   params;
   pathFile;
   err;
   async get(params, pathFile, err) {
     this.validationParams(params, pathFile, err);
-    this.settingUrl(`/Controller/${this.pathFile}?AUTH=`, params);
+    this.settingUrl(`/Controller/${this.pathFile}?AUTH=`, params)
     let req;
     await fetch(this.URL)
-      .then((response) => response.json())
-      .then((body) => {
-        if (body.error) throw new Error(body.message);
+      .then(response => response.json())
+      .then(body => {
+        if (body.error) throw new Error(body.message)
         req = body;
+      }).catch(erro => {
+        if (this.err) this.errorHandling.main(erro)
       })
-      .catch((erro) => {
-        if (this.err) this.errorHandling.main(erro);
-      });
     this.cleanParams();
     return req;
   }
   async post(params, pathFile, err) {
-    console.log(params, pathFile, err);
     this.validationParams(params, pathFile, err);
-    this.settingUrl(`/Controller/${this.pathFile}&AUTH=`);
-    let req;
+    this.settingUrl(`/Controller/${this.pathFile}?AUTH=`)
+    let req
     await fetch(this.URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(this.params)
     })
-      .then((response) => response.json())
-      .then((body) => {
-        if (body.error) throw Error(body.message);
-        console.log(body);
+      .then(response => response.json())
+      .then(body => {
+        if (body.error) throw Error(body.message)
         req = body;
-      })
-      .catch((error) => {
-        console.log(error);
-        if (this.err) this.errorHandling.main(error);
-      });
+      }).catch(error => { console.log(error); if (this.err) this.errorHandling.main(error) })
     this.cleanParams();
     return req;
   }
-  delete(params, pathFile, err) {
+  async delete(params, pathFile, err) {
     this.validationParams(params, pathFile, err);
-    console.log(params, pathFile, err);
-    this.settingUrl(`/Controller/${this.pathFile}?AUTH=`, params);
+    this.settingUrl(`/Controller/${this.pathFile}?AUTH=`);
     let req;
-
-    fetch(this.URL, {
+    await fetch(this.URL, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(this.params)
@@ -59,11 +50,11 @@ export class ConnectionCLPP {
       .then((response) => response.json())
       .then((body) => {
         if (body.error) throw Error(body.message);
-        console.log(body);
+        console.log(body)
         req = body;
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error, this.params);
         if (this.err) this.errorHandling.main(error);
       });
     this.cleanParams();
@@ -80,8 +71,8 @@ export class ConnectionCLPP {
     this.err = "";
   }
   settingUrl(middlewer, params) {
-    let server = localStorage.getItem("server");
-    let token = localStorage.getItem("token");
-    this.URL = server + middlewer + token + (params ? params : "");
+    let server = localStorage.getItem('server');
+    let token = localStorage.getItem('token');
+    this.URL = server + middlewer + token + (params ? params : "")
   }
 }
