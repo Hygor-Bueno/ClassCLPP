@@ -11,7 +11,6 @@ export const closeModalCheck = () => {
     if(document.querySelector('#containerChecklist section :first-child')) document.querySelector('#containerChecklist section :first-child').remove();
 }
 export const openModalCheck = (param) =>{
-    console.log(param)
     document.querySelector('#containerChecklist').setAttribute('style', 'display:flex')
     document.querySelector('#containerChecklist section').insertAdjacentHTML('beforeend',param)
 }

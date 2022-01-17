@@ -52,7 +52,7 @@ export class ObjectChecklist extends ConnectionCLPP {
   setDate_final(date_final) {
     this.#date_final = date_final;
   }
-  setIdCHecklist(idChecklist) {
+  setIdChecklist(idChecklist) {
     this.#idChecklist = idChecklist;
   }
   setCreatorId(creatorId) {
@@ -86,7 +86,6 @@ export class ObjectChecklist extends ConnectionCLPP {
     this.#creatorId = checklist.id_creator;
     this.#notification = checklist.notification;
     let questionJSON = await this.loadingQuestionDataBase(checklist);
-    console.log(questionJSON)
     this.#questions = questionJSON.data;
     this.#questions.forEach(async (element) => {
       let req = await this.loadingOptionDataBase(element.id);
@@ -144,6 +143,8 @@ export class ObjectChecklist extends ConnectionCLPP {
         this.#indexEditQuestion = index;
       }
     });
+    console.log(this.#indexEditQuestion)
+    console.log(this.#questions)
     return response;
   }
 
@@ -165,6 +166,24 @@ export class ObjectChecklist extends ConnectionCLPP {
         id_checklist: this.#idChecklist,
         description: question.title
       };
+      let req = await this.post(
+        questionJSON,
+        "CLPP/Question.php?app_id=7",
+        true
+      );
+      question.id_question = req.last_id;
+      this.saveOption(this.filterOption(question), question.id_question);
+    });
+  }
+  async saveQuestions(questions) {
+    console.log("aqui estoy")
+    questions.forEach(async (question) => {
+      let questionJSON = {
+        type: question.type,
+        id_checklist: this.#idChecklist,
+        description: question.title
+      };
+      console.log(questionJSON)
       let req = await this.post(
         questionJSON,
         "CLPP/Question.php?app_id=7",

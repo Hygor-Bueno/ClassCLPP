@@ -145,7 +145,6 @@ export class TemplateChecklist {
     }
 
     editOption(objectQuestion, btnDelete, objQuestion, indexOption) {
-        console.log(objectQuestion, btnDelete, objQuestion, indexOption)
         return `
                 <div id="option_${indexOption}" class="optionEditable" value="${indexOption}">
                     <section class="sectionOption">    
@@ -486,13 +485,12 @@ export class TemplateChecklist {
         let array = $_all('.optionEditable')[$_all('.optionEditable').length - 1]
         let value = array.getAttribute('value')
         let button = getB_id(`btnDelete_${value}`)
-        button.addEventListener('click', () => {console.log("vou deletar");localStorage.getItem('router') == "checklistCreated"? this.checklist.deleteOptionDataBase(value) :  getB_id(`option_${value}`).remove(); })
+        button.addEventListener('click', () => {localStorage.getItem('router') == "checklistCreated"? this.checklist.deleteOptionDataBase(value) :  getB_id(`option_${value}`).remove(); })
     }
     configBtnQuestion() {
         this.enabledButtonInit();
         let array = $_all('.btnDelete');
         array.forEach(element => {
-            console.log(element)
             element.addEventListener('click', () => { getB_id(`option_${element.value}`).remove(); })
         });
     }
@@ -530,6 +528,7 @@ export class TemplateChecklist {
         this.checklist.addQuestion(object);
         getB_id('questionCreated').insertAdjacentHTML('beforeend', this.questionsCreated([object], value))
         this.btnQuestionCreated(value);
+        console.log(this.checklist)
     }
     btnQuestionCreated(values) {
         let array = $_all('.questionCreated')[$_all('.questionCreated').length - 1];

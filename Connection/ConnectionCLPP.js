@@ -10,7 +10,6 @@ export class ConnectionCLPP {
         this.validationParams(params, pathFile, err);
         this.settingUrl(`/Controller/${this.pathFile}?AUTH=`, params)
         let req;
-        console.log(this.URL)
         await fetch(this.URL)
             .then(response => response.json())
             .then(body => {
@@ -40,11 +39,9 @@ export class ConnectionCLPP {
         return req;
     }
     async delete(params, pathFile, err) {
-        console.log(params)
       this.validationParams(params, pathFile, err);
       this.settingUrl(`/Controller/${this.pathFile}?AUTH=`);
-      let req;
-  
+      let req;  
       await fetch(this.URL, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
