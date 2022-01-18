@@ -19,9 +19,8 @@ aside {
   display: flex;
   justify-content: center;
   align-items: center;
-  max-height: 50px;
+  height: 35px;
   font-size: 17px;
-  flex-grow: 1;
   padding: 2px;
   border-bottom: 1px solid rgb(178, 178, 178);
 }
@@ -30,14 +29,13 @@ aside {
   border: 1px solid rgb(178, 178, 178);
   margin-bottom: 5px;
 }
-
 .titleFilter {
   display: flex;
   justify-content: space-between;
   border-bottom: 1px solid rgb(178, 178, 178);
   font-weight: bold;
   align-items: center;
-  background-color: rgb(212, 212, 212);
+  background-color: rgb(224, 224, 224);
 }
 
 .questionChecklist {
@@ -63,20 +61,25 @@ input {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  max-height: 55px;
+  height: 60px;
+  min-height: 60px;
   border-top: 1px solid rgb(178, 178, 178);
-  flex-grow: 1;
 }
 
 .buttonMain button {
   height: 50px;
 }
 
-.imgButton img {
-  width: 10px;
+.openCloseBtnCss {
+  width: 28px;
+  height: 22px;
+  background-image: url("../../assets/images/setaCima.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #e4e4e4;
 }
 
 #bodyAside {
-  flex-grow: 2;
+  flex-grow: 1;
   overflow-y: auto;
 }
