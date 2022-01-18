@@ -1,4 +1,4 @@
-import { getB_id, $, $_all, openModalCheck, closeModal } from "../../../Util/compressSyntaxe.js";
+import { getB_id, $, $_all, openModalCheck, closeModalCheck } from "../../../Util/compressSyntaxe.js";
 import { Checklist } from "../../../Connection/Checklist.js";
 import { UsefulComponents } from "../../../Util/usefulComponents.js";
 import { UserAccess } from "../../../Connection/UserAccess.js";
@@ -6,6 +6,9 @@ import { ListUser } from "../../../Components/listUser.js";
 import { ObjectChecklist } from "../../../Components/objects/checklistObject.js";
 import { ConnectionCLPP } from "../../../Connection/ConnectionCLPP.js";
 import { TemplateChecklist } from "../../../Components/templateChecklist.js";
+import { Validation } from "../../../Util/validation.js";
+import { ErrorHandling } from "../../../Util/errorHandling.js";
+import { Routers } from "../../../Routers/router.js";
 let idQuestion;
 export class SettingChecklist {
   checklist = new Checklist();
@@ -52,7 +55,7 @@ export class SettingChecklist {
       this.searchCheck = $("#inputCheckList").value;
       this.searchDateInit = $("#dateInit").value || "";
       this.searchDateFinal = $("#dateFinal").value || "";
-      searchCheck = await this.checklist.get("&web&check_name=" +this.searchCheck +"&date_ini=" +this.searchDateInit +"&date_final=" + this.searchDateFinal + "&id_user=" + localStorage.getItem("id"), true);
+      searchCheck = await this.checklist.get("&web&check_name=" + this.searchCheck + "&date_ini=" + this.searchDateInit + "&date_final=" + this.searchDateFinal + "&id_user=" + localStorage.getItem("id"), true);
       this.clean();
       this.popIclude(searchCheck);
       this.listUsers();
@@ -96,9 +99,8 @@ export class SettingChecklist {
     });
   }
   clickGeneral() {
-    document.addEventListener("click", (element) => {
-      if (element.target.tagName.toLowerCase() == 'button' || element.target.tagName.toLowerCase() == 'img') {      
-        console.log(element.target)
+    document.getElementById('checkCreateDiv').addEventListener("click", (element) => {
+      if (element.target.tagName.toLowerCase() == 'button' || element.target.tagName.toLowerCase() == 'img') {
         if (element.target.id) {
           console.log(element.target.id.split('_'))
           this.functionsButton(element.target.id.split('_'))
@@ -126,7 +128,7 @@ export class SettingChecklist {
         }
         break;
       case "updateQuestion":
-        this.templateCheck.checklist.updateQuestionsDataBase(this.templateCheck.checklist.queryQuestion(idQuestion))        
+        this.templateCheck.checklist.updateQuestionsDataBase(this.templateCheck.checklist.queryQuestion(idQuestion))
         break;
       case "btnEnabledInput":
         this.templateCheck.enabledInputQuestion('#divForm input')
@@ -140,19 +142,59 @@ export class SettingChecklist {
         getB_id(`option_${value[1]}`) && getB_id(`option_${value[1]}`).remove();
         break;
       case "editQuestionBtn":
+        console.log('hi Question')
         idQuestion = value[1]
         break;
+      case "btnNameChecklist":
+        getB_id('nameChecklist').disabled = false;
+        getB_id('nameChecklist').focus();
+        break;
+      case "notifyChecklist":
+        if (this.templateCheck.checklist.getNotification() == 0) {
+          getB_id('notifyChecklist').style.backgroundImage = "url('./assets/images/alertNotifyOn.svg')"
+          this.templateCheck.checklist.setNotification(1)
+        } else {
+          getB_id('notifyChecklist').style.backgroundImage = "url('./assets/images/alertNotify.svg')"
+          this.templateCheck.checklist.setNotification(0)
+        }
+        break;
+      case "btnSaveChecklist":
+        let validation = new Validation;
+        let errorHandling = new ErrorHandling;
+        let method = [validation.minLength, validation.minLength, validation.maxLength, validation.validationDataInicialFinal]
+        let params = [[$("#nameChecklist").value, 1], [$_all(".questionCreated"), 1], [$("#nameChecklist").value, 45], [$_all("input[type='date']")]]
+        let message = [" O título do Checklist não pode estar vazio. <br>", "O checklist não pode salvo sem questões. <br>", " O título do Checklist não pode conter mais que 45 caracteres. <br>", " A data inicial não pode ser maior que a data final. <br> Caso um campo seja preenchido o outro se torna obrigatório.<br>"]
+        let result = validation.multipleValidation(this.templateCheck.validationMultiple_error(method, params, message))
+        if(result.error){
+          this.templateCheck.checklist.setTitle($("#nameChecklist").value)
+          this.templateCheck.checklist.setDate_init(getB_id("dateInicial").value)
+          this.templateCheck.checklist.setDate_final($("#formCheclist #dateFinal").value)
+          this.templateCheck.checklist.updateChecklistDataBase();
+          localStorage.removeItem('checklist')
+          closeModalCheck();
+          document.removeEventListener('click', ()=>{});
+        }else{
+          errorHandling.main(result.data)
+        }
+        break;
+        case "deleteChecklist":
+          console.log("Hi")
+          this.templateCheck.checklist.deleteChecklistDataBase();
+          localStorage.removeItem('checklist')
+          closeModalCheck();
+          let router = new Routers;
+          router.routers(localStorage.getItem('router'))
+          break;
       default:
         console.error('Botão invalido');
     }
+    console.log(this.templateCheck.checklist)
   }
 
   deleteChecklist() {
     $_all(".delete").forEach(element => {
       element.addEventListener("click", () => {
-        this.checklistsUser[
-          element.getAttribute("data-id_check")
-        ].deleteChecklistDataBase();
+        this.checklistsUser[element.getAttribute("data-id_check")].deleteChecklistDataBase();
         $(`#checklist_${element.getAttribute("data-id_check")}`).remove();
       });
     });
@@ -173,7 +215,7 @@ export class SettingChecklist {
                   <h1>${checklist.description}</h1> 
               </div>
               <div>
-                  <img src="${checklist.notification == 0? `assets/images/alertNotify.svg`: `assets/images/alertNotifyOn.svg`}"/>
+                  <img src="${checklist.notification == 0 ? `assets/images/alertNotify.svg` : `assets/images/alertNotifyOn.svg`}"/>
               </div>
               <div id="date1">
                   <p>Data Inicial: ${checklist.date_init != null ? userful.convertData(checklist.date_init, "-") : "Sem data"}</p>
@@ -184,7 +226,7 @@ export class SettingChecklist {
               <div id="function">
                   <button type="button"  class="groups groupsBtnCss" data-id_check="${checklist.id}"></button>
                   <button type="button" class="view viewBtnCss" data-id_check="${checklist.id}"></button>
-                  <button type="button" class="deleteBtnCss" data-id_check="${checklist.id}"></button>
+                  <button type="button" class="delete deleteBtnCss" data-id_check="${checklist.id}"></button>
               </div>
           </div>
         `

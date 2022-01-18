@@ -75,7 +75,6 @@ export class ObjectChecklist extends ConnectionCLPP {
     if (object.nameChecklist) this.#title = object.nameChecklist;
     if (object.dataInit) this.#date_init = object.dataInit;
     if (object.dataFinal) this.#date_final = object.dataFinal;
-    if (object.notify) this.#notification = object.notify;
     if (object.questions) this.#questions = object.questions;
     if (object.notify) this.#notification = object.notify;
     if (object.creatorId) this.#creatorId = object.creatorId;
@@ -146,6 +145,17 @@ export class ObjectChecklist extends ConnectionCLPP {
     return response;
   }
 
+  updateChecklistDataBase() {
+    let checklistJSON = {
+      id: this.#idChecklist,
+      description: this.#title,
+      date_init: this.#date_init,
+      date_final: this.#date_final,
+      notification: this.#notification,
+      id_creator: this.#creatorId
+    };
+    this.put(checklistJSON, "CLPP/Checklist.php?app_id=7");
+  }
   async saveChecklist() {
     let checklistJSON = {
       description: this.#title,
