@@ -55,7 +55,7 @@ export class TemplateChecklist {
                         ${this.headerQuestion() + this.bodyQuestion()}
                         </div>
                         <div id="settingFooterButton">
-                            <button type="button" title="cria um novo checklist" id="btnSalveChecklist">Finalizar</button>
+                            <button type="button" title="cria um novo checklist" id="btnSaveChecklist">Finalizar</button>
                         </div>
                     </aside>
                 </body> 
@@ -236,7 +236,7 @@ export class TemplateChecklist {
         this.saveQuestion('saveQuestion');
         getB_id('deleteChecklist').addEventListener('click', () => {this.finalChecklist('excluir')})
         getB_id('btnEnabledInput').addEventListener('click', () => this.enabledInputQuestion('#divForm input'))
-        getB_id('btnSalveChecklist').addEventListener('click', () => this.completedChecklist())
+        getB_id('btnSaveChecklist').addEventListener('click', () => this.completedChecklist())
         localStorage.getItem('checklist') ? this.proceedChecklist(JSON.parse(localStorage.getItem('checklist'))) : "";
     }
     editQuestionCreated(objectQuestion) {

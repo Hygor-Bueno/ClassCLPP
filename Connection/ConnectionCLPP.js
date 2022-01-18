@@ -40,7 +40,6 @@ export class ConnectionCLPP {
         return req;
     }
     async put(params, pathFile, err) {
-        console.log(params)
         this.validationParams(params, pathFile, err);
         this.settingUrl(`/Controller/${this.pathFile}?AUTH=`)
         let req

@@ -577,7 +577,7 @@ ATENÇÃO
     display: flex;
     justify-content: space-around;
 }
-#btnAddQuestion, #btnSalveChecklist {
+#btnAddQuestion, #btnSaveChecklist {
     margin-top: 5px;
     opacity: 0.8;  
     height: 7vh;

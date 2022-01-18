@@ -8,11 +8,11 @@ export const openModal = (param) =>{
 }
 export const closeModalCheck = () => {
     document.querySelector('#containerChecklist').setAttribute('style', 'display:none')
-    if(document.querySelector('#containerChecklist section :first-child')) document.querySelector('#containerChecklist section :first-child').remove();
+    if(document.querySelector('#containerChecklist #sectionCheck :first-child')) document.querySelector('#containerChecklist #sectionCheck :first-child').remove();
 }
 export const openModalCheck = (param) =>{
     document.querySelector('#containerChecklist').setAttribute('style', 'display:flex')
-    document.querySelector('#containerChecklist section').insertAdjacentHTML('beforeend',param)
+    document.querySelector('#containerChecklist #sectionCheck').insertAdjacentHTML('beforeend',param)
 }
 export const $ = document.querySelector.bind(document);
 export const $_all = document.querySelectorAll.bind(document);
