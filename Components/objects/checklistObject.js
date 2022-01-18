@@ -151,9 +151,10 @@ export class ObjectChecklist extends ConnectionCLPP {
       description: this.#title,
       date_init: this.#date_init,
       date_final: this.#date_final,
-      notification: toString(this.#notification),
+      notification: this.#notification,
       id_creator: this.#creatorId
     };
+    
     let req = await this.post(checklistJSON, "CLPP/Checklist.php?app_id=7");
     this.#idChecklist = req.last_id;
   }
@@ -169,7 +170,7 @@ export class ObjectChecklist extends ConnectionCLPP {
       this.saveOptions(this.filterOption(question), question.id_question);
     });
   }
-  async saveQuestions(questions) {
+  async saveQuestionsBD(questions) {
     console.log("aqui estoy")
     questions.forEach(async (question) => {
       let questionJSON = {
