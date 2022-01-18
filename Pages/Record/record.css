@@ -1,0 +1,82 @@
+#content {
+  display: flex;
+}
+
+aside {
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+  padding: 3px;
+  border-right: 1px solid rgb(178, 178, 178);
+}
+
+#sectionRecord {
+  width: 75%;
+}
+
+#titleMain {
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-height: 50px;
+  font-size: 17px;
+  flex-grow: 1;
+  padding: 2px;
+  border-bottom: 1px solid rgb(178, 178, 178);
+}
+
+.titleBlock {
+  border: 1px solid rgb(178, 178, 178);
+  margin-bottom: 5px;
+}
+
+.titleFilter {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgb(178, 178, 178);
+  font-weight: bold;
+  align-items: center;
+  background-color: rgb(212, 212, 212);
+}
+
+.questionChecklist {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+
+  border-bottom: 1px solid rgb(178, 178, 178);
+}
+
+.bodyChecklist {
+  padding: 0px 3px;
+}
+
+.questionChecklist select,
+input {
+  width: 50%;
+  height: 23px;
+  margin-top: 2px;
+}
+
+.buttonMain {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  max-height: 55px;
+  border-top: 1px solid rgb(178, 178, 178);
+  flex-grow: 1;
+}
+
+.buttonMain button {
+  height: 50px;
+}
+
+.imgButton img {
+  width: 10px;
+}
+
+#bodyAside {
+  flex-grow: 2;
+  overflow-y: auto;
+}
