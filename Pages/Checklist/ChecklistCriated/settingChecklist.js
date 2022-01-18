@@ -134,6 +134,7 @@ export class SettingChecklist {
         break;
       case "btnDelete":
         getB_id(`option_${value[1]}`) && getB_id(`option_${value[1]}`).remove();
+        this.templateCheck.checklist.deleteOptionDataBase(value[1])
         break;
       case "editQuestionBtn":
         idQuestion = value[1]
