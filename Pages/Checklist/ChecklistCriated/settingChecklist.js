@@ -111,21 +111,10 @@ export class SettingChecklist {
   async functionsButton(value) {
     switch (value[0]) {
       case "addNewOption":
-        if (getB_id('updateQuestion')) {
-          let idOp = await this.templateCheck.checklist.saveOption({ description: "Editável", observe: 0, photo: 0, value: 0 }, idQuestion);
-          this.templateCheck.addOptions('bodyQuestion', idOp)
-        } else {
-          this.templateCheck.addOptions('bodyQuestion')
-        }
+        await this.addNewOptionMethod();
         break;
       case "saveQuestion":
-        if (this.templateCheck.validationQuestion()) {
-          this.templateCheck.checklist.saveQuestionsBD([this.templateCheck.addQuestion(this.templateCheck.idQuestion)])
-          this.templateCheck.auxAddQuestion(this.templateCheck.idQuestion);
-          this.templateCheck.alterTypeQuestion();
-          this.templateCheck.enabledButtonInit();
-          this.templateCheck.resetInput('#headerQuestion input')
-        }
+        this.saveQuestionMethod();
         break;
       case "updateQuestion":
         this.templateCheck.checklist.updateQuestionsDataBase(this.templateCheck.checklist.queryQuestion(idQuestion))
@@ -134,63 +123,93 @@ export class SettingChecklist {
         this.templateCheck.enabledInputQuestion('#divForm input')
         break;
       case "btnEditabled":
-        let input = document.querySelector(`#inputOption${value[1]}`)
-        input.disabled = false;
-        input.focus()
+        this.btnEditabledMethod(value);
         break;
       case "btnDelete":
         getB_id(`option_${value[1]}`) && getB_id(`option_${value[1]}`).remove();
         break;
       case "editQuestionBtn":
-        console.log('hi Question')
         idQuestion = value[1]
         break;
       case "btnNameChecklist":
-        getB_id('nameChecklist').disabled = false;
-        getB_id('nameChecklist').focus();
+        this.btnNameChecklistMethod();
         break;
       case "notifyChecklist":
-        if (this.templateCheck.checklist.getNotification() == 0) {
-          getB_id('notifyChecklist').style.backgroundImage = "url('./assets/images/alertNotifyOn.svg')"
-          this.templateCheck.checklist.setNotification(1)
-        } else {
-          getB_id('notifyChecklist').style.backgroundImage = "url('./assets/images/alertNotify.svg')"
-          this.templateCheck.checklist.setNotification(0)
-        }
+        this.notifyChecklistMethod();
         break;
       case "btnSaveChecklist":
-        let validation = new Validation;
-        let errorHandling = new ErrorHandling;
-        let method = [validation.minLength, validation.minLength, validation.maxLength, validation.validationDataInicialFinal]
-        let params = [[$("#nameChecklist").value, 1], [$_all(".questionCreated"), 1], [$("#nameChecklist").value, 45], [$_all("input[type='date']")]]
-        let message = [" O título do Checklist não pode estar vazio. <br>", "O checklist não pode salvo sem questões. <br>", " O título do Checklist não pode conter mais que 45 caracteres. <br>", " A data inicial não pode ser maior que a data final. <br> Caso um campo seja preenchido o outro se torna obrigatório.<br>"]
-        let result = validation.multipleValidation(this.templateCheck.validationMultiple_error(method, params, message))
-        if(result.error){
-          this.templateCheck.checklist.setTitle($("#nameChecklist").value)
-          this.templateCheck.checklist.setDate_init(getB_id("dateInicial").value)
-          this.templateCheck.checklist.setDate_final($("#formCheclist #dateFinal").value)
-          this.templateCheck.checklist.updateChecklistDataBase();
-          localStorage.removeItem('checklist')
-          closeModalCheck();
-          document.removeEventListener('click', ()=>{});
-        }else{
-          errorHandling.main(result.data)
-        }
+        this.btnSaveChecklistMethod();
         break;
-        case "deleteChecklist":
-          console.log("Hi")
-          this.templateCheck.checklist.deleteChecklistDataBase();
-          localStorage.removeItem('checklist')
-          closeModalCheck();
-          let router = new Routers;
-          router.routers(localStorage.getItem('router'))
-          break;
+      case "deleteChecklist":
+        this.deleteChecklistMethod();
+        break;
       default:
         console.error('Botão invalido');
     }
-    console.log(this.templateCheck.checklist)
   }
+  async addNewOptionMethod() {
+    if (getB_id('updateQuestion')) {
+      let idOp = await this.templateCheck.checklist.saveOption({ description: "Editável", observe: 0, photo: 0, value: 0 }, idQuestion);
+      this.templateCheck.addOptions('bodyQuestion', idOp)
+    } else {
+      this.templateCheck.addOptions('bodyQuestion')
+    }
+  }
+  saveQuestionMethod() {
+    if (this.templateCheck.validationQuestion()) {
+      this.templateCheck.checklist.saveQuestionsBD([this.templateCheck.addQuestion(this.templateCheck.idQuestion)])
+      this.templateCheck.auxAddQuestion(this.templateCheck.idQuestion);
+      this.templateCheck.alterTypeQuestion();
+      this.templateCheck.enabledButtonInit();
+      this.templateCheck.resetInput('#headerQuestion input')
+    }
+  }
+  btnEditabledMethod(value) {
+    let input = document.querySelector(`#inputOption${value[1]}`)
+    input.disabled = false;
+    input.focus()
+  }
+  btnNameChecklistMethod() {
+    getB_id('nameChecklist').disabled = false;
+    getB_id('nameChecklist').focus();
+  }
+  notifyChecklistMethod() {
+    if (this.templateCheck.checklist.getNotification() == 0) {
+      getB_id('notifyChecklist').style.backgroundImage = "url('./assets/images/alertNotifyOn.svg')"
+      this.templateCheck.checklist.setNotification(1)
+    } else {
+      getB_id('notifyChecklist').style.backgroundImage = "url('./assets/images/alertNotify.svg')"
+      this.templateCheck.checklist.setNotification(0)
+    }
+  }
+  btnSaveChecklistMethod() {
+    let validation = new Validation;
+    let errorHandling = new ErrorHandling;
+    let method = [validation.minLength, validation.minLength, validation.maxLength, validation.validationDataInicialFinal]
+    let params = [[$("#nameChecklist").value, 1], [$_all(".questionCreated"), 1], [$("#nameChecklist").value, 45], [$_all("input[type='date']")]]
+    let message = [" O título do Checklist não pode estar vazio. <br>", "O checklist não pode salvo sem questões. <br>", " O título do Checklist não pode conter mais que 45 caracteres. <br>", " A data inicial não pode ser maior que a data final. <br> Caso um campo seja preenchido o outro se torna obrigatório.<br>"]
+    let result = validation.multipleValidation(this.templateCheck.validationMultiple_error(method, params, message))
+    if (result.error) {
+      this.templateCheck.checklist.setTitle($("#nameChecklist").value)
+      this.templateCheck.checklist.setDate_init(getB_id("dateInicial").value)
+      this.templateCheck.checklist.setDate_final($("#formCheclist #dateFinal").value)
+      this.templateCheck.checklist.updateChecklistDataBase();
+      localStorage.removeItem('checklist')
+      closeModalCheck();
+      let router = new Routers;
+      router.routers(localStorage.getItem('router'))
 
+    } else {
+      errorHandling.main(result.data)
+    }
+  }
+  deleteChecklistMethod() {
+    this.templateCheck.checklist.deleteChecklistDataBase();
+    localStorage.removeItem('checklist')
+    closeModalCheck();
+    let router = new Routers;
+    router.routers(localStorage.getItem('router'))
+  }
   deleteChecklist() {
     $_all(".delete").forEach(element => {
       element.addEventListener("click", () => {
