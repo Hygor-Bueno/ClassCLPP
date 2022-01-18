@@ -1,4 +1,4 @@
-import {getB_id, $, $_all, openModalCheck, closeModal} from "../../../Util/compressSyntaxe.js";
+import { getB_id, $, $_all, openModalCheck, closeModal } from "../../../Util/compressSyntaxe.js";
 import { Checklist } from "../../../Connection/Checklist.js";
 import { UsefulComponents } from "../../../Util/usefulComponents.js";
 import { UserAccess } from "../../../Connection/UserAccess.js";
@@ -6,7 +6,7 @@ import { ListUser } from "../../../Components/listUser.js";
 import { ObjectChecklist } from "../../../Components/objects/checklistObject.js";
 import { ConnectionCLPP } from "../../../Connection/ConnectionCLPP.js";
 import { TemplateChecklist } from "../../../Components/templateChecklist.js";
-
+let idQuestion;
 export class SettingChecklist {
   checklist = new Checklist();
   listUser = new ListUser();
@@ -52,17 +52,7 @@ export class SettingChecklist {
       this.searchCheck = $("#inputCheckList").value;
       this.searchDateInit = $("#dateInit").value || "";
       this.searchDateFinal = $("#dateFinal").value || "";
-      searchCheck = await this.checklist.get(
-        "&web&check_name=" +
-        this.searchCheck +
-        "&date_ini=" +
-        this.searchDateInit +
-        "&date_final=" +
-        this.searchDateFinal +
-        "&id_user=" +
-        localStorage.getItem("id"),
-        true
-      );
+      searchCheck = await this.checklist.get("&web&check_name=" +this.searchCheck +"&date_ini=" +this.searchDateInit +"&date_final=" + this.searchDateFinal + "&id_user=" + localStorage.getItem("id"), true);
       this.clean();
       this.popIclude(searchCheck);
       this.listUsers();
@@ -89,20 +79,19 @@ export class SettingChecklist {
 
   viewChecklist() {
     $_all(".view").forEach(element => {
-      element.addEventListener("click", () => {        
+      element.addEventListener("click", () => {
         let objJSON = this.checklistsUser[element.getAttribute("data-id_check")].checklistJSON()
         localStorage.setItem('checklist', JSON.stringify(objJSON))
         openModalCheck(`<div id="checkCreateDiv">${this.templateCheck.main()}</div>`)
         this.templateCheck.proceedChecklist(JSON.parse(localStorage.getItem('checklist')));
-        this.clickGeneral(this.templateCheck);
+        this.clickGeneral();
         this.templateCheck.checklist.setIdChecklist(element.getAttribute("data-id_check"))
         getB_id('typeQuestion').onchange = () => {
           this.templateCheck.alterTypeQuestion();
-            this.templateCheck.enabledButtonInit();
-            $('#headerQuestion input').value = "";
-            $('#headerQuestion input').setAttribute('disabled', true)
+          this.templateCheck.enabledButtonInit();
+          $('#headerQuestion input').value = "";
+          $('#headerQuestion input').setAttribute('disabled', true)
         }
-        console.log(element.getAttribute("data-id_check"))
       });
     });
   }
@@ -110,23 +99,25 @@ export class SettingChecklist {
     document.addEventListener("click", (element) => {
       if (element.target.tagName.toLowerCase() == 'button' || element.target.tagName.toLowerCase() == 'img') {
         let buttonCkick = element.target.parentNode
-        console.log(buttonCkick.id.split('_'))
         if (buttonCkick.id) {
           this.functionsButton(buttonCkick.id.split('_'))
         }
       }
     })
   }
-  functionsButton(value) {
+  async functionsButton(value) {
     switch (value[0]) {
       case "addNewOption":
-        this.templateCheck.addOptions('bodyQuestion')
-        // this.templateCheck.addNewOption()
+        if (getB_id('updateQuestion')) {
+          let idOp = await this.templateCheck.checklist.saveOption({ description: "Editável", observe: 0, photo: 0, value: 0 }, idQuestion);
+          this.templateCheck.addOptions('bodyQuestion', idOp)
+        } else {
+          this.templateCheck.addOptions('bodyQuestion')
+        }
         break;
       case "saveQuestion":
         if (this.templateCheck.validationQuestion()) {
-           this.templateCheck.checklist.saveQuestions([this.templateCheck.addQuestion(this.templateCheck.idQuestion)])
-    
+          this.templateCheck.checklist.saveQuestions([this.templateCheck.addQuestion(this.templateCheck.idQuestion)])
           this.templateCheck.auxAddQuestion(this.templateCheck.idQuestion);
           this.templateCheck.alterTypeQuestion();
           this.templateCheck.enabledButtonInit();
@@ -134,7 +125,7 @@ export class SettingChecklist {
         }
         break;
       case "updateQuestion":
-        
+        this.templateCheck.checklist.updateQuestionsDataBase(this.templateCheck.checklist.queryQuestion(idQuestion))        
         break;
       case "btnEnabledInput":
         this.templateCheck.enabledInputQuestion('#divForm input')
@@ -145,10 +136,13 @@ export class SettingChecklist {
         input.focus()
         break;
       case "btnDelete":
-        getB_id(`option_${value[1]}`).remove();
+        getB_id(`option_${value[1]}`) && getB_id(`option_${value[1]}`).remove();
+        break;
+      case "editQuestionBtn":
+        idQuestion = value[1]
         break;
       default:
-        console.error('Botão invalido')
+        console.error('Botão invalido');
     }
   }
 
@@ -178,19 +172,13 @@ export class SettingChecklist {
                   <h1>${checklist.description}</h1> 
               </div>
               <div>
-                  <img src="${checklist.notification == 0
-              ? `assets/images/alertNotify.svg`
-              : `assets/images/alertNotifyOn.svg`}"/>
+                  <img src="${checklist.notification == 0? `assets/images/alertNotify.svg`: `assets/images/alertNotifyOn.svg`}"/>
               </div>
               <div id="date1">
-                  <p>Data Inicial: ${checklist.date_init != null
-              ? userful.convertData(checklist.date_init, "-")
-              : "Sem data"}</p>
+                  <p>Data Inicial: ${checklist.date_init != null ? userful.convertData(checklist.date_init, "-") : "Sem data"}</p>
               </div>
               <div id="date2">
-                  <p>Data Final: ${checklist.date_final != null
-              ? userful.convertData(checklist.date_final, "-")
-              : "Sem data"}</p>
+                  <p>Data Final: ${checklist.date_final != null ? userful.convertData(checklist.date_final, "-") : "Sem data"}</p>
               </div>
               <div id="function">
                   <button type="button"  class="groups" data-id_check="${checklist.id}"><img src="./assets/images/groups_black_24dp.svg"/></button>
@@ -201,7 +189,6 @@ export class SettingChecklist {
         `
         )
         .join("");
-
       return response;
     } catch (e) {
       console.error(e + " : Falha ao realizar a requisição...");

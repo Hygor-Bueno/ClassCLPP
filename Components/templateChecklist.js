@@ -145,27 +145,28 @@ export class TemplateChecklist {
     }
 
     editOption(objectQuestion, btnDelete, objQuestion, indexOption) {
+        let id = localStorage.getItem('router') == "checklistCreated"? objectQuestion.id : indexOption
         return `
-                <div id="option_${indexOption}" class="optionEditable" value="${indexOption}">
+                <div id="option_${id}" class="optionEditable" value="${id}">
                     <section class="sectionOption">    
                         <div>                    
                         ${objQuestion.type == 1 ? `<input type="radio" title="input"/>` : `<input type="checkbox" title="input"/>`}
-                            <input type="text" placeholder="Editável" class="inputEditable inputRiquered" id="inputOption${indexOption}"
+                            <input type="text" placeholder="Editável" class="inputEditable inputRiquered" id="inputOption${id}"
                                 title="Editável" disabled value="${objectQuestion.description}"/>
-                            <button type="button" class="btnsQuestion" id="btnEditabled_${indexOption}">
+                            <button type="button" class="btnsQuestion" id="btnEditabled_${id}">
                                 <img src="./assets/images/pencil.svg" title="Editar" />
                             </button>
                                 ${btnDelete
                 ? `
 
-                                    <button type="button" class="btnsQuestion btnDelete" id="btnDelete_${indexOption}" value="${indexOption}">
+                                    <button type="button" class="btnsQuestion btnDelete" id="btnDelete_${id}" value="${id}">
                                         <img src="./assets/images/delete.svg" title="Editar" />
                                     </button>` : ""
             }  
                         </div>  
                         ${objQuestion.type == 1 ?
                 `
-                        <select class="selectValue" title="Valor das Respostas" id="selectOption_${indexOption}">
+                        <select class="selectValue" title="Valor das Respostas" id="selectOption_${id}">
                             <option value="1" ${objectQuestion.value == "1" ? 'selected' : ''}>Correta: 1 Ponto</option>
                             <option value="0.5" ${objectQuestion.value == "0.5" ? 'selected' : ''}>Parcial: 0.5 Ponto</option>
                             <option value="0" ${objectQuestion.value == "0" ? 'selected' : ''}>Errada: 0 Pontos</option>
@@ -176,8 +177,8 @@ export class TemplateChecklist {
                     <footer class="footerOption">
                     ${`
                         <label class="mandatoryOptions">Obrigatórios:</label>
-                        <input type="checkbox" class="checkPhoto"  id="checkPhoto_${indexOption}" ${objectQuestion.photo == 1 ? "checked='true'" : ''}/> <p>Foto</p>
-                        <input type="checkbox" class="checkObservation"  id="checkObservation_${indexOption}" ${objectQuestion.observe == 1 ? "checked='true'" : ''}"/><p>Observação</p>
+                        <input type="checkbox" class="checkPhoto"  id="checkPhoto_${id}" ${objectQuestion.photo == 1 ? "checked='true'" : ''}/> <p>Foto</p>
+                        <input type="checkbox" class="checkObservation"  id="checkObservation_${id}" ${objectQuestion.observe == 1 ? "checked='true'" : ''}"/><p>Observação</p>
                     `}
                     </footer>
                 </div>
@@ -277,9 +278,10 @@ export class TemplateChecklist {
         this.enabledButtonInit();
     }
     btnUpdate(objectQuestion, local) {
+        console.log(objectQuestion,local)
         getB_id(local).addEventListener('click', () => {
             if (this.validationQuestion()) {
-                this.checklist.updateQuestion(this.addQuestion(objectQuestion.id));
+                this.checklist.updateQuestion(localStorage.getItem('router')=='checklistCreated' ? this.upQuestion(objectQuestion) : this.addQuestion(objectQuestion.id));
                 let editedQuestion = this.containerQuestionCreate([this.checklist.queryQuestion(objectQuestion.id)], objectQuestion.id)
                 getB_id(`questionCreated_${objectQuestion.id}`).innerHTML = "";
                 getB_id(`questionCreated_${objectQuestion.id}`).insertAdjacentHTML('beforeend', editedQuestion)
@@ -507,6 +509,7 @@ export class TemplateChecklist {
         object.title = $('#headerQuestion input').value;
         if (object.type < 3) {
             $_all('.optionEditable').forEach(element => {
+                console.log(element)
                 let values = element.getAttribute('value');
                 let desc = element.querySelector('.inputEditable').value
                 let selectOption
@@ -520,6 +523,29 @@ export class TemplateChecklist {
         }
         return object;
     }
+    upQuestion(value){
+        this.idQuestion++;
+        let object = {};
+        object.id = value.id;
+        object.id_question =  value.id;
+        object.type = value.type;
+        object.title = $('#headerQuestion input').value;
+        object.checklist_id= value.checklist_id;
+        if (object.type < 3) {
+            $_all('.optionEditable').forEach(element => {
+                let values = element.getAttribute('value');
+                let desc = element.querySelector('.inputEditable').value
+                let selectOption
+                object.type == 1 ? selectOption = this.getValueSelect(`#selectOption_${values}`) : selectOption = this.calculateCheckboxValue('inputEditable');
+                let photo = element.querySelector(`#checkPhoto_${values}`);
+                let note = element.querySelector(`#checkObservation_${values}`);
+                object[`op_${values}`] = {type: this.getValueSelect("#typeQuestion"),description: desc,id: values,observe: note.checked ? 1 : 0,photo:photo.checked ? 1 : 0,question_id: object.id_question,value: selectOption}
+            });
+        } else {
+            object[`op_${value}`] = { type: this.getValueSelect("#typeQuestion"), description: 'Assinatura', photo: 0, observe: 0, value: 0 }
+        }
+        return object;
+    }
     calculateCheckboxValue(optionClass) {
         return parseFloat((1 / $_all(`.${optionClass}`).length).toFixed(2))
     }
@@ -528,7 +554,6 @@ export class TemplateChecklist {
         this.checklist.addQuestion(object);
         getB_id('questionCreated').insertAdjacentHTML('beforeend', this.questionsCreated([object], value))
         this.btnQuestionCreated(value);
-        console.log(this.checklist)
     }
     btnQuestionCreated(values) {
         let array = $_all('.questionCreated')[$_all('.questionCreated').length - 1];
@@ -548,6 +573,7 @@ export class TemplateChecklist {
         this.checklist.deleteQuestionDataBase(value)
     }
     editQuestion(objectQuestion) {
+        console.log(objectQuestion)
         this.editQuestionCreated(objectQuestion)
     }
     //Função resposavel por finalizar o checklist!
