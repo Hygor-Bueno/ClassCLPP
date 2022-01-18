@@ -59,6 +59,8 @@ export class SettingChecklist {
       this.clean();
       this.popIclude(searchCheck);
       this.listUsers();
+      this.viewChecklist();
+      this.deleteChecklist();
     });
   }
   clean() {
@@ -66,10 +68,7 @@ export class SettingChecklist {
   }
 
   popIclude(objectCheck) {
-    getB_id("getCheckList").insertAdjacentHTML(
-      "beforeend",
-      this.getCheckListCreted(objectCheck)
-    );
+    getB_id("getCheckList").insertAdjacentHTML("beforeend",this.getCheckListCreted(objectCheck));
   }
 
   listUsers() {
@@ -95,6 +94,14 @@ export class SettingChecklist {
           $('#headerQuestion input').value = "";
           $('#headerQuestion input').setAttribute('disabled', true)
         }
+      });
+    });
+  }
+  deleteChecklist() {
+    $_all(".delete").forEach(element => {
+      element.addEventListener("click", () => {
+        this.checklistsUser[element.getAttribute("data-id_check")].deleteChecklistDataBase();
+        $(`#checklist_${element.getAttribute("data-id_check")}`).remove();
       });
     });
   }
@@ -210,14 +217,7 @@ export class SettingChecklist {
     let router = new Routers;
     router.routers(localStorage.getItem('router'))
   }
-  deleteChecklist() {
-    $_all(".delete").forEach(element => {
-      element.addEventListener("click", () => {
-        this.checklistsUser[element.getAttribute("data-id_check")].deleteChecklistDataBase();
-        $(`#checklist_${element.getAttribute("data-id_check")}`).remove();
-      });
-    });
-  }
+  
   async queryUser(idChecklist) {
     await this.listUser.checkBoxUser(this.listsUsersCheck, idChecklist);
   }
