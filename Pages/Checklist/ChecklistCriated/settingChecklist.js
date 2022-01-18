@@ -97,10 +97,11 @@ export class SettingChecklist {
   }
   clickGeneral() {
     document.addEventListener("click", (element) => {
-      if (element.target.tagName.toLowerCase() == 'button' || element.target.tagName.toLowerCase() == 'img') {
-        let buttonCkick = element.target.parentNode
-        if (buttonCkick.id) {
-          this.functionsButton(buttonCkick.id.split('_'))
+      if (element.target.tagName.toLowerCase() == 'button' || element.target.tagName.toLowerCase() == 'img') {      
+        console.log(element.target)
+        if (element.target.id) {
+          console.log(element.target.id.split('_'))
+          this.functionsButton(element.target.id.split('_'))
         }
       }
     })
@@ -117,7 +118,7 @@ export class SettingChecklist {
         break;
       case "saveQuestion":
         if (this.templateCheck.validationQuestion()) {
-          this.templateCheck.checklist.saveQuestions([this.templateCheck.addQuestion(this.templateCheck.idQuestion)])
+          this.templateCheck.checklist.saveQuestionsBD([this.templateCheck.addQuestion(this.templateCheck.idQuestion)])
           this.templateCheck.auxAddQuestion(this.templateCheck.idQuestion);
           this.templateCheck.alterTypeQuestion();
           this.templateCheck.enabledButtonInit();
@@ -181,9 +182,9 @@ export class SettingChecklist {
                   <p>Data Final: ${checklist.date_final != null ? userful.convertData(checklist.date_final, "-") : "Sem data"}</p>
               </div>
               <div id="function">
-                  <button type="button"  class="groups" data-id_check="${checklist.id}"><img src="./assets/images/groups_black_24dp.svg"/></button>
-                  <button type="button" class="view" data-id_check="${checklist.id}"><img src="./assets/images/olho.svg"/></button>
-                  <button type="button" class="delete" data-id_check="${checklist.id}"><img src="./assets/images/delete.svg"/></button>
+                  <button type="button"  class="groups groupsBtnCss" data-id_check="${checklist.id}"></button>
+                  <button type="button" class="view viewBtnCss" data-id_check="${checklist.id}"></button>
+                  <button type="button" class="deleteBtnCss" data-id_check="${checklist.id}"></button>
               </div>
           </div>
         `

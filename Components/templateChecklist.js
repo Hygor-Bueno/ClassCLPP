@@ -27,16 +27,15 @@ export class TemplateChecklist {
             `<div id="formCheclist">		
                     <div id="groupForm">
                         <input type="text" placeholder="Digite o Título do Checklist" id="nameChecklist" class="inputRiquered" disabled=false>
-                        <button type="button" title="Edita nome do checklist" id="btnNameChecklist"><img src=${this.pathImgEdit} title="Editar Nome do checklist" /></button>
+                        <button type="button" title="Edita nome do checklist" class="editBtnCss" id="btnNameChecklist"></button>
                         <div id="groupFormDate">
                             <p>Data Inicial: </p> <input type="date" id="dateInicial" min="${this.usefulComponents.currentDate()}"/>
                             <p>Data Final: </p> <input type="date" id="dateFinal" min="${this.usefulComponents.currentDate()}"/>
                         </div>		
                     </div>
                     <div id="groupButtons">
-                        <button type="button" id="notifyChecklist"><img src=${this.pathImgNotify} title="Noftificar quando checklist for respondido" /></button>
-                        
-                        <button type="button" id="deleteChecklist"><img src=${this.pathImgDelete} title="Excluir checklist" /></button>
+                        <button type="button" class="notificationBtnCss" id="notifyChecklist"></button>                          
+                        <button type="button" class="deleteBtnCss" id="deleteChecklist"></button>
                     </div>
                 </div>
                 <div id="bodyCheckEditable">
@@ -68,17 +67,11 @@ export class TemplateChecklist {
                     <div id="headerQuestion">
                         <div id="divForm">
                             <input type="text" class="inputRiquered" placeholder="Digite o Título da questão" disabled/>
-                            <button type="button" id="btnEnabledInput">
-                                <img src="./assets/images/pencil.svg" title="Editar título da questão."/>
-                            </button>
+                            <button type="button" class="editBtnCss" id="btnEnabledInput"></button>
                         </div>  
                         <asind id="btnQuestion">
-                            <button type="button" id="addNewOption">
-                                <img src="./assets/images/add.svg" title="Adicionar Nova Opção de Resposta."/>
-                            </button>
-                            <button type="button" id="saveQuestion">
-                                <img src="${this.pathImgSave}" title="Salvar questão."/>
-                            </button>
+                            <button type="button" class="addBtnCss" id="addNewOption"></button>
+                            <button type="button" class="saveBtnCss" id="saveQuestion"></button>
                         </asind>
                     </div>
                 `
@@ -100,14 +93,10 @@ export class TemplateChecklist {
                             ${inputGeneral}
                             <input type="text" placeholder="Editável" class="inputEditable inputRiquered" id="inputOption${id}"
                                 title="Editável" disabled />
-                            <button type="button" class="btnsQuestion" id="btnEditabled_${id}">
-                                <img src="./assets/images/pencil.svg" title="Editar" />
-                            </button>
+                            <button type="button" class="btnsQuestion editBtnCss" id="btnEditabled_${id}"></button>
                                 ${btnDelete
                 ? `
-                                    <button type="button" class="btnsQuestion btnDelete" id="btnDelete_${id}" value="${id}">
-                                        <img src="./assets/images/delete.svg" title="Editar" />
-                                    </button>` : ""
+                                    <button type="button" class="btnsQuestion btnDelete deleteBtnCss" id="btnDelete_${id}" value="${id}"></button>` : ""
             }  
                         </div>  
                     ${typeMult == 1 ?
@@ -133,7 +122,7 @@ export class TemplateChecklist {
         this.checklist.loadingChecklist(object);
         getB_id('nameChecklist').value = object.nameChecklist
         if (object.notify != "0") {
-            $('#notifyChecklist img').setAttribute('src', this.pathImgNotifyOn)
+            $('#notifyChecklist ').setAttribute('style', "background-image: url('./assets/images/alertNotifyOn.svg')")
             this.notification = false;
         }
         if (object.dataInit) getB_id('dateInicial').value = object.dataInit;
@@ -153,15 +142,11 @@ export class TemplateChecklist {
                         ${objQuestion.type == 1 ? `<input type="radio" title="input"/>` : `<input type="checkbox" title="input"/>`}
                             <input type="text" placeholder="Editável" class="inputEditable inputRiquered" id="inputOption${id}"
                                 title="Editável" disabled value="${objectQuestion.description}"/>
-                            <button type="button" class="btnsQuestion" id="btnEditabled_${id}">
-                                <img src="./assets/images/pencil.svg" title="Editar" />
-                            </button>
+                            <button type="button" class="btnsQuestion editBtnCss" id="btnEditabled_${id}"></button>
                                 ${btnDelete
                 ? `
 
-                                    <button type="button" class="btnsQuestion btnDelete" id="btnDelete_${id}" value="${id}">
-                                        <img src="./assets/images/delete.svg" title="Editar" />
-                                    </button>` : ""
+                                    <button type="button" class="btnsQuestion btnDelete deleteBtnCss" id="btnDelete_${id}" value="${id}"></button>` : ""
             }  
                         </div>  
                         ${objQuestion.type == 1 ?
@@ -201,8 +186,8 @@ export class TemplateChecklist {
                                     <header>
                                         <h1>${element.title || element.description}</h1>
                                         <div class="divGroupButton">
-                                            <button  id="editQuestionBtn_${value}" type="button" data-id="${value}" title="editar questão"><img src=${this.pathImgEdit} title="Editar Image"/></button>
-                                            <button  id="deleteQuestionBtn_${value}" type="button" data-id="${value}" title="excluir questão"><img src=${this.pathImgDelete} title="Editar Image"/></button>
+                                            <button class="editBtnCss" id="editQuestionBtn_${value}" type="button" data-id="${value}" title="editar questão"></button>
+                                            <button class="deleteBtnCss" id="deleteQuestionBtn_${value}" type="button" data-id="${value}" title="excluir questão"></button>
                                         </div>
                                     </header>                                        
                                 ${groupOption.map((options) => (this.bodyCreated(options,element.type))).join("")}`
@@ -306,22 +291,24 @@ export class TemplateChecklist {
     }
     tempButtonUpdate(id) {
         return `
-            <button type="button" id='${id}'>
-                <img src="${this.pathImgSave}" title="alterar Questão."/>
-            </button>
+            <button type="button" class="saveBtnCss" id='${id}'></button>
         `
     }
     //FUNCIONALIDADES DOS TEMPLATES: 
     disableButtons(places) {
         places.forEach((place) => {
             let buttons = $_all(`${place} button`);
-            buttons.forEach((button) => { button.disabled = true; button.setAttribute('style', 'opacity:0.2') })
+
+            buttons.forEach((button) => { 
+                button.disabled = true;
+                button.style.opacity = 0.2
+            })
         })
     }
     enableButtons(places) {
         places.forEach((place) => {
             let buttons = $_all(`${place} button`);
-            buttons.forEach((button) => { button.disabled = false; button.setAttribute('style', 'opacity:1') })
+            buttons.forEach((button) => { button.disabled = false; button.style.opacity=1})
         })
     }
     saveQuestion(idButton) {
@@ -367,9 +354,11 @@ export class TemplateChecklist {
     // Funcçoes que alteram o objeto checklist.
     changeNotification() {
         getB_id('notifyChecklist').addEventListener("click", () => {
-            this.notification ? $('#notifyChecklist img').setAttribute('src', this.pathImgNotifyOn) : $('#notifyChecklist img').setAttribute('src', this.pathImgNotify)
+            // this.notification ? $('#notifyChecklist img').setAttribute('src', this.pathImgNotifyOn) : $('#notifyChecklist img').setAttribute('src', this.pathImgNotify)
+            this.notification ? $('#notifyChecklist').setAttribute('style', "background-image: url('./assets/images/alertNotifyOn.svg')") : $('#notifyChecklist').setAttribute('style', "background-image: url('./assets/images/alertNotify.svg')")
             this.checklist.setNotification(this.notification ? 1 : 0)
             this.notification = !this.notification;
+            console.log(this.checklist)
         })
     }
     changeTypeQuestion() {
