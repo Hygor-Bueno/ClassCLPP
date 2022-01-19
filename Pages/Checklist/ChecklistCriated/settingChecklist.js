@@ -59,6 +59,8 @@ export class SettingChecklist {
       this.clean();
       this.popIclude(searchCheck);
       this.listUsers();
+      this.viewChecklist();
+      this.deleteChecklist();
     });
   }
   clean() {
@@ -66,10 +68,7 @@ export class SettingChecklist {
   }
 
   popIclude(objectCheck) {
-    getB_id("getCheckList").insertAdjacentHTML(
-      "beforeend",
-      this.getCheckListCreted(objectCheck)
-    );
+    getB_id("getCheckList").insertAdjacentHTML("beforeend",this.getCheckListCreted(objectCheck));
   }
 
   listUsers() {
@@ -98,6 +97,14 @@ export class SettingChecklist {
       });
     });
   }
+  deleteChecklist() {
+    $_all(".delete").forEach(element => {
+      element.addEventListener("click", () => {
+        this.checklistsUser[element.getAttribute("data-id_check")].deleteChecklistDataBase();
+        $(`#checklist_${element.getAttribute("data-id_check")}`).remove();
+      });
+    });
+  }
   clickGeneral() {
     document.getElementById('checkCreateDiv').addEventListener("click", (element) => {
       if (element.target.tagName.toLowerCase() == 'button' || element.target.tagName.toLowerCase() == 'img') {
@@ -114,7 +121,7 @@ export class SettingChecklist {
         await this.addNewOptionMethod();
         break;
       case "saveQuestion":
-        this.saveQuestionMethod();
+        await this.saveQuestionMethod();
         break;
       case "updateQuestion":
         this.templateCheck.checklist.updateQuestionsDataBase(this.templateCheck.checklist.queryQuestion(idQuestion))
@@ -127,6 +134,7 @@ export class SettingChecklist {
         break;
       case "btnDelete":
         getB_id(`option_${value[1]}`) && getB_id(`option_${value[1]}`).remove();
+        this.templateCheck.checklist.deleteOptionDataBase(value[1])
         break;
       case "editQuestionBtn":
         idQuestion = value[1]
@@ -155,10 +163,14 @@ export class SettingChecklist {
       this.templateCheck.addOptions('bodyQuestion')
     }
   }
-  saveQuestionMethod() {
-    if (this.templateCheck.validationQuestion()) {
-      this.templateCheck.checklist.saveQuestionsBD([this.templateCheck.addQuestion(this.templateCheck.idQuestion)])
-      this.templateCheck.auxAddQuestion(this.templateCheck.idQuestion);
+  async saveQuestionMethod() {
+    if (this.templateCheck.validationQuestion()) {      
+      let req = await this.connectionCLPP.get(`&user_id=${localStorage.getItem("id")}&id=${this.templateCheck.checklist.getIdCHecklist()}`,'CLPP/Question.php')
+      this.templateCheck.idQuestion = req.nextId.next_id
+      let object = this.templateCheck.addQuestion(this.templateCheck.idQuestion)     
+      await this.templateCheck.checklist.saveQuestionsBD(object)
+      getB_id('questionCreated').insertAdjacentHTML('beforeend', this.templateCheck.questionsCreated([object], this.templateCheck.idQuestion))
+      this.templateCheck.btnQuestionCreated(this.templateCheck.idQuestion);   
       this.templateCheck.alterTypeQuestion();
       this.templateCheck.enabledButtonInit();
       this.templateCheck.resetInput('#headerQuestion input')
@@ -210,14 +222,7 @@ export class SettingChecklist {
     let router = new Routers;
     router.routers(localStorage.getItem('router'))
   }
-  deleteChecklist() {
-    $_all(".delete").forEach(element => {
-      element.addEventListener("click", () => {
-        this.checklistsUser[element.getAttribute("data-id_check")].deleteChecklistDataBase();
-        $(`#checklist_${element.getAttribute("data-id_check")}`).remove();
-      });
-    });
-  }
+  
   async queryUser(idChecklist) {
     await this.listUser.checkBoxUser(this.listsUsersCheck, idChecklist);
   }

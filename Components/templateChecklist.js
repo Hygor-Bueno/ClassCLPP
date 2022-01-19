@@ -39,7 +39,7 @@ export class TemplateChecklist {
                     </div>
                 </div>
                 <div id="bodyCheckEditable">
-                    <section id="questionCreated">
+                    <section id="questionCreated" class="style_scroll">
                     </section>
                     <aside>
                         <div id="editableQuestion">
@@ -263,7 +263,6 @@ export class TemplateChecklist {
         this.enabledButtonInit();
     }
     btnUpdate(objectQuestion, local) {
-        console.log(objectQuestion,local)
         getB_id(local).addEventListener('click', () => {
             if (this.validationQuestion()) {
                 this.checklist.updateQuestion(localStorage.getItem('router')=='checklistCreated' ? this.upQuestion(objectQuestion) : this.addQuestion(objectQuestion.id));
@@ -358,7 +357,6 @@ export class TemplateChecklist {
             this.notification ? $('#notifyChecklist').setAttribute('style', "background-image: url('./assets/images/alertNotifyOn.svg')") : $('#notifyChecklist').setAttribute('style', "background-image: url('./assets/images/alertNotify.svg')")
             this.checklist.setNotification(this.notification ? 1 : 0)
             this.notification = !this.notification;
-            console.log(this.checklist)
         })
     }
     changeTypeQuestion() {
@@ -489,8 +487,8 @@ export class TemplateChecklist {
         getB_id('bodyQuestion').innerHTML = "";
         getB_id('bodyQuestion').insertAdjacentHTML('beforeend', this.filterType(parseInt(this.getValueSelect('#typeQuestion')), 1));
     }
-    addQuestion(value) {
-        this.idQuestion++;
+    addQuestion(value) {                
+        localStorage.getItem('router') == 'checklistCreated'? this.idQuestion= value:this.idQuestion++;        
         let object = {};
         object.id = value;
         object.id_question = "";
@@ -498,7 +496,6 @@ export class TemplateChecklist {
         object.title = $('#headerQuestion input').value;
         if (object.type < 3) {
             $_all('.optionEditable').forEach(element => {
-                console.log(element)
                 let values = element.getAttribute('value');
                 let desc = element.querySelector('.inputEditable').value
                 let selectOption
@@ -562,7 +559,6 @@ export class TemplateChecklist {
         this.checklist.deleteQuestionDataBase(value)
     }
     editQuestion(objectQuestion) {
-        console.log(objectQuestion)
         this.editQuestionCreated(objectQuestion)
     }
     //Função resposavel por finalizar o checklist!

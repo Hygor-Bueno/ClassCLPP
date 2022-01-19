@@ -164,7 +164,7 @@ export class ObjectChecklist extends ConnectionCLPP {
       notification: this.#notification,
       id_creator: this.#creatorId
     };
-    
+
     let req = await this.post(checklistJSON, "CLPP/Checklist.php?app_id=7");
     this.#idChecklist = req.last_id;
   }
@@ -180,26 +180,51 @@ export class ObjectChecklist extends ConnectionCLPP {
       this.saveOptions(this.filterOption(question), question.id_question);
     });
   }
-  async saveQuestionsBD(questions) {
-    console.log("aqui estoy")
-    questions.forEach(async (question) => {
-      let questionJSON = {
-        type: question.type,
-        id_checklist: this.#idChecklist,
-        description: question.title
-      };
-      console.log(questionJSON)
-      let req = await this.post(questionJSON, "CLPP/Question.php?app_id=7", true);
-      question.id_question = req.last_id;
-      this.saveOptions(this.filterOption(question), question.id_question);
-    });
-  }
   saveOptions(options, idQuestion) {
     options.forEach(async (element) => {
       element.id_question = idQuestion;
       let req = await this.post(element, "CLPP/Option.php?app_id=7");
       element.id = req.last_id;
     });
+  }
+  async saveQuestionsBD(question) { 
+    let questionJSON = {
+      type: question.type,
+      id_checklist: this.#idChecklist,
+      description: question.title
+    };
+    let req = await this.post(questionJSON, "CLPP/Question.php?app_id=7", true);
+    question.id_question = req.last_id;
+    let resp = await this.saveOptionsBD(this.filterOption(question), question.id_question, questionJSON);
+    console.log(resp);
+    console.log(Object.keys(resp))
+    this.addQuestion(resp)    
+    return resp
+  }
+  async saveOptionsBD(options, idQuestion, Object) {
+    console.log(options, idQuestion, Object)
+    Object.id_question = idQuestion
+    let newObj = this.mountQuestion(Object);
+    options.forEach(async (element, index) => {
+      element.id_question = idQuestion;
+      element.question_id = idQuestion
+      let req = await this.post(element, "CLPP/Option.php?app_id=7");
+      element.id = req.last_id;
+      newObj[`op_${index + 1}`] = element;
+      delete element.id_question
+      delete element.type
+    });
+    return newObj;
+  }
+  
+  mountQuestion(Object) {
+    let obj = {
+      checklist_id: Object.id_checklist,
+      description: Object.description,
+      id: Object.id_question,
+      type: Object.type,
+    }
+    return obj;
   }
   async updateQuestionsDataBase(question) {
     let questionJSON = {
@@ -216,13 +241,11 @@ export class ObjectChecklist extends ConnectionCLPP {
       element.id_question = options.question_id;
       await this.put(element, "CLPP/Option.php?app_id=7"); // NÂO ESTÁ RETORNANDO NADA...
     });
-    console.log(options)
   }
   async saveOption(option, idQuestion) {
     option.id_question = idQuestion;
     let req = await this.post(option, "CLPP/Option.php?app_id=7");
     option.id = req.last_id;
-    console.log(option)
     return option
   }
   filterOption(question) {

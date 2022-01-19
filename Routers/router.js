@@ -25,6 +25,7 @@ export class Routers {
 					result.setting();
 					break;
 				case 'checklistCreated':
+					localStorage.removeItem('checklist')
 					result = new ChecklistCreatedPage;
 					document.getElementById('StylePages').setAttribute('href', "./Pages/Checklist/ChecklistCriated/checklist.css")
 					let req = await result.arrayCheckList();
