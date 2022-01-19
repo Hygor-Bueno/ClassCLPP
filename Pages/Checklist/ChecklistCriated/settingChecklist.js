@@ -121,7 +121,7 @@ export class SettingChecklist {
         await this.addNewOptionMethod();
         break;
       case "saveQuestion":
-        this.saveQuestionMethod();
+        await this.saveQuestionMethod();
         break;
       case "updateQuestion":
         this.templateCheck.checklist.updateQuestionsDataBase(this.templateCheck.checklist.queryQuestion(idQuestion))
@@ -163,10 +163,14 @@ export class SettingChecklist {
       this.templateCheck.addOptions('bodyQuestion')
     }
   }
-  saveQuestionMethod() {
-    if (this.templateCheck.validationQuestion()) {
-      this.templateCheck.checklist.saveQuestionsBD([this.templateCheck.addQuestion(this.templateCheck.idQuestion)])
-      this.templateCheck.auxAddQuestion(this.templateCheck.idQuestion);
+  async saveQuestionMethod() {
+    if (this.templateCheck.validationQuestion()) {      
+      let req = await this.connectionCLPP.get(`&user_id=${localStorage.getItem("id")}&id=${this.templateCheck.checklist.getIdCHecklist()}`,'CLPP/Question.php')
+      this.templateCheck.idQuestion = req.nextId.next_id
+      let object = this.templateCheck.addQuestion(this.templateCheck.idQuestion)     
+      await this.templateCheck.checklist.saveQuestionsBD(object)
+      getB_id('questionCreated').insertAdjacentHTML('beforeend', this.templateCheck.questionsCreated([object], this.templateCheck.idQuestion))
+      this.templateCheck.btnQuestionCreated(this.templateCheck.idQuestion);   
       this.templateCheck.alterTypeQuestion();
       this.templateCheck.enabledButtonInit();
       this.templateCheck.resetInput('#headerQuestion input')
