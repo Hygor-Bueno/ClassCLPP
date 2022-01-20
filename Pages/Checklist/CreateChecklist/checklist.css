@@ -1,5 +1,5 @@
 /* PARTE RESPONSÁVEL POR FORMATAR O ESTILO DO FORMULÁRIO DO CHECKLIST */
-#formCheclist {
+/* #formCheclist {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -28,7 +28,7 @@
     display: flex;
 }
 /* FORMATAÇÕES GERAIS DO CHECKLIST */
-#checkCreateDiv {
+/*#checkCreateDiv {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -37,19 +37,18 @@
 }
 #checkCreateDiv button {
     border: none;
-    background: none;
-}
+}*/
 /*CORPO DO CHECKLIST */
-#bodyCheckEditable {
+/*#bodyCheckEditable {
     display: flex;
     flex-direction: row;
     width: 99%;
     height: 100%;
     align-items: center;
     justify-content: center;
-}
+}*/
 /*FORMATAÇÃO DO SECTION CHECKLIST */
-#questionCreated {
+/*#questionCreated {
     border-right: 1px solid rgb(178, 178, 178);
     margin-right: 5px;
     width: 60%;
@@ -85,8 +84,8 @@
 #questionCreated p{
     font-size:18px;
 
-}
-.questionCreated{
+}*/
+/*.questionCreated{
     background:#f1f2f5;
     width: 70%;
     padding:5px;
@@ -94,12 +93,12 @@
     border-radius: 5px;
 }
 /*FORMATAÇÃO DO ASIDE CHECKLIST */
-#bodyCheckEditable aside {
+/*#bodyCheckEditable aside {
     height: 100%;
     width: 40%;
 }
 /*CORPO DA ASIDE CHECKLIST */
-#editableQuestion header {
+/*#editableQuestion header {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -207,4 +206,4 @@
     display: flex;
     flex-direction:column;
     margin-left: 10px;
-}
+} */

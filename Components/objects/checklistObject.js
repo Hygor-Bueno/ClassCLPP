@@ -14,93 +14,6 @@ export class ObjectChecklist extends ConnectionCLPP {
     super();
     this.#creatorId = id;
   }
-  checklistJSON() {
-    let response = {};
-    response.nameChecklist = this.#title;
-    response.dataInit = this.#date_init;
-    response.dataFinal = this.#date_final;
-    response.notify = this.#notification;
-    response.questions = this.#questions;
-    response.notify = this.#notification;
-    response.creatorId = this.#creatorId;
-    return response;
-  }
-
-  loadingChecklist(object) {
-    if (object.nameChecklist) this.#title = object.nameChecklist;
-    if (object.dataInit) this.#date_init = object.dataInit;
-    if (object.dataFinal) this.#date_final = object.dataFinal;
-    if (object.notify) this.#notification = object.notify;
-    if (object.questions) this.#questions = object.questions;
-    if (object.notify) this.#notification = object.notify;
-    if (object.creatorId) this.#notification = object.creatorId;
-  }
-
-  async loadingCheckDataBase(checklist) {
-    this.#title = checklist.description;
-    this.#idChecklist = checklist.id;
-    this.#creatorId = checklist.id_creator;
-    this.#notification = checklist.notification;
-
-    let questionJSON = await this.loadingQuestionDataBase(checklist);
-    questionJSON.data.forEach((element) => (element.options = {}));
-
-    this.#questions = questionJSON.data;
-
-    this.#questions.forEach(async (element) => {
-      let req = await this.loadingOptionDataBase(element.id);
-      element.options = req.data;
-    });
-  }
-
-  async loadingQuestionDataBase(checklist) {
-    return await this.get(
-      `&id=${checklist.id}&user_id=${checklist.id_creator}`,
-      "CLPP/Question.php",
-      true
-    );
-  }
-  async loadingOptionDataBase(id_question) {
-    return await this.get(`&id=${id_question}`, "CLPP/Option.php", true);
-  }
-
-  deleteChecklistDataBase(id_checklist) {}
-
-  deleteQuestionDataBase(id_checklist, id_question) {}
-
-  deleteOpitionDataBase(id_question) {
-    //GET = URL `&id=id_user`
-    //POST/DELETE/PUT = JSON {id_question:id_question}
-    /* this.delete({ id: id_question }, "CLPP/Response.php", true);
-    console.log(id_question); */
-  }
-
-  addQuestion(questionJson) {
-    this.#questions.push(questionJson);
-  }
-
-  updateQuestion(arrayQuestion) {
-    this.#questions[this.#indexEditQuestion] = arrayQuestion;
-  }
-
-  deleteQuestion(idQuestion) {
-    this.#questions.forEach((element, index) => {
-      if (element.id == idQuestion) {
-        this.#questions.splice(index, 1), console.log(element);
-      }
-    });
-  }
-
-  queryQuestion(idQuestion) {
-    let response;
-    this.#questions.forEach((element, index) => {
-      if (element.id == idQuestion) {
-        response = element;
-        this.#indexEditQuestion = index;
-      }
-    });
-    return response;
-  }
 
   getTitle() {
     return this.#title;
@@ -139,21 +52,119 @@ export class ObjectChecklist extends ConnectionCLPP {
   setDate_final(date_final) {
     this.#date_final = date_final;
   }
-  setIdCHecklist(idChecklist) {
+  setIdChecklist(idChecklist) {
     this.#idChecklist = idChecklist;
   }
   setCreatorId(creatorId) {
     this.#creatorId = creatorId;
   }
 
+  checklistJSON() {
+    let response = {};
+    response.nameChecklist = this.#title;
+    response.dataInit = this.#date_init;
+    response.dataFinal = this.#date_final;
+    response.notify = this.#notification;
+    response.questions = this.#questions;
+    response.notify = this.#notification;
+    response.creatorId = this.#creatorId;
+    return response;
+  }
+
+  loadingChecklist(object) {
+    if (object.nameChecklist) this.#title = object.nameChecklist;
+    if (object.dataInit) this.#date_init = object.dataInit;
+    if (object.dataFinal) this.#date_final = object.dataFinal;
+    if (object.questions) this.#questions = object.questions;
+    if (object.notify) this.#notification = object.notify;
+    if (object.creatorId) this.#creatorId = object.creatorId;
+  }
+  async loadingCheckDataBase(checklist) {
+    this.#title = checklist.description;
+    this.#idChecklist = checklist.id;
+    this.#creatorId = checklist.id_creator;
+    this.#notification = checklist.notification;
+    let questionJSON = await this.loadingQuestionDataBase(checklist);
+    this.#questions = questionJSON.data;
+    this.#questions.forEach(async (element) => {
+      let req = await this.loadingOptionDataBase(element.id);
+      req.data.forEach((option, index) => { element["op_" + (index + 1)] = option });
+    });
+  }
+
+  async loadingQuestionDataBase(checklist) {
+    return await this.get(
+      `&id=${checklist.id}&user_id=${checklist.id_creator}`,
+      "CLPP/Question.php",
+      true
+    );
+  }
+  async loadingOptionDataBase(id_question) {
+    return await this.get(`&id=${id_question}`, "CLPP/Option.php", true);
+  }
+
+  deleteChecklistDataBase() {
+    this.delete({ id: this.#idChecklist }, "CLPP/Checklist.php")
+  }
+  // let array = this.filterOption(this.queryQuestion(idQuestion)) -> Esse codigo pega todas as Options de uma determinada Question
+  async deleteQuestionDataBase(idQuestion) {
+    await this.deleteAllOptionDataBase(idQuestion);
+    this.delete({ "id": idQuestion }, "CLPP/Question.php")
+  }
+  deleteOptionDataBase(idOption) {
+    this.delete({ "id": idOption }, "CLPP/Option.php")
+  }
+  async deleteAllOptionDataBase(idQuestion) {
+    this.delete({ "id_question": idQuestion }, "CLPP/Option.php")
+  }
+
+  addQuestion(questionJson) {
+    this.#questions.push(questionJson);
+  }
+
+  updateQuestion(arrayQuestion) {
+    this.#questions[this.#indexEditQuestion] = arrayQuestion;
+  }
+
+  deleteQuestion(idQuestion) {
+    this.#questions.forEach((element, index) => {
+      if (element.id == idQuestion) {
+        this.#questions.splice(index, 1);
+      }
+    });
+  }
+
+  queryQuestion(idQuestion) {
+    let response;
+    this.#questions.forEach((element, index) => {
+      if (element.id == idQuestion) {
+        response = element;
+        this.#indexEditQuestion = index;
+      }
+    });
+    return response;
+  }
+
+  updateChecklistDataBase() {
+    let checklistJSON = {
+      id: this.#idChecklist,
+      description: this.#title,
+      date_init: this.#date_init,
+      date_final: this.#date_final,
+      notification: this.#notification,
+      id_creator: this.#creatorId
+    };
+    this.put(checklistJSON, "CLPP/Checklist.php?app_id=7");
+  }
   async saveChecklist() {
     let checklistJSON = {
       description: this.#title,
       date_init: this.#date_init,
       date_final: this.#date_final,
-      notification: toString(this.#notification),
+      notification: this.#notification,
       id_creator: this.#creatorId
     };
+
     let req = await this.post(checklistJSON, "CLPP/Checklist.php?app_id=7");
     this.#idChecklist = req.last_id;
   }
@@ -164,20 +175,78 @@ export class ObjectChecklist extends ConnectionCLPP {
         id_checklist: this.#idChecklist,
         description: question.title
       };
-      let req = await this.post(
-        questionJSON,
-        "CLPP/Question.php?app_id=7",
-        true
-      );
+      let req = await this.post(questionJSON, "CLPP/Question.php?app_id=7", true);
       question.id_question = req.last_id;
-      this.saveOption(this.filterOption(question), question.id_question);
+      this.saveOptions(this.filterOption(question), question.id_question);
     });
   }
-  saveOption(options, idQuestion) {
-    options.forEach((element) => {
+  saveOptions(options, idQuestion) {
+    options.forEach(async (element) => {
       element.id_question = idQuestion;
-      this.post(element, "CLPP/Option.php?app_id=7");
+      let req = await this.post(element, "CLPP/Option.php?app_id=7");
+      element.id = req.last_id;
     });
+  }
+  async saveQuestionsBD(question) { 
+    let questionJSON = {
+      type: question.type,
+      id_checklist: this.#idChecklist,
+      description: question.title
+    };
+    let req = await this.post(questionJSON, "CLPP/Question.php?app_id=7", true);
+    question.id_question = req.last_id;
+    let resp = await this.saveOptionsBD(this.filterOption(question), question.id_question, questionJSON);
+    console.log(resp);
+    console.log(Object.keys(resp))
+    this.addQuestion(resp)    
+    return resp
+  }
+  async saveOptionsBD(options, idQuestion, Object) {
+    console.log(options, idQuestion, Object)
+    Object.id_question = idQuestion
+    let newObj = this.mountQuestion(Object);
+    options.forEach(async (element, index) => {
+      element.id_question = idQuestion;
+      element.question_id = idQuestion
+      let req = await this.post(element, "CLPP/Option.php?app_id=7");
+      element.id = req.last_id;
+      newObj[`op_${index + 1}`] = element;
+      delete element.id_question
+      delete element.type
+    });
+    return newObj;
+  }
+  
+  mountQuestion(Object) {
+    let obj = {
+      checklist_id: Object.id_checklist,
+      description: Object.description,
+      id: Object.id_question,
+      type: Object.type,
+    }
+    return obj;
+  }
+  async updateQuestionsDataBase(question) {
+    let questionJSON = {
+      id: question.id,
+      type: question.type,
+      id_checklist: this.#idChecklist,
+      description: question.title
+    };
+    await this.put(questionJSON, "CLPP/Question.php?app_id=7");
+    this.updateOptionsDataBase(this.filterOption(question));
+  }
+  updateOptionsDataBase(options) {
+    options.forEach(async (element) => {
+      element.id_question = options.question_id;
+      await this.put(element, "CLPP/Option.php?app_id=7"); // NÂO ESTÁ RETORNANDO NADA...
+    });
+  }
+  async saveOption(option, idQuestion) {
+    option.id_question = idQuestion;
+    let req = await this.post(option, "CLPP/Option.php?app_id=7");
+    option.id = req.last_id;
+    return option
   }
   filterOption(question) {
     let response = [];

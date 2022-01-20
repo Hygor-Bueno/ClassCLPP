@@ -27,20 +27,19 @@ export class TemplateChecklist {
             `<div id="formCheclist">		
                     <div id="groupForm">
                         <input type="text" placeholder="Digite o Título do Checklist" id="nameChecklist" class="inputRiquered" disabled=false>
-                        <button type="button" title="Edita nome do checklist" id="btnNameChecklist"><img src=${this.pathImgEdit} title="Editar Nome do checklist" /></button>
+                        <button type="button" title="Edita nome do checklist" class="editBtnCss" id="btnNameChecklist"></button>
                         <div id="groupFormDate">
                             <p>Data Inicial: </p> <input type="date" id="dateInicial" min="${this.usefulComponents.currentDate()}"/>
                             <p>Data Final: </p> <input type="date" id="dateFinal" min="${this.usefulComponents.currentDate()}"/>
                         </div>		
                     </div>
                     <div id="groupButtons">
-                        <button type="button" id="notifyChecklist"><img src=${this.pathImgNotify} title="Noftificar quando checklist for respondido" /></button>
-                        
-                        <button type="button" id="deleteChecklist"><img src=${this.pathImgDelete} title="Excluir checklist" /></button>
+                        <button type="button" class="notificationBtnCss" id="notifyChecklist"></button>                          
+                        <button type="button" class="deleteBtnCss" id="deleteChecklist"></button>
                     </div>
                 </div>
                 <div id="bodyCheckEditable">
-                    <section id="questionCreated">
+                    <section id="questionCreated" class="style_scroll">
                     </section>
                     <aside>
                         <div id="editableQuestion">
@@ -56,7 +55,7 @@ export class TemplateChecklist {
                         ${this.headerQuestion() + this.bodyQuestion()}
                         </div>
                         <div id="settingFooterButton">
-                            <button type="button" title="cria um novo checklist" id="btnSalveChecklist">Finalizar</button>
+                            <button type="button" title="cria um novo checklist" id="btnSaveChecklist">Finalizar</button>
                         </div>
                     </aside>
                 </body> 
@@ -68,17 +67,11 @@ export class TemplateChecklist {
                     <div id="headerQuestion">
                         <div id="divForm">
                             <input type="text" class="inputRiquered" placeholder="Digite o Título da questão" disabled/>
-                            <button type="button" id="btnEnabledInput">
-                                <img src="./assets/images/pencil.svg" title="Editar título da questão."/>
-                            </button>
+                            <button type="button" class="editBtnCss" id="btnEnabledInput"></button>
                         </div>  
                         <asind id="btnQuestion">
-                            <button type="button" id="addNewOption">
-                                <img src="./assets/images/add.svg" title="Adicionar Nova Opção de Resposta."/>
-                            </button>
-                            <button type="button" id="saveQuestion">
-                                <img src="${this.pathImgSave}" title="Salvar questão."/>
-                            </button>
+                            <button type="button" class="addBtnCss" id="addNewOption"></button>
+                            <button type="button" class="saveBtnCss" id="saveQuestion"></button>
                         </asind>
                     </div>
                 `
@@ -100,14 +93,10 @@ export class TemplateChecklist {
                             ${inputGeneral}
                             <input type="text" placeholder="Editável" class="inputEditable inputRiquered" id="inputOption${id}"
                                 title="Editável" disabled />
-                            <button type="button" class="btnsQuestion" id="btnEditabled_${id}">
-                                <img src="./assets/images/pencil.svg" title="Editar" />
-                            </button>
+                            <button type="button" class="btnsQuestion editBtnCss" id="btnEditabled_${id}"></button>
                                 ${btnDelete
                 ? `
-                                    <button type="button" class="btnsQuestion btnDelete" id="btnDelete_${id}" value="${id}">
-                                        <img src="./assets/images/delete.svg" title="Editar" />
-                                    </button>` : ""
+                                    <button type="button" class="btnsQuestion btnDelete deleteBtnCss" id="btnDelete_${id}" value="${id}"></button>` : ""
             }  
                         </div>  
                     ${typeMult == 1 ?
@@ -133,7 +122,7 @@ export class TemplateChecklist {
         this.checklist.loadingChecklist(object);
         getB_id('nameChecklist').value = object.nameChecklist
         if (object.notify != "0") {
-            $('#notifyChecklist img').setAttribute('src', this.pathImgNotifyOn)
+            $('#notifyChecklist ').setAttribute('style', "background-image: url('./assets/images/alertNotifyOn.svg')")
             this.notification = false;
         }
         if (object.dataInit) getB_id('dateInicial').value = object.dataInit;
@@ -145,27 +134,24 @@ export class TemplateChecklist {
     }
 
     editOption(objectQuestion, btnDelete, objQuestion, indexOption) {
+        let id = localStorage.getItem('router') == "checklistCreated"? objectQuestion.id : indexOption
         return `
-                <div id="option_${indexOption}" class="optionEditable" value="${indexOption}">
+                <div id="option_${id}" class="optionEditable" value="${id}">
                     <section class="sectionOption">    
                         <div>                    
                         ${objQuestion.type == 1 ? `<input type="radio" title="input"/>` : `<input type="checkbox" title="input"/>`}
-                            <input type="text" placeholder="Editável" class="inputEditable inputRiquered" id="inputOption${indexOption}"
+                            <input type="text" placeholder="Editável" class="inputEditable inputRiquered" id="inputOption${id}"
                                 title="Editável" disabled value="${objectQuestion.description}"/>
-                            <button type="button" class="btnsQuestion" id="btnEditabled_${indexOption}">
-                                <img src="./assets/images/pencil.svg" title="Editar" />
-                            </button>
+                            <button type="button" class="btnsQuestion editBtnCss" id="btnEditabled_${id}"></button>
                                 ${btnDelete
                 ? `
 
-                                    <button type="button" class="btnsQuestion btnDelete" id="btnDelete_${indexOption}" value="${indexOption}">
-                                        <img src="./assets/images/delete.svg" title="Editar" />
-                                    </button>` : ""
+                                    <button type="button" class="btnsQuestion btnDelete deleteBtnCss" id="btnDelete_${id}" value="${id}"></button>` : ""
             }  
                         </div>  
                         ${objQuestion.type == 1 ?
                 `
-                        <select class="selectValue" title="Valor das Respostas" id="selectOption_${indexOption}">
+                        <select class="selectValue" title="Valor das Respostas" id="selectOption_${id}">
                             <option value="1" ${objectQuestion.value == "1" ? 'selected' : ''}>Correta: 1 Ponto</option>
                             <option value="0.5" ${objectQuestion.value == "0.5" ? 'selected' : ''}>Parcial: 0.5 Ponto</option>
                             <option value="0" ${objectQuestion.value == "0" ? 'selected' : ''}>Errada: 0 Pontos</option>
@@ -176,8 +162,8 @@ export class TemplateChecklist {
                     <footer class="footerOption">
                     ${`
                         <label class="mandatoryOptions">Obrigatórios:</label>
-                        <input type="checkbox" class="checkPhoto"  id="checkPhoto_${indexOption}" ${objectQuestion.photo == 1 ? "checked='true'" : ''}/> <p>Foto</p>
-                        <input type="checkbox" class="checkObservation"  id="checkObservation_${indexOption}" ${objectQuestion.observe == 1 ? "checked='true'" : ''}"/><p>Observação</p>
+                        <input type="checkbox" class="checkPhoto"  id="checkPhoto_${id}" ${objectQuestion.photo == 1 ? "checked='true'" : ''}/> <p>Foto</p>
+                        <input type="checkbox" class="checkObservation"  id="checkObservation_${id}" ${objectQuestion.observe == 1 ? "checked='true'" : ''}"/><p>Observação</p>
                     `}
                     </footer>
                 </div>
@@ -198,20 +184,20 @@ export class TemplateChecklist {
             let groupOption = this.desmemberObjQuestion(element)
             return `
                                     <header>
-                                        <h1>${element.title}</h1>
+                                        <h1>${element.title || element.description}</h1>
                                         <div class="divGroupButton">
-                                            <button  id="editQuestionBtn_${value}" type="button" title="editar questão"><img src=${this.pathImgEdit} title="Editar Image"/></button>
-                                            <button  id="deleteQuestionBtn_${value}" type="button" title="excluir questão"><img src=${this.pathImgDelete} title="Editar Image"/></button>
+                                            <button class="editBtnCss" id="editQuestionBtn_${value}" type="button" data-id="${value}" title="editar questão"></button>
+                                            <button class="deleteBtnCss" id="deleteQuestionBtn_${value}" type="button" data-id="${value}" title="excluir questão"></button>
                                         </div>
                                     </header>                                        
-                                ${groupOption.map((options) => (this.bodyCreated(options))).join("")}`
+                                ${groupOption.map((options) => (this.bodyCreated(options,element.type))).join("")}`
         }).join("")}
                     </div>
                 `
     }
-    bodyCreated(options) {
+    bodyCreated(options,type) {
         let response;
-        switch (parseInt(options.type)) {
+        switch (parseInt(type)) {
             case 1:
                 response = `<section><input type="radio" title="input"/><p>${options.description}</p></section>`
                 break;
@@ -250,7 +236,7 @@ export class TemplateChecklist {
         this.saveQuestion('saveQuestion');
         getB_id('deleteChecklist').addEventListener('click', () => {this.finalChecklist('excluir')})
         getB_id('btnEnabledInput').addEventListener('click', () => this.enabledInputQuestion('#divForm input'))
-        getB_id('btnSalveChecklist').addEventListener('click', () => this.completedChecklist())
+        getB_id('btnSaveChecklist').addEventListener('click', () => this.completedChecklist())
         localStorage.getItem('checklist') ? this.proceedChecklist(JSON.parse(localStorage.getItem('checklist'))) : "";
     }
     editQuestionCreated(objectQuestion) {
@@ -259,7 +245,7 @@ export class TemplateChecklist {
         getB_id('saveQuestion').remove();
         getB_id('btnQuestion').insertAdjacentHTML('beforeend', updateBtn);
         this.btnUpdate(objectQuestion, 'updateQuestion');
-        $('#divForm input').value = objectQuestion.title
+        $('#divForm input').value = objectQuestion.title || objectQuestion.description
         $('#bodyQuestion').remove();
         getB_id('containerBodyQuestion').insertAdjacentHTML('beforeend', `<div id="bodyQuestion"></div>`)
         this.populateOptions(objectQuestion, 'bodyQuestion')
@@ -279,7 +265,7 @@ export class TemplateChecklist {
     btnUpdate(objectQuestion, local) {
         getB_id(local).addEventListener('click', () => {
             if (this.validationQuestion()) {
-                this.checklist.updateQuestion(this.addQuestion(objectQuestion.id));
+                this.checklist.updateQuestion(localStorage.getItem('router')=='checklistCreated' ? this.upQuestion(objectQuestion) : this.addQuestion(objectQuestion.id));
                 let editedQuestion = this.containerQuestionCreate([this.checklist.queryQuestion(objectQuestion.id)], objectQuestion.id)
                 getB_id(`questionCreated_${objectQuestion.id}`).innerHTML = "";
                 getB_id(`questionCreated_${objectQuestion.id}`).insertAdjacentHTML('beforeend', editedQuestion)
@@ -304,22 +290,24 @@ export class TemplateChecklist {
     }
     tempButtonUpdate(id) {
         return `
-            <button type="button" id='${id}'>
-                <img src="${this.pathImgSave}" title="alterar Questão."/>
-            </button>
+            <button type="button" class="saveBtnCss" id='${id}'></button>
         `
     }
     //FUNCIONALIDADES DOS TEMPLATES: 
     disableButtons(places) {
         places.forEach((place) => {
             let buttons = $_all(`${place} button`);
-            buttons.forEach((button) => { button.disabled = true; button.setAttribute('style', 'opacity:0.2') })
+
+            buttons.forEach((button) => { 
+                button.disabled = true;
+                button.style.opacity = 0.2
+            })
         })
     }
     enableButtons(places) {
         places.forEach((place) => {
             let buttons = $_all(`${place} button`);
-            buttons.forEach((button) => { button.disabled = false; button.setAttribute('style', 'opacity:1') })
+            buttons.forEach((button) => { button.disabled = false; button.style.opacity=1})
         })
     }
     saveQuestion(idButton) {
@@ -365,7 +353,8 @@ export class TemplateChecklist {
     // Funcçoes que alteram o objeto checklist.
     changeNotification() {
         getB_id('notifyChecklist').addEventListener("click", () => {
-            this.notification ? $('#notifyChecklist img').setAttribute('src', this.pathImgNotifyOn) : $('#notifyChecklist img').setAttribute('src', this.pathImgNotify)
+            // this.notification ? $('#notifyChecklist img').setAttribute('src', this.pathImgNotifyOn) : $('#notifyChecklist img').setAttribute('src', this.pathImgNotify)
+            this.notification ? $('#notifyChecklist').setAttribute('style', "background-image: url('./assets/images/alertNotifyOn.svg')") : $('#notifyChecklist').setAttribute('style', "background-image: url('./assets/images/alertNotify.svg')")
             this.checklist.setNotification(this.notification ? 1 : 0)
             this.notification = !this.notification;
         })
@@ -395,7 +384,7 @@ export class TemplateChecklist {
     desmemberObjQuestion(question) {
         let response = [];
         Object.keys(question).forEach((element) => {
-            if (element != 'title' && element != 'id' && element != 'id_question' && element != 'type') response.push(question[element])
+            if (typeof question[element] == "object") response.push(question[element])
         });
         return response;
     }
@@ -485,7 +474,7 @@ export class TemplateChecklist {
         let array = $_all('.optionEditable')[$_all('.optionEditable').length - 1]
         let value = array.getAttribute('value')
         let button = getB_id(`btnDelete_${value}`)
-        button.addEventListener('click', () => { getB_id(`option_${value}`).remove(); })
+        button.addEventListener('click', () => {localStorage.getItem('router') == "checklistCreated"? this.checklist.deleteOptionDataBase(value) :  getB_id(`option_${value}`).remove(); })
     }
     configBtnQuestion() {
         this.enabledButtonInit();
@@ -498,8 +487,8 @@ export class TemplateChecklist {
         getB_id('bodyQuestion').innerHTML = "";
         getB_id('bodyQuestion').insertAdjacentHTML('beforeend', this.filterType(parseInt(this.getValueSelect('#typeQuestion')), 1));
     }
-    addQuestion(value) {
-        this.idQuestion++;
+    addQuestion(value) {                
+        localStorage.getItem('router') == 'checklistCreated'? this.idQuestion= value:this.idQuestion++;        
         let object = {};
         object.id = value;
         object.id_question = "";
@@ -520,6 +509,29 @@ export class TemplateChecklist {
         }
         return object;
     }
+    upQuestion(value){
+        this.idQuestion++;
+        let object = {};
+        object.id = value.id;
+        object.id_question =  value.id;
+        object.type = value.type;
+        object.title = $('#headerQuestion input').value;
+        object.checklist_id= value.checklist_id;
+        if (object.type < 3) {
+            $_all('.optionEditable').forEach(element => {
+                let values = element.getAttribute('value');
+                let desc = element.querySelector('.inputEditable').value
+                let selectOption
+                object.type == 1 ? selectOption = this.getValueSelect(`#selectOption_${values}`) : selectOption = this.calculateCheckboxValue('inputEditable');
+                let photo = element.querySelector(`#checkPhoto_${values}`);
+                let note = element.querySelector(`#checkObservation_${values}`);
+                object[`op_${values}`] = {type: this.getValueSelect("#typeQuestion"),description: desc,id: values,observe: note.checked ? 1 : 0,photo:photo.checked ? 1 : 0,question_id: object.id_question,value: selectOption}
+            });
+        } else {
+            object[`op_${value}`] = { type: this.getValueSelect("#typeQuestion"), description: 'Assinatura', photo: 0, observe: 0, value: 0 }
+        }
+        return object;
+    }
     calculateCheckboxValue(optionClass) {
         return parseFloat((1 / $_all(`.${optionClass}`).length).toFixed(2))
     }
@@ -527,15 +539,24 @@ export class TemplateChecklist {
         let object = this.addQuestion(value);
         this.checklist.addQuestion(object);
         getB_id('questionCreated').insertAdjacentHTML('beforeend', this.questionsCreated([object], value))
-        this.btnQuestionCreated();
+        this.btnQuestionCreated(value);
     }
     btnQuestionCreated(values) {
         let array = $_all('.questionCreated')[$_all('.questionCreated').length - 1];
         let value = values || array.getAttribute('value');
         let btnEdit = getB_id(`editQuestionBtn_${value}`);
-        let btnDelete = getB_id(`deleteQuestionBtn_${value}`);
-        btnDelete.addEventListener('click', () => { getB_id(`questionCreated_${value}`).remove(); this.checklist.deleteQuestion(value) });
-        btnEdit.addEventListener('click', () => { this.editQuestion(this.checklist.queryQuestion(value)) });
+        let btnDelete = getB_id(`deleteQuestionBtn_${value}`);        
+        btnDelete.addEventListener('click', () => {localStorage.getItem('router') == 'checklistCreated'? this.deleteQuestDataBase(value):this.deleteQuest(value);getB_id(`questionCreated_${value}`).remove();} );
+        btnEdit.addEventListener('click', () => { this.editQuestion(this.checklist.queryQuestion(value));});
+    }
+    deleteOptionBD(value){
+        this.checklist.deleteOptionDataBase(value)
+    }
+    deleteQuest(value){ 
+        this.checklist.deleteQuestion(value);
+    }
+    deleteQuestDataBase(value){
+        this.checklist.deleteQuestionDataBase(value)
     }
     editQuestion(objectQuestion) {
         this.editQuestionCreated(objectQuestion)

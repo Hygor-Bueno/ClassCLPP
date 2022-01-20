@@ -1,0 +1,85 @@
+#content {
+  display: flex;
+}
+
+aside {
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+  padding: 3px;
+  border-right: 1px solid rgb(178, 178, 178);
+}
+
+#sectionRecord {
+  width: 75%;
+}
+
+#titleMain {
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 35px;
+  font-size: 17px;
+  padding: 2px;
+  border-bottom: 1px solid rgb(178, 178, 178);
+}
+
+.titleBlock {
+  border: 1px solid rgb(178, 178, 178);
+  margin-bottom: 5px;
+}
+.titleFilter {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgb(178, 178, 178);
+  font-weight: bold;
+  align-items: center;
+  background-color: rgb(224, 224, 224);
+}
+
+.questionChecklist {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+
+  border-bottom: 1px solid rgb(178, 178, 178);
+}
+
+.bodyChecklist {
+  padding: 0px 3px;
+}
+
+.questionChecklist select,
+input {
+  width: 50%;
+  height: 23px;
+  margin-top: 2px;
+}
+
+.buttonMain {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 60px;
+  min-height: 60px;
+  border-top: 1px solid rgb(178, 178, 178);
+}
+
+.buttonMain button {
+  height: 50px;
+}
+
+.openCloseBtnCss {
+  width: 28px;
+  height: 22px;
+  background-image: url("../../assets/images/up.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #e4e4e4;
+}
+
+#bodyAside {
+  flex-grow: 1;
+  overflow-y: auto;
+}
