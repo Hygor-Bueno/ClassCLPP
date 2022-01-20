@@ -16,46 +16,46 @@ export class RecordPage extends SettingRecord {
                     <div class="titleBlock">                
                         <div class="titleFilter">     
                             <h1>Checklist</h1>  
-                            <button class="imgButton openCloseBlock openCloseBtnCss" data-block="checklistBlock" type="button"></button>               
+                            <button class="imgButton openCloseBlock openCloseBtnCss" data-function="openCloseFilter"  data-block="checklistBlock" type="button"></button>               
                         </div>                   
                         <div class="bodyChecklist" style="display:none" id="checklistBlock">
                             <div class="questionChecklist">
                                 <label>Titulo das checkList</label>
-                                <select>
-                                    <option placeholder="Selecione a Checklist">Opções</option>
-                                    <option>Uva</option>
-                                    <option>Arroz</option>
+                                <select class="sel">
+                                    <option class="option" value="1">Opções</option>
+                                    <option class="option" value="2">Uva</option>
+                                    <option class="option" value="3">Arroz</option>
                                 </select>
                             </div>
                             <div class="questionChecklist">
                                 <label>Titulo das Perguntas</label>
-                                <select>
-                                    <option>Opções</option>
-                                    <option>Uva</option>
-                                    <option>Arroz</option>
+                                <select class="sel">
+                                    <option class="option" value="opcoes">Opções</option>
+                                    <option class="option" value="uva">Uva</option>
+                                    <option class="option" value="arroz">Arroz</option>
                                 </select>
                             </div>
                             <div class="questionChecklist">
                                 <label>Validade</label>
-                                <input type="date"></input>
+                                <input type="date" class="date"></input>
                             </div>
                             <div class="questionChecklist">
                                 <label>Validade</label>
-                                <input type="date"></input>
+                                <input type="date" class="date"></input>
                             </div>
                         </div>
                     </div>
                     <div class="titleBlock">                
                         <div class="titleFilter">     
                             <h1>Grupos Criados</h1>  
-                            <button class="imgButton openCloseBlock openCloseBtnCss" data-block="grupsCreatedBlock" type="button"></button>               
+                            <button class="imgButton openCloseBlock openCloseBtnCss" data-function="openCloseFilter"  data-block="grupsCreatedBlock" type="button"></button>               
                         </div>
                         <div id="grupsCreatedBlock" class="bodyChecklist" style="display:none">
                             <div class="questionChecklist">
-                                <select>
-                                    <option>Opções</option>
-                                    <option>Uva</option>
-                                    <option>Arroz</option>
+                                <select class="sel">
+                                    <option class="option" value="opcoes">Opções</option>
+                                    <option class="option" value="uva">Uva</option>
+                                    <option class="option" value="arroz">Arroz</option>
                                 </select>
                             </div>
                         </div>    
@@ -63,14 +63,14 @@ export class RecordPage extends SettingRecord {
                     <div class="titleBlock">                
                         <div class="titleFilter">     
                             <h1>Tipo de relatório</h1>  
-                            <button class="imgButton openCloseBlock openCloseBtnCss" data-block="recordBlock" type="button"></button>               
+                            <button class="imgButton openCloseBlock openCloseBtnCss" data-function="openCloseFilter"  data-block="recordBlock" type="button"></button>               
                         </div>
                         <div id="recordBlock" class="bodyChecklist" style="display:none">
                             <div class="questionChecklist" >
-                                <select>
-                                    <option value="opt">Opções</option>
-                                    <option value="uva">Uva</option>
-                                    <option value="arroz">Arroz</option>
+                                <select class="sel">
+                                    <option class="option" value="arroz" >Opções</option>
+                                    <option class="option" value="arroz" >Uva</option>
+                                    <option class="option" value="arroz" >Arroz</option>
                                 </select>
                             </div>
                         </div>  
@@ -78,14 +78,14 @@ export class RecordPage extends SettingRecord {
                     <div class="titleBlock">                
                         <div class="titleFilter">     
                             <h1>Unidades Grupos Criados</h1>  
-                            <button class="imgButton openCloseBlock openCloseBtnCss" data-block="unidGroupBlock" type="button"></button>               
+                            <button class="imgButton openCloseBlock openCloseBtnCss" data-function="openCloseFilter"  data-block="unidGroupBlock" type="button"></button>               
                         </div>
                         <div id="unidGroupBlock" class="bodyChecklist" style="display:none">
                             <div class="questionChecklist">
-                                <select>
-                                    <option>Opções</option>
-                                    <option>Uva</option>
-                                    <option>Arroz</option>
+                                <select class="sel">
+                                    <option class="option" value="opcoes">Opções</option>
+                                    <option class="option" value="uva">Uva</option>
+                                    <option class="option" value="arroz">Arroz</option>
                                 </select>
                             </div>
                         </div>      
@@ -93,23 +93,23 @@ export class RecordPage extends SettingRecord {
                     <div class="titleBlock">                
                         <div class="titleFilter">     
                             <h1>Por data</h1>  
-                            <button class="imgButton openCloseBlock openCloseBtnCss" data-block="dateBlock" type="button"></button>               
+                            <button class="imgButton openCloseBlock openCloseBtnCss"  data-function="openCloseFilter" data-block="dateBlock" type="button"></button>               
                         </div>
                         <div id="dateBlock" class="bodyChecklist" style="display:none">
                             <div class="questionChecklist">
                                 <label>Data inicial</label>
-                                <input type="date"></input>
+                                <input type="date" class="date"></input>
                             </div>
                             <div class="questionChecklist">
                             <label>Data final</label>
-                            <input type="date"></input>
+                            <input type="date" class="date"/>
                         </div>
                         </div>
                     </div>
                 </section>
                 <div class="buttonMain">
-                    <button type="button">FILTRAR</button> 
-                    <button type="button" class="clearBtn" data-clear="dataClear">LIMPAR</button> 
+                    <button type="button" id="filterBtn" data-function="filterBtn">FILTRAR</button> 
+                    <button type="button" id="clearBtn" data-function="clearBtn"> LIMPAR </button> 
                 </div>
             </aside>
 
