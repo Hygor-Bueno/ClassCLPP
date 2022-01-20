@@ -154,24 +154,24 @@ b {
     overflow-y: auto;
 }
 .cardCheck {
-    display: flex;
+    /* display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: center; */
     margin: 5px;
     border: solid 1px rgb(178, 178, 178);
     background: white;
-    width: 120px;
-    height: 100px;
+    width: 300px;
+    height: 150px;
     padding: 3px;
     border-radius: 5px;
 }
 #bodyCheckDiv {
-    display: grid;
-    width: 100%;
+    display: flex;
+    width: 100vw;
     height: 89%;
     justify-content: center;
     align-items: center;
-    grid-template-areas: "cardCheck cardCheck cardCheck";
+    overflow-x:auto;
 }
 .cardCheck header {
     border-bottom: solid 1px rgb(178, 178, 178);
