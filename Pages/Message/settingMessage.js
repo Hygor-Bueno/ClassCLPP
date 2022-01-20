@@ -11,7 +11,7 @@ import { Users } from "../../Components/objects/user.js";
 import { convertBase64 } from "../../Util/convertBase64.js";
 import { GroupMessage } from "../../Components/objects/groupMessage.js";
 import { Routers } from "../../Routers/router.js";
-
+let carai=1;
 export class SettingMessage {
     userAccess = new UserAccess;
     validation = new Validation;
@@ -30,12 +30,11 @@ export class SettingMessage {
     chatIdSender;
     chatIdPage;
     chatScroll;
-    positionChat=0;
+    positionChat = 0;
 
     async setting() {
         this.clickDivUser('.divUser')
         this.searchUser()
-        this.scrollMsg()
         this.searchName()
         this.modalImg()
         this.createGroup()
@@ -47,7 +46,7 @@ export class SettingMessage {
         });
         getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
-    chergeSendButtom(){
+    chergeSendButtom() {
         $('.footSend').innerHTML = " ";
         const chargeButton = `                        
         <input type="file" accept=".doc, .pdf, image/png, image/jpg, image/jpeg, image/gif, video/mp4," id="file">
@@ -58,14 +57,14 @@ export class SettingMessage {
         $('.footSend').insertAdjacentHTML('beforeend', chargeButton);
         this.clickSend()
     }
-    async sendMsg(){
-        let sending = getB_id('inputSend').value 
+    async sendMsg() {
+        let sending = getB_id('inputSend').value
         let sendImg = getB_id('file').files[0]
         this.typeMsg = 1
         sending && await this.settingHome.buttonSend(this.chatIdSender, sending, this.typeMsg, this.chatIdPage, this.chatScroll);
         sendImg && this.previewFile(sendImg);
     }
-    previewFile(imgFile){
+    previewFile(imgFile) {
         this.typeMsg = 2
         let img = document.createElement('img')
         const reader = new FileReader();
@@ -74,42 +73,44 @@ export class SettingMessage {
         } else {
             img.src = "";
         }
-        reader.onloadend = async () => {            
-            img.src = reader.result;   
-            await this.settingHome.buttonSend(this.chatIdSender, img.src.replace(/^data:image\/[a-z]+;base64,/,""), this.typeMsg, this.chatIdPage, this.chatScroll);         
-        } 
-        getB_id('file').value = ""  
+        reader.onloadend = async () => {
+            img.src = reader.result;
+            await this.settingHome.buttonSend(this.chatIdSender, img.src.replace(/^data:image\/[a-z]+;base64,/, ""), this.typeMsg, this.chatIdPage, this.chatScroll);
+        }
+        getB_id('file').value = ""
     }
     clickDivUser(local) {
-        $_all(local).forEach(element => element.addEventListener('click',  () => {this.clickEvents(element); this.chergeSendButtom()}))
+        $_all(local).forEach(element => element.addEventListener('click', () => { this.clickEvents(element); this.chergeSendButtom() }))
     }
-    async clickEvents(element){
+    async clickEvents(element) {
         this.pages = 1;
-        $('.msg_out').innerHTML = "";   
+        $('.msg_out ').remove();
+        $('.msg_in').insertAdjacentHTML("afterbegin",'<div class="msg_out style_scroll" id="bodyMessageDiv"></div>')
         this.changeHeader(element);
         $('.user_in').setAttribute('style', 'display:flex');
         $('.templateSearchUser').setAttribute('style', 'display:none');
         $('.searchUnic').setAttribute('style', 'display:none');
         element.querySelector('.imgNotify') && element.querySelector('.imgNotify').setAttribute('src', './assets/images/notification.svg');
-        await this.chargePageMsg(this.usefulComponents.splitString(element.getAttribute('id'), '_'),'beforeend');
-        $('.msg_out ').scrollTop = $('.msg_out ').scrollHeight;
+        await this.chargePageMsg(this.usefulComponents.splitString(element.getAttribute('id'), '_'), 'beforeend');
         this.chatIdSender = this.usefulComponents.splitString(element.getAttribute('id'), '_');
         this.chatIdPage = `#${$('.msg_out section').getAttribute('id')}`;
         this.chatScroll = `.msg_out`;
         this.ws.informPreview(this.chatIdSender);
         this.notificationMsg();
+        this.scrollMsg()
     }
     async chargePageMsg(split, position) {
-        let object = split[0] == 'sender' ? { 'id': split[1], 'destiny': '&id_send=' } : { 'id': split[1], 'destiny': '&id_group=' };        
+        let object = split[0] == 'sender' ? { 'id': split[1], 'destiny': '&id_send=' } : { 'id': split[1], 'destiny': '&id_group=' };
         $('.msg_out').insertAdjacentHTML(position, await this.messageList.bodyChat(object, this.pages))
-        $('.msg_out section').setAttribute('id', `pages_${this.pages}`)
+        $('.msg_out ').scrollTop = $('.msg_out ').scrollHeight;
+        $('.msg_out section').setAttribute('id', `pages_${this.pages}`)     
     }
     changeHeader(element) {
         $('.colabHead').setAttribute('data-id', element.getAttribute('id'))
         $('.colabHead').innerHTML = element.innerHTML
         $(`.part2 .notifyMsg`) && $(`.part2 .notifyMsg`).remove();
-        $('.part2 .colabHead').insertAdjacentHTML('beforeend', 
-        `<div class="notifyMsg">
+        $('.part2 .colabHead').insertAdjacentHTML('beforeend',
+            `<div class="notifyMsg">
             <img class="imgNotify" src=./assets/images/notification.svg>
         </div>`)
     }
@@ -129,14 +130,16 @@ export class SettingMessage {
         let nameArray = []
         const divArray = $_all('.templateSearchUser .divUser')
         for (let index = 0; index < divArray.length; index++) {
-            nameArray.push({ 'name': $(`#${divArray[index].getAttribute('id')} p`).innerText, 'id': divArray[index].getAttribute('id')
-            .replace('sender_', ' ') })
+            nameArray.push({
+                'name': $(`#${divArray[index].getAttribute('id')} p`).innerText, 'id': divArray[index].getAttribute('id')
+                    .replace('sender_', ' ')
+            })
         }
         return nameArray
     }
     searchName() {
         $('.searchName').addEventListener('click', async () => {
-            if($('.searchUserBar').value){
+            if ($('.searchUserBar').value) {
                 let searchName = $('.searchUserBar').value
                 let findName = this.createListUser().filter(valor => valor.name.toLowerCase().includes(searchName.toLowerCase()))
                 $('.user_in').setAttribute('style', 'display:none')
@@ -151,7 +154,7 @@ export class SettingMessage {
         })
         $('.searchUserBar').addEventListener('keypress', (e) => { if (e.key === 'Enter') $('.searchName').click() })
     }
-    createGroup(){
+    createGroup() {
         $('.searchGroup').addEventListener('click', () => {
             const nameGroup = `
             <div class="nameGroup">
@@ -163,18 +166,18 @@ export class SettingMessage {
             this.saveGroup()
         })
     }
-    saveGroup(){
+    saveGroup() {
         $('.buttonProgress').addEventListener('click', async () => {
             await this.groupMessage.main($('.nameGroup input').value)
             closeModal()
             this.usersInGroup()
         })
     }
-    usersInGroup(){
+    usersInGroup() {
         let idsUsers = ""
         $_all('.templateSearchUser .divUser').forEach((element) => idsUsers += element.outerHTML)
-            this.listUser.checkBoxUser(idsUsers)
-            $('#templateListUser').insertAdjacentHTML("afterbegin",`
+        this.listUser.checkBoxUser(idsUsers)
+        $('#templateListUser').insertAdjacentHTML("afterbegin", `
             <div id="displayHeader">  
                 <div id="borderBack">
                     <img src="./assets/images/cancel.svg" title ="Fechar">
@@ -183,39 +186,42 @@ export class SettingMessage {
                     <h1>Incluir Usuario:</h1>
                 </header>
             </div>`)
-             this.settingGroup()
+        this.settingGroup()
     }
-    settingGroup(){
+    settingGroup() {
         getB_id('borderBack').addEventListener('click', () => closeModal())
         getB_id('saveGroup').addEventListener('click', () => {
-        this.groupMessage.addUsers(this.listUser.insertChecked());
-        this.groupMessage.saveGroupAll();
-        closeModal()
-        const routers = new Routers;
-        routers.routers(localStorage.getItem('router'))
-        //novo metodo
+            this.groupMessage.addUsers(this.listUser.insertChecked());
+            this.groupMessage.saveGroupAll();
+            closeModal()
+            const routers = new Routers;
+            routers.routers(localStorage.getItem('router'))
+            //novo metodo
         })
     }
     async visualizationMsg(params) {
-        if ($('.colabHead .divColab') && $('.colabHead').getAttribute('data-id').split('_')[1] == params.user){
+        if ($('.colabHead .divColab') && $('.colabHead').getAttribute('data-id').split('_')[1] == params.user) {
             $_all('.messageSend')[$_all('.messageSend').length - 1].setAttribute('data-view', '0')
             this.notificationMsg()
         }
     }
     scrollMsg() {
-        $('.msg_out').addEventListener('scroll', async () => {
-            if($('.msg_out').scrollTop == 0 && !$('.errorReqMessage')){
+        $('.msg_out').addEventListener('scroll', async() => {
+            if ($('.msg_out').scrollTop == 0 && !$('.errorReqMessage')) {
+               
+                             
                 this.pages++
                 await this.chargePageMsg(this.usefulComponents.splitString($('.colabHead').getAttribute('data-id'), '_'),'afterbegin')
-                $('.msg_out').scrollTop = parseInt($(`#pages_${this.pages}`).scrollHeight)
+                $('.msg_out').scrollTop = parseInt($(`#pages_${this.pages}`).scrollHeight);  
+
             }
         })
     }
     notificationMsg() {
         let notific = $('.messageSend') && $_all('.messageSend')[$_all('.messageSend').length - 1].getAttribute('data-view')
-        if(notific == 1){
+        if (notific == 1) {
             $('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notify.svg')
-        }else{
+        } else {
             $('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notification.svg')
         }
     }
@@ -226,20 +232,20 @@ export class SettingMessage {
         }
         return response;
     }
-    convertArray(obj){
-        let response=[],key;
+    convertArray(obj) {
+        let response = [], key;
         key = Object.keys(obj)
-        key.forEach(valor => {response.push(obj[valor])})
+        key.forEach(valor => { response.push(obj[valor]) })
         return response
     }
     modalImg() {
         document.querySelector('.msg_out').addEventListener('click', (evt) => {
             if (evt.target.tagName === 'IMG') {
                 openModal(`<div id="closeImg"> ${evt.target.outerHTML}</div>`)
-                $('.container').addEventListener('click', (events)=> {
-                    if($('#closeImg') && !$('#closeImg').contains(events.target)) closeModal()
+                $('.container').addEventListener('click', (events) => {
+                    if ($('#closeImg') && !$('#closeImg').contains(events.target)) closeModal()
                 })
             }
-        })                                          
+        })
     }
 }
