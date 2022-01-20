@@ -77,7 +77,6 @@ export class WebSocketCLPP {
         const jsonString = {}
         jsonString.type = 3;
         jsonString[idSender[0] == 'sender' ? 'send_id': 'id_group'] = idSender[1]
-        console.log(jsonString)
         ws.send(JSON.stringify(jsonString))
     }
     // Eu estou enviando a mensagem  
