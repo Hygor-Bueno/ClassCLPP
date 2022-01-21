@@ -50,7 +50,7 @@ export class HomePage extends SettingHome {
                 <aside id="homeRight">
                     <div id="checkDiv">
                         <header><h1>Cabeçalho do Checklist</h1></header>
-                        <div id=bodyCheckDiv>
+                        <div id="bodyCheckDiv">
                             ${await this.checklistCreated() || `<p></p>`}
                         </div>   
                     </div>

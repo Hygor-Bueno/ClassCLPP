@@ -46,10 +46,10 @@ export class TemplateChecklist {
                         <header>
                             <h1>Escolha o tipo da questão: </h1>
                             <select id="typeQuestion">
-                                <option value= "1"> Multiplas Escolhas </option>
-                                <option value= "2"> Checkbox </option>
-                                <option value= "3"> Assiatura Manual </option>
-                                <option value= "4"> Assinatura por Nome e CPF </option>
+                                <option value= "2"> Multiplas Escolhas </option>
+                                <option value= "1"> Checkbox </option>
+                                <option value= "4"> Assiatura Manual </option>
+                                <option value= "3"> Assinatura por Nome e CPF </option>
                             </select>
                         </header>
                         ${this.headerQuestion() + this.bodyQuestion()}
@@ -80,7 +80,7 @@ export class TemplateChecklist {
         return `
                 <div id="containerBodyQuestion">
                     <div id="bodyQuestion">
-                        ${this.filterType(1, 1)}
+                        ${this.filterType(2, 1)}
                     </div>
                 </div>
                 `
@@ -94,18 +94,14 @@ export class TemplateChecklist {
                             <input type="text" placeholder="Editável" class="inputEditable inputRiquered" id="inputOption${id}"
                                 title="Editável" disabled />
                             <button type="button" class="btnsQuestion editBtnCss" id="btnEditabled_${id}"></button>
-                                ${btnDelete
-                ? `
-                                    <button type="button" class="btnsQuestion btnDelete deleteBtnCss" id="btnDelete_${id}" value="${id}"></button>` : ""
-            }  
+                                ${btnDelete? `<button type="button" class="btnsQuestion btnDelete deleteBtnCss" id="btnDelete_${id}" value="${id}"></button>` : ""}  
                         </div>  
-                    ${typeMult == 1 ?
+                    ${typeMult == 2 ?
                 `<select class="selectValue" title="Valor das Respostas" id="selectOption_${id}" default=1>
                             <option value="1" >Correta: 1 Ponto</option>
                             <option value="0.5" >Parcial: 0.5 Ponto</option>
                             <option value="0">Errada: 0 Pontos</option>
-                        </select>`: ""
-            }
+                        </select>`: ""}
                     </section>
                     <footer class="footerOption">
                     ${`
@@ -139,25 +135,18 @@ export class TemplateChecklist {
                 <div id="option_${id}" class="optionEditable" value="${id}">
                     <section class="sectionOption">    
                         <div>                    
-                        ${objQuestion.type == 1 ? `<input type="radio" title="input"/>` : `<input type="checkbox" title="input"/>`}
+                        ${objQuestion.type == 2 ? `<input type="radio" title="input"/>` : `<input type="checkbox" title="input"/>`}
                             <input type="text" placeholder="Editável" class="inputEditable inputRiquered" id="inputOption${id}"
                                 title="Editável" disabled value="${objectQuestion.description}"/>
                             <button type="button" class="btnsQuestion editBtnCss" id="btnEditabled_${id}"></button>
-                                ${btnDelete
-                ? `
-
-                                    <button type="button" class="btnsQuestion btnDelete deleteBtnCss" id="btnDelete_${id}" value="${id}"></button>` : ""
-            }  
+                                ${btnDelete? `<button type="button" class="btnsQuestion btnDelete deleteBtnCss" id="btnDelete_${id}" value="${id}"></button>` : ""}  
                         </div>  
-                        ${objQuestion.type == 1 ?
-                `
+                        ${objQuestion.type == 2 ?                `
                         <select class="selectValue" title="Valor das Respostas" id="selectOption_${id}">
                             <option value="1" ${objectQuestion.value == "1" ? 'selected' : ''}>Correta: 1 Ponto</option>
                             <option value="0.5" ${objectQuestion.value == "0.5" ? 'selected' : ''}>Parcial: 0.5 Ponto</option>
                             <option value="0" ${objectQuestion.value == "0" ? 'selected' : ''}>Errada: 0 Pontos</option>
-                        </select>
-                        `: ""
-            }
+                        </select>`: ""}
                     </section>
                     <footer class="footerOption">
                     ${`
@@ -198,16 +187,16 @@ export class TemplateChecklist {
     bodyCreated(options,type) {
         let response;
         switch (parseInt(type)) {
-            case 1:
+            case 2:
                 response = `<section><input type="radio" title="input"/><p>${options.description}</p></section>`
                 break;
-            case 2:
+            case 1:
                 response = `<section><input type="checkbox" title="input"/><p>${options.description}</p></section>`
                 break;
-            case 3:
+            case 4:
                 response = `<div class="handSignatureCreated"><input type="text" placeholder="Assine Aqui..." disabled/><img id="handSignatureImg" src="${this.pathImgSignature}" title="Assinatura manual" /></div>`
                 break;
-            case 4:
+            case 3:
                 response = `
                 <div class="signatureCpfCreated"> 
                     <div class="nameResponsible">
@@ -278,7 +267,7 @@ export class TemplateChecklist {
         })
     }
     populateOptions(objectQuestion, local) {
-        let aux = objectQuestion.type == 1 ? 2 : 1
+        let aux = objectQuestion.type == 2 ? 2 : 1
         let index = 0;
         this.usefulComponents.convertObjForArray(objectQuestion).forEach((element) => {
             if (typeof element == 'object') {
@@ -392,20 +381,20 @@ export class TemplateChecklist {
         let input;
         let response = "";
         switch (value) {
-            case 1:
+            case 2:
                 for (let index = 0; index < 2; index++) {
                     input = `<input type="radio" name="optionRadio" id="res_${index == 0 ? id : id + 1}" value='${index == 0 ? id : id + 1}' title="sim" />`;
-                    response += this.options(index == 0 ? id : id + 1, false, input, 1);
+                    response += this.options(index == 0 ? id : id + 1, false, input, 2);
                 }
                 break;
-            case 2:
+            case 1:
                 input = `<input type="checkbox" id="res_${id}" value='1' title="sim" />`;
                 response = this.options(id, false, input);
                 break;
-            case 3:
+            case 4:
                 response = `<div id="bodyQuestion" class="handSignature"><input type="text" placeholder="Assine Aqui..." disabled/><img src="${this.pathImgSignature}" title="Assinatura manual" /></div>`
                 break;
-            case 4:
+            case 3:
                 response = `
                 <div class="signatureCpfCreated"> 
                     <div class="nameResponsible">
@@ -419,7 +408,7 @@ export class TemplateChecklist {
                 </div>`
                 break;
             case 5:
-                input = `<input type=${this.getValueSelect('#typeQuestion') == 1 ? "radio" : "checkbox"} name="optionRadio" id="res_${id}" value='${id}' title="sim" />`;
+                input = `<input type=${this.getValueSelect('#typeQuestion') == 2 ? "radio" : "checkbox"} name="optionRadio" id="res_${id}" value='${id}' title="sim" />`;
                 response = this.options(id, true, input, this.getValueSelect('#typeQuestion'));
                 break;
             default:
@@ -439,6 +428,7 @@ export class TemplateChecklist {
     }
     getValueSelect(local) {
         let select = $(local)
+        console.log($(local))
         let value = select.options[select.selectedIndex].value;
         return value
     }
@@ -499,7 +489,7 @@ export class TemplateChecklist {
                 let values = element.getAttribute('value');
                 let desc = element.querySelector('.inputEditable').value
                 let selectOption
-                object.type == 1 ? selectOption = this.getValueSelect(`#selectOption_${values}`) : selectOption = this.calculateCheckboxValue('inputEditable');
+                object.type == 2 ? selectOption = this.getValueSelect(`#selectOption_${values}`) : selectOption = this.calculateCheckboxValue('inputEditable');
                 let photo = element.querySelector(`#checkPhoto_${values}`);
                 let note = element.querySelector(`#checkObservation_${values}`);
                 object[`op_${values}`] = { type: this.getValueSelect("#typeQuestion"), description: desc, photo: photo.checked ? 1 : 0, observe: note.checked ? 1 : 0, value: selectOption }
@@ -522,7 +512,7 @@ export class TemplateChecklist {
                 let values = element.getAttribute('value');
                 let desc = element.querySelector('.inputEditable').value
                 let selectOption
-                object.type == 1 ? selectOption = this.getValueSelect(`#selectOption_${values}`) : selectOption = this.calculateCheckboxValue('inputEditable');
+                object.type == 2 ? selectOption = this.getValueSelect(`#selectOption_${values}`) : selectOption = this.calculateCheckboxValue('inputEditable');
                 let photo = element.querySelector(`#checkPhoto_${values}`);
                 let note = element.querySelector(`#checkObservation_${values}`);
                 object[`op_${values}`] = {type: this.getValueSelect("#typeQuestion"),description: desc,id: values,observe: note.checked ? 1 : 0,photo:photo.checked ? 1 : 0,question_id: object.id_question,value: selectOption}
