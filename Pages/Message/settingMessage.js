@@ -83,6 +83,7 @@ export class SettingMessage {
         $_all(local).forEach(element => element.addEventListener('click', () => { this.clickEvents(element); this.chergeSendButtom() }))
     }
     async clickEvents(element) {
+        this.tradeDiv()
         this.preparatePages()
         this.changeHeader(element);
         $('.user_in').setAttribute('style', 'display:flex');
@@ -251,5 +252,9 @@ export class SettingMessage {
                 })
             }
         })
+    }
+    tradeDiv(){
+        $('.presentation').setAttribute('style', 'display:none')
+        $('.part2').setAttribute('style', 'display:flex') 
     }
 }
