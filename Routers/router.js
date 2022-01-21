@@ -34,9 +34,10 @@ export class Routers {
 					break;
 				case 'record':
 					result = new RecordPage;
+					let reqCheck = await result.getChecklist();
 					document.getElementById('StylePages').setAttribute('href', "./Pages/Record/record.css")
-					local.insertAdjacentHTML("beforeend", await result.main());
-					result.setting()
+					local.insertAdjacentHTML("beforeend", await result.main(reqCheck));
+					result.setting(reqCheck)
 					break;
 				case 'message':
 					result = new MessagePage;
