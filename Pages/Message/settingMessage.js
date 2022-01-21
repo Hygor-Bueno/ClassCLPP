@@ -11,7 +11,7 @@ import { Users } from "../../Components/objects/user.js";
 import { convertBase64 } from "../../Util/convertBase64.js";
 import { GroupMessage } from "../../Components/objects/groupMessage.js";
 import { Routers } from "../../Routers/router.js";
-let carai=1;
+
 export class SettingMessage {
     userAccess = new UserAccess;
     validation = new Validation;
@@ -83,9 +83,7 @@ export class SettingMessage {
         $_all(local).forEach(element => element.addEventListener('click', () => { this.clickEvents(element); this.chergeSendButtom() }))
     }
     async clickEvents(element) {
-        this.pages = 1;
-        $('.msg_out ').remove();
-        $('.msg_in').insertAdjacentHTML("afterbegin",'<div class="msg_out style_scroll" id="bodyMessageDiv"></div>')
+        this.preparatePages()
         this.changeHeader(element);
         $('.user_in').setAttribute('style', 'display:flex');
         $('.templateSearchUser').setAttribute('style', 'display:none');
@@ -98,6 +96,12 @@ export class SettingMessage {
         this.ws.informPreview(this.chatIdSender);
         this.notificationMsg();
         this.scrollMsg()
+    }
+    preparatePages(){
+        this.pages = 1;
+        $('.msg_out ').remove();
+        $('.msg_in').insertAdjacentHTML("afterbegin",'<div class="msg_out style_scroll" id="bodyMessageDiv"></div>')
+        this.modalImg()
     }
     async chargePageMsg(split, position) {
         let object = split[0] == 'sender' ? { 'id': split[1], 'destiny': '&id_send=' } : { 'id': split[1], 'destiny': '&id_group=' };
@@ -239,7 +243,7 @@ export class SettingMessage {
         return response
     }
     modalImg() {
-        document.querySelector('.msg_out').addEventListener('click', (evt) => {
+        $('.msg_out').addEventListener('click', (evt) => {
             if (evt.target.tagName === 'IMG') {
                 openModal(`<div id="closeImg"> ${evt.target.outerHTML}</div>`)
                 $('.container').addEventListener('click', (events) => {

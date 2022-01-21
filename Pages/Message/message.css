@@ -1,5 +1,6 @@
 .containerMsg {
     display:flex;
+    margin: auto;
     width: 100%;
     height: 100%;
 }
@@ -124,8 +125,8 @@
 }
 
 .msg_out{
-    border-left: 4px solid #f1f2f5;
-    border-right: 4px solid #f1f2f5;
+    /* border-left: 4px solid #f1f2f5;
+    border-right: 4px solid #f1f2f5; */
     background: white;
     overflow-y: auto;
     width: 100%;
@@ -248,4 +249,33 @@
     color: white;
     font-size: 13px;
     margin: 10px;
+}
+
+@media (min-width:1300px) {
+    .searchHead, .colabHead{
+        height: 70px;
+    }
+    .containerMsg {
+        border: 5px solid white;
+        display:flex;
+        margin: auto;
+    }
+    .containerMsg p{
+        font-size:19px;
+    }
+    .msg_out{
+        width: 98%;
+        height: 88%;
+    }
+    .formatImg img{
+        width: 300px;
+        height: 300px;
+    }
+    .colabHead p{
+        font-size:22px;
+    }
+    .searchGroup, .searchUser, .searchName{
+        height:45%;
+        cursor:pointer;
+    }
 }
