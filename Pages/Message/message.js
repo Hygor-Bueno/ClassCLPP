@@ -46,7 +46,10 @@ export class MessagePage extends SettingMessage {
                 <div class="searchUnic style_scroll" style="display:none">
                 </div>
             </div>
-            <div class="part2">
+            <div class="presentation"style="display:flex">
+                <img class="imgPresentation" src="./assets/images/logoPPG.png">
+            </div>
+            <div class="part2" style="display:none">
                 <header class="colabHead">
                 </header>
                 <div class="msg_in">
