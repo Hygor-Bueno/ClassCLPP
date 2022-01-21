@@ -16,6 +16,7 @@ var webSocket = new WebSocketCLPP;
 export class SettingHome {
     settings() {
         this.notifyMessage();
+        this.carousel();
     }
     openMessage() {
         getB_id('message').setAttribute('style', 'display:flex')
@@ -75,5 +76,14 @@ export class SettingHome {
         openModal(generalModal.main(message, true))
         generalModal.close()
         setTimeout(() => { closeModal() }, generalModal.readingTime(message));
+    }
+    carousel(){
+        document.querySelector('#bodyCheckDiv').addEventListener("wheel", event =>{
+            if(event.deltaY > 0){
+                event.target.scrollBy(-$(".cardCheck").offsetWidth,0)
+            }else{
+                event.target.scrollBy($(".cardCheck").offsetWidth,0)
+            }
+        })
     }
 }
