@@ -30,7 +30,7 @@ export class ObjectChecklist extends ConnectionCLPP {
   getDate_final() {
     return this.#date_final;
   }
-  getIdCHecklist() {
+  getIdChecklist() {
     return this.#idChecklist;
   }
   getCreatorId() {

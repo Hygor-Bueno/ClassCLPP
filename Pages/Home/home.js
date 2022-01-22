@@ -85,10 +85,10 @@ export class HomePage extends SettingHome {
     async checklistCreated() {
         // try {
             return Object.keys(this.checklistJson).map((element) => (
-                `<div class="cardCheck" id="check_${this.checklistJson[element].getIdCHecklist()}">
+                `<div class="cardCheck" id="check_${this.checklistJson[element].getIdChecklist()}">
                     <header><h2>${this.checklistJson[element].getTitle().slice(0, 30) + "..."}</h2></header>
                     <section>
-                        <article class="articeLeftChecklist style_scroll"> 
+                        <article class="articleLeftChecklist style_scroll"> 
                             <div class="notificationChecklist">
                                 <p><b>Notificação:</b></p> 
                                 ${this.checklistJson[element].getNotification() == 1 ? "<p class='unicNotifyOn'>&#10003;</p>" : "<p class='unicNotifyOff'>&#128473;</p>"}
@@ -100,7 +100,7 @@ export class HomePage extends SettingHome {
                                 ${this.tamplateQuestions(this.checklistJson[element])}
                             <div>
                         </article>
-                        <article class="articeRigthChecklist style_scroll"> 
+                        <article class="articleRigthChecklist style_scroll"> 
                         <article>  
                     </section>
                 </div>`)).join("")
@@ -110,9 +110,17 @@ export class HomePage extends SettingHome {
         // }
     }
     tamplateQuestions(checklist){
+        console.log(checklist.getIdChecklist())
         let jsonQuestion = this.addressIssues(checklist);
         return `
         <p><b>Quantidade de Itens:</b> ${jsonQuestion.numberItems}</p>
+        <p><b>Quantidade de Assinaturas:</b> ${jsonQuestion.numberQuestions}</p>
+        <p><b>Quantidade de Questões:</b> ${jsonQuestion.numberSignatures}</p>
+        <div class="listQuestionsDiv">
+            <div class="listQuestionsHeader"><b>Vizualizar lista de questões:</b><button type="button" class="viewQuizList" data-id="${checklist.getIdChecklist()}" id="viewQuizList_${checklist.getIdChecklist()}"></button></div>
+            <div class="listQuestions" id="listQuestion_${checklist.getIdChecklist()}">${jsonQuestion.listItens.map(element => (`<p>${element}</p>`)).join("")}</div>
+        </div>
+
         `
     }
     addressIssues(checklist) {

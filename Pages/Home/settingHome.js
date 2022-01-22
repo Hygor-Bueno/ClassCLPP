@@ -17,6 +17,7 @@ export class SettingHome {
     settings() {
         this.notifyMessage();
         this.carousel();
+        this.buttonCardChecklist();
     }
     openMessage() {
         getB_id('message').setAttribute('style', 'display:flex')
@@ -39,6 +40,15 @@ export class SettingHome {
                 ])
             this.eventNotifyMessage(iterator, objectSenders);
         }
+    }
+    buttonCardChecklist(){
+        $_all('.viewQuizList').forEach(element =>{
+            element.addEventListener("click", ()=>{
+                // console.log(getB_id(`listQuestion_${element.getAttribute('data-id')}`))
+                let divList = getB_id(`listQuestion_${element.getAttribute('data-id')}`);
+                console.log(window.getComputedStyle(divList,null).display == 'none'? divList.style.display = "flex":divList.style.display="none")
+            })
+        })
     }
     eventNotifyMessage(iterator, objectSenders) {
         let temp = objectSenders.temp        
@@ -78,6 +88,7 @@ export class SettingHome {
     }
     carousel(){
         document.querySelector('#bodyCheckDiv').addEventListener("wheel", event =>{
+            console.log(event.target)
             if(event.deltaY > 0){
                 event.target.scrollBy(-$(".cardCheck").offsetWidth,0)
             }else{

@@ -165,7 +165,7 @@ export class SettingChecklist {
   }
   async saveQuestionMethod() {
     if (this.templateCheck.validationQuestion()) {      
-      let req = await this.connectionCLPP.get(`&user_id=${localStorage.getItem("id")}&id=${this.templateCheck.checklist.getIdCHecklist()}`,'CLPP/Question.php')
+      let req = await this.connectionCLPP.get(`&user_id=${localStorage.getItem("id")}&id=${this.templateCheck.checklist.getIdChecklist()}`,'CLPP/Question.php')
       this.templateCheck.idQuestion = req.next_id
       let object = this.templateCheck.addQuestion(this.templateCheck.idQuestion)     
       await this.templateCheck.checklist.saveQuestionsBD(object)
