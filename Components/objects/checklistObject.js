@@ -95,11 +95,8 @@ export class ObjectChecklist extends ConnectionCLPP {
   }
 
   async loadingQuestionDataBase(checklist) {
-    return await this.get(
-      `&id=${checklist.id}&user_id=${checklist.id_creator}`,
-      "CLPP/Question.php",
-      true
-    );
+    let resp =await this.get(`&id=${checklist.id}&user_id=${checklist.id_creator}`,"CLPP/Question.php",true);
+    return resp
   }
   async loadingOptionDataBase(id_question) {
     return await this.get(`&id=${id_question}`, "CLPP/Option.php", true);

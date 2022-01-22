@@ -17,11 +17,12 @@ var listMessage = new MessageList;
 export class HomePage extends SettingHome {
     userJson;
     accessClpp;
-    checklistJson={};
+    checklistJson = {};
     message;
 
     async main() {
-        this.userJson = await employee.get("&id=" + localStorage.getItem("id"),true);
+        await this.createObjChecklist();
+        this.userJson = await employee.get("&id=" + localStorage.getItem("id"), true);
         this.accessClpp = await userAccess.get('&application_id=7&web');
         let nameUser = usefulComponents.splitStringName(this.userJson.name, " ")
         let response =
@@ -70,7 +71,7 @@ export class HomePage extends SettingHome {
             if (document.getElementById('bodyChDiv')) document.getElementById('bodyChDiv').innerHTML = ""
             return this.validatorChat(listMessage.notSeen()).map((element) => (
                 `
-                <div class="cardMessageUser" id="${element.id_user? `send_${element.id_user}` :`group_${element.id_group}`}">
+                <div class="cardMessageUser" id="${element.id_user ? `send_${element.id_user}` : `group_${element.id_group}`}">
                     <img class="photosUsers" src ="${element.photo.src}" />
                     <p>${usefulComponents.splitStringName(element.description, " ")}</p>
                 </div>
@@ -82,9 +83,8 @@ export class HomePage extends SettingHome {
         }
     }
     async checklistCreated() {
-        try {            
-            await this.createObjChecklist();     
-            return Object.keys(this.checklistJson).map((element)=>(
+        // try {
+            return Object.keys(this.checklistJson).map((element) => (
                 `<div class="cardCheck" id="check_${this.checklistJson[element].getIdCHecklist()}">
                     <header><h2>${this.checklistJson[element].getTitle().slice(0, 30) + "..."}</h2></header>
                     <section>
@@ -96,25 +96,44 @@ export class HomePage extends SettingHome {
                             <div class="dateChecklist">
                                 <p><b>Data:</b> ${this.checklistJson[element].getDate_init() ? "<br/> Inicial: " + this.checklistJson[element].getDate_init() + " <br/> " + "Final:  " + this.checklistJson[element].getDate_final() : "Não Possuí Válidade Definida."}</P>
                             </div>
+                            <div class="checklistItensQuantities">
+                                ${this.tamplateQuestions(this.checklistJson[element])}
+                            <div>
                         </article>
                         <article class="articeRigthChecklist style_scroll"> 
                         <article>  
                     </section>
-                </div>`)).join("")               
-        } catch (e) {
-            console.error(e + " : Falha ao realizar ao carregar o tamplate...")
-            return `<div class="ErrorPageDefault"><p>Desculpe, não foi possivél carregar as informações...</p></div>`
-        }
+                </div>`)).join("")
+        // } catch (e) {
+        //     console.error(e + " : Falha ao realizar ao carregar o tamplate...")
+        //     return `<div class="ErrorPageDefault"><p>Desculpe, não foi possivél carregar as informações...</p></div>`
+        // }
     }
-    async createObjChecklist(){
-        let req= await checklist.get('&web&id_user=' + localStorage.getItem('id')); 
+    tamplateQuestions(checklist){
+        let jsonQuestion = this.addressIssues(checklist);
+        return `
+        <p><b>Quantidade de Itens:</b> ${jsonQuestion.numberItems}</p>
+        `
+    }
+    addressIssues(checklist) {
+        let total_items = checklist.getQuestion().length;
+        let signatures=0;
+        let title_Questions = [];
+        checklist.getQuestion().forEach((element,index) => {
+            if (element.type > 2){signatures++;}
+            title_Questions.push(index+1+" - "+element.description)
+        })
+        let response = {numberItems:total_items,numberSignatures:signatures,numberQuestions:total_items - signatures,listItens:title_Questions} 
+        return response
+    }
+    async createObjChecklist() {
+        let req = await checklist.get('&web&id_user=' + localStorage.getItem('id'));
         req.forEach(element => {
             let objectChecklist = new ObjectChecklist;
             objectChecklist.loadingCheckDataBase(element);
             this.checklistJson[element.id] = objectChecklist;
         })
-
-        return req;
+        return;
     }
     validatorChat(object) {
         if (document.querySelector('#bodyMessageDiv header')) {
