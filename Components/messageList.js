@@ -9,7 +9,6 @@ export class MessageList {
     messages = [];
 
     notSeen() {
-        console.log(this.messages)     
         return this.messages.filter(
             (element) => element.notification == 1
         )   

@@ -84,6 +84,8 @@ export class ObjectChecklist extends ConnectionCLPP {
     this.#idChecklist = checklist.id;
     this.#creatorId = checklist.id_creator;
     this.#notification = checklist.notification;
+    this.#date_init = checklist.date_init;
+    this.#date_final = checklist.date_final;
     let questionJSON = await this.loadingQuestionDataBase(checklist);
     this.#questions = questionJSON.data;
     this.#questions.forEach(async (element) => {

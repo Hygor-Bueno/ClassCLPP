@@ -163,6 +163,36 @@ b {
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
 }
+.articeLeftChecklist{
+    width: 50%;
+    height: 100%;
+    background-color: #ff000055;
+    border-right: 1px solid rgb(178, 178, 178);
+    overflow-y: auto;
+}
+.articeRigthChecklist{
+    width: 50%;
+    height: 100%;
+    background-color: #0000ff55;
+    overflow-y: auto;
+}
+.notificationChecklist{
+    display:flex;
+    align-items: center;
+    min-height:20px;
+}
+.unicNotifyOn{
+    margin-left: 10px;
+    color:#326744;
+    font-weight: bold;
+    font-size:16px;
+}
+.unicNotifyOff{
+    margin-left: 10px;
+    color:#B5001A;
+    font-weight: bold;
+    font-size:16px;
+}
 #bodyCheckDiv::-webkit-scrollbar {
     height: 5px;
 }
@@ -191,10 +221,13 @@ b {
 .cardCheck header {
     border-bottom: solid 1px rgb(178, 178, 178);
     padding-bottom: 3px;
+    height: 18px;
 }
 .cardCheck section {
+    display: flex;
     margin-top: 5px;
     font-size: 14px;
+    height:122px;
 }
 #recordDiv {
     margin: 5px;

@@ -27,7 +27,6 @@ export class SettingHome {
     }
     notifyMessage() {
         let notify = $_all('.cardMessageUser')
-        console.log(notify)
         for (const iterator of notify) {
             var usefulComponentsSplit = new UsefulComponents;
             let split = usefulComponentsSplit.splitString(iterator.getAttribute('id'), '_')

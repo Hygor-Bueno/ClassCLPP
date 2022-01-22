@@ -5,6 +5,7 @@ import { UserAccess } from "../../Connection/UserAccess.js"
 import { Message } from "../../Connection/Message.js";
 import { MessageList } from "../../Components/messageList.js";
 import { SettingHome } from "./settingHome.js";
+import { ObjectChecklist } from "../../Components/objects/checklistObject.js";
 
 var employee = new Employee;
 var usefulComponents = new UsefulComponents;
@@ -16,7 +17,7 @@ var listMessage = new MessageList;
 export class HomePage extends SettingHome {
     userJson;
     accessClpp;
-    checklistJson;
+    checklistJson={};
     message;
 
     async main() {
@@ -81,21 +82,39 @@ export class HomePage extends SettingHome {
         }
     }
     async checklistCreated() {
-        try {
-            this.checklistJson = await checklist.get('&web&id_user=' + localStorage.getItem('id'));            
-                return this.checklistJson.map((element) => (
-                    `<div class="cardCheck" id="check_${element.id}">
-                    <header><p>${element.description.slice(0, 14) + "..."}</p></header>
+        try {            
+            await this.createObjChecklist();     
+            return Object.keys(this.checklistJson).map((element)=>(
+                `<div class="cardCheck" id="check_${this.checklistJson[element].getIdCHecklist()}">
+                    <header><h2>${this.checklistJson[element].getTitle().slice(0, 30) + "..."}</h2></header>
                     <section>
-                        <p><b>Notificação:</b> ${element.notification == 1 ? "Sim" : "Não"}</P>
-                        <p><b>Data:</b><br/> ${element.date_init ? "Inicial: " + element.date_init + " <br/> " + "Final:  " + element.date_final : "Não Possuí Válidade Definida."}</P>
+                        <article class="articeLeftChecklist style_scroll"> 
+                            <div class="notificationChecklist">
+                                <p><b>Notificação:</b></p> 
+                                ${this.checklistJson[element].getNotification() == 1 ? "<p class='unicNotifyOn'>&#10003;</p>" : "<p class='unicNotifyOff'>&#128473;</p>"}
+                            </div>
+                            <div class="dateChecklist">
+                                <p><b>Data:</b> ${this.checklistJson[element].getDate_init() ? "<br/> Inicial: " + this.checklistJson[element].getDate_init() + " <br/> " + "Final:  " + this.checklistJson[element].getDate_final() : "Não Possuí Válidade Definida."}</P>
+                            </div>
+                        </article>
+                        <article class="articeRigthChecklist style_scroll"> 
+                        <article>  
                     </section>
-                </div>`
-                )).join("")            
+                </div>`)).join("")               
         } catch (e) {
-            console.error(e + " : Falha ao realizar a requisição...")
+            console.error(e + " : Falha ao realizar ao carregar o tamplate...")
             return `<div class="ErrorPageDefault"><p>Desculpe, não foi possivél carregar as informações...</p></div>`
         }
+    }
+    async createObjChecklist(){
+        let req= await checklist.get('&web&id_user=' + localStorage.getItem('id')); 
+        req.forEach(element => {
+            let objectChecklist = new ObjectChecklist;
+            objectChecklist.loadingCheckDataBase(element);
+            this.checklistJson[element.id] = objectChecklist;
+        })
+
+        return req;
     }
     validatorChat(object) {
         if (document.querySelector('#bodyMessageDiv header')) {
