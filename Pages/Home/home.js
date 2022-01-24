@@ -153,7 +153,6 @@ export class HomePage extends SettingHome {
         }
     }
     async upMsgReceived(getNotify) {
-        console.log(getNotify)
         if (document.getElementById('bodyChDiv')) {
             document.getElementById('bodyChDiv').insertAdjacentHTML('beforeend', await this.messageReceived());
             this.settings();

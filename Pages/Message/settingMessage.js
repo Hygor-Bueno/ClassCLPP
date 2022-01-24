@@ -212,13 +212,10 @@ export class SettingMessage {
     }
     scrollMsg() {
         $('.msg_out').addEventListener('scroll', async() => {
-            if ($('.msg_out').scrollTop == 0 && !$('.errorReqMessage')) {
-               
-                             
+            if ($('.msg_out').scrollTop == 0 && !$('.errorReqMessage')) {             
                 this.pages++
                 await this.chargePageMsg(this.usefulComponents.splitString($('.colabHead').getAttribute('data-id'), '_'),'afterbegin')
                 $('.msg_out').scrollTop = parseInt($(`#pages_${this.pages}`).scrollHeight);  
-
             }
         })
     }
@@ -257,4 +254,5 @@ export class SettingMessage {
         $('.presentation').setAttribute('style', 'display:none')
         $('.part2').setAttribute('style', 'display:flex') 
     }
+
 }
