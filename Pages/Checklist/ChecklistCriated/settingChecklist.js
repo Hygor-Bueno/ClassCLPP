@@ -68,7 +68,7 @@ export class SettingChecklist {
   }
 
   popIclude(objectCheck) {
-    getB_id("getCheckList").insertAdjacentHTML("beforeend",this.getCheckListCreted(objectCheck));
+    getB_id("getCheckList").insertAdjacentHTML("beforeend", this.getCheckListCreted(objectCheck));
   }
 
   listUsers() {
@@ -164,13 +164,14 @@ export class SettingChecklist {
     }
   }
   async saveQuestionMethod() {
+
     if (this.templateCheck.validationQuestion()) {      
       let req = await this.connectionCLPP.get(`&user_id=${localStorage.getItem("id")}&id=${this.templateCheck.checklist.getIdChecklist()}`,'CLPP/Question.php')
       this.templateCheck.idQuestion = req.next_id
-      let object = this.templateCheck.addQuestion(this.templateCheck.idQuestion)     
+      let object = this.templateCheck.addQuestion(this.templateCheck.idQuestion)
       await this.templateCheck.checklist.saveQuestionsBD(object)
       getB_id('questionCreated').insertAdjacentHTML('beforeend', this.templateCheck.questionsCreated([object], this.templateCheck.idQuestion))
-      this.templateCheck.btnQuestionCreated(this.templateCheck.idQuestion);   
+      this.templateCheck.btnQuestionCreated(this.templateCheck.idQuestion);
       this.templateCheck.alterTypeQuestion();
       this.templateCheck.enabledButtonInit();
       this.templateCheck.resetInput('#headerQuestion input')
@@ -222,7 +223,7 @@ export class SettingChecklist {
     let router = new Routers;
     router.routers(localStorage.getItem('router'))
   }
-  
+
   async queryUser(idChecklist) {
     await this.listUser.checkBoxUser(this.listsUsersCheck, idChecklist);
   }

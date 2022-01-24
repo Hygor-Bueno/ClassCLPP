@@ -186,7 +186,7 @@ export class ObjectChecklist extends ConnectionCLPP {
       element.id = req.last_id;
     });
   }
-  async saveQuestionsBD(question) { 
+  async saveQuestionsBD(question) {
     let questionJSON = {
       type: question.type,
       id_checklist: this.#idChecklist,
@@ -197,7 +197,7 @@ export class ObjectChecklist extends ConnectionCLPP {
     let resp = await this.saveOptionsBD(this.filterOption(question), question.id_question, questionJSON);
     console.log(resp);
     console.log(Object.keys(resp))
-    this.addQuestion(resp)    
+    this.addQuestion(resp)
     return resp
   }
   async saveOptionsBD(options, idQuestion, Object) {
@@ -215,7 +215,7 @@ export class ObjectChecklist extends ConnectionCLPP {
     });
     return newObj;
   }
-  
+
   mountQuestion(Object) {
     let obj = {
       checklist_id: Object.id_checklist,

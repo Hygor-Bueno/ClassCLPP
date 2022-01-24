@@ -3,7 +3,7 @@ import { SettingRecord } from "./settingRecord.js";
 
 export class RecordPage extends SettingRecord {
     getRecord = new Record
-    async main() {
+    async main(objectChecklist) {
         document.getElementById("message").setAttribute("style", "display:none");
 
         let response =
@@ -21,18 +21,15 @@ export class RecordPage extends SettingRecord {
                         <div class="bodyChecklist" style="display:none" id="checklistBlock">
                             <div class="questionChecklist">
                                 <label>Titulo das checkList</label>
-                                <select class="sel">
-                                    <option class="option" value="1">Opções</option>
-                                    <option class="option" value="2">Uva</option>
-                                    <option class="option" value="3">Arroz</option>
+                                <select class="sel" id="titleChecklist">
+                                <option class="option" value="none" selected="" disabled="" hidden="">Selecione o checklist:</option>
+                                    ${this.templateOption(objectChecklist, 'description')}
                                 </select>
                             </div>
                             <div class="questionChecklist">
                                 <label>Titulo das Perguntas</label>
-                                <select class="sel">
-                                    <option class="option" value="opcoes">Opções</option>
-                                    <option class="option" value="uva">Uva</option>
-                                    <option class="option" value="arroz">Arroz</option>
+                                <select class="sel" id="titleQuestion">                                
+                                <option class="option" value="none" selected="" disabled="" hidden="">Selecione a pergunta:</option>
                                 </select>
                             </div>
                             <div class="questionChecklist">
@@ -53,9 +50,7 @@ export class RecordPage extends SettingRecord {
                         <div id="grupsCreatedBlock" class="bodyChecklist" style="display:none">
                             <div class="questionChecklist">
                                 <select class="sel">
-                                    <option class="option" value="opcoes">Opções</option>
-                                    <option class="option" value="uva">Uva</option>
-                                    <option class="option" value="arroz">Arroz</option>
+                                <option class="option" value="none" selected="" disabled="" hidden="">Opções</option>
                                 </select>
                             </div>
                         </div>    
@@ -68,24 +63,20 @@ export class RecordPage extends SettingRecord {
                         <div id="recordBlock" class="bodyChecklist" style="display:none">
                             <div class="questionChecklist" >
                                 <select class="sel">
-                                    <option class="option" value="arroz" >Opções</option>
-                                    <option class="option" value="arroz" >Uva</option>
-                                    <option class="option" value="arroz" >Arroz</option>
+                                <option class="option" value="none" selected="" disabled="" hidden="">Opções</option>
                                 </select>
                             </div>
                         </div>  
                     </div>
                     <div class="titleBlock">                
                         <div class="titleFilter">     
-                            <h1>Unidades Grupos Criados</h1>  
+                            <h1>Unidades</h1>  
                             <button class="imgButton openCloseBlock openCloseBtnCss" data-function="openCloseFilter"  data-block="unidGroupBlock" type="button"></button>               
                         </div>
                         <div id="unidGroupBlock" class="bodyChecklist" style="display:none">
                             <div class="questionChecklist">
                                 <select class="sel">
-                                    <option class="option" value="opcoes">Opções</option>
-                                    <option class="option" value="uva">Uva</option>
-                                    <option class="option" value="arroz">Arroz</option>
+                                <option class="option" value="none" selected="" disabled="" hidden="">Opções</option>
                                 </select>
                             </div>
                         </div>      
@@ -119,6 +110,4 @@ export class RecordPage extends SettingRecord {
         `
         return response;
     }
-
-
 }

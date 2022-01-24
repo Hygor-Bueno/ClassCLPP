@@ -1,11 +1,36 @@
+import { ObjectChecklist } from "../../Components/objects/checklistObject.js";
+import { ConnectionCLPP } from "../../Connection/ConnectionCLPP.js";
 import { getB_id, $, $_all, openModalCheck, closeModalCheck } from "../../Util/compressSyntaxe.js";
+
 export class SettingRecord {
     searchOption;
     searchDateInit;
     searchDateFinal;
-    setting() {
+    jsonCheck = {}
+    connectionCLPP = new ConnectionCLPP;
+
+    setting(objectChecklist) {
         this.clickPage();
-        this.filterReposrt()
+        this.jsonChecklists(objectChecklist);
+
+        getB_id('titleChecklist').onchange = () => {
+            getB_id('titleQuestion').innerHTML = ""
+            let select = getB_id('titleChecklist');
+            let indexSelect = select.selectedIndex;
+            let idCheckSelected = select.options[indexSelect].getAttribute("data-id");
+            getB_id('titleQuestion').insertAdjacentHTML('beforeend',
+                this.templateOption(null, "description", this.jsonCheck[idCheckSelected].getQuestion())
+            )
+        }
+
+    }
+
+    jsonChecklists(objectChecklist) {
+        objectChecklist.data.forEach(async (element) => {
+            const objectChecklist = new ObjectChecklist;
+            await objectChecklist.loadingCheckDataBase(element)
+            this.jsonCheck[element.id] = objectChecklist
+        })
     }
 
     clickPage() {
@@ -50,6 +75,7 @@ export class SettingRecord {
         test.forEach(options => {
             options.options[0].selected = true
         });
+        document.querySelectorAll('#titleQuestion option').forEach((e, index) => { index > 0 ? e.remove() : "" })
     }
 
     clearDate() {
@@ -59,20 +85,19 @@ export class SettingRecord {
         })
     }
 
-    filterReposrt() {
-        const valueDate = document.querySelectorAll(".date")
+    filterReport() {
 
-
-
-        document.addEventListener("click", (event) => {
-            if (event.target.tagName.toLowerCase() == "input") {
-                valueDate.forEach(datas => {
-                    console.log(datas)
-                })
-            }
-
-
+    }
+    templateOption(objectChecklist, key, array) {
+        let response = ""
+        let auxArray = array || objectChecklist.data
+        auxArray.map(element => {
+            response += `<option class="option" data-id="${element.id}" value="${element[key]}">${element[key]}</option>`
         })
+        return response;
+    }
 
+    async getChecklist() {
+        return await this.connectionCLPP.get("&web=&id_user=" + localStorage.getItem("id"), 'CLPP/Checklist.php')
     }
 } 
