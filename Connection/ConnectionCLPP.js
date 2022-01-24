@@ -8,7 +8,7 @@ export class ConnectionCLPP {
     err;
     async get(params, pathFile, err) {
         this.validationParams(params, pathFile, err);
-        this.settingUrl(`/Controller/${this.pathFile}?AUTH=`, params)
+        this.settingUrl(`/Controller/${this.pathFile}?app_id=7&AUTH=`, params)
         let req;
         await fetch(this.URL)
             .then(response => response.json())
@@ -23,7 +23,7 @@ export class ConnectionCLPP {
     }
     async post(params, pathFile, err) {
         this.validationParams(params, pathFile, err);
-        this.settingUrl(`/Controller/${this.pathFile}?AUTH=`)
+        this.settingUrl(`/Controller/${this.pathFile}?app_id=7&AUTH=`)
         let req
         await fetch(this.URL, {
             method: 'POST',
@@ -40,7 +40,7 @@ export class ConnectionCLPP {
     }
     async put(params, pathFile, err) {
         this.validationParams(params, pathFile, err);
-        this.settingUrl(`/Controller/${this.pathFile}?AUTH=`)
+        this.settingUrl(`/Controller/${this.pathFile}?app_id=7&AUTH=`)
         let req
         await fetch(this.URL, {
             method: 'PUT',
@@ -58,7 +58,7 @@ export class ConnectionCLPP {
     }
     async delete(params, pathFile, err) {
         this.validationParams(params, pathFile, err);
-        this.settingUrl(`/Controller/${this.pathFile}?AUTH=`);
+        this.settingUrl(`/Controller/${this.pathFile}?app_id=7&AUTH=`);
         let req;
         await fetch(this.URL, {
             method: "DELETE",
@@ -91,6 +91,7 @@ export class ConnectionCLPP {
     settingUrl(middlewer, params) {
         let server = localStorage.getItem('server');
         let token = localStorage.getItem('token');
+        console.log(server)
         this.URL = server + middlewer + token + (params ? params : "")
     }
 }
