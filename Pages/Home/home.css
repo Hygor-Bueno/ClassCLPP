@@ -214,7 +214,7 @@ b {
 .cardCheck {
     flex:none;
     width:75%; 
-    height: 150px;
+    height: 170px;
     margin: 5px;
     border: solid 1px rgb(178, 178, 178);
     background: white;
@@ -232,13 +232,13 @@ b {
     display: flex;
     margin-top: 5px;
     font-size: 14px;
-    height:122px;
+    height:80%;
 }
 .listQuestionsHeader{
     display: flex;
     align-items: center;
     width:100%;
-    border-bottom: solid 1px rgb(178, 178, 178);
+    /* border-bottom: solid 1px rgb(178, 178, 178); */
 }
 .listQuestions{
     display:none;

@@ -16,6 +16,8 @@ export class ConnectionCLPP {
                 if (body.error) throw new Error(body.message)
                 req = body;
             }).catch(erro => {
+                console.error(erro)
+                console.error(params, pathFile, err)
                 if (this.err) this.errorHandling.main(erro)
             })
         this.cleanParams();
@@ -91,7 +93,6 @@ export class ConnectionCLPP {
     settingUrl(middlewer, params) {
         let server = localStorage.getItem('server');
         let token = localStorage.getItem('token');
-        console.log(server)
         this.URL = server + middlewer + token + (params ? params : "")
     }
 }

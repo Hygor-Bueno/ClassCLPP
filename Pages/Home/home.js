@@ -6,6 +6,7 @@ import { Message } from "../../Connection/Message.js";
 import { MessageList } from "../../Components/messageList.js";
 import { SettingHome } from "./settingHome.js";
 import { ObjectChecklist } from "../../Components/objects/checklistObject.js";
+import { Users } from "../../Components/objects/user.js";
 
 var employee = new Employee;
 var usefulComponents = new UsefulComponents;
@@ -53,7 +54,7 @@ export class HomePage extends SettingHome {
                     <div id="checkDiv">
                         <header><h1>Cabeçalho do Checklist</h1></header>
                         <div id="bodyCheckDiv">
-                            ${await this.checklistCreated() || `<p></p>`}
+                            ${this.checklistCreated() || `<p></p>`}
                         </div>   
                     </div>
                     <div id="recordDiv">
@@ -82,10 +83,11 @@ export class HomePage extends SettingHome {
             return `<div class="ErrorPageDefault"><p>Desculpe, não foi possivél carregar as informações...</p></div>`
         }
     }
-    async checklistCreated() {
+    checklistCreated() {
+        let resp;
         // try {
-            return Object.keys(this.checklistJson).map((element) => (
-                `<div class="cardCheck" id="check_${this.checklistJson[element].getIdChecklist()}">
+        resp =  Object.keys(this.checklistJson).map((element) => (
+            `<div class="cardCheck" id="check_${this.checklistJson[element].getIdChecklist()}">
                     <header><h2>${this.checklistJson[element].getTitle().slice(0, 30) + "..."}</h2></header>
                     <section>
                         <article class="articleLeftChecklist style_scroll"> 
@@ -101,7 +103,7 @@ export class HomePage extends SettingHome {
                             <div>
                         </article>
                         <article class="articleRigthChecklist style_scroll"> 
-                        
+                            ${this.templateListLinkedEmployees(this.checklistJson[element])}
                         <article>  
                     </section>
                 </div>`)).join("")
@@ -109,9 +111,13 @@ export class HomePage extends SettingHome {
         //     console.error(e + " : Falha ao realizar ao carregar o tamplate...")
         //     return `<div class="ErrorPageDefault"><p>Desculpe, não foi possivél carregar as informações...</p></div>`
         // }
+        return resp
     }
-    tamplateQuestions(checklist){
-        console.log(checklist.getIdChecklist())
+    templateListLinkedEmployees(checklist) {
+   
+   
+    }
+    tamplateQuestions(checklist) {
         let jsonQuestion = this.addressIssues(checklist);
         return `
         <p><b>Quantidade de Itens:</b> ${jsonQuestion.numberItems}</p>
@@ -121,18 +127,17 @@ export class HomePage extends SettingHome {
             <div class="listQuestionsHeader"><b>Vizualizar lista de questões:</b><button type="button" class="viewQuizList" data-id="${checklist.getIdChecklist()}" id="viewQuizList_${checklist.getIdChecklist()}"></button></div>
             <div class="listQuestions" id="listQuestion_${checklist.getIdChecklist()}"><ol>${jsonQuestion.listItens.map(element => (`<li>${element}</li>`)).join("")}</ol></div>
         </div>
-
         `
     }
     addressIssues(checklist) {
         let total_items = checklist.getQuestion().length;
-        let signatures=0;
+        let signatures = 0;
         let title_Questions = [];
-        checklist.getQuestion().forEach((element,index) => {
-            if (element.type > 2){signatures++;}
+        checklist.getQuestion().forEach((element, index) => {
+            if (element.type > 2) { signatures++; }
             title_Questions.push(element.description)
         })
-        let response = {numberItems:total_items,numberSignatures:signatures,numberQuestions:total_items - signatures,listItens:title_Questions} 
+        let response = { numberItems: total_items, numberSignatures: signatures, numberQuestions: total_items - signatures, listItens: title_Questions }
         return response
     }
     async createObjChecklist() {
