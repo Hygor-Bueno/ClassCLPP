@@ -30,7 +30,7 @@ export class ObjectChecklist extends ConnectionCLPP {
   getDate_final() {
     return this.#date_final;
   }
-  getIdCHecklist() {
+  getIdChecklist() {
     return this.#idChecklist;
   }
   getCreatorId() {
@@ -84,6 +84,8 @@ export class ObjectChecklist extends ConnectionCLPP {
     this.#idChecklist = checklist.id;
     this.#creatorId = checklist.id_creator;
     this.#notification = checklist.notification;
+    this.#date_init = checklist.date_init;
+    this.#date_final = checklist.date_final;
     let questionJSON = await this.loadingQuestionDataBase(checklist);
     this.#questions = questionJSON.data;
     this.#questions.forEach(async (element) => {
@@ -93,11 +95,8 @@ export class ObjectChecklist extends ConnectionCLPP {
   }
 
   async loadingQuestionDataBase(checklist) {
-    return await this.get(
-      `&id=${checklist.id}&user_id=${checklist.id_creator}`,
-      "CLPP/Question.php",
-      true
-    );
+    let resp =await this.get(`&id=${checklist.id}&user_id=${checklist.id_creator}`,"CLPP/Question.php",true);
+    return resp
   }
   async loadingOptionDataBase(id_question) {
     return await this.get(`&id=${id_question}`, "CLPP/Option.php", true);
@@ -187,7 +186,7 @@ export class ObjectChecklist extends ConnectionCLPP {
       element.id = req.last_id;
     });
   }
-  async saveQuestionsBD(question) { 
+  async saveQuestionsBD(question) {
     let questionJSON = {
       type: question.type,
       id_checklist: this.#idChecklist,
@@ -198,7 +197,7 @@ export class ObjectChecklist extends ConnectionCLPP {
     let resp = await this.saveOptionsBD(this.filterOption(question), question.id_question, questionJSON);
     console.log(resp);
     console.log(Object.keys(resp))
-    this.addQuestion(resp)    
+    this.addQuestion(resp)
     return resp
   }
   async saveOptionsBD(options, idQuestion, Object) {
@@ -216,7 +215,7 @@ export class ObjectChecklist extends ConnectionCLPP {
     });
     return newObj;
   }
-  
+
   mountQuestion(Object) {
     let obj = {
       checklist_id: Object.id_checklist,

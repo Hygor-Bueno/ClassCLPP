@@ -163,6 +163,38 @@ b {
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
 }
+.articleLeftChecklist{
+    width: 50%;
+    height: 100%;
+    /* background-color: #ff000055; */
+    border-right: 1px solid rgb(178, 178, 178);
+    overflow-y: auto;
+    pointer-events: painted;
+}
+.articleRigthChecklist{
+    width: 50%;
+    height: 100%;
+    background-color: #0000ff55;
+    overflow-y: auto;
+    pointer-events: painted;
+}
+.notificationChecklist{
+    display:flex;
+    align-items: center;
+    min-height:20px;
+}
+.unicNotifyOn{
+    margin-left: 10px;
+    color:#326744;
+    font-weight: bold;
+    font-size:16px;
+}
+.unicNotifyOff{
+    margin-left: 10px;
+    color:#B5001A;
+    font-weight: bold;
+    font-size:16px;
+}
 #bodyCheckDiv::-webkit-scrollbar {
     height: 5px;
 }
@@ -178,7 +210,7 @@ b {
 
 .cardCheck {
     flex:none;
-    width:65%; 
+    width:75%; 
     height: 150px;
     margin: 5px;
     border: solid 1px rgb(178, 178, 178);
@@ -191,10 +223,35 @@ b {
 .cardCheck header {
     border-bottom: solid 1px rgb(178, 178, 178);
     padding-bottom: 3px;
+    height: 18px;
 }
 .cardCheck section {
+    display: flex;
     margin-top: 5px;
     font-size: 14px;
+    height:122px;
+}
+.listQuestionsHeader{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width:100%;
+    /* border: solid 1px rgb(178, 178, 178); */
+}
+.listQuestions{
+    display:none;
+    flex-direction: column;
+    /* background:black; */
+    height:40px;
+    width:100%;
+}
+.viewQuizList{
+    background-image: url("../../assets/images/down.svg"); 
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    width: 18px;   
+    height:18px; 
 }
 #recordDiv {
     margin: 5px;
