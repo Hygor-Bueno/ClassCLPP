@@ -43,9 +43,9 @@ export class SettingRecord {
 
     functionFilter(element) {
         switch (element.getAttribute("data-function")) {
-            case "openCloseFilter":
+            /* case "openCloseFilter":
                 this.openCloseFilter(element);
-                break;
+                break; */
             case "clearBtn":
                 this.clearFilter()
                 break;
@@ -54,7 +54,7 @@ export class SettingRecord {
         }
     }
 
-    openCloseFilter(element) {
+    /* openCloseFilter(element) {
         let bodyBlock = document.getElementById(`${element.getAttribute("data-block")}`)
         if (bodyBlock.style.display == 'none') {
             bodyBlock.setAttribute('style', "display:block")
@@ -63,7 +63,7 @@ export class SettingRecord {
             bodyBlock.setAttribute('style', "display:none")
             element.style.backgroundImage = "url('./assets/images/up.svg')";
         }
-    }
+    } */
 
     clearFilter() {
         this.clearDate()
@@ -92,7 +92,7 @@ export class SettingRecord {
         let response = ""
         let auxArray = array || objectChecklist.data
         auxArray.map(element => {
-            response += `<option class="option" data-id="${element.id}" value="${element[key]}">${element[key]}</option>`
+            response += `<option type="checkbox" class="option" multiple="multiple" data-id="${element.id}" value="${element[key]}">${element[key]}</option>`
         })
         return response;
     }
