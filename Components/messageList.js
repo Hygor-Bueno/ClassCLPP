@@ -1,6 +1,7 @@
 import { EmployeePhoto } from "../Connection/EmployeePhoto.js";
 import { Message } from "../Connection/Message.js";
 import { convertBase64 } from "../Util/convertBase64.js";
+import { Users } from "./objects/user.js";
 var employeePhoto = new EmployeePhoto;
 
 export class MessageList {
@@ -58,6 +59,7 @@ export class MessageList {
         return response;
     }
     async bodyChat(senderObject, page) {
+        const user = new Users;
         let response, src="http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/";
         try {
             if (!page) page = 1
@@ -66,8 +68,8 @@ export class MessageList {
             getMessage.reverse()
             response =
                 `<section class="showMsg">
-                    ${getMessage.map((element) => (`
-                    <div class="${element.id_user != localStorage.getItem('id') ? "messageReceived" : "messageSend"} ${element.type == 2 ? "formatImg":''}" data-view ='${element.notification}'>
+                    ${getMessage.map((element) => (
+                        `<div class="${element.id_user != localStorage.getItem('id') ? "messageReceived" : "messageSend"} ${element.type == 2 ? "formatImg":''}" data-view ='${element.notification}'>
                         ${element.type == 1 ? `<p>${element.message}</p>`: `<img src="${src}${element.message}"/>`}
                     </div>`)).join("")}
                 </section>`

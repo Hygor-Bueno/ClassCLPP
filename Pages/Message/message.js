@@ -81,9 +81,15 @@ export class MessagePage extends SettingMessage {
         return `${conversation}`;
     }
     async setNotify(notify){
+        const user = new Users();
+        await user.populate(notify.send_user);
         if ($('.colabHead .divColab') && $('.colabHead').getAttribute('data-id').split('_')[1] == notify.send_user){
-            $('.msg_out :first-child') && $('.msg_out section').remove()
-            await this.chargePageMsg(this.usefulComponents.splitString($('.colabHead').getAttribute('data-id'), '_'),'beforeend')
+            $('#bodyMessageDiv section').insertAdjacentHTML('beforeend',`${notify.type == 2 ?
+                `<div class="messageReceived formatImg">
+                    ${!notify.send_user && `<span>${user.getName()}</span>`}
+                    <img src=http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/${notify.message}></div>`
+                :
+                `${!notify.send_user && `<span>${user.getName()}</span>`}<div class= "messageReceived"><p>${notify.message}</p></div>`}`) 
             $('.msg_out ').scrollTop = $('.msg_out ').scrollHeight;
         }else{
             if(document.querySelector('.user_in :first-child')) document.querySelector('.user_in').innerHTML = ' ';

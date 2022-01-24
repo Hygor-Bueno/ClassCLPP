@@ -8,20 +8,19 @@ export class RecordPage extends SettingRecord {
 
         let response =
             `
-            <aside>
+            <aside id="asideFilter">
                 <div id="titleMain">
                     <h1>Filtra Checklist</h1>
                 </div> 
-                <section class="style_scroll" id="bodyAside">
+                <section  id="bodyAside">
                     <div class="titleBlock">                
                         <div class="titleFilter">     
-                            <h1>Checklist</h1>  
-                            <button class="imgButton openCloseBlock openCloseBtnCss" data-function="openCloseFilter"  data-block="checklistBlock" type="button"></button>               
+                            <h1>Checklist</h1>            
                         </div>                   
-                        <div class="bodyChecklist" style="display:none" id="checklistBlock">
+                        <div class="bodyChecklist" style="display:block" id="checklistBlock">
                             <div class="questionChecklist">
                                 <label>Titulo das checkList</label>
-                                <select class="sel" id="titleChecklist">
+                                <select class="sel" id="titleChecklist" type="checkbox">
                                 <option class="option" value="none" selected="" disabled="" hidden="">Selecione o checklist:</option>
                                     ${this.templateOption(objectChecklist, 'description')}
                                 </select>
@@ -44,36 +43,10 @@ export class RecordPage extends SettingRecord {
                     </div>
                     <div class="titleBlock">                
                         <div class="titleFilter">     
-                            <h1>Grupos Criados</h1>  
-                            <button class="imgButton openCloseBlock openCloseBtnCss" data-function="openCloseFilter"  data-block="grupsCreatedBlock" type="button"></button>               
-                        </div>
-                        <div id="grupsCreatedBlock" class="bodyChecklist" style="display:none">
-                            <div class="questionChecklist">
-                                <select class="sel">
-                                <option class="option" value="none" selected="" disabled="" hidden="">Opções</option>
-                                </select>
-                            </div>
-                        </div>    
-                    </div>
-                    <div class="titleBlock">                
-                        <div class="titleFilter">     
-                            <h1>Tipo de relatório</h1>  
-                            <button class="imgButton openCloseBlock openCloseBtnCss" data-function="openCloseFilter"  data-block="recordBlock" type="button"></button>               
-                        </div>
-                        <div id="recordBlock" class="bodyChecklist" style="display:none">
-                            <div class="questionChecklist" >
-                                <select class="sel">
-                                <option class="option" value="none" selected="" disabled="" hidden="">Opções</option>
-                                </select>
-                            </div>
-                        </div>  
-                    </div>
-                    <div class="titleBlock">                
-                        <div class="titleFilter">     
                             <h1>Unidades</h1>  
-                            <button class="imgButton openCloseBlock openCloseBtnCss" data-function="openCloseFilter"  data-block="unidGroupBlock" type="button"></button>               
+                           
                         </div>
-                        <div id="unidGroupBlock" class="bodyChecklist" style="display:none">
+                        <div id="unidGroupBlock" class="bodyChecklist" style="display:block"">
                             <div class="questionChecklist">
                                 <select class="sel">
                                 <option class="option" value="none" selected="" disabled="" hidden="">Opções</option>
@@ -84,9 +57,9 @@ export class RecordPage extends SettingRecord {
                     <div class="titleBlock">                
                         <div class="titleFilter">     
                             <h1>Por data</h1>  
-                            <button class="imgButton openCloseBlock openCloseBtnCss"  data-function="openCloseFilter" data-block="dateBlock" type="button"></button>               
+                              
                         </div>
-                        <div id="dateBlock" class="bodyChecklist" style="display:none">
+                        <div id="dateBlock" class="bodyChecklist" style="display:block">
                             <div class="questionChecklist">
                                 <label>Data inicial</label>
                                 <input type="date" class="date"></input>
@@ -104,9 +77,44 @@ export class RecordPage extends SettingRecord {
                 </div>
             </aside>
 
-            <section id="sectionRecord">
-                <div><h1>checklist</h1></div>
+            <section id="corpoRecord">
+                <header id="header">
+                    <section id="inputTitle">
+                        <input type="text" placeholder="Nome do relatório"/>
+                    </section>
+                    <aside id="buttonPrint">
+                        <button type="button" class="buttonRecordPrint"></button>
+                    </aside>
+                </header>
+
+                <div id="headerGraphic">
+                        <div id="dashbord">
+                            <h1>DashBord</h1>
+                        </div>
+                        <div id="buttonGraphic">
+                            <button type="button" class="buttonRecordBar"></button>
+                            <button type="button" class="buttonRecordPizza"></button> 
+                            <button type="button" class="buttonRecordPercentage"></button>
+                        </div>
+                </div>
+
+                <body id="graphicRecord">
+                    <section id="graphicMain">
+                    <h1>Principal</h1>
+                    </section>
+
+                    <aside id="unityGraphic">
+                    <h1>Unidade</h1>
+                    </aside>
+
+                    <aside id="checklistGraphic">
+                    <h1>Checklist</h1>
+                    </aside>
+                </body>
             </section>
+            
+
+            
         `
         return response;
     }
