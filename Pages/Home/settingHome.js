@@ -73,7 +73,7 @@ export class SettingHome {
             let objectSend = [['id_sender', localStorage.getItem('id')], [idSender[0] == 'group'?"id_group":`id_user`, idSender[1]], ['message', message], ['type', type]]
             let req = await messages.post(usefulComponents.createObject(objectSend), true);
             listMessage.addMessage(local, message, 'messageSend',type);
-            webSocket.informSending(req.last_id, idSender[1]);
+            webSocket.informSending(req.last_id, idSender);
             getB_id('inputSend').value = "";
             $('.errorReqMessage') &&  $('.errorReqMessage').remove();
         } else {
