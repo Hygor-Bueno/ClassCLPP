@@ -164,17 +164,20 @@ b {
     scroll-behavior: smooth;
 }
 .articleLeftChecklist{
+    padding:1px;    
     width: 50%;
     height: 100%;
-    /* background-color: #ff000055; */
     border-right: 1px solid rgb(178, 178, 178);
     overflow-y: auto;
     pointer-events: painted;
 }
+.articleLeftChecklist ol{
+    margin-top: 0px;
+}
 .articleRigthChecklist{
+    padding:1px;
     width: 50%;
     height: 100%;
-    background-color: #0000ff55;
     overflow-y: auto;
     pointer-events: painted;
 }
@@ -233,15 +236,13 @@ b {
 }
 .listQuestionsHeader{
     display: flex;
-    justify-content: space-between;
     align-items: center;
     width:100%;
-    /* border: solid 1px rgb(178, 178, 178); */
+    border-bottom: solid 1px rgb(178, 178, 178);
 }
 .listQuestions{
     display:none;
     flex-direction: column;
-    /* background:black; */
     height:40px;
     width:100%;
 }
@@ -252,6 +253,7 @@ b {
     background-size: cover;
     width: 18px;   
     height:18px; 
+    margin-left: 10px;;
 }
 #recordDiv {
     margin: 5px;

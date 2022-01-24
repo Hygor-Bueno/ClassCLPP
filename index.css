@@ -228,10 +228,7 @@ button {
     align-items: center;
     justify-content: center;
     height: 30px;
-    /* width: 30px;
-    border-radius: 15px; */
     background: transparent;
-    /* background: #326744; */
     color: white;
     cursor: pointer;
 }

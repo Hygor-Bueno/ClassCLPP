@@ -101,6 +101,7 @@ export class HomePage extends SettingHome {
                             <div>
                         </article>
                         <article class="articleRigthChecklist style_scroll"> 
+                        
                         <article>  
                     </section>
                 </div>`)).join("")
@@ -118,7 +119,7 @@ export class HomePage extends SettingHome {
         <p><b>Quantidade de Questões:</b> ${jsonQuestion.numberSignatures}</p>
         <div class="listQuestionsDiv">
             <div class="listQuestionsHeader"><b>Vizualizar lista de questões:</b><button type="button" class="viewQuizList" data-id="${checklist.getIdChecklist()}" id="viewQuizList_${checklist.getIdChecklist()}"></button></div>
-            <div class="listQuestions" id="listQuestion_${checklist.getIdChecklist()}">${jsonQuestion.listItens.map(element => (`<p>${element}</p>`)).join("")}</div>
+            <div class="listQuestions" id="listQuestion_${checklist.getIdChecklist()}"><ol>${jsonQuestion.listItens.map(element => (`<li>${element}</li>`)).join("")}</ol></div>
         </div>
 
         `
@@ -129,7 +130,7 @@ export class HomePage extends SettingHome {
         let title_Questions = [];
         checklist.getQuestion().forEach((element,index) => {
             if (element.type > 2){signatures++;}
-            title_Questions.push(index+1+" - "+element.description)
+            title_Questions.push(element.description)
         })
         let response = {numberItems:total_items,numberSignatures:signatures,numberQuestions:total_items - signatures,listItens:title_Questions} 
         return response
