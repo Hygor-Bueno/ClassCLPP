@@ -83,7 +83,6 @@ export class WebSocketCLPP {
     }
     // Eu estou enviando a mensagem  
     informSending(idMessage, idUserSend) {
-        console.log(idMessage, idUserSend)
         let jsonString = {}
             jsonString.type = 2,
             jsonString[idUserSend[0] == 'sender' ? 'send_id': 'group_id'] = idUserSend[1], 
