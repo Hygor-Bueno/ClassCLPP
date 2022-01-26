@@ -171,9 +171,22 @@ b {
     overflow-y: auto;
     pointer-events: painted;
 }
-.articleLeftChecklist ol{
-    margin-top: 0px;
+.listEmployees{
+    display: flex;
+    justify-content:center;
+    height: 90%;
 }
+.listEmployeesEmpty {
+    margin-left: 5px;
+}
+.articleLeftChecklist ol, .articleRigthChecklist ol{
+    padding-top:5px;
+    padding-bottom:5px;
+    margin: 5px;
+    background:#f1f2f5;
+    width: 60%;
+}
+
 .articleRigthChecklist{
     padding:1px;
     width: 50%;
@@ -243,6 +256,7 @@ b {
 .listQuestions{
     display:none;
     flex-direction: column;
+    align-items: center;
     height:40px;
     width:100%;
 }

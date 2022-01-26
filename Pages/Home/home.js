@@ -23,7 +23,7 @@ export class HomePage extends SettingHome {
 
     async main() {
         await this.createObjChecklist();
-        this.userJson = await employee.get("&id=" + localStorage.getItem("id"), true);
+        this.userJson = await employee.get("&id=" + localStorage.getItem("id"));
         this.accessClpp = await userAccess.get('&application_id=7&web');
         let nameUser = usefulComponents.splitStringName(this.userJson.name, " ")
         let response =
@@ -114,8 +114,25 @@ export class HomePage extends SettingHome {
         return resp
     }
     templateListLinkedEmployees(checklist) {
-   
-   
+        let response
+        try{
+            if(!checklist.getLinkedEmployees().length) throw new Error("Não possuí usuários vinculados")
+            response =  `
+            <h2><b>Lista de usuários: </b></h2>
+            <div class="listEmployees">
+                <ol>
+                    ${checklist.getLinkedEmployees().map(element => (`<li>${element.getName()}</li>`)).join("")}
+                </ol>
+            </div>
+            `    
+        }catch(e){
+            // console.error(e)
+            response = `
+            <h2><b>Lista de usuários: </b></h2><br/>         
+                <p class= "listEmployeesEmpty">Checklist não possuí usuários vinculados.</p>         
+            `
+        }
+        return response;
     }
     tamplateQuestions(checklist) {
         let jsonQuestion = this.addressIssues(checklist);
@@ -159,10 +176,13 @@ export class HomePage extends SettingHome {
         }
     }
     async upMsgReceived(getNotify) {
+        let aux = getNotify.group_id || getNotify.send_user 
+        console.log(aux+"<--")
         if (document.getElementById('bodyChDiv')) {
             document.getElementById('bodyChDiv').insertAdjacentHTML('beforeend', await this.messageReceived());
             this.settings();
-            if (document.getElementById('bodyMessageDiv') && document.querySelector('#bodyMessageDiv header').getAttribute('data-id') == getNotify.send_user) {
+            if (document.getElementById('bodyMessageDiv') && aux == document.querySelector('#bodyMessageDiv header').getAttribute('data-id')) {
+                console.log(getNotify)
                 document.querySelector('#bodyMessageDiv section').insertAdjacentHTML('beforeend', `${getNotify.type == 2 ?
                     `<div class="messageReceived formatImg"><img src=http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/${getNotify.message}></div>`
                     :

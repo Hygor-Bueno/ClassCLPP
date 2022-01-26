@@ -95,7 +95,7 @@ export class ObjectChecklist extends ConnectionCLPP {
     this.#date_init = checklist.date_init;
     this.#date_final = checklist.date_final;
     let questionJSON = await this.loadingQuestionDataBase(checklist);
-    let linkedJson = this.loadingLinkedEmployees(checklist)
+    let linkedJson = await this.loadingLinkedEmployees(checklist)
     linkedJson ? this.#linkedEmployees = linkedJson.data : linkedJson;
     this.#questions = questionJSON.data;
     this.#questions.forEach(async (element) => {
@@ -104,12 +104,12 @@ export class ObjectChecklist extends ConnectionCLPP {
     });
   }
   async loadingLinkedEmployees(checklist){
-    let req = await this.get(`&id_checklist=${checklist.id}`,"CLPP/UserCheckList.php");
-    console.log('<------>')
+    let req = await this.get(`&id_checklist=${checklist.id}`,"CLPP/UserCheckList.php",false);
     if(req){
-      let user = new Users;
       req.data.forEach(async (element)=>{
-        console.log(element)
+        let user = new Users;
+        await user.populate(element.id_user)
+        this.#linkedEmployees.push(user)
       });
     }
     // return await user.populate(checklist.id)

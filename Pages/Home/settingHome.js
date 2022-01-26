@@ -94,7 +94,6 @@ export class SettingHome {
     }
     carousel(){
         document.querySelector('#bodyCheckDiv').addEventListener("wheel", event =>{
-            console.log(event.target)
             if(event.deltaY > 0){
                 event.target.scrollBy(-$(".cardCheck").offsetWidth,0)
             }else{
