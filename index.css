@@ -47,8 +47,13 @@ body {
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    margin:0px;
+    padding: 0px;
 }
-
+.principal ul{
+    margin:0px;
+    padding: 0px;
+}
 .menu ul {
     list-style: none;
     position: relative;
@@ -228,10 +233,7 @@ button {
     align-items: center;
     justify-content: center;
     height: 30px;
-    /* width: 30px;
-    border-radius: 15px; */
     background: transparent;
-    /* background: #326744; */
     color: white;
     cursor: pointer;
 }

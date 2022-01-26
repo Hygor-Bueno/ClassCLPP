@@ -3,8 +3,13 @@ import { ChecklistCreatePage } from "../Pages/Checklist/CreateChecklist/checklis
 import { ChecklistCreatedPage } from "../Pages/Checklist/ChecklistCriated/checklist.js";
 import { MessagePage } from "../Pages/Message/message.js"
 import { RecordPage } from "../Pages/Record/record.js"
+import { Employee } from "../Connection/Employee.js";
 export class Routers {
 	async routers(params) {
+
+		let employee =new Employee;
+		await employee.get("&id=" + localStorage.getItem("id"),true)
+
 		localStorage.setItem('router', params)
 		document.getElementById('message').setAttribute('style', 'display:none')
 		let local = document.getElementById('content');
@@ -20,7 +25,7 @@ export class Routers {
 					break;
 				case 'checklistCreate':
 					result = new ChecklistCreatePage;
-					document.getElementById('StylePages').setAttribute('href', "./Pages/Checklist/CreateChecklist/checklist.css")
+					document.getElementById('StylePages').setAttribute('href', "")
 					local.insertAdjacentHTML("beforeend", result.main());
 					result.setting();
 					break;
