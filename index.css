@@ -8,6 +8,18 @@ body {
     font-family: "titillium_web";
     src: url("./assets/fonts/titillium_web.ttf") format("truetype");
 }
+/* @media screen and (min-width: 1500px){
+    body p{
+        font-size:18px;
+        margin: 5px;
+    }
+    body h1{
+        font-size:25px;
+    }
+    body h2{
+        font-size: 20px;
+    }
+} */
 
 .container {
     position: fixed;
