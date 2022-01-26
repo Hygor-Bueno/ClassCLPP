@@ -80,20 +80,20 @@ export class MessagePage extends SettingMessage {
         )).join('')
         return `${conversation}`;
     }
-    async setNotify(notify){
+    async setNotify(notify){   
         const user = new Users();
         await user.populate(notify.send_user);
-        if ($('.colabHead .divColab') && $('.colabHead').getAttribute('data-id').split('_')[1] == notify.send_user){
-            $('#bodyMessageDiv section').insertAdjacentHTML('beforeend',`${notify.type == 2 ?
-                `<div class="messageReceived formatImg">
-                    ${!notify.send_user && `<span>${user.getName()}</span>`}
-                    <img src=http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/${notify.message}></div>`
+        if ($('.colabHead .divColab') && $('.colabHead').getAttribute('data-id').split('_')[1] == notify.send_user){          
+            $('#bodyMessageDiv section').insertAdjacentHTML('beforeend',` ${notify.type == 2 ?
+                `<div class="messageReceived formatImg" data-view="0">
+                ${notify.group_id ? `<span>${user.getName()}</span>`:""}<img src=http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/${notify.message}></div>`
                 :
-                `${!notify.send_user && `<span>${user.getName()}</span>`}<div class= "messageReceived"><p>${notify.message}</p></div>`}`) 
+                `${notify.group_id ? `<span>${user.getName()}</span>`:""}<div class= "messageReceived" data-view="0"><p>${notify.message}</p></div>`}`)     
             $('.msg_out ').scrollTop = $('.msg_out ').scrollHeight;
-        }else{
+            this.ws.informPreview($('.colabHead').getAttribute('data-id').split('_'));
+        }else {
             if(document.querySelector('.user_in :first-child')) document.querySelector('.user_in').innerHTML = ' ';
-            userJson[notify.send_user?'user_'+ notify.send_user:'group_'+ notify.send_user].notification = 1
+            userJson[!notify.group_id?'user_'+ notify.send_user:'group_'+ notify.group_id].notification = 1
             $('.user_in').insertAdjacentHTML('beforeend', this.userReceived(this.convertArray(userJson)))
             this.clickDivUser('.user_in .divUser')
         }

@@ -31,6 +31,7 @@ export class SettingMessage {
     chatIdPage;
     chatScroll;
     positionChat = 0;
+    allEmployers = {}
 
     async setting() {
         this.clickDivUser('.divUser')
@@ -38,12 +39,10 @@ export class SettingMessage {
         this.searchName()
         this.modalImg()
         this.createGroup()
+        console.log(this.allEmployers)
     }
     clickSend() {
-        getB_id('buttonSend').addEventListener('click', () => {
-            this.sendMsg();
-            this.notificationMsg();
-        });
+        getB_id('buttonSend').addEventListener('click', () => {this.sendMsg();this.notificationMsg();});
         getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
     chergeSendButtom() {
@@ -61,7 +60,7 @@ export class SettingMessage {
         let sending = getB_id('inputSend').value
         let sendImg = getB_id('file').files[0]
         this.typeMsg = 1
-        sending && await this.settingHome.buttonSend(this.chatIdSender, sending, this.typeMsg, this.chatIdPage, this.chatScroll);
+        sending && await this.settingHome.buttonSend(this.chatIdSender, sending, this.typeMsg, this.chatIdPage, this.chatScroll); this.notificationMsg();
         sendImg && this.previewFile(sendImg);
     }
     previewFile(imgFile) {
@@ -80,7 +79,7 @@ export class SettingMessage {
         getB_id('file').value = ""
     }
     clickDivUser(local) {
-        $_all(local).forEach(element => element.addEventListener('click', () => { this.clickEvents(element); this.chergeSendButtom() }))
+        $_all(local).forEach(element => element.addEventListener('click', () => { this.clickEvents(element); this.chergeSendButtom()}))
     }
     async clickEvents(element) {
         this.tradeDiv()
@@ -201,10 +200,9 @@ export class SettingMessage {
             closeModal()
             const routers = new Routers;
             routers.routers(localStorage.getItem('router'))
-            //novo metodo
         })
     }
-    async visualizationMsg(params) {
+    visualizationMsg(params) {
         if ($('.colabHead .divColab') && $('.colabHead').getAttribute('data-id').split('_')[1] == params.user) {
             $_all('.messageSend')[$_all('.messageSend').length - 1].setAttribute('data-view', '0')
             this.notificationMsg()
@@ -230,8 +228,11 @@ export class SettingMessage {
     async methodUnited(dataId) {
         let response = ""
         for (const iterator of dataId.data) {
+            this.allEmployers[iterator.id] = iterator
+            this.allEmployers[iterator.id].user = this.usefulComponents.splitStringName(this.allEmployers[iterator.id].user," ")       
             response += await this.listUser.main(iterator.id)
         }
+        this.messageList.receiverName(this.allEmployers)
         return response;
     }
     convertArray(obj) {
