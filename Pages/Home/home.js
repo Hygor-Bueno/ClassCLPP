@@ -22,8 +22,8 @@ export class HomePage extends SettingHome {
     message;
 
     async main() {
+        this.userJson = await employee.get("&id=" + localStorage.getItem("id"),true);
         await this.createObjChecklist();
-        this.userJson = await employee.get("&id=" + localStorage.getItem("id"));
         this.accessClpp = await userAccess.get('&application_id=7&web');
         let nameUser = usefulComponents.splitStringName(this.userJson.name, " ")
         let response =
@@ -118,7 +118,7 @@ export class HomePage extends SettingHome {
         try{
             if(!checklist.getLinkedEmployees().length) throw new Error("Não possuí usuários vinculados")
             response =  `
-            <h2><b>Lista de usuários: </b></h2>
+            <h2><b>Usuários vinculados: </b></h2>
             <div class="listEmployees">
                 <ol>
                     ${checklist.getLinkedEmployees().map(element => (`<li>${element.getName()}</li>`)).join("")}
@@ -136,10 +136,11 @@ export class HomePage extends SettingHome {
     }
     tamplateQuestions(checklist) {
         let jsonQuestion = this.addressIssues(checklist);
+      
         return `
-        <p><b>Quantidade de Itens:</b> ${jsonQuestion.numberItems}</p>
-        <p><b>Quantidade de Assinaturas:</b> ${jsonQuestion.numberQuestions}</p>
-        <p><b>Quantidade de Questões:</b> ${jsonQuestion.numberSignatures}</p>
+        <p><b>Quantidade de Itens:</b> ${jsonQuestion.numberItems}</p>       
+        <p><b>Quantidade de Assinaturas:</b> ${jsonQuestion.numberSignatures}</p>
+        <p><b>Quantidade de Questões:</b> ${jsonQuestion.numberQuestions}</p>
         <div class="listQuestionsDiv">
             <div class="listQuestionsHeader"><b>Vizualizar lista de questões:</b><button type="button" class="viewQuizList" data-id="${checklist.getIdChecklist()}" id="viewQuizList_${checklist.getIdChecklist()}"></button></div>
             <div class="listQuestions" id="listQuestion_${checklist.getIdChecklist()}"><ol>${jsonQuestion.listItens.map(element => (`<li>${element}</li>`)).join("")}</ol></div>
@@ -150,7 +151,7 @@ export class HomePage extends SettingHome {
         let total_items = checklist.getQuestion().length;
         let signatures = 0;
         let title_Questions = [];
-        checklist.getQuestion().forEach((element, index) => {
+        checklist.getQuestion().forEach((element) => {
             if (element.type > 2) { signatures++; }
             title_Questions.push(element.description)
         })
@@ -184,9 +185,7 @@ export class HomePage extends SettingHome {
             if (document.getElementById('bodyMessageDiv') && aux == document.querySelector('#bodyMessageDiv header').getAttribute('data-id')) {
                 console.log(getNotify)
                 document.querySelector('#bodyMessageDiv section').insertAdjacentHTML('beforeend', `${getNotify.type == 2 ?
-                    `<div class="messageReceived formatImg"><img src=http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/${getNotify.message}></div>`
-                    :
-                    `<div class= "messageReceived"><p>${getNotify.message}</p></div>`}`)
+                    `<div class="messageReceived formatImg"><img src=http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/${getNotify.message}></div>` : `<div class= "messageReceived"><p>${getNotify.message}</p></div>`}`)
                 document.querySelector('#bodyMessageDiv section').scrollTop = document.querySelector('#bodyMessageDiv section').scrollHeight;
             }
         }
