@@ -8,7 +8,7 @@ export class UserCheckList {
         this.settingUrl('/Controller/CLPP/UserCheckList.php?app_id=7&AUTH=',params)
         let response
         console.log(this.URL)
-        await fetch(this.URL + params)
+        await fetch(this.URL)
             .then(response => response.json())
             .then(body => {
                 if (body.error) throw new Error(body.message)

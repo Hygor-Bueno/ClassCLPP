@@ -6,6 +6,7 @@ import { Message } from "../../Connection/Message.js";
 import { MessageList } from "../../Components/messageList.js";
 import { SettingHome } from "./settingHome.js";
 import { ObjectChecklist } from "../../Components/objects/checklistObject.js";
+import { Users } from "../../Components/objects/user.js";
 
 var employee = new Employee;
 var usefulComponents = new UsefulComponents;
@@ -21,8 +22,8 @@ export class HomePage extends SettingHome {
     message;
 
     async main() {
+        this.userJson = await employee.get("&id=" + localStorage.getItem("id"),true);
         await this.createObjChecklist();
-        this.userJson = await employee.get("&id=" + localStorage.getItem("id"), true);
         this.accessClpp = await userAccess.get('&application_id=7&web');
         let nameUser = usefulComponents.splitStringName(this.userJson.name, " ")
         let response =
@@ -53,7 +54,7 @@ export class HomePage extends SettingHome {
                     <div id="checkDiv">
                         <header><h1>Cabeçalho do Checklist</h1></header>
                         <div id="bodyCheckDiv">
-                            ${await this.checklistCreated() || `<p></p>`}
+                            ${this.checklistCreated() || `<p></p>`}
                         </div>   
                     </div>
                     <div id="recordDiv">
@@ -82,10 +83,11 @@ export class HomePage extends SettingHome {
             return `<div class="ErrorPageDefault"><p>Desculpe, não foi possivél carregar as informações...</p></div>`
         }
     }
-    async checklistCreated() {
+    checklistCreated() {
+        let resp;
         // try {
-            return Object.keys(this.checklistJson).map((element) => (
-                `<div class="cardCheck" id="check_${this.checklistJson[element].getIdChecklist()}">
+        resp =  Object.keys(this.checklistJson).map((element) => (
+            `<div class="cardCheck" id="check_${this.checklistJson[element].getIdChecklist()}">
                     <header><h2>${this.checklistJson[element].getTitle().slice(0, 30) + "..."}</h2></header>
                     <section>
                         <article class="articleLeftChecklist style_scroll"> 
@@ -101,6 +103,7 @@ export class HomePage extends SettingHome {
                             <div>
                         </article>
                         <article class="articleRigthChecklist style_scroll"> 
+                            ${this.templateListLinkedEmployees(this.checklistJson[element])}
                         <article>  
                     </section>
                 </div>`)).join("")
@@ -108,30 +111,51 @@ export class HomePage extends SettingHome {
         //     console.error(e + " : Falha ao realizar ao carregar o tamplate...")
         //     return `<div class="ErrorPageDefault"><p>Desculpe, não foi possivél carregar as informações...</p></div>`
         // }
+        return resp
     }
-    tamplateQuestions(checklist){
-        console.log(checklist.getIdChecklist())
+    templateListLinkedEmployees(checklist) {
+        let response
+        try{
+            if(!checklist.getLinkedEmployees().length) throw new Error("Não possuí usuários vinculados")
+            response =  `
+            <h2><b>Usuários vinculados: </b></h2>
+            <div class="listEmployees">
+                <ol>
+                    ${checklist.getLinkedEmployees().map(element => (`<li>${element.getName()}</li>`)).join("")}
+                </ol>
+            </div>
+            `    
+        }catch(e){
+            // console.error(e)
+            response = `
+            <h2><b>Lista de usuários: </b></h2><br/>         
+                <p class= "listEmployeesEmpty">Checklist não possuí usuários vinculados.</p>         
+            `
+        }
+        return response;
+    }
+    tamplateQuestions(checklist) {
         let jsonQuestion = this.addressIssues(checklist);
+      
         return `
-        <p><b>Quantidade de Itens:</b> ${jsonQuestion.numberItems}</p>
-        <p><b>Quantidade de Assinaturas:</b> ${jsonQuestion.numberQuestions}</p>
-        <p><b>Quantidade de Questões:</b> ${jsonQuestion.numberSignatures}</p>
+        <p><b>Quantidade de Itens:</b> ${jsonQuestion.numberItems}</p>       
+        <p><b>Quantidade de Assinaturas:</b> ${jsonQuestion.numberSignatures}</p>
+        <p><b>Quantidade de Questões:</b> ${jsonQuestion.numberQuestions}</p>
         <div class="listQuestionsDiv">
             <div class="listQuestionsHeader"><b>Vizualizar lista de questões:</b><button type="button" class="viewQuizList" data-id="${checklist.getIdChecklist()}" id="viewQuizList_${checklist.getIdChecklist()}"></button></div>
-            <div class="listQuestions" id="listQuestion_${checklist.getIdChecklist()}">${jsonQuestion.listItens.map(element => (`<p>${element}</p>`)).join("")}</div>
+            <div class="listQuestions" id="listQuestion_${checklist.getIdChecklist()}"><ol>${jsonQuestion.listItens.map(element => (`<li>${element}</li>`)).join("")}</ol></div>
         </div>
-
         `
     }
     addressIssues(checklist) {
         let total_items = checklist.getQuestion().length;
-        let signatures=0;
+        let signatures = 0;
         let title_Questions = [];
-        checklist.getQuestion().forEach((element,index) => {
-            if (element.type > 2){signatures++;}
-            title_Questions.push(index+1+" - "+element.description)
+        checklist.getQuestion().forEach((element) => {
+            if (element.type > 2) { signatures++; }
+            title_Questions.push(element.description)
         })
-        let response = {numberItems:total_items,numberSignatures:signatures,numberQuestions:total_items - signatures,listItens:title_Questions} 
+        let response = { numberItems: total_items, numberSignatures: signatures, numberQuestions: total_items - signatures, listItens: title_Questions }
         return response
     }
     async createObjChecklist() {
@@ -153,14 +177,15 @@ export class HomePage extends SettingHome {
         }
     }
     async upMsgReceived(getNotify) {
+        let aux = getNotify.group_id || getNotify.send_user 
+        console.log(aux+"<--")
         if (document.getElementById('bodyChDiv')) {
             document.getElementById('bodyChDiv').insertAdjacentHTML('beforeend', await this.messageReceived());
             this.settings();
-            if (document.getElementById('bodyMessageDiv') && document.querySelector('#bodyMessageDiv header').getAttribute('data-id') == getNotify.send_user) {
+            if (document.getElementById('bodyMessageDiv') && aux == document.querySelector('#bodyMessageDiv header').getAttribute('data-id')) {
+                console.log(getNotify)
                 document.querySelector('#bodyMessageDiv section').insertAdjacentHTML('beforeend', `${getNotify.type == 2 ?
-                    `<div class="messageReceived formatImg"><img src=http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/${getNotify.message}></div>`
-                    :
-                    `<div class= "messageReceived"><p>${getNotify.message}</p></div>`}`)
+                    `<div class="messageReceived formatImg"><img src=http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/${getNotify.message}></div>` : `<div class= "messageReceived"><p>${getNotify.message}</p></div>`}`)
                 document.querySelector('#bodyMessageDiv section').scrollTop = document.querySelector('#bodyMessageDiv section').scrollHeight;
             }
         }

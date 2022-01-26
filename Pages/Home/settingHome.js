@@ -46,7 +46,13 @@ export class SettingHome {
             element.addEventListener("click", ()=>{
                 // console.log(getB_id(`listQuestion_${element.getAttribute('data-id')}`))
                 let divList = getB_id(`listQuestion_${element.getAttribute('data-id')}`);
-                console.log(window.getComputedStyle(divList,null).display == 'none'? divList.style.display = "flex":divList.style.display="none")
+                if(window.getComputedStyle(divList,null).display == 'none'){ 
+                    divList.style.display = "flex"
+                    element.style.backgroundImage = "url('./assets/images/up.svg')"
+                }else{
+                    divList.style.display="none"
+                    element.style.backgroundImage = "url('./assets/images/down.svg')"
+                }
             })
         })
     }
@@ -88,7 +94,6 @@ export class SettingHome {
     }
     carousel(){
         document.querySelector('#bodyCheckDiv').addEventListener("wheel", event =>{
-            console.log(event.target)
             if(event.deltaY > 0){
                 event.target.scrollBy(-$(".cardCheck").offsetWidth,0)
             }else{

@@ -1,4 +1,5 @@
 import { ConnectionCLPP } from "../../Connection/ConnectionCLPP.js";
+import { Users } from "./user.js";
 
 export class ObjectChecklist extends ConnectionCLPP {
   #indexEditQuestion;
@@ -9,6 +10,7 @@ export class ObjectChecklist extends ConnectionCLPP {
   #questions = [];
   #idChecklist;
   #creatorId;
+  #linkedEmployees = [];
 
   constructor(id) {
     super();
@@ -36,6 +38,9 @@ export class ObjectChecklist extends ConnectionCLPP {
   getCreatorId() {
     return this.#creatorId;
   }
+  getLinkedEmployees(){
+    return this.#linkedEmployees;
+  }
 
   setTitle(title) {
     this.#title = title;
@@ -57,6 +62,9 @@ export class ObjectChecklist extends ConnectionCLPP {
   }
   setCreatorId(creatorId) {
     this.#creatorId = creatorId;
+  }
+  setLinkedEmployees(linkedEmployees) {
+    this.#linkedEmployees = linkedEmployees;
   }
 
   checklistJSON() {
@@ -87,13 +95,25 @@ export class ObjectChecklist extends ConnectionCLPP {
     this.#date_init = checklist.date_init;
     this.#date_final = checklist.date_final;
     let questionJSON = await this.loadingQuestionDataBase(checklist);
+    let linkedJson = await this.loadingLinkedEmployees(checklist)
+    linkedJson ? this.#linkedEmployees = linkedJson.data : linkedJson;
     this.#questions = questionJSON.data;
     this.#questions.forEach(async (element) => {
       let req = await this.loadingOptionDataBase(element.id);
       req.data.forEach((option, index) => { element["op_" + (index + 1)] = option });
     });
   }
-
+  async loadingLinkedEmployees(checklist){
+    let req = await this.get(`&id_checklist=${checklist.id}`,"CLPP/UserCheckList.php",false);
+    if(req){
+      req.data.forEach(async (element)=>{
+        let user = new Users;
+        await user.populate(element.id_user)
+        this.#linkedEmployees.push(user)
+      });
+    }
+    // return await user.populate(checklist.id)
+  }
   async loadingQuestionDataBase(checklist) {
     let resp =await this.get(`&id=${checklist.id}&user_id=${checklist.id_creator}`,"CLPP/Question.php",true);
     return resp

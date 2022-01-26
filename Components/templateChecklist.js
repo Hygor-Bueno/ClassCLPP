@@ -549,7 +549,8 @@ export class TemplateChecklist {
         this.checklist.deleteQuestionDataBase(value)
     }
     editQuestion(objectQuestion) {
-        this.editQuestionCreated(objectQuestion)
+        this.
+        Created(objectQuestion)
     }
     //Função resposavel por finalizar o checklist!
     async completedChecklist() {

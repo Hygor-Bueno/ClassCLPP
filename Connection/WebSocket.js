@@ -35,6 +35,7 @@ export class WebSocketCLPP {
     }
     async OnMessage(ev) {        
         let getNotify = JSON.parse(ev.data)
+
         if (getNotify.objectType == 'notification') {
             console.log(' ****** vizualizaram sua mensagem ****** ')
             this.routerSettingsWs(localStorage.getItem('router'), '_viewed',getNotify)
@@ -57,6 +58,7 @@ export class WebSocketCLPP {
     }
     routerSettingsWs(page, path, param) {
         page += path
+        console.log(param)
         switch (page) {
             case 'message_viewed':
                 this.messageViewed(param);
