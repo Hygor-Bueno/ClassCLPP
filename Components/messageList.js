@@ -8,6 +8,7 @@ export class MessageList {
     groups = [];
     users = [];
     messages = [];
+    employeers = {}
 
     notSeen() {
         return this.messages.filter(
@@ -66,10 +67,13 @@ export class MessageList {
             let messages = new Message;
             let getMessage = await messages.get(`&id_user=${localStorage.getItem('id')}${senderObject.destiny}${senderObject.id}&pages=${page}`) 
             getMessage.reverse()
+            //continuar a colocar o nome das pessoas no grupo
             response =
                 `<section class="showMsg">
                     ${getMessage.map((element) => (
                         `<div class="${element.id_user != localStorage.getItem('id') ? "messageReceived" : "messageSend"} ${element.type == 2 ? "formatImg":''}" data-view ='${element.notification}'>
+                        <span>${this.employeers[element.id_user].user}</span>
+                        <br/>
                         ${element.type == 1 ? `<p>${element.message}</p>`: `<img src="${src}${element.message}"/>`}
                     </div>`)).join("")}
                 </section>`
@@ -93,5 +97,8 @@ export class MessageList {
         const converImgBase64 = new convertBase64;
         document.querySelector(local).insertAdjacentHTML('beforeend', `<div class="${type == 2 ? classMessage + " formatImg": classMessage}" data-view="1">${type == 2 ?converImgBase64.convert(message).outerHTML:`<p>${message}</p>`}</div>`)
     }
-
+    receiverName(employeers){
+        this.employeers = employeers
+        console.log(this.employeers)
+    }
 }
