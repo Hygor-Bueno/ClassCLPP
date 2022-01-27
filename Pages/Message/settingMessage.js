@@ -39,7 +39,6 @@ export class SettingMessage {
         this.searchName()
         this.modalImg()
         this.createGroup()
-        console.log(this.allEmployers)
     }
     clickSend() {
         getB_id('buttonSend').addEventListener('click', () => {this.sendMsg();this.notificationMsg();});
