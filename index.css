@@ -8,6 +8,27 @@ body {
     font-family: "titillium_web";
     src: url("./assets/fonts/titillium_web.ttf") format("truetype");
 }
+ @media screen and (min-width: 1500px){
+    #checkCreateDiv p,#checkCreateDiv label, #checkCreateDiv input, #checkCreateDiv select,#checkCreateDiv option{
+        font-size:17px;
+    }
+    #checkCreateDiv h1{
+        font-size:20px;
+    }
+    #groupButtons button{
+        width: 40px;
+        height: 30px;
+
+    }
+    #editableQuestion{
+        height:80%;
+    }
+    #settingFooterButton{
+        display:flex;
+        align-items: center;
+        height:20%;
+    }
+} 
 
 .container {
     position: fixed;

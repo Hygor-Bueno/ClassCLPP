@@ -93,7 +93,6 @@ b {
 #welcom p {
     border-top: 1px solid rgb(178, 178, 178);
     padding: 5px;
-    font-size: 12px;
 }
 #bodyHome {
     display: flex;
@@ -174,7 +173,7 @@ b {
 .listEmployees{
     display: flex;
     justify-content:center;
-    height: 90%;
+    min-height: 90%;
 }
 .listEmployeesEmpty {
     margin-left: 5px;
@@ -274,4 +273,41 @@ b {
     height: 50%;
     border-top: solid 5px white;
     overflow-y: auto;
+}
+@media screen and (min-width: 1500px){
+    #bodySection p{
+        font-size:17px;
+        margin: 5px;
+    }
+    #welcom p, .listQuestions, .listEmployees{
+        font-size:16px;
+    }
+    #bodySection h1{
+        font-size:23px;
+    }
+    #bodySection h2{
+        font-size: 20px;
+    }
+  
+    .cardMessageUser{
+        padding: 5px;
+    }
+    .cardMessageUser p{
+        font-size:18px;
+    }
+    .cardMessageUser img{
+        width:50px;
+        height:50px;
+        border-radius: 25px;
+    }
+    .cardCheck{
+        height:230px;
+    }
+    .listEmployees{
+        min-height:85%;
+    }
+    .viewQuizList{
+        margin-left: 2px;
+    }
+   
 }

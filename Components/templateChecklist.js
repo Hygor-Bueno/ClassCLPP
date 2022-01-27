@@ -115,6 +115,7 @@ export class TemplateChecklist {
     }
 
     proceedChecklist(object) {
+        console.log(object.dataFinal)
         this.checklist.loadingChecklist(object);
         getB_id('nameChecklist').value = object.nameChecklist
         if (object.notify != "0") {
@@ -122,7 +123,7 @@ export class TemplateChecklist {
             this.notification = false;
         }
         if (object.dataInit) getB_id('dateInicial').value = object.dataInit;
-        if (object.dataFinal) getB_id('dateFinal').value = object.dataFinal;
+        if (object.dataFinal) $('#checkCreateDiv #dateFinal').value = object.dataFinal;
         let questions = "";
         object.questions.forEach((element) => { questions += this.questionsCreated([element], element.id);this.idQuestion =element.id+1;});
         getB_id('questionCreated').insertAdjacentHTML('beforeend', questions)
@@ -549,8 +550,7 @@ export class TemplateChecklist {
         this.checklist.deleteQuestionDataBase(value)
     }
     editQuestion(objectQuestion) {
-        this.
-        Created(objectQuestion)
+        this.editQuestionCreated(objectQuestion)
     }
     //Função resposavel por finalizar o checklist!
     async completedChecklist() {

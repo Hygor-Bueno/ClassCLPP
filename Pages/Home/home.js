@@ -52,13 +52,13 @@ export class HomePage extends SettingHome {
                 </section>
                 <aside id="homeRight">
                     <div id="checkDiv">
-                        <header><h1>Cabeçalho do Checklist</h1></header>
+                        <header><h1>Checklist criados:</h1></header>
                         <div id="bodyCheckDiv">
                             ${this.checklistCreated() || `<p></p>`}
                         </div>   
                     </div>
                     <div id="recordDiv">
-                        <header><h1>Cabeçalho dos Relatórios </h1></header>
+                        <header><h1>Relatório Criados:  </h1></header>
                     </div>
                 </aside>
             </div>
@@ -142,7 +142,7 @@ export class HomePage extends SettingHome {
         <p><b>Quantidade de Assinaturas:</b> ${jsonQuestion.numberSignatures}</p>
         <p><b>Quantidade de Questões:</b> ${jsonQuestion.numberQuestions}</p>
         <div class="listQuestionsDiv">
-            <div class="listQuestionsHeader"><b>Vizualizar lista de questões:</b><button type="button" class="viewQuizList" data-id="${checklist.getIdChecklist()}" id="viewQuizList_${checklist.getIdChecklist()}"></button></div>
+            <div class="listQuestionsHeader"><p><b>Vizualizar lista de questões:</b><button type="button" class="viewQuizList" data-id="${checklist.getIdChecklist()}" id="viewQuizList_${checklist.getIdChecklist()}"></button></p></div>
             <div class="listQuestions" id="listQuestion_${checklist.getIdChecklist()}"><ol>${jsonQuestion.listItens.map(element => (`<li>${element}</li>`)).join("")}</ol></div>
         </div>
         `
