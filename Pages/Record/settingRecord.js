@@ -24,8 +24,8 @@ export class SettingRecord {
                 this.templateOption(null, "description", this.jsonCheck[idCheckSelected].getQuestion())
             )
         }
-
-        console.log(await this.getShop())
+        let req = await this.getShop()
+        getB_id('shop').insertAdjacentHTML('beforeend', this.templateOption(null, 'description', req))
     }
 
     jsonChecklists(objectChecklist) {
@@ -104,8 +104,12 @@ export class SettingRecord {
             this.templateOption(null, 'date', jsonDate))
     }
 
-    shopFilter() {
-        getB_id('shop').insertAdjacentHTML('beforeend', 'oi')
+    async shopFilter() {
+        /* let filterShop = getB_id('shop')
+        let array = await this.getShop()
+        array.forEach(element => {
+            `<option class="option" data-id="${element.id}" value="${element[key]}">${element[key]}</option>`
+        }) */
     }
 
     async getChecklist() {
