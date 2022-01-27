@@ -91,7 +91,6 @@ export class ConnectionCLPP {
     settingUrl(middlewer, params) {
         let server = localStorage.getItem('server');
         let token = localStorage.getItem('token');
-        console.log(server)
         this.URL = server + middlewer + token + (params ? params : "")
     }
 }
