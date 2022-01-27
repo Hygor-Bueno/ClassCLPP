@@ -7,8 +7,6 @@ import { Message } from "../../Connection/Message.js";
 import { ListUser } from "../../Components/listUser.js";
 import { WebSocketCLPP } from "../../Connection/WebSocket.js";
 import { UserAccess } from "../../Connection/UserAccess.js";
-import { Users } from "../../Components/objects/user.js";
-import { convertBase64 } from "../../Util/convertBase64.js";
 import { GroupMessage } from "../../Components/objects/groupMessage.js";
 import { Routers } from "../../Routers/router.js";
 
@@ -226,12 +224,10 @@ export class SettingMessage {
     }
     async methodUnited(dataId) {
         let response = ""
-        for (const iterator of dataId.data) {
-            this.allEmployers[iterator.id] = iterator
-            this.allEmployers[iterator.id].user = this.usefulComponents.splitStringName(this.allEmployers[iterator.id].user," ")       
+        for (const iterator of dataId.data) {       
             response += await this.listUser.main(iterator.id)
         }
-        this.messageList.receiverName(this.allEmployers)
+        await this.messageList.receiverName()
         return response;
     }
     convertArray(obj) {
