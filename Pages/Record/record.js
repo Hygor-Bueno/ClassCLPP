@@ -5,7 +5,6 @@ export class RecordPage extends SettingRecord {
     getRecord = new Record
     async main(objectChecklist) {
         document.getElementById("message").setAttribute("style", "display:none");
-
         let response =
             `
             <aside id="asideFilter">
@@ -21,50 +20,48 @@ export class RecordPage extends SettingRecord {
                             <div class="questionChecklist">
                                 <label>Titulo das checkList</label>
                                 <select class="sel" id="titleChecklist" type="checkbox">
-                                <option class="option" value="none" selected="" disabled="" hidden="">Selecione o checklist</option>
-                                    ${this.templateOption(objectChecklist, 'description')}
+                                    <option class="option" value="none" selected="" disabled="" hidden="">Selecione o checklist</option>
+                                        ${this.templateOption(objectChecklist, 'description')}
                                 </select>
                             </div>
                             <div class="questionChecklist">
                                 <label>Titulo das Perguntas</label>
                                 <select class="sel" id="titleQuestion">                                
-                                <option class="option" value="none" selected="" disabled="" hidden="">Selecione a pergunta</option>
+                                    <option class="option" value="none" selected="" disabled="" hidden="">Selecione a pergunta</option>
                                 </select>
                             </div>
                             <div class="questionChecklist">
                                 <label>Validade</label>
                                 <select class="sel" id="titleDate">
-                                <option class="option" value="none" selected="" disabled="" hidden="">Selecione a data</option>
+                                    <option class="option" value="none" selected="" disabled="" hidden="">Selecione a data</option>
                                 </select>
                             </div>
                         </div>
                     </div>
                     <div class="titleBlock">                
                         <div class="titleFilter">     
-                            <h1>Unidades</h1>  
-                           
+                            <h1>Unidades</h1>     
                         </div>
                         <div id="unidGroupBlock" class="bodyChecklist" style="display:block"">
                             <div class="questionChecklist">
-                                <select class="sel">
-                                <option class="option" value="none" selected="" disabled="" hidden="">Opções</option>
+                                <select class="sel" id=shop>
+                                    <option class="option" value="none" selected="" disabled="" hidden="">Opções</option>
                                 </select>
                             </div>
                         </div>      
                     </div>
                     <div class="titleBlock">                
                         <div class="titleFilter">     
-                            <h1>Por data</h1>  
-                              
+                            <h1>Por data</h1>    
                         </div>
                         <div id="dateBlock" class="bodyChecklist" style="display:block">
                             <div class="questionChecklist">
                                 <label>Data inicial</label>
-                                     <input type="date"></input>
+                                <input type="date"></input>
                             </div>
                             <div class="questionChecklist">
                                 <label>Data final</label>
-                                     <input type="date"></input>
+                                <input type="date"></input>
                             </div>
                         </div>
                     </div>
@@ -95,23 +92,20 @@ export class RecordPage extends SettingRecord {
                             <button type="button" class="buttonRecordPercentage"></button>
                         </div>
                 </div>
-
                 <body id="graphicRecord">
                     <section id="graphicMain">
-                    <h1>Principal</h1>
+                        <h1>Principal</h1>
                     </section>
 
                     <aside id="unityGraphic">
-                    <h1>Unidade</h1>
+                        <h1>Unidade</h1>
                     </aside>
 
                     <aside id="checklistGraphic">
-                    <h1>Checklist</h1>
+                        <h1>Checklist</h1>
                     </aside>
                 </body>
             </section>
-            
-
             
         `
         return response;

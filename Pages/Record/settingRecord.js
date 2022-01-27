@@ -11,7 +11,7 @@ export class SettingRecord {
     connectionCLPP = new ConnectionCLPP;
     userFulComponents = new UsefulComponents;
 
-    setting(objectChecklist) {
+    async setting(objectChecklist) {
         this.clickPage();
         this.jsonChecklists(objectChecklist);
         this.templateDate(objectChecklist)
@@ -24,10 +24,9 @@ export class SettingRecord {
                 this.templateOption(null, "description", this.jsonCheck[idCheckSelected].getQuestion())
             )
         }
+
+        console.log(await this.getShop())
     }
-
-
-
 
     jsonChecklists(objectChecklist) {
         objectChecklist.data.forEach(async (element) => {
@@ -105,7 +104,16 @@ export class SettingRecord {
             this.templateOption(null, 'date', jsonDate))
     }
 
+    shopFilter() {
+        getB_id('shop').insertAdjacentHTML('beforeend', 'oi')
+    }
+
     async getChecklist() {
         return await this.connectionCLPP.get("&web=&id_user=" + localStorage.getItem("id"), 'CLPP/Checklist.php')
+    }
+
+    async getShop() {
+        let response = await this.connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')
+        return response.data
     }
 } 
