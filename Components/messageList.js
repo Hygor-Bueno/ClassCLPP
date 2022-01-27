@@ -3,7 +3,6 @@ import { Message } from "../Connection/Message.js";
 import { UserAccess } from "../Connection/UserAccess.js";
 import { convertBase64 } from "../Util/convertBase64.js";
 import { UsefulComponents } from "../Util/usefulComponents.js";
-import { Users } from "./objects/user.js";
 var employeePhoto = new EmployeePhoto;
 
 export class MessageList {
