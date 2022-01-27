@@ -4,9 +4,7 @@ import { Message } from "../../Connection/Message.js";
 import { SettingMessage } from "./settingMessage.js";
 import { UsefulComponents } from "../../Util/usefulComponents.js";
 import { $ } from "../../Util/compressSyntaxe.js";
-import { UserAccess } from "../../Connection/UserAccess.js";
 import { Users } from "../../Components/objects/user.js";
-import { ListUser } from "../../Components/listUser.js";
 
 var userJson = {}
 

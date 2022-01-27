@@ -1,6 +1,8 @@
 import { EmployeePhoto } from "../Connection/EmployeePhoto.js";
 import { Message } from "../Connection/Message.js";
+import { UserAccess } from "../Connection/UserAccess.js";
 import { convertBase64 } from "../Util/convertBase64.js";
+import { UsefulComponents } from "../Util/usefulComponents.js";
 import { Users } from "./objects/user.js";
 var employeePhoto = new EmployeePhoto;
 
@@ -60,6 +62,7 @@ export class MessageList {
         return response;
     }
     async bodyChat(senderObject, page) {
+        await this.receiverName();
         let response, src="http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/";
         try {
             if (!page) page = 1
@@ -94,8 +97,13 @@ export class MessageList {
         const converImgBase64 = new convertBase64;
         document.querySelector(local).insertAdjacentHTML('beforeend', `<div class="${type == 2 ? classMessage + " formatImg": classMessage}" data-view="1">${type == 2 ?converImgBase64.convert(message).outerHTML:`<p>${message}</p>`}</div>`)
     }
-    receiverName(employeers){
-        this.employeers = employeers
-        console.log(this.employeers)
+    async receiverName(){
+        let userAccess = new UserAccess;
+        let usefulComponents = new UsefulComponents
+        let employee = await userAccess.get('&application_id=7&web', false);
+        for (const iterator of employee.data) {
+            this.employeers[iterator.id] = iterator
+            this.employeers[iterator.id].user = usefulComponents.splitStringName(this.employeers[iterator.id].user," ") 
+        }
     }
 }
