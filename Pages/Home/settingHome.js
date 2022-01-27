@@ -74,7 +74,7 @@ export class SettingHome {
         getB_id('buttonSend').addEventListener('click',  () => {this.buttonSend(idSender,getB_id('inputSend').value,1,'#bodyMessageDiv section')});
         getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
-    async buttonSend(idSender, message, type, local, localScroll) {   
+    async buttonSend(idSender, message, type, local, localScroll) {  
         if (type == 2 ? true : validator.minLength(message, 0) && validator.maxLength(message, 200)) {
             let objectSend = [['id_sender', localStorage.getItem('id')], [idSender[0] == 'group'?"id_group":`id_user`, idSender[1]], ['message', message], ['type', type]]
             let req = await messages.post(usefulComponents.createObject(objectSend), true);

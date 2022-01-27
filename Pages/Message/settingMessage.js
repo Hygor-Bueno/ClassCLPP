@@ -104,7 +104,7 @@ export class SettingMessage {
         this.modalImg()
     }
     async chargePageMsg(split, position) {
-        let object = split[0] == 'sender' ? { 'id': split[1], 'destiny': '&id_send=' } : { 'id': split[1], 'destiny': '&id_group=' };
+        let object = split[0] == 'send' ? { 'id': split[1], 'destiny': '&id_send=' } : { 'id': split[1], 'destiny': '&id_group=' };
         $('.msg_out').insertAdjacentHTML(position, await this.messageList.bodyChat(object, this.pages))
         $('.msg_out ').scrollTop = $('.msg_out ').scrollHeight;
         $('.msg_out section').setAttribute('id', `pages_${this.pages}`)     
