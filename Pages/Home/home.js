@@ -6,7 +6,7 @@ import { Message } from "../../Connection/Message.js";
 import { MessageList } from "../../Components/messageList.js";
 import { SettingHome } from "./settingHome.js";
 import { ObjectChecklist } from "../../Components/objects/checklistObject.js";
-import { Users } from "../../Components/objects/user.js";
+import { WebSocketCLPP } from "../../Connection/WebSocket.js";
 
 var employee = new Employee;
 var usefulComponents = new UsefulComponents;
@@ -14,6 +14,7 @@ var checklist = new Checklist;
 var userAccess = new UserAccess;
 var message = new Message;
 var listMessage = new MessageList;
+var ws = new WebSocketCLPP;
 
 export class HomePage extends SettingHome {
     userJson;
@@ -187,6 +188,8 @@ export class HomePage extends SettingHome {
                 document.querySelector('#bodyMessageDiv section').insertAdjacentHTML('beforeend', `${getNotify.type == 2 ?
                     `<div class="messageReceived formatImg"><img src=http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/${getNotify.message}></div>` : `<div class= "messageReceived"><p>${getNotify.message}</p></div>`}`)
                 document.querySelector('#bodyMessageDiv section').scrollTop = document.querySelector('#bodyMessageDiv section').scrollHeight;
+                console.log([document.querySelector('#bodyMessageDiv header').getAttribute('data-destiny'),document.querySelector('#bodyMessageDiv header').getAttribute('data-id')])
+                ws.informPreview([document.querySelector('#bodyMessageDiv header').getAttribute('data-destiny'),document.querySelector('#bodyMessageDiv header').getAttribute('data-id')])
             }
         }
     }
