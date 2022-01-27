@@ -551,7 +551,6 @@ export class TemplateChecklist {
     }
     editQuestion(objectQuestion) {
         this.editQuestionCreated(objectQuestion)
-        // Created(objectQuestion)
     }
     //Função resposavel por finalizar o checklist!
     async completedChecklist() {
