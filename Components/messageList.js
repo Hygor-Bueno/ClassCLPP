@@ -66,13 +66,12 @@ export class MessageList {
             let messages = new Message;
             let getMessage = await messages.get(`&id_user=${localStorage.getItem('id')}${senderObject.destiny}${senderObject.id}&pages=${page}`)
             getMessage.reverse()
-            //continuar a colocar o nome das pessoas no grupo
             response =
                 `<section class="showMsg">
                     ${getMessage.map((element) => (
 
                         `<div class="${element.id_user != localStorage.getItem('id') ? "messageReceived" : "messageSend"} ${element.type == 2 ? "formatImg":''}" data-view ='${element.notification}'>
-                        ${this.employeers[element.id_user] ? `<span>${this.employeers[element.id_user].user}</span>`:""}
+                        ${senderObject.destiny == '&id_group=' && element.id_user!= localStorage.getItem('id') ? `<span>${this.employeers[element.id_user].user+':'}</span>`:""}
                         ${element.type == 1 ? `<p>${element.message}</p>`: `<img src="${src}${element.message}"/>`}
 
                     </div>`)).join("")}
