@@ -60,7 +60,6 @@ export class MessageList {
         return response;
     }
     async bodyChat(senderObject, page) {
-        console.log(senderObject, page)
         let response, src="http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/";
         try {
             if (!page) page = 1
@@ -73,7 +72,6 @@ export class MessageList {
                     ${getMessage.map((element) => (
                         `<div class="${element.id_user != localStorage.getItem('id') ? "messageReceived" : "messageSend"} ${element.type == 2 ? "formatImg":''}" data-view ='${element.notification}'>
                         ${this.employeers[element.id_user] ? `<span>${this.employeers[element.id_user].user}</span>`:""}
-                        <br/>
                         ${element.type == 1 ? `<p>${element.message}</p>`: `<img src="${src}${element.message}"/>`}
                     </div>`)).join("")}
                 </section>`

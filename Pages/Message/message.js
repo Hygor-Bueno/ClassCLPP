@@ -67,7 +67,7 @@ export class MessagePage extends SettingMessage {
         let receiv = obj.sort((a,b) =>  {if(a.notification > b.notification) return -1})
         const conversation = receiv.map((element) => (
             `            
-            <div class="divUser" id="${element.id_user ? 'sender_' + element.id_user : 'group_' + element.id_group}">
+            <div class="divUser" id="${element.id_user ? 'send_' + element.id_user : 'group_' + element.id_group}">
                 <div class="divColab">
                     <img id="photoUser" src="${element.photo.src}">
                     <p>${this.usefulComponents.splitStringName(element.description, " ")}</p>
