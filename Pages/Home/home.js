@@ -86,7 +86,7 @@ export class HomePage extends SettingHome {
     }
     checklistCreated() {
         let resp;
-        // try {
+        try {
         resp =  Object.keys(this.checklistJson).map((element) => (
             `<div class="cardCheck" id="check_${this.checklistJson[element].getIdChecklist()}">
                     <header><h2>${this.checklistJson[element].getTitle().slice(0, 30) + "..."}</h2></header>
@@ -108,10 +108,10 @@ export class HomePage extends SettingHome {
                         <article>  
                     </section>
                 </div>`)).join("")
-        // } catch (e) {
-        //     console.error(e + " : Falha ao realizar ao carregar o tamplate...")
-        //     return `<div class="ErrorPageDefault"><p>Desculpe, não foi possivél carregar as informações...</p></div>`
-        // }
+        } catch (e) {
+            console.error(e + " : Falha ao realizar ao carregar o tamplate...")
+            return `<div class="ErrorPageDefault"><p>Desculpe, não foi possivél carregar as informações...</p></div>`
+        }
         return resp
     }
     templateListLinkedEmployees(checklist) {
