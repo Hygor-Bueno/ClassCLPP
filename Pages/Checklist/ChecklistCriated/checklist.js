@@ -1,11 +1,12 @@
 import { Checklist } from "../../../Connection/Checklist.js";
 import { SettingChecklist } from "../ChecklistCriated/settingChecklist.js";
 
-export class ChecklistCreatedPage extends SettingChecklist{
-  getChecklist = new Checklist(); 
-   async main(checklists) {
-    document.getElementById("message").setAttribute("style", "display:none");      
+export class ChecklistCreatedPage extends SettingChecklist {
+  getChecklist = new Checklist();
+  async main(checklists) {
+    document.getElementById("message").setAttribute("style", "display:none");
     let response = `
+    <nav id="nav">
       <form id="form">
           <div  id="inputCheck">
               <input type="text" placeholder="Digite aqui o nome da sua checklist" id="inputCheckList"/>
@@ -19,15 +20,16 @@ export class ChecklistCreatedPage extends SettingChecklist{
           <div id="search">
               <img id="searchName" src="./assets/images/Search.svg">
           </div>
-      </form>        
+      </form> 
+    </nav>         
       <section id="getCheckList">
           ${await this.getCheckListCreted(checklists)}
       </section>
         `;
     return response;
   }
-  
-  async arrayCheckList(){
-    return await this.getChecklist.get('&web&id_user=' + localStorage.getItem('id')) 
+
+  async arrayCheckList() {
+    return await this.getChecklist.get('&web&id_user=' + localStorage.getItem('id'))
   }
 }

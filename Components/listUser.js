@@ -136,12 +136,12 @@ export class ListUser {
       $(`#${element.getAttribute("id")} input[type=checkbox]`).checked
         ? connectionClpp.post(
           { id_user: user, id_checklist: idChecklist },
-          "CLPP/UserCheckList.php?",
+          "CLPP/UserCheckList.php",
           true
         )
         : connectionClpp.delete(
           { id_user: user, id_checklist: idChecklist },
-          "CLPP/UserCheckList.php?",
+          "CLPP/UserCheckList.php",
           true
         );
     });

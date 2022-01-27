@@ -7,8 +7,8 @@ import { Employee } from "../Connection/Employee.js";
 export class Routers {
 	async routers(params) {
 
-		let employee =new Employee;
-		await employee.get("&id=" + localStorage.getItem("id"),true)
+		let employee = new Employee;
+		await employee.get("&id=" + localStorage.getItem("id"), true)
 
 		localStorage.setItem('router', params)
 		document.getElementById('message').setAttribute('style', 'display:none')
@@ -42,7 +42,7 @@ export class Routers {
 					let reqCheck = await result.getChecklist();
 					document.getElementById('StylePages').setAttribute('href', "./Pages/Record/record.css")
 					local.insertAdjacentHTML("beforeend", await result.main(reqCheck));
-					result.setting(reqCheck)
+					await result.setting(reqCheck)
 					break;
 				case 'message':
 					result = new MessagePage;
