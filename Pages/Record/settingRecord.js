@@ -1,18 +1,20 @@
 import { ObjectChecklist } from "../../Components/objects/checklistObject.js";
 import { ConnectionCLPP } from "../../Connection/ConnectionCLPP.js";
 import { getB_id, $, $_all, openModalCheck, closeModalCheck } from "../../Util/compressSyntaxe.js";
+import { UsefulComponents } from "../../Util/usefulComponents.js";
 
 export class SettingRecord {
     searchOption;
     searchDateInit;
     searchDateFinal;
-    jsonCheck = {}
+    jsonCheck = {};
     connectionCLPP = new ConnectionCLPP;
+    userFulComponents = new UsefulComponents;
 
-    setting(objectChecklist) {
+    async setting(objectChecklist) {
         this.clickPage();
         this.jsonChecklists(objectChecklist);
-
+        this.templateDate(objectChecklist)
         getB_id('titleChecklist').onchange = () => {
             getB_id('titleQuestion').innerHTML = ""
             let select = getB_id('titleChecklist');
@@ -23,6 +25,7 @@ export class SettingRecord {
             )
         }
 
+        console.log(await this.getShop())
     }
 
     jsonChecklists(objectChecklist) {
@@ -43,9 +46,6 @@ export class SettingRecord {
 
     functionFilter(element) {
         switch (element.getAttribute("data-function")) {
-            /* case "openCloseFilter":
-                this.openCloseFilter(element);
-                break; */
             case "clearBtn":
                 this.clearFilter()
                 break;
@@ -53,17 +53,6 @@ export class SettingRecord {
                 console.error("data-function")
         }
     }
-
-    /* openCloseFilter(element) {
-        let bodyBlock = document.getElementById(`${element.getAttribute("data-block")}`)
-        if (bodyBlock.style.display == 'none') {
-            bodyBlock.setAttribute('style', "display:block")
-            element.style.backgroundImage = "url('./assets/images/down.svg')";
-        } else {
-            bodyBlock.setAttribute('style', "display:none")
-            element.style.backgroundImage = "url('./assets/images/up.svg')";
-        }
-    } */
 
     clearFilter() {
         this.clearDate()
@@ -75,7 +64,7 @@ export class SettingRecord {
         test.forEach(options => {
             options.options[0].selected = true
         });
-        document.querySelectorAll('#titleQuestion option').forEach((e, index) => { index > 0 ? e.remove() : "" })
+        document.querySelectorAll('#titleDate option').forEach((e, index) => { index > 0 ? e.remove() : "" })
     }
 
     clearDate() {
@@ -85,19 +74,46 @@ export class SettingRecord {
         })
     }
 
-    filterReport() {
-
-    }
     templateOption(objectChecklist, key, array) {
         let response = ""
         let auxArray = array || objectChecklist.data
         auxArray.map(element => {
-            response += `<option type="checkbox" class="option" multiple="multiple" data-id="${element.id}" value="${element[key]}">${element[key]}</option>`
+            response += `<option class="option" data-id="${element.id}" value="${element[key]}">${element[key]}</option>`
         })
         return response;
     }
 
+    templateDate(objectChecklist) {
+        let objDateId;
+        let objDateInit;
+        let objDateFinal;
+        let newJson;
+        let jsonDate = [];
+        objectChecklist.data.forEach(element => {
+            objDateId = element.id
+            objDateInit = element.date_init
+            objDateFinal = element.date_final
+            newJson = {
+                date: this.userFulComponents.convertData(objDateInit, "-") + " - " + this.userFulComponents.convertData(objDateFinal, "-"),
+                id: (objDateId)
+            }
+            jsonDate.push(newJson)
+
+        })
+        getB_id('titleDate').insertAdjacentHTML('beforeend',
+            this.templateOption(null, 'date', jsonDate))
+    }
+
+    shopFilter() {
+        getB_id('shop').insertAdjacentHTML('beforeend', 'oi')
+    }
+
     async getChecklist() {
         return await this.connectionCLPP.get("&web=&id_user=" + localStorage.getItem("id"), 'CLPP/Checklist.php')
+    }
+
+    async getShop() {
+        let response = await this.connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')
+        return response.data
     }
 } 

@@ -66,13 +66,13 @@ export class SettingHome {
             getB_id(`${iterator.getAttribute('id')}`).remove()                                                                              // remove o usuário da lista de mensagens não vizualizadas.
             this.settingsButtonChat(temp)                                                                                                   // Atribui as funcionalidades aos botões do Chat.
             document.querySelector('#bodyMessageDiv section').scrollTop = document.querySelector('#bodyMessageDiv section').scrollHeight;   // Faz com que o Scroll preaneça sempre em baixo.
-            webSocket.informPreview([objectSenders.send ? 'sender':'group',objectSenders.id])                                               // informa so websocket que o usuário abriu uma mensagem, passando por parâmento o destinatário da mensagem.
+            webSocket.informPreview([objectSenders.send ? 'send':'group',objectSenders.id])                                               // informa so websocket que o usuário abriu uma mensagem, passando por parâmento o destinatário da mensagem.
         })
     }
     settingsButtonChat(idSender) {
         getB_id('buttonReply').addEventListener('click', () => this.closeMessage());
         getB_id('buttonSend').addEventListener('click',  () => {this.buttonSend(idSender,getB_id('inputSend').value,1,'#bodyMessageDiv section')});
-        getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
+        getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click()})
     }
     async buttonSend(idSender, message, type, local, localScroll) {  
         if (type == 2 ? true : validator.minLength(message, 0) && validator.maxLength(message, 200)) {
