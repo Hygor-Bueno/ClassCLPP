@@ -13,7 +13,7 @@ export class MessageList {
     notSeen() {
         return this.messages.filter(
             (element) => element.notification == 1
-        )   
+        )
     }
     notSeenGroup() {
         return this.groups.filter(
@@ -39,8 +39,7 @@ export class MessageList {
         }
     }
     async chatCLPP(senderObject, page) {
-        let response =
-            `
+        let response = `
             <div id="bodyMessageDiv">
                 ${this.headerChat(senderObject)}
                 ${await this.bodyChat(senderObject, page)}
@@ -49,10 +48,11 @@ export class MessageList {
         `
         return response;
     }
-    headerChat(senderObject) {
+    headerChat(senderObject) {      
+        console.log(senderObject)
         let response =
             `
-        <header data-id="${senderObject.id}">
+        <header data-destiny="${senderObject.destiny == "&id_send="?"send":"group"}" data-id="${senderObject.id}">
             <p><b>${senderObject.name}</b></p>
             <img id="buttonReply" src="assets/images/reply.svg" title="Fechar Mensagem"/>
         </header>
@@ -64,15 +64,17 @@ export class MessageList {
         try {
             if (!page) page = 1
             let messages = new Message;
-            let getMessage = await messages.get(`&id_user=${localStorage.getItem('id')}${senderObject.destiny}${senderObject.id}&pages=${page}`) 
+            let getMessage = await messages.get(`&id_user=${localStorage.getItem('id')}${senderObject.destiny}${senderObject.id}&pages=${page}`)
             getMessage.reverse()
             //continuar a colocar o nome das pessoas no grupo
             response =
                 `<section class="showMsg">
                     ${getMessage.map((element) => (
+
                         `<div class="${element.id_user != localStorage.getItem('id') ? "messageReceived" : "messageSend"} ${element.type == 2 ? "formatImg":''}" data-view ='${element.notification}'>
                         ${this.employeers[element.id_user] ? `<span>${this.employeers[element.id_user].user}</span>`:""}
                         ${element.type == 1 ? `<p>${element.message}</p>`: `<img src="${src}${element.message}"/>`}
+
                     </div>`)).join("")}
                 </section>`
         } catch (e) {
@@ -91,11 +93,11 @@ export class MessageList {
             `
         return response;
     }
-    addMessage(local, message, classMessage,type) {
+    addMessage(local, message, classMessage, type) {
         const converImgBase64 = new convertBase64;
-        document.querySelector(local).insertAdjacentHTML('beforeend', `<div class="${type == 2 ? classMessage + " formatImg": classMessage}" data-view="1">${type == 2 ?converImgBase64.convert(message).outerHTML:`<p>${message}</p>`}</div>`)
+        document.querySelector(local).insertAdjacentHTML('beforeend', `<div class="${type == 2 ? classMessage + " formatImg" : classMessage}" data-view="1">${type == 2 ? converImgBase64.convert(message).outerHTML : `<p>${message}</p>`}</div>`)
     }
-    receiverName(employeers){
+    receiverName(employeers) {
         this.employeers = employeers
         console.log(this.employeers)
     }
