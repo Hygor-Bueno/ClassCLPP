@@ -6,7 +6,6 @@ import { Message } from "../../Connection/Message.js";
 import { MessageList } from "../../Components/messageList.js";
 import { SettingHome } from "./settingHome.js";
 import { ObjectChecklist } from "../../Components/objects/checklistObject.js";
-import { Users } from "../../Components/objects/user.js";
 
 var employee = new Employee;
 var usefulComponents = new UsefulComponents;

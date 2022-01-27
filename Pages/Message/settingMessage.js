@@ -159,12 +159,16 @@ export class SettingMessage {
         $('.searchGroup').addEventListener('click', () => {
             const nameGroup = `
             <div class="nameGroup">
-                <header><h1>Insira o nome do grupo</h1></header>
+                <header><div id="borderBack">
+                <img src="./assets/images/cancel.svg" title ="Fechar">
+                </div>
+                <h1>Insira o nome do grupo</h1></header>
                 <input type="text">
                 <footer><button class="buttonProgress"><a>Continuar</a></button></footer>
             </div>`
             openModal(nameGroup);
             this.saveGroup()
+            this.settingGroup()
         })
     }
     saveGroup() {
