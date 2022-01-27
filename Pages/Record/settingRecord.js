@@ -78,12 +78,13 @@ export class SettingRecord {
         let response = ""
         let auxArray = array || objectChecklist.data
         auxArray.map(element => {
-            response += `<option class="option" data-id="${element.id}" value="${element[key]}">${element[key]}</option>`
+            element[key] ?  response += `<option class="option" data-id="${element.id}" value="${element[key]}">${element[key]}</option>` : ""
         })
         return response;
     }
 
     templateDate(objectChecklist) {
+        console.log(objectChecklist)
         let objDateId;
         let objDateInit;
         let objDateFinal;
@@ -92,9 +93,10 @@ export class SettingRecord {
         objectChecklist.data.forEach(element => {
             objDateId = element.id
             objDateInit = element.date_init
+            console.log(objDateInit)
             objDateFinal = element.date_final
             newJson = {
-                date: this.userFulComponents.convertData(objDateInit, "-") + " - " + this.userFulComponents.convertData(objDateFinal, "-"),
+                date: objDateInit ? this.userFulComponents.convertData(objDateInit, "-") + " - " + this.userFulComponents.convertData(objDateFinal, "-"):false,
                 id: (objDateId)
             }
             jsonDate.push(newJson)
