@@ -78,14 +78,14 @@ export class WebSocketCLPP {
     informPreview(idSender) {
         const jsonString = {}
             jsonString.type = 3;
-            jsonString[idSender[0] == 'sender' ? 'send_id': 'id_group'] = idSender[1]
+            jsonString[idSender[0] == 'send' ? 'send_id': 'id_group'] = idSender[1]
         ws.send(JSON.stringify(jsonString))
     }
     // Eu estou enviando a mensagem  
     informSending(idMessage, idUserSend) {
         let jsonString = {}
             jsonString.type = 2,
-            jsonString[idUserSend[0] == 'sender' ? 'send_id': 'group_id'] = idUserSend[1], 
+            jsonString[idUserSend[0] == 'send' ? 'send_id': 'group_id'] = idUserSend[1], 
             jsonString.last_id = idMessage
         ws.send(JSON.stringify(jsonString))
     }
