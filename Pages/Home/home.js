@@ -179,18 +179,20 @@ export class HomePage extends SettingHome {
     }
     async upMsgReceived(getNotify) {
         let aux = getNotify.group_id || getNotify.send_user 
-        console.log(aux+"<--")
+        await listMessage.receiverName();
+        console.log(getNotify+" <-- ",listMessage.employeers[getNotify.send_user].user+": ")
         if (document.getElementById('bodyChDiv')) {
             document.getElementById('bodyChDiv').insertAdjacentHTML('beforeend', await this.messageReceived());
             this.settings();
             if (document.getElementById('bodyMessageDiv') && aux == document.querySelector('#bodyMessageDiv header').getAttribute('data-id')) {
                 console.log(getNotify)
                 document.querySelector('#bodyMessageDiv section').insertAdjacentHTML('beforeend', `${getNotify.type == 2 ?
-                    `<div class="messageReceived formatImg"><img src=http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/${getNotify.message}></div>` : `<div class= "messageReceived"><p>${getNotify.message}</p></div>`}`)
+                    `<div class="messageReceived formatImg">${getNotify.group_id ? `<span>${listMessage.employeers[getNotify.send_user]+": "}</span>`:""}<img src=http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/${getNotify.message}></div>` : `<div class= "messageReceived"> ${getNotify.group_id ? `<span>${listMessage.employeers[getNotify.send_user].user+": "}</span>`:``} <p>${getNotify.message}</p></div>`}`)
                 document.querySelector('#bodyMessageDiv section').scrollTop = document.querySelector('#bodyMessageDiv section').scrollHeight;
                 console.log([document.querySelector('#bodyMessageDiv header').getAttribute('data-destiny'),document.querySelector('#bodyMessageDiv header').getAttribute('data-id')])
                 ws.informPreview([document.querySelector('#bodyMessageDiv header').getAttribute('data-destiny'),document.querySelector('#bodyMessageDiv header').getAttribute('data-id')])
             }
         }
+        // ${getNotify.group_id ? ``:``}
     }
 }

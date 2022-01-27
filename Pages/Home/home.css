@@ -37,11 +37,19 @@
     margin-top:10px;
     word-wrap: break-word;
 }
+
 .messageReceived p{
     padding:2px;
     width: 70%;
     background:#f1f2f5;
     border-radius: 5px;
+}
+
+.messageReceived span{
+    background:#f1f2f5;
+    font-size:14px;
+    opacity: .7;
+    padding:2px;
 }
 .messageSend{
     display: flex;
