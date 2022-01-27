@@ -21,23 +21,21 @@ export class RecordPage extends SettingRecord {
                             <div class="questionChecklist">
                                 <label>Titulo das checkList</label>
                                 <select class="sel" id="titleChecklist" type="checkbox">
-                                <option class="option" value="none" selected="" disabled="" hidden="">Selecione o checklist:</option>
+                                <option class="option" value="none" selected="" disabled="" hidden="">Selecione o checklist</option>
                                     ${this.templateOption(objectChecklist, 'description')}
                                 </select>
                             </div>
                             <div class="questionChecklist">
                                 <label>Titulo das Perguntas</label>
                                 <select class="sel" id="titleQuestion">                                
-                                <option class="option" value="none" selected="" disabled="" hidden="">Selecione a pergunta:</option>
+                                <option class="option" value="none" selected="" disabled="" hidden="">Selecione a pergunta</option>
                                 </select>
                             </div>
                             <div class="questionChecklist">
                                 <label>Validade</label>
-                                <input type="date" class="date"></input>
-                            </div>
-                            <div class="questionChecklist">
-                                <label>Validade</label>
-                                <input type="date" class="date"></input>
+                                <select class="sel" id="titleDate">
+                                <option class="option" value="none" selected="" disabled="" hidden="">Selecione a data</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -62,12 +60,12 @@ export class RecordPage extends SettingRecord {
                         <div id="dateBlock" class="bodyChecklist" style="display:block">
                             <div class="questionChecklist">
                                 <label>Data inicial</label>
-                                <input type="date" class="date"></input>
+                                     <input type="date"></input>
                             </div>
                             <div class="questionChecklist">
-                            <label>Data final</label>
-                            <input type="date" class="date"/>
-                        </div>
+                                <label>Data final</label>
+                                     <input type="date"></input>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -89,7 +87,7 @@ export class RecordPage extends SettingRecord {
 
                 <div id="headerGraphic">
                         <div id="dashbord">
-                            <h1>DashBord</h1>
+                            <h1>Dashboard</h1>
                         </div>
                         <div id="buttonGraphic">
                             <button type="button" class="buttonRecordBar"></button>
