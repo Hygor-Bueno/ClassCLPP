@@ -180,7 +180,6 @@ export class HomePage extends SettingHome {
     async upMsgReceived(getNotify) {
         let aux = getNotify.group_id || getNotify.send_user 
         await listMessage.receiverName();
-        console.log(getNotify+" <-- ",listMessage.employeers[getNotify.send_user].user+": ")
         if (document.getElementById('bodyChDiv')) {
             document.getElementById('bodyChDiv').insertAdjacentHTML('beforeend', await this.messageReceived());
             this.settings();
