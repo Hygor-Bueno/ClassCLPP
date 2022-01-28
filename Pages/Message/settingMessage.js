@@ -37,6 +37,7 @@ export class SettingMessage {
         this.searchName()
         this.modalImg()
         this.createGroup()
+        
     }
     clickSend() {
         getB_id('buttonSend').addEventListener('click', () => {this.sendMsg();this.notificationMsg();});
@@ -82,6 +83,7 @@ export class SettingMessage {
         this.tradeDiv()
         this.preparatePages()
         this.changeHeader(element);
+        this.consultGroup()
         $('.user_in').setAttribute('style', 'display:flex');
         $('.templateSearchUser').setAttribute('style', 'display:none');
         $('.searchUnic').setAttribute('style', 'display:none');
@@ -177,6 +179,7 @@ export class SettingMessage {
             await this.groupMessage.main($('.nameGroup input').value)
             closeModal()
             this.usersInGroup()
+            this.settingGroup()
         })
     }
     usersInGroup() {
@@ -192,7 +195,6 @@ export class SettingMessage {
                     <h1>Incluir Usuario:</h1>
                 </header>
             </div>`)
-        this.settingGroup()
     }
     settingGroup() {
         getB_id('borderBack').addEventListener('click', () => closeModal())
@@ -202,6 +204,12 @@ export class SettingMessage {
             closeModal()
             const routers = new Routers;
             routers.routers(localStorage.getItem('router'))
+        })
+    }
+    consultGroup() {
+        if ($('.colabHead .btnOnlyGroup')) $('.btnOnlyGroup').addEventListener('click', () => {
+            this.usersInGroup();
+            getB_id('borderBack').addEventListener('click', () => closeModal())
         })
     }
     visualizationMsg(params) {
