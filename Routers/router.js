@@ -50,7 +50,7 @@ export class Routers {
 					local.insertAdjacentHTML("beforeend", await result.main());
 					result.setting()
 					break;
-			}
+				}
 			return result;
 		}
 	}
