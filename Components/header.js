@@ -1,11 +1,12 @@
 import { Routers } from "../Routers/router.js"
 import { Logof } from "./logof/modal_logof.js"
 
-export class HeaderCLPP{
+export class HeaderCLPP {
     routes = new Routers
-    template(photo){
-        let response = 
-        `
+    stopRouter = true;
+    template(photo) {
+        let response =
+            `
         <header class = "nav">         
             <nav class="menu"> 
                 <ul class="principal">
@@ -25,18 +26,23 @@ export class HeaderCLPP{
         `
         return response
     }
-    setting(){
-        let idLine = ["pageHome","pageNewChecklist","pageChecklistCreated","pageRecord","pageMessage"]
-        let router = ['home','checklistCreate','checklistCreated','record','message']
-        for(let index =0; index < 5; index++){
-            document.getElementById(idLine[index]).addEventListener('click',()=>{this.routes.routers(router[index])})
+    setting() {
+        let idLine = ["pageHome", "pageNewChecklist", "pageChecklistCreated", "pageRecord", "pageMessage"]
+        let router = ['home', 'checklistCreate', 'checklistCreated', 'record', 'message']
+        for (let index = 0; index < 5; index++) {
+            document.getElementById(idLine[index]).addEventListener('click', async () => {
+                if (this.stopRouter) {
+                    this.stopRouter = false;
+                    await this.routes.routers(router[index]);
+                    this.stopRouter = true;
+                }
+            })
         }
-
-        document.getElementById('linePhotoUser').addEventListener('click',()=>{
+        document.getElementById('linePhotoUser').addEventListener('click', () => {
             let logof = new Logof();
             document.querySelector('.container').insertAdjacentHTML("beforeend", logof.template())
-            document.querySelector('.container').setAttribute('style','display:flex')  
-            logof.settings()      
+            document.querySelector('.container').setAttribute('style', 'display:flex')
+            logof.settings()
         })
     }
 }
