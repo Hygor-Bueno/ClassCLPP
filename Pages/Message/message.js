@@ -32,8 +32,8 @@ export class MessagePage extends SettingMessage {
                 <header class="searchHead">
                     <img class="searchName" src="./assets/images/Search.svg">
                     <input type="text" class="searchUserBar">
-                    <img class="searchUser" src="./assets/images/person_black_24dp.svg">
-                    <img class="searchGroup" src="./assets/images/groups_black_24dp.svg">
+                    <img class="searchUser" src="./assets/images/icons8-search-client-24.png">
+                    <img class="searchGroup" src="./assets/images/icons8-people-working-together-50.png">
                 </header>
                 <div class="user_in style_scroll" style="display:flex">
                     ${this.userReceived(this.convertArray(userJson))}

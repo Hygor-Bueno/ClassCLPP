@@ -74,8 +74,7 @@ export class ListUser {
     for (const iterator of list) {
       iterator.addEventListener("click", () => {
         iterator.getAttribute("data-update") == 0 ? iterator.setAttribute("data-update", 1) : iterator.setAttribute("data-update", 0);
-        document.querySelector(`#${iterator.getAttribute("id")} input[type=checkbox]`
-        ).checked
+        document.querySelector(`#${iterator.getAttribute("id")} input[type=checkbox]`).checked
           ? this.markoffUser(iterator.getAttribute("id"))
           : this.markUser(iterator.getAttribute("id"));
       });
@@ -88,16 +87,13 @@ export class ListUser {
 
   // FUNCIONALIDADES:
   markUser(idDivUser) {
-    console.log(idDivUser);
     document.querySelector(`#${idDivUser} input[type=checkbox]`).checked = true;
     document.querySelector(`#${idDivUser} label`).setAttribute("style", "display:flex");
     document.querySelector(`#templateListUser #${idDivUser} div`).setAttribute("style", "opacity:.3");
   }
 
   markoffUser(idDivUser) {
-    document.querySelector(
-      `#${idDivUser} input[type=checkbox]`
-    ).checked = false;
+    document.querySelector(`#${idDivUser} input[type=checkbox]`).checked = false;
     document.querySelector(`#${idDivUser} label`).setAttribute("style", "display:none");
     document.querySelector(`#templateListUser #${idDivUser} div`).setAttribute("style", "opacity:1");
   }

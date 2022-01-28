@@ -111,9 +111,10 @@ export class SettingMessage {
         $('.colabHead').innerHTML = element.innerHTML
         $(`.part2 .notifyMsg`) && $(`.part2 .notifyMsg`).remove();
         $('.part2 .colabHead').insertAdjacentHTML('beforeend',
-            `<div class="notifyMsg">
-            <img class="imgNotify" src=./assets/images/notification.svg>
-        </div>`)
+            `${element.getAttribute('id').split('_')[0] == "group" ? `<button class="btnOnlyGroup" type="button"><img src="./assets/images/icons8-search-group-24.png"></button>`: ""}
+            <div class="notifyMsg">
+                <img class="imgNotify" src=./assets/images/notification.svg>
+            </div>`)
     }
     searchUser() {
         $('.searchUser').addEventListener('click', () => {
@@ -221,9 +222,9 @@ export class SettingMessage {
     notificationMsg() {
         let notific = $('.messageSend') && $_all('.messageSend')[$_all('.messageSend').length - 1].getAttribute('data-view')
         if (notific == 1) {
-            $('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notify.svg')
+            $('.colabHead div:nth-child(3) img').setAttribute('src', './assets/images/notify.svg')
         } else {
-            $('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notification.svg')
+            $('.colabHead div:nth-child(3) img').setAttribute('src', './assets/images/notification.svg')
         }
     }
     async methodUnited(dataId) {
