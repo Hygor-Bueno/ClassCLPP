@@ -68,15 +68,6 @@ input {
   height: 50px;
 }
 
-/* openCloseBtnCss {
-  width: 28px;
-  height: 22px;
-  background-image: url("../../assets/images/up.svg");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-color: #e4e4e4;
-} */
-
 #bodyAside {
   height: 94%;
 }
@@ -123,6 +114,12 @@ input {
   align-items: center;
 }
 
+#buttonRecordBar,
+#buttonRecordPizza,
+#buttonRecordPercentage {
+  opacity: 0.3;
+}
+
 #dashbord {
   width: 50%;
   display: flex;
@@ -141,7 +138,7 @@ input {
   width: 20%;
 }
 
-.buttonRecordBar {
+#buttonRecordBar {
   width: 23px;
   height: 23px;
   background-image: url("../../assets/images/barra.png");
@@ -150,7 +147,7 @@ input {
   box-shadow: none;
 }
 
-.buttonRecordPizza {
+#buttonRecordPizza {
   width: 23px;
   height: 23px;
   background-image: url("../../assets/images/pizza.png");
@@ -159,7 +156,7 @@ input {
   box-shadow: none;
 }
 
-.buttonRecordPercentage {
+#buttonRecordPercentage {
   width: 23px;
   height: 23px;
   background-image: url("../../assets/images/porcentagem.png");
@@ -189,12 +186,31 @@ input {
   grid-row: 3/5;
   background-color: rgb(255, 255, 255);
   border-bottom: 1px solid rgb(178, 178, 178);
-  /* border-top: 1px solid rgb(178, 178, 178);
-  border-right: 1px solid rgb(178, 178, 178); */
 }
 
 #checklistGraphic {
   grid-column: 4/6;
   grid-row: 5/7;
   background-color: rgb(255, 255, 255);
+}
+
+@media screen and (min-width: 1500px) {
+  .titleOptionBlock,
+  #titleMain {
+    font-size: 20px;
+  }
+
+  #dashbord {
+    font-size: 35px;
+  }
+  .sel {
+    font-size: 18px;
+  }
+
+  #buttonRecordBar,
+  #buttonRecordPizza,
+  #buttonRecordPercentage {
+    width: 27px;
+    height: 27px;
+  }
 }
