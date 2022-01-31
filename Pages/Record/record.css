@@ -1,0 +1,200 @@
+#content {
+  display: flex;
+}
+
+#asideFilter {
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+  padding: 3px;
+  border-right: 1px solid rgb(178, 178, 178);
+  height: 98%;
+}
+
+#titleMain {
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 35px;
+  font-size: 17px;
+  padding: 2px;
+  border-bottom: 1px solid rgb(178, 178, 178);
+  background-color: white;
+}
+
+.titleBlock {
+  border: 1px solid rgb(178, 178, 178);
+  margin-bottom: 5px;
+}
+.titleFilter {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgb(178, 178, 178);
+  font-weight: bold;
+  align-items: center;
+  background-color: rgb(224, 224, 224);
+}
+
+.questionChecklist {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  border-bottom: 1px solid rgb(178, 178, 178);
+}
+
+.bodyChecklist {
+  padding: 0px 3px;
+}
+
+.questionChecklist select,
+input {
+  width: 90%;
+  height: 23px;
+  margin-top: 2px;
+}
+
+.buttonMain {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 60px;
+  min-height: 60px;
+  border-top: 1px solid rgb(178, 178, 178);
+  background-color: white;
+}
+
+.buttonMain button {
+  height: 50px;
+}
+
+/* openCloseBtnCss {
+  width: 28px;
+  height: 22px;
+  background-image: url("../../assets/images/up.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #e4e4e4;
+} */
+
+#bodyAside {
+  height: 94%;
+}
+
+#corpoRecord {
+  width: 100%;
+  height: 96%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 0.4fr 0.3fr 1fr 1fr 1fr 1fr;
+  padding: 10px;
+}
+
+#header {
+  grid-column: 1/6;
+  grid-row: 1/1;
+  display: flex;
+  background-color: rgb(255, 255, 255);
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+
+#inputTitle {
+  display: flex;
+  padding-left: 20px;
+  width: 60%;
+}
+
+#headerGraphic {
+  grid-column: 1/6;
+  grid-row: 2/2;
+  display: flex;
+  justify-content: space-between;
+  background-color: rgb(255, 255, 255);
+  border-bottom: 1px solid rgb(178, 178, 178);
+}
+
+#buttonGraphic {
+  width: 15%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+#dashbord {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22pt;
+  font-weight: bold;
+}
+
+#buttonPrint {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding-right: 20px;
+  border: none;
+  width: 20%;
+}
+
+.buttonRecordBar {
+  width: 23px;
+  height: 23px;
+  background-image: url("../../assets/images/barra.png");
+  background-size: cover;
+  border: none;
+  box-shadow: none;
+}
+
+.buttonRecordPizza {
+  width: 23px;
+  height: 23px;
+  background-image: url("../../assets/images/pizza.png");
+  background-size: cover;
+  border: none;
+  box-shadow: none;
+}
+
+.buttonRecordPercentage {
+  width: 23px;
+  height: 23px;
+  background-image: url("../../assets/images/porcentagem.png");
+  background-size: cover;
+  box-shadow: none;
+  border: none;
+}
+
+.buttonRecordPrint {
+  width: 28px;
+  height: 28px;
+  background-image: url("../../assets/images/print.png");
+  background-size: cover;
+  box-shadow: none;
+  border: none;
+}
+
+#graphicMain {
+  grid-column: 1/4;
+  grid-row: 3/7;
+  background-color: rgb(255, 255, 255);
+  border-right: 1px solid rgb(178, 178, 178);
+}
+
+#unityGraphic {
+  grid-column: 4/6;
+  grid-row: 3/5;
+  background-color: rgb(255, 255, 255);
+  border-bottom: 1px solid rgb(178, 178, 178);
+  /* border-top: 1px solid rgb(178, 178, 178);
+  border-right: 1px solid rgb(178, 178, 178); */
+}
+
+#checklistGraphic {
+  grid-column: 4/6;
+  grid-row: 5/7;
+  background-color: rgb(255, 255, 255);
+}

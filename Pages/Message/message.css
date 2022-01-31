@@ -1,5 +1,6 @@
 .containerMsg {
     display:flex;
+    margin: auto;
     width: 100%;
     height: 100%;
 }
@@ -50,19 +51,6 @@
     height: 86%;
 }
 
-.user_in::-webkit-scrollbar, .expor::-webkit-scrollbar {
-    width: 5px;
-}
-
-.user_in::-webkit-scrollbar-track, .expor::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.user_in::-webkit-scrollbar-thumb, .expor::-webkit-scrollbar-thumb {
-    background:#326744;
-    border-radius: 10px;
-}
-
 .templateSearchUser{
     display: none;
     flex-direction: column;
@@ -72,19 +60,6 @@
     height: 86%;
 }
 
-.templateSearchUser::-webkit-scrollbar, .expor::-webkit-scrollbar {
-    width: 5px;
-}
-
-.templateSearchUser::-webkit-scrollbar-track, .expor::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.templateSearchUser::-webkit-scrollbar-thumb, .expor::-webkit-scrollbar-thumb {
-    background:#326744;
-    border-radius: 10px;
-}
-
 .searchUnic{
     display: none;
     flex-direction: column;
@@ -92,19 +67,6 @@
     margin: 2px;
     width: 98%;
     height: 86%;
-}
-
-.searchUnic::-webkit-scrollbar, .expor::-webkit-scrollbar {
-    width: 5px;
-}
-
-.searchUnic::-webkit-scrollbar-track, .expor::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.searchUnic::-webkit-scrollbar-thumb, .expor::-webkit-scrollbar-thumb {
-    background:#326744;
-    border-radius: 10px;
 }
 
 .divUser{
@@ -125,6 +87,21 @@
     align-items: center;
     height: 100%;
     width: 85%;
+}
+
+.presentation{
+    border-left: 5px solid white;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 65%;
+    height: 100%;
+}
+
+.imgPresentation{
+    width: 60%;
+    height: 30%;
 }
 
 .part2 {
@@ -163,8 +140,6 @@
 }
 
 .msg_out{
-    border-left: 4px solid #f1f2f5;
-    border-right: 4px solid #f1f2f5;
     background: white;
     overflow-y: auto;
     width: 100%;
@@ -175,44 +150,42 @@
     flex-direction: column;
 }
 
-.msg_out::-webkit-scrollbar, .expor::-webkit-scrollbar {
-    width: 5px;
-}
-
-.msg_out::-webkit-scrollbar-track, .expor::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.msg_out::-webkit-scrollbar-thumb, .expor::-webkit-scrollbar-thumb {
-    background:#326744;
-    border-radius: 10px;
-}
-
 .messageReceived{
     display: flex;
-    justify-content: flex-start;
-    width:100%;
+    align-items: flex-start;
+    flex-direction: column;
+    width:98%;
     margin-top:10px;
+    padding:5px;
     word-wrap: break-word;
 }
 .messageReceived p{
     padding:2px;
-    max-width: 50%;
+    width: 50%;
     background:#f1f2f5;
-    border-radius: 5px;
 }
+
+.messageReceived span{
+    background:#f1f2f5;
+    font-size:14px;
+    opacity: .7;
+    padding:2px;
+    width: 50%;
+}
+
 .messageSend{
     display: flex;
-    justify-content: flex-end;
-    width:100%;
+    align-items: flex-end;
+    flex-direction: column;
+    width:98%;
     margin-top:10px;
     word-wrap: break-word;
 }
+
 .messageSend p{
-    padding:2px;
-    max-width: 50%;
     background:#f1f2f5;
-    border-radius: 5px;
+    padding:2px;
+    width: 50%;
 }
 
 .footSend{
@@ -241,4 +214,99 @@
 .buttonSendMsg{
     cursor:pointer;
     margin: 20px;
+}
+
+#closeImg{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    width: 600px;
+    height: 600px;
+}
+
+#closeImg img{
+    height: 100%;
+    width: 100%;
+}
+
+#borderBack h1 {
+    color: white;
+}
+
+.nameGroup {
+    background: white;
+    width: 30%;
+    height: 30%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.nameGroup header {
+    width: 100%;
+    height: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #326744;
+    margin-bottom: 10px; 
+}
+.nameGroup h1 {
+    color: white;
+    font-size: 20px;
+}
+
+.nameGroup input {
+    font-size: 20px;
+    margin: 15px;
+    width: 80%;
+}
+
+.nameGroup button {
+    background: #326744;
+    margin: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.nameGroup button a {
+    color: white;
+    font-size: 13px;
+    margin: 10px;
+}
+
+@media (min-width:1300px) {
+    .searchHead, .colabHead{
+        height: 80px;
+    }
+
+    .colabHead p{
+        font-size:22px;
+    }
+
+    .searchGroup, .searchUser, .searchName{
+        height:40%;
+        cursor:pointer;
+    }
+
+    .containerMsg {
+        border: 5px solid white;
+        display:flex;
+        margin: auto;
+    }
+
+    .containerMsg p{
+        font-size:19px;
+    }
+    
+    .msg_out{
+        width: 99%;
+        height: 88%;
+    }
+
+    .formatImg img{
+        width: 300px;
+        height: 300px;
+    }
+
 }

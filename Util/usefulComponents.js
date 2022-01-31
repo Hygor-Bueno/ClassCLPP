@@ -1,18 +1,17 @@
 import { Validation } from "./validation.js";
 var validation = new Validation();
 export class UsefulComponents {
-    
-    splitString(stringToSplit, separator) {        
-        try{
+    splitString(stringToSplit, separator) {
+        try {
             if (validation.mandatoryMethods(stringToSplit, separator)) throw new Error('Atenção. Falha ao realizar a ação! São obrigatórios dois parâmentros para execução dos métodos "splitString" e "splitStringName". (Util/UsefulComponents)')
             return stringToSplit.split(separator);
-        }catch(e) {
+        } catch (e) {
             console.error(e)
         }
     }
-    convertData(stringToSplit, separator){
+    convertData(stringToSplit, separator) {
         let response = this.splitString(stringToSplit, separator)
-        return response[2] + "/"+ response[1] + "/" + response[0]
+        return response[2] + "/" + response[1] + "/" + response[0]
     }
     splitStringName(stringToSplit, separator) {
         var arrayOfStrings = this.splitString(stringToSplit, separator)
@@ -28,36 +27,39 @@ export class UsefulComponents {
         }
         return response
     }
-    checkField(local){
+    checkField(local) {
         let valid = true;
 
-        for(let field of this.formular.querySelectorAll(local)){
+        for (let field of this.formular.querySelectorAll(local)) {
             const label = field.previousElementSibling.innerText;
-            if(!field.value){
+            if (!field.value) {
                 this.createError(field, `Campo ${label} não pode estar em branco.`)
                 valid = false;
             }
         }
     }
-    createError(field,msg){
+    createError(field, msg) {
         const div = document.createElement('div')
         div.innerHTML = msg;
         div.classList.add('error-text')
         field.insertAdjacentElement('afterend', div)
     }
-    convertObjForArray(obj){
-        let response=[],key;
+    convertObjForArray(obj) {
+        let response = [], key;
         key = Object.keys(obj)
-        key.forEach(valor => {response.push(obj[valor])})
+        key.forEach(valor => { response.push(obj[valor]) })
         return response
     }
-    
-    currentDate() {        
+
+    currentDate() {
         let date = new Date();
         let day = String(date.getDate()).padStart(2, '0')
         let month = String(date.getMonth() + 1).padStart(2, '0')
         let year = date.getFullYear();
         let current_date = year + '-' + month + '-' + day;
         return current_date;
+    }
+    currentDateBR() {
+        return this.convertData(this.currentDate(), "-")
     }
 }

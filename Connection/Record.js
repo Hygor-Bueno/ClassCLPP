@@ -1,11 +1,11 @@
 import { ErrorHandling } from "../Util/errorHandling.js";
 
-export class Checklist {
+export class Record {
     errorHandling = new ErrorHandling;
     URL
-    async get(params,err) {
+    async get(params, err) {
         typeof params === "string" || typeof params === "object" ? params : err = params;
-        this.settingUrl('/Controller/CLPP/Checklist.php?app_id=7&AUTH=',params)
+        this.settingUrl('/Controller/CLPP/Record.php?app_id=7&AUTH=', params)
         let response
         await fetch(this.URL)
             .then(response => response.json())
@@ -13,13 +13,13 @@ export class Checklist {
                 if (body.error) throw new Error(body.message)
                 response = body.data
             }).catch(erro => {
-                if(err) this.errorHandling.main(erro)
+                if (err) this.errorHandling.main(erro)
             })
         return response
     }
-    async post(params,err) {
+    async post(params, err) {
         typeof params === "string" || typeof params === "object" ? params : err = params;
-        this.settingUrl('/Controller/CLPP/Checklist.php?app_id=7&AUTH=')
+        this.settingUrl('/Controller/CLPP/Record.php?app_id=7&AUTH=')
         let req
         await fetch(this.URL, {
             method: 'POST',

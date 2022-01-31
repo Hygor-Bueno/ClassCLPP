@@ -11,11 +11,11 @@
 
 #inputCheck {
   margin-left: 10px;
-  width: 350px
+  width: 350px;
 }
 
 #inputCheckList {
-width: 90%
+  width: 90%;
 }
 
 #date {
@@ -74,6 +74,8 @@ width: 90%
 }
 
 #function {
+  display: flex;
+  justify-content: space-around;
   width: 180px;
 }
 
@@ -86,14 +88,32 @@ width: 90%
   flex-direction: column;
 }
 
-#headerUserList{
-  width: 35%;
-  height:50px;
-  background-color: rgb(255, 255, 255);
-  font-weight: bold;
-  font-size:30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-bottom: 1px solid rgb(178, 178, 178);
+@media screen and (min-width: 1500px) {
+  #date1,
+  #date2,
+  #description,
+  #date {
+    font-size: 18px;
+  }
+
+  #date,
+  #inputCheckList {
+    font-size: 18px;
+  }
+
+  #date {
+    width: 800px;
+  }
+
+  #getCheckList,
+  #nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  #form,
+  .checklistCreated {
+    width: 85%;
+  }
 }

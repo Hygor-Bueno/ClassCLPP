@@ -10,6 +10,9 @@ export class BodyCLPP{
         </section>
         <div class="container">
         </div>
+        <div id="containerChecklist">
+            <section id="sectionCheck"></section>
+        </div>
         `
         return response;
     }
