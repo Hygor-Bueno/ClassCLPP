@@ -34,7 +34,11 @@ export class Routers {
 					await this.pageRecord(local);
 					break;
 				case 'message':
-					await this.pageMessage(local);
+					try{
+						await this.pageMessage(local);
+					}catch(e){
+						console.error(e)
+					}
 					break;
 			}
 			this.modalLoading.settingLoading(100, 10)
@@ -72,11 +76,16 @@ export class Routers {
 		await result.setting(reqCheck);
 	}
 	async pageMessage(local) {
-		let result;
-		result = new MessagePage;
-		document.getElementById('StylePages').setAttribute('href', "./Pages/Message/message.css");
-		await this.loadPage(result["main"](), local, 70, 10);
-		result.setting();
+		try{
+
+			let result;
+			result = new MessagePage;
+			document.getElementById('StylePages').setAttribute('href', "./Pages/Message/message.css");
+			await this.loadPage(result["main"](), local, 70, 10);
+			result.setting();
+		}catch(e){
+			console.error(e)
+		}
 	}
 
 	async loadPage(elementMethod, local, percentage, speed) {

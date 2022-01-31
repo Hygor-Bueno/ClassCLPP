@@ -2,7 +2,7 @@ import { ErrorHandling } from "../Util/errorHandling.js";
 import { EmployeePhoto } from "./EmployeePhoto.js"
 
 export class Employee extends EmployeePhoto{
-    async get(params, err){         
+    async get(params, err){       
         typeof params === "string" || typeof params === "object" ? params : err = params;
         let URL = localStorage.getItem("server") + "/Controller/CCPP/Employee.php?app_id=7&AUTH=" + localStorage.getItem("token")+ params;
         let req 
