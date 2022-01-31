@@ -71,6 +71,7 @@ export class ListUser {
   }
 
   insertVerification(list) {
+    console.log(list)
     for (const iterator of list) {
       iterator.addEventListener("click", () => {
         iterator.getAttribute("data-update") == 0 ? iterator.setAttribute("data-update", 1) : iterator.setAttribute("data-update", 0);

@@ -107,7 +107,9 @@ export class SettingRecord {
         let response = ""
         let auxArray = array || objectChecklist.data
         auxArray.map(element => {
-            element[key] ? response += `<option type="checkbox" class="option" data-id="${element.id}" value="${element[key]}">${element[key]}</option>` : ""
+            //element[key].insertAdjacentHTML('afterbegin', `<input type="checkbox" class="option" data-id="${element.id}" value="${element[key]}">${element[key]}</input>`)
+
+            element[key] ? response += `<input type="checkbox" class="option" data-id="${element.id}" value="${element[key]}">${element[key]}</input>` : ""
         })
         return response;
     }
