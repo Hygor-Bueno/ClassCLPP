@@ -17,21 +17,25 @@ export class RecordPage extends SettingRecord {
                             <h1>Checklist</h1>            
                         </div>                   
                         <div class="bodyChecklist" style="display:block" id="checklistBlock">
+
+
                             <div class="questionChecklist">
-                                <label>Titulo das checkList</label>
+                                <label class="titleOptionBlock">Titulo das checkList</label>
                                 <select class="sel" id="titleChecklist" type="checkbox">
                                     <option class="option" value="none" selected="" disabled="" hidden="">Selecione o checklist</option>
-                                        ${this.templateOption(objectChecklist, 'description')}
+                                        ${this.templateOption(objectChecklist, 'description')}    
                                 </select>
                             </div>
+
+
                             <div class="questionChecklist">
-                                <label>Titulo das Perguntas</label>
+                                <label class="titleOptionBlock">Titulo das Perguntas</label>
                                 <select class="sel" id="titleQuestion">                                
-                                    <option class="option" value="none" selected="" disabled="" hidden="">Selecione a pergunta</option>
+                                <option class="option" value="none" selected="" disabled="" hidden="">Selecione a pergunta</option>
                                 </select>
                             </div>
                             <div class="questionChecklist">
-                                <label>Validade</label>
+                                <label class="titleOptionBlock">Validade</label>
                                 <select class="sel" id="titleDate">
                                     <option class="option" value="none" selected="" disabled="" hidden="">Selecione a data</option>
                                 </select>
@@ -56,12 +60,12 @@ export class RecordPage extends SettingRecord {
                         </div>
                         <div id="dateBlock" class="bodyChecklist" style="display:block">
                             <div class="questionChecklist">
-                                <label>Data inicial</label>
-                                <input type="date"></input>
+                                <label class="titleOptionBlock">Data inicial</label>
+                                <input class="sel" type="date"></input>
                             </div>
                             <div class="questionChecklist">
-                                <label>Data final</label>
-                                <input type="date"></input>
+                                <label class="titleOptionBlock">Data final</label>
+                                <input class="sel" type="date"></input>
                             </div>
                         </div>
                     </div>
@@ -87,9 +91,9 @@ export class RecordPage extends SettingRecord {
                             <h1>Dashboard</h1>
                         </div>
                         <div id="buttonGraphic">
-                            <button type="button" class="buttonRecordBar"></button>
-                            <button type="button" class="buttonRecordPizza"></button> 
-                            <button type="button" class="buttonRecordPercentage"></button>
+                            <button type="button" class="buttonRecordGraphic" id="buttonRecordBar" data-function="buttonRecordGraphic"></button>
+                            <button type="button" class="buttonRecordGraphic" id="buttonRecordPizza" data-function="buttonRecordGraphic"></button> 
+                            <button type="button" class="buttonRecordGraphic" id="buttonRecordPercentage" data-function="buttonRecordGraphic" style="opacity: 1"></button>
                         </div>
                 </div>
                 <body id="graphicRecord">

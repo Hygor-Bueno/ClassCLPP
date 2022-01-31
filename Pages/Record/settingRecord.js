@@ -8,6 +8,7 @@ export class SettingRecord {
     searchDateInit;
     searchDateFinal;
     jsonCheck = {};
+    expanded = false;
     connectionCLPP = new ConnectionCLPP;
     userFulComponents = new UsefulComponents;
 
@@ -16,16 +17,35 @@ export class SettingRecord {
         this.jsonChecklists(objectChecklist);
         this.templateDate(objectChecklist)
         getB_id('titleChecklist').onchange = () => {
-            getB_id('titleQuestion').innerHTML = ""
-            let select = getB_id('titleChecklist');
-            let indexSelect = select.selectedIndex;
-            let idCheckSelected = select.options[indexSelect].getAttribute("data-id");
-            getB_id('titleQuestion').insertAdjacentHTML('beforeend',
-                this.templateOption(null, "description", this.jsonCheck[idCheckSelected].getQuestion())
-            )
+            this.populaQuestion()
         }
         let req = await this.getShop()
         getB_id('shop').insertAdjacentHTML('beforeend', this.templateOption(null, 'description', req))
+
+        getB_id('titleDate').onchange = () => {
+            let selectChecklist = getB_id('titleChecklist')
+            this.populaValidade(selectChecklist)
+            this.populaQuestion()
+            selectChecklist.disabled = true;
+        }
+
+    }
+
+    populaValidade(selectChecklist) {
+        let select = getB_id('titleDate')
+        let indexSelect = select.selectedIndex;
+        let idCheckSelected = select.options[indexSelect].getAttribute("data-id");
+        this.jsonCheck[idCheckSelected].getQuestion()
+        selectChecklist.value = this.jsonCheck[idCheckSelected].getTitle()
+    }
+
+    populaQuestion() {
+        getB_id('titleQuestion').innerHTML = ""
+        let select = getB_id('titleChecklist');
+        let indexSelect = select.selectedIndex;
+        let idCheckSelected = select.options[indexSelect].getAttribute("data-id");
+        getB_id('titleQuestion').insertAdjacentHTML('beforeend', '<option class="option" value="none" selected="" disabled="" hidden="">Selecione a pergunta</option>')
+        getB_id('titleQuestion').insertAdjacentHTML('beforeend', this.templateOption(null, "description", this.jsonCheck[idCheckSelected].getQuestion()))
     }
 
     jsonChecklists(objectChecklist) {
@@ -45,9 +65,13 @@ export class SettingRecord {
     }
 
     functionFilter(element) {
+
         switch (element.getAttribute("data-function")) {
             case "clearBtn":
                 this.clearFilter()
+                break;
+            case "buttonRecordGraphic":
+                this.buttonGraphic(element)
                 break;
             default:
                 console.error("data-function")
@@ -55,36 +79,40 @@ export class SettingRecord {
     }
 
     clearFilter() {
+        let selectChecklist = getB_id('titleChecklist')
+        selectChecklist.disabled = false;
+        this.resetOptions()
         this.clearDate()
-        this.clearOptions()
+        this.clearOption('titleQuestion', 'Selecione a pergunta')
     }
 
-    clearOptions() {
-        const test = document.querySelectorAll(".sel")
-        test.forEach(options => {
+    resetOptions() {
+        const clear = document.querySelectorAll(".sel")
+        clear.forEach(options => {
             options.options[0].selected = true
         });
-        document.querySelectorAll('#titleDate option').forEach((e, index) => { index > 0 ? e.remove() : "" })
+    }
+
+    clearOption(local, message) {
+        getB_id(local).innerHTML = ""
+        getB_id(local).insertAdjacentHTML('beforeend', `<option class="option" value="none" selected="" disabled="" hidden="">${message}</option>`)
     }
 
     clearDate() {
-        const data = document.querySelectorAll(".date")
-        data.forEach(date => {
-            date.value = ""
-        })
+        const data = document.querySelectorAll("input[type='date']")
+        data.forEach(date => { date.value = "" })
     }
 
     templateOption(objectChecklist, key, array) {
         let response = ""
         let auxArray = array || objectChecklist.data
         auxArray.map(element => {
-            element[key] ?  response += `<option class="option" data-id="${element.id}" value="${element[key]}">${element[key]}</option>` : ""
+            element[key] ? response += `<option type="checkbox" class="option" data-id="${element.id}" value="${element[key]}">${element[key]}</option>` : ""
         })
         return response;
     }
 
     templateDate(objectChecklist) {
-        console.log(objectChecklist)
         let objDateId;
         let objDateInit;
         let objDateFinal;
@@ -93,10 +121,9 @@ export class SettingRecord {
         objectChecklist.data.forEach(element => {
             objDateId = element.id
             objDateInit = element.date_init
-            console.log(objDateInit)
             objDateFinal = element.date_final
             newJson = {
-                date: objDateInit ? this.userFulComponents.convertData(objDateInit, "-") + " - " + this.userFulComponents.convertData(objDateFinal, "-"):false,
+                date: objDateInit ? this.userFulComponents.convertData(objDateInit, "-") + " - " + this.userFulComponents.convertData(objDateFinal, "-") : false,
                 id: (objDateId)
             }
             jsonDate.push(newJson)
@@ -106,12 +133,15 @@ export class SettingRecord {
             this.templateOption(null, 'date', jsonDate))
     }
 
-    async shopFilter() {
-        /* let filterShop = getB_id('shop')
-        let array = await this.getShop()
-        array.forEach(element => {
-            `<option class="option" data-id="${element.id}" value="${element[key]}">${element[key]}</option>`
-        }) */
+    buttonGraphic(element) {
+        let array = [getB_id('buttonRecordBar'), getB_id('buttonRecordPizza'), getB_id('buttonRecordPercentage')]
+        array.forEach((e) => {
+            if (element.getAttribute('id') == e.getAttribute('id')) {
+                e.setAttribute("style", "opacity: 1")
+            } else {
+                e.setAttribute("style", "opacity: 0.3")
+            }
+        })
     }
 
     async getChecklist() {
@@ -122,4 +152,5 @@ export class SettingRecord {
         let response = await this.connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')
         return response.data
     }
+
 } 
