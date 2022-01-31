@@ -86,7 +86,6 @@ export class SettingMessage {
         this.consultGroup()
         $('.user_in').setAttribute('style', 'display:flex');
         $('.templateSearchUser').setAttribute('style', 'display:none');
-        $('.searchUnic').setAttribute('style', 'display:none');
         element.querySelector('.imgNotify') && element.querySelector('.imgNotify').setAttribute('src', './assets/images/notification.svg');
         await this.chargePageMsg(this.usefulComponents.splitString(element.getAttribute('id'), '_'), 'beforeend');
         this.chatIdSender = this.usefulComponents.splitString(element.getAttribute('id'), '_');
@@ -119,14 +118,14 @@ export class SettingMessage {
             </div>`)
     }
     searchUser() {
-        $('.searchUser').addEventListener('click', () => {
-            $('.searchUnic').setAttribute('style', 'display:none')
+        $('.searchUser').addEventListener('click', async() => {
+            $('.templateSearchUser').insertAdjacentHTML('beforeend', await this.methodUnited())
             if ($('.user_in').style.display == 'flex') {
                 $('.user_in').setAttribute('style', 'display:none')
                 $('.templateSearchUser').setAttribute('style', 'display:flex')
             } else {
-                $('.user_in').setAttribute('style', 'display:flex')
                 $('.templateSearchUser').setAttribute('style', 'display:none')
+                $('.user_in').setAttribute('style', 'display:flex')
             }
         })
     }
@@ -147,9 +146,8 @@ export class SettingMessage {
                 let searchName = $('.searchUserBar').value
                 let findName = this.createListUser().filter(valor => valor.name.toLowerCase().includes(searchName.toLowerCase()))
                 $('.user_in').setAttribute('style', 'display:none')
-                $('.templateSearchUser').setAttribute('style', 'display:none')
-                $('.searchUnic').innerHTML = " "
-                $('.searchUnic').setAttribute('style', 'display:flex')
+                $('.templateSearchUser').innerHTML = " "
+                $('.templateSearchUser').setAttribute('style', 'display:flex')
                 for (let i = 0; i < findName.length; i++) {
                     if (!findName[i].id.includes(localStorage.getItem('id'))) $('.searchUnic').insertAdjacentHTML("afterbegin", await this.listUser.main(findName[i].id))
                 }
@@ -235,12 +233,16 @@ export class SettingMessage {
             $('.colabHead div:nth-child(3) img').setAttribute('src', './assets/images/notification.svg')
         }
     }
-    async methodUnited(dataId) {
+    async methodUnited() {
+        let dataId = await this.userAccess.get('&application_id=7&web', false)
         let response = ""
-        for (const iterator of dataId.data) {       
-            response += await this.listUser.main(iterator.id)
+        let auxArray = []
+        let nameId = dataId.data.sort((a, b) => a.user.trim().localeCompare(b.user.trim()))
+        console.log(nameId)
+        for (const iterator of nameId) {  
+            auxArray.push(this.listUser.main(iterator.id))
         }
-        await this.messageList.receiverName()
+        await Promise.all(auxArray).then(data=>{response=data.join("")})
         return response;
     }
     convertArray(obj) {

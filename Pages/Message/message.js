@@ -16,15 +16,16 @@ export class MessagePage extends SettingMessage {
     
     
     async main() {
-        this.employeeAccess = await this.userAccess.get('&application_id=7&web', false);
         const id = localStorage.getItem('id')
         const getInfo = await this.message.get("&id=" + id)
-        await this.messageList.separator(getInfo)        
-        const user = new Users();
-        getInfo.forEach(objs => { 
-            user.userInner(objs)
-            userJson[objs.id_user ? 'user_' + objs.id_user :'group_'+ objs.id_group] = user.classObj()
-        })
+        if(getInfo) {
+            await this.messageList.separator(getInfo)        
+            const user = new Users();
+            getInfo.forEach(objs => { 
+                user.userInner(objs)
+                userJson[objs.id_user ? 'user_' + objs.id_user :'group_'+ objs.id_group] = user.classObj()
+            })
+        }
         let response =
             `
         <div class="containerMsg">
@@ -38,10 +39,7 @@ export class MessagePage extends SettingMessage {
                 <div class="user_in style_scroll" style="display:flex">
                     ${this.userReceived(this.convertArray(userJson))}
                 </div>
-                <div class="templateSearchUser style_scroll" style="display:none"> 
-                    ${await this.methodUnited(this.employeeAccess)}           
-                </div>
-                <div class="searchUnic style_scroll" style="display:none">
+                <div class="templateSearchUser style_scroll" style="display:none">       
                 </div>
             </div>
             <div class="presentation"style="display:flex">
