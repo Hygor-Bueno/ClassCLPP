@@ -16,8 +16,6 @@ var webSocket = new WebSocketCLPP;
 export class SettingHome {
     settings() {
         this.notifyMessage();
-        this.carousel();
-        this.buttonCardChecklist();
     }
     openMessage() {
         getB_id('message').setAttribute('style', 'display:flex')
@@ -28,6 +26,7 @@ export class SettingHome {
     }
     notifyMessage() {
         let notify = $_all('.cardMessageUser')
+        console.log(notify)
         for (const iterator of notify) {
             var usefulComponentsSplit = new UsefulComponents;
             let split = usefulComponentsSplit.splitString(iterator.getAttribute('id'), '_')
@@ -41,21 +40,7 @@ export class SettingHome {
             this.eventNotifyMessage(iterator, objectSenders);
         }
     }
-    buttonCardChecklist(){
-        $_all('.viewQuizList').forEach(element =>{
-            element.addEventListener("click", ()=>{
-                // console.log(getB_id(`listQuestion_${element.getAttribute('data-id')}`))
-                let divList = getB_id(`listQuestion_${element.getAttribute('data-id')}`);
-                if(window.getComputedStyle(divList,null).display == 'none'){ 
-                    divList.style.display = "flex"
-                    element.style.backgroundImage = "url('./assets/images/up.svg')"
-                }else{
-                    divList.style.display="none"
-                    element.style.backgroundImage = "url('./assets/images/down.svg')"
-                }
-            })
-        })
-    }
+
     eventNotifyMessage(iterator, objectSenders) {
         let temp = objectSenders.temp        
         delete objectSenders['temp']
@@ -66,39 +51,31 @@ export class SettingHome {
             getB_id(`${iterator.getAttribute('id')}`).remove()                                                                              // remove o usuário da lista de mensagens não vizualizadas.
             this.settingsButtonChat(temp)                                                                                                   // Atribui as funcionalidades aos botões do Chat.
             document.querySelector('#bodyMessageDiv section').scrollTop = document.querySelector('#bodyMessageDiv section').scrollHeight;   // Faz com que o Scroll preaneça sempre em baixo.
-            webSocket.informPreview([objectSenders.send ? 'send':'group',objectSenders.id])                                                 // informa so websocket que o usuário abriu uma mensagem, passando por parâmento o destinatário da mensagem.
+            webSocket.informPreview([objectSenders.send ? 'sender':'group',objectSenders.id])                                               // informa so websocket que o usuário abriu uma mensagem, passando por parâmento o destinatário da mensagem.
         })
     }
     settingsButtonChat(idSender) {
         getB_id('buttonReply').addEventListener('click', () => this.closeMessage());
-        getB_id('buttonSend').addEventListener('click',  () => {this.buttonSend(idSender,getB_id('inputSend').value,1,'#bodyMessageDiv section')});
-        getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click()})
+        getB_id('buttonSend').addEventListener('click',  () => {this.buttonSend(idSender,'#bodyMessageDiv section')});
+        getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
-    async buttonSend(idSender, message, type, local, localScroll) {  
-        if (type == 2 ? true : validator.minLength(message, 0) && validator.maxLength(message, 200)) {
-            let objectSend = [['id_sender', localStorage.getItem('id')], [idSender[0] == 'group'?"id_group":`id_user`, idSender[1]], ['message', message], ['type', type]]
-            let req = await messages.post(usefulComponents.createObject(objectSend), true);
-            listMessage.addMessage(local, message, 'messageSend',type);
-            webSocket.informSending(req.last_id, idSender);
-            getB_id('inputSend').value = "";
+    async buttonSend(idSender, local, localScroll) {     
+        let input = getB_id('inputSend')
+        if (validator.minLength(input.value, 0) && validator.maxLength(input.value, 200)) {
+            let objectSend = [['id_sender', localStorage.getItem('id')], [idSender[0] == 'group'?"id_group":`id_user`, idSender[1]], ['message', input.value], ['type', '1']]
+            let req = await messages.post(usefulComponents.createObject(objectSend), true)
+            listMessage.addMessage(local, input.value, 'messageSend')
+            webSocket.informSending(req.last_id, idSender[1])
+            input.value = ""
+            document.querySelector(localScroll ? localScroll : local).scrollTop = document.querySelector(localScroll ? localScroll : local).scrollHeight;
             $('.errorReqMessage') &&  $('.errorReqMessage').remove();
         } else {
             this.error('Atenção! \n O campo de envio não pode estar vazio... E não deve utrapassar 200 caracteres')
-        }  
-        document.querySelector(localScroll ? localScroll : local).scrollTop = document.querySelector(localScroll ? localScroll : local).scrollHeight;
+        }        
     }
     error(message) {
         openModal(generalModal.main(message, true))
         generalModal.close()
         setTimeout(() => { closeModal() }, generalModal.readingTime(message));
-    }
-    carousel(){
-        document.querySelector('#bodyCheckDiv').addEventListener("wheel", event =>{
-            if(event.deltaY > 0){
-                event.target.scrollBy(-$(".cardCheck").offsetWidth,0)
-            }else{
-                event.target.scrollBy($(".cardCheck").offsetWidth,0)
-            }
-        })
     }
 }

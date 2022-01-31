@@ -1,20 +1,17 @@
 import { EmployeePhoto } from "../Connection/EmployeePhoto.js";
 import { Message } from "../Connection/Message.js";
-import { UserAccess } from "../Connection/UserAccess.js";
-import { convertBase64 } from "../Util/convertBase64.js";
-import { UsefulComponents } from "../Util/usefulComponents.js";
 var employeePhoto = new EmployeePhoto;
 
 export class MessageList {
     groups = [];
     users = [];
     messages = [];
-    employeers = {}
 
     notSeen() {
+        console.log(this.messages)     
         return this.messages.filter(
             (element) => element.notification == 1
-        )
+        )   
     }
     notSeenGroup() {
         return this.groups.filter(
@@ -40,7 +37,8 @@ export class MessageList {
         }
     }
     async chatCLPP(senderObject, page) {
-        let response = `
+        let response =
+            `
             <div id="bodyMessageDiv">
                 ${this.headerChat(senderObject)}
                 ${await this.bodyChat(senderObject, page)}
@@ -49,11 +47,10 @@ export class MessageList {
         `
         return response;
     }
-    headerChat(senderObject) {      
-        console.log(senderObject)
+    headerChat(senderObject) {
         let response =
             `
-        <header data-destiny="${senderObject.destiny == "&id_send="?"send":"group"}" data-id="${senderObject.id}">
+        <header data-id="${senderObject.id}">
             <p><b>${senderObject.name}</b></p>
             <img id="buttonReply" src="assets/images/reply.svg" title="Fechar Mensagem"/>
         </header>
@@ -61,26 +58,22 @@ export class MessageList {
         return response;
     }
     async bodyChat(senderObject, page) {
-        await this.receiverName();
-        let response, src="http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/";
+        let response
         try {
             if (!page) page = 1
             let messages = new Message;
-            let getMessage = await messages.get(`&id_user=${localStorage.getItem('id')}${senderObject.destiny}${senderObject.id}&pages=${page}`)
+            let getMessage = await messages.get(`&id_user=${localStorage.getItem('id')}${senderObject.destiny}${senderObject.id}&pages=${page}`) 
             getMessage.reverse()
             response =
-                `<section class="showMsg">
-                    ${getMessage.map((element) => (
-
-                        `<div class="${element.id_user != localStorage.getItem('id') ? "messageReceived" : "messageSend"} ${element.type == 2 ? "formatImg":''}" data-view ='${element.notification}'>
-                        ${senderObject.destiny == '&id_group=' && element.id_user!= localStorage.getItem('id') ? `<span>${this.employeers[element.id_user].user+':'}</span>`:""}
-                        ${element.type == 1 ? `<p>${element.message}</p>`: `<img src="${src}${element.message}"/>`}
-
+                `<section>
+                    ${getMessage.map((element) => (`
+                    <div class="${element.id_user != localStorage.getItem('id') ? "messageReceived" : "messageSend"}" data-view ='${element.notification}'>
+                        <p>${element.message}</p>
                     </div>`)).join("")}
                 </section>`
         } catch (e) {
             console.log(e);
-            response = `<section><p class="errorReqMessage">Desculpe. Não há dados encontrados.</p></section>`;
+            response = `<section><p class="errorReqMessage">Desculpe. Você não possuí conversas com esse colaborador.</p></section>`;
         }
         return response;
     }
@@ -94,18 +87,8 @@ export class MessageList {
             `
         return response;
     }
-    addMessage(local, message, classMessage, type) {
-        const converImgBase64 = new convertBase64;
-        document.querySelector(local).insertAdjacentHTML('beforeend', `<div class="${type == 2 ? classMessage + " formatImg" : classMessage}" data-view="1">${type == 2 ? converImgBase64.convert(message).outerHTML : `<p>${message}</p>`}</div>`)
+    addMessage(local, message, classMessage) {
+        document.querySelector(local).insertAdjacentHTML('beforeend', `<div class="${classMessage}" data-view="1"><p>${message}</p></div>`)
     }
-    async receiverName(){
-        let userAccess = new UserAccess;
-        let usefulComponents = new UsefulComponents
-        let employee = await userAccess.get('&application_id=7&web', false);
-        for (const iterator of employee.data) {
-            this.employeers[iterator.id] = iterator
-            this.employeers[iterator.id].user = usefulComponents.splitStringName(this.employeers[iterator.id].user," ") 
-        }
 
-    }
 }

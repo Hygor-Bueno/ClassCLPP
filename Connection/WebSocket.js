@@ -35,7 +35,6 @@ export class WebSocketCLPP {
     }
     async OnMessage(ev) {        
         let getNotify = JSON.parse(ev.data)
-
         if (getNotify.objectType == 'notification') {
             console.log(' ****** vizualizaram sua mensagem ****** ')
             this.routerSettingsWs(localStorage.getItem('router'), '_viewed',getNotify)
@@ -48,7 +47,7 @@ export class WebSocketCLPP {
         const Msg = new MessagePage;
         Msg.visualizationMsg(param)
     }
-    async messageReceived(param){      
+    async messageReceived(param){       
         const msg = new MessagePage;
         msg.setNotify(param)
     }
@@ -58,7 +57,6 @@ export class WebSocketCLPP {
     }
     routerSettingsWs(page, path, param) {
         page += path
-        console.log(param)
         switch (page) {
             case 'message_viewed':
                 this.messageViewed(param);
@@ -77,16 +75,18 @@ export class WebSocketCLPP {
     // "Eu visualizei a mensagem"
     informPreview(idSender) {
         const jsonString = {}
-            jsonString.type = 3;
-            jsonString[idSender[0] == 'send' ? 'send_id': 'id_group'] = idSender[1]
+        jsonString.type = 3;
+        jsonString[idSender[0] == 'sender' ? 'send_id': 'id_group'] = idSender[1]
         ws.send(JSON.stringify(jsonString))
     }
     // Eu estou enviando a mensagem  
     informSending(idMessage, idUserSend) {
-        let jsonString = {}
-            jsonString.type = 2,
-            jsonString[idUserSend[0] == 'send' ? 'send_id': 'group_id'] = idUserSend[1], 
-            jsonString.last_id = idMessage
+        console.log(idMessage, idUserSend)
+        let jsonString = {
+            type: 2,
+            send_id: idUserSend,
+            last_id: idMessage
+        }
         ws.send(JSON.stringify(jsonString))
     }
 }

@@ -4,7 +4,9 @@ import { Message } from "../../Connection/Message.js";
 import { SettingMessage } from "./settingMessage.js";
 import { UsefulComponents } from "../../Util/usefulComponents.js";
 import { $ } from "../../Util/compressSyntaxe.js";
+import { UserAccess } from "../../Connection/UserAccess.js";
 import { Users } from "../../Components/objects/user.js";
+import { ListUser } from "../../Components/listUser.js";
 
 var userJson = {}
 
@@ -35,23 +37,20 @@ export class MessagePage extends SettingMessage {
                     <img class="searchUser" src="./assets/images/person_black_24dp.svg">
                     <img class="searchGroup" src="./assets/images/groups_black_24dp.svg">
                 </header>
-                <div class="user_in style_scroll" style="display:flex">
+                <div class="user_in" style="display:flex">
                     ${this.userReceived(this.convertArray(userJson))}
                 </div>
-                <div class="templateSearchUser style_scroll" style="display:none"> 
+                <div class="templateSearchUser" style="display:none"> 
                     ${await this.methodUnited(this.employeeAccess)}           
                 </div>
-                <div class="searchUnic style_scroll" style="display:none">
+                <div class="searchUnic" style="display:none">
                 </div>
             </div>
-            <div class="presentation"style="display:flex">
-                <img class="imgPresentation" src="./assets/images/logoPPG.png">
-            </div>
-            <div class="part2" style="display:none">
+            <div class="part2">
                 <header class="colabHead">
                 </header>
                 <div class="msg_in">
-                    <div class="msg_out style_scroll" id="bodyMessageDiv">
+                    <div class="msg_out" id="bodyMessageDiv">
                     </div>
                     <footer class="footSend">
                     </footer>
@@ -65,7 +64,7 @@ export class MessagePage extends SettingMessage {
         let receiv = obj.sort((a,b) =>  {if(a.notification > b.notification) return -1})
         const conversation = receiv.map((element) => (
             `            
-            <div class="divUser" id="${element.id_user ? 'send_' + element.id_user : 'group_' + element.id_group}">
+            <div class="divUser" id="${element.id_user ? 'sender_' + element.id_user : 'group_' + element.id_group}">
                 <div class="divColab">
                     <img id="photoUser" src="${element.photo.src}">
                     <p>${this.usefulComponents.splitStringName(element.description, " ")}</p>
@@ -78,20 +77,10 @@ export class MessagePage extends SettingMessage {
         )).join('')
         return `${conversation}`;
     }
-    async setNotify(notify){ 
-        const user = new Users();
-        await user.populate(notify.send_user);
-        if ($('.colabHead .divColab') && ($('.colabHead').getAttribute('data-id').split('_')[1] == notify.send_user || $('.colabHead').getAttribute('data-id').split('_')[1] == notify.group_id )){          
-            $('#bodyMessageDiv section').insertAdjacentHTML('beforeend',` ${notify.type == 2 ?
-                `<div class="messageReceived formatImg" data-view="0">
-                ${notify.group_id ? `<span>${user.getName()}</span>`:""}<img src=http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/${notify.message}></div>`
-                :
-                `<div class= "messageReceived" data-view="0">${notify.group_id ? `<span>${user.getName()}</span>`:""}<p>${notify.message}</p></div>`}`)     
-            $('.msg_out ').scrollTop = $('.msg_out ').scrollHeight;
-            this.ws.informPreview($('.colabHead').getAttribute('data-id').split('_'));
-        }else {
+    setNotify(notify){
+        if (notify){
             if(document.querySelector('.user_in :first-child')) document.querySelector('.user_in').innerHTML = ' ';
-            userJson[!notify.group_id?'user_'+ notify.send_user:'group_'+ notify.group_id].notification = 1
+            userJson[notify.send_user?'user_'+ notify.send_user:'group_'+ notify.send_user].notification = 1
             $('.user_in').insertAdjacentHTML('beforeend', this.userReceived(this.convertArray(userJson)))
             this.clickDivUser('.user_in .divUser')
         }

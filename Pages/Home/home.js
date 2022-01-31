@@ -5,8 +5,6 @@ import { UserAccess } from "../../Connection/UserAccess.js"
 import { Message } from "../../Connection/Message.js";
 import { MessageList } from "../../Components/messageList.js";
 import { SettingHome } from "./settingHome.js";
-import { ObjectChecklist } from "../../Components/objects/checklistObject.js";
-import { WebSocketCLPP } from "../../Connection/WebSocket.js";
 
 var employee = new Employee;
 var usefulComponents = new UsefulComponents;
@@ -14,17 +12,15 @@ var checklist = new Checklist;
 var userAccess = new UserAccess;
 var message = new Message;
 var listMessage = new MessageList;
-var ws = new WebSocketCLPP;
 
 export class HomePage extends SettingHome {
     userJson;
     accessClpp;
-    checklistJson = {};
+    checklistJson;
     message;
 
     async main() {
         this.userJson = await employee.get("&id=" + localStorage.getItem("id"),true);
-        await this.createObjChecklist();
         this.accessClpp = await userAccess.get('&application_id=7&web');
         let nameUser = usefulComponents.splitStringName(this.userJson.name, " ")
         let response =
@@ -53,13 +49,13 @@ export class HomePage extends SettingHome {
                 </section>
                 <aside id="homeRight">
                     <div id="checkDiv">
-                        <header><h1>Checklist criados:</h1></header>
-                        <div id="bodyCheckDiv">
-                            ${this.checklistCreated() || `<p></p>`}
+                        <header><h1>Cabeçalho do Checklist</h1></header>
+                        <div id=bodyCheckDiv>
+                            ${await this.checklistCreated() || `<p></p>`}
                         </div>   
                     </div>
                     <div id="recordDiv">
-                        <header><h1>Relatório Criados:  </h1></header>
+                        <header><h1>Cabeçalho dos Relatórios </h1></header>
                     </div>
                 </aside>
             </div>
@@ -73,7 +69,7 @@ export class HomePage extends SettingHome {
             if (document.getElementById('bodyChDiv')) document.getElementById('bodyChDiv').innerHTML = ""
             return this.validatorChat(listMessage.notSeen()).map((element) => (
                 `
-                <div class="cardMessageUser" id="${element.id_user ? `send_${element.id_user}` : `group_${element.id_group}`}">
+                <div class="cardMessageUser" id="${element.id_user? `send_${element.id_user}` :`group_${element.id_group}`}">
                     <img class="photosUsers" src ="${element.photo.src}" />
                     <p>${usefulComponents.splitStringName(element.description, " ")}</p>
                 </div>
@@ -84,89 +80,22 @@ export class HomePage extends SettingHome {
             return `<div class="ErrorPageDefault"><p>Desculpe, não foi possivél carregar as informações...</p></div>`
         }
     }
-    checklistCreated() {
-        let resp;
+    async checklistCreated() {
         try {
-        resp =  Object.keys(this.checklistJson).map((element) => (
-            `<div class="cardCheck" id="check_${this.checklistJson[element].getIdChecklist()}">
-                    <header><h2>${this.checklistJson[element].getTitle().slice(0, 30) + "..."}</h2></header>
+            this.checklistJson = await checklist.get('&web&id_user=' + localStorage.getItem('id'));            
+                return this.checklistJson.map((element) => (
+                    `<div class="cardCheck" id="check_${element.id}">
+                    <header><p>${element.description.slice(0, 14) + "..."}</p></header>
                     <section>
-                        <article class="articleLeftChecklist style_scroll"> 
-                            <div class="notificationChecklist">
-                                <p><b>Notificação:</b></p> 
-                                ${this.checklistJson[element].getNotification() == 1 ? "<p class='unicNotifyOn'>&#10003;</p>" : "<p class='unicNotifyOff'>&#128473;</p>"}
-                            </div>
-                            <div class="dateChecklist">
-                                <p><b>Data:</b> ${this.checklistJson[element].getDate_init() ? "<br/> Inicial: " + this.checklistJson[element].getDate_init() + " <br/> " + "Final:  " + this.checklistJson[element].getDate_final() : "Não Possuí Válidade Definida."}</P>
-                            </div>
-                            <div class="checklistItensQuantities">
-                                ${this.tamplateQuestions(this.checklistJson[element])}
-                            <div>
-                        </article>
-                        <article class="articleRigthChecklist style_scroll"> 
-                            ${this.templateListLinkedEmployees(this.checklistJson[element])}
-                        <article>  
+                        <p><b>Notificação:</b> ${element.notification == 1 ? "Sim" : "Não"}</P>
+                        <p><b>Data:</b><br/> ${element.date_init ? "Inicial: " + element.date_init + " <br/> " + "Final:  " + element.date_final : "Não Possuí Válidade Definida."}</P>
                     </section>
-                </div>`)).join("")
+                </div>`
+                )).join("")            
         } catch (e) {
-            console.error(e + " : Falha ao realizar ao carregar o tamplate...")
+            console.error(e + " : Falha ao realizar a requisição...")
             return `<div class="ErrorPageDefault"><p>Desculpe, não foi possivél carregar as informações...</p></div>`
         }
-        return resp
-    }
-    templateListLinkedEmployees(checklist) {
-        let response
-        try{
-            if(!checklist.getLinkedEmployees().length) throw new Error("Não possuí usuários vinculados")
-            response =  `
-            <h2><b>Usuários vinculados: </b></h2>
-            <div class="listEmployees">
-                <ol>
-                    ${checklist.getLinkedEmployees().map(element => (`<li>${element.getName()}</li>`)).join("")}
-                </ol>
-            </div>
-            `    
-        }catch(e){
-            // console.error(e)
-            response = `
-            <h2><b>Lista de usuários: </b></h2><br/>         
-                <p class= "listEmployeesEmpty">Checklist não possuí usuários vinculados.</p>         
-            `
-        }
-        return response;
-    }
-    tamplateQuestions(checklist) {
-        let jsonQuestion = this.addressIssues(checklist);
-      
-        return `
-        <p><b>Quantidade de Itens:</b> ${jsonQuestion.numberItems}</p>       
-        <p><b>Quantidade de Assinaturas:</b> ${jsonQuestion.numberSignatures}</p>
-        <p><b>Quantidade de Questões:</b> ${jsonQuestion.numberQuestions}</p>
-        <div class="listQuestionsDiv">
-            <div class="listQuestionsHeader"><p><b>Vizualizar lista de questões:</b><button type="button" class="viewQuizList" data-id="${checklist.getIdChecklist()}" id="viewQuizList_${checklist.getIdChecklist()}"></button></p></div>
-            <div class="listQuestions" id="listQuestion_${checklist.getIdChecklist()}"><ol>${jsonQuestion.listItens.map(element => (`<li>${element}</li>`)).join("")}</ol></div>
-        </div>
-        `
-    }
-    addressIssues(checklist) {
-        let total_items = checklist.getQuestion().length;
-        let signatures = 0;
-        let title_Questions = [];
-        checklist.getQuestion().forEach((element) => {
-            if (element.type > 2) { signatures++; }
-            title_Questions.push(element.description)
-        })
-        let response = { numberItems: total_items, numberSignatures: signatures, numberQuestions: total_items - signatures, listItens: title_Questions }
-        return response
-    }
-    async createObjChecklist() {
-        let req = await checklist.get('&web&id_user=' + localStorage.getItem('id'));
-        req.forEach(element => {
-            let objectChecklist = new ObjectChecklist;
-            objectChecklist.loadingCheckDataBase(element);
-            this.checklistJson[element.id] = objectChecklist;
-        })
-        return;
     }
     validatorChat(object) {
         if (document.querySelector('#bodyMessageDiv header')) {
@@ -178,20 +107,14 @@ export class HomePage extends SettingHome {
         }
     }
     async upMsgReceived(getNotify) {
-        let aux = getNotify.group_id || getNotify.send_user 
-        await listMessage.receiverName();
-        console.log(getNotify+" <-- ",listMessage.employeers[getNotify.send_user].user+": ")
+        console.log(getNotify)
         if (document.getElementById('bodyChDiv')) {
             document.getElementById('bodyChDiv').insertAdjacentHTML('beforeend', await this.messageReceived());
             this.settings();
-            if (document.getElementById('bodyMessageDiv') && aux == document.querySelector('#bodyMessageDiv header').getAttribute('data-id')) {
-                document.querySelector('#bodyMessageDiv section').insertAdjacentHTML('beforeend', `${getNotify.type == 2 ?
-                    `<div class="messageReceived formatImg">${getNotify.group_id ? `<span>${listMessage.employeers[getNotify.send_user]+": "}</span>`:""}<img src=http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/${getNotify.message}></div>` : `<div class= "messageReceived"> ${getNotify.group_id ? `<span>${listMessage.employeers[getNotify.send_user].user+": "}</span>`:``} <p>${getNotify.message}</p></div>`}`)
+            if (document.getElementById('bodyMessageDiv') && document.querySelector('#bodyMessageDiv header').getAttribute('data-id') == getNotify.send_user) {
+                document.querySelector('#bodyMessageDiv section').insertAdjacentHTML('beforeend', `<div class= "messageReceived"><p>${getNotify.message}</p></div>`)
                 document.querySelector('#bodyMessageDiv section').scrollTop = document.querySelector('#bodyMessageDiv section').scrollHeight;
-                console.log([document.querySelector('#bodyMessageDiv header').getAttribute('data-destiny'),document.querySelector('#bodyMessageDiv header').getAttribute('data-id')])
-                ws.informPreview([document.querySelector('#bodyMessageDiv header').getAttribute('data-destiny'),document.querySelector('#bodyMessageDiv header').getAttribute('data-id')])
             }
         }
-        // ${getNotify.group_id ? ``:``}
     }
 }

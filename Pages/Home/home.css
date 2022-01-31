@@ -37,19 +37,11 @@
     margin-top:10px;
     word-wrap: break-word;
 }
-
 .messageReceived p{
     padding:2px;
     width: 70%;
     background:#f1f2f5;
     border-radius: 5px;
-}
-
-.messageReceived span{
-    background:#f1f2f5;
-    font-size:14px;
-    opacity: .7;
-    padding:2px;
 }
 .messageSend{
     display: flex;
@@ -101,6 +93,7 @@ b {
 #welcom p {
     border-top: 1px solid rgb(178, 178, 178);
     padding: 5px;
+    font-size: 12px;
 }
 #bodyHome {
     display: flex;
@@ -160,162 +153,37 @@ b {
     height: 50%;
     overflow-y: auto;
 }
-#bodyCheckDiv {
-    display: flex;
-    width: 100%;
-    height: 89%;
-    justify-content: start;
-    align-items: center;
-    overflow-x:auto;
-    scroll-snap-type: x mandatory;
-    scroll-behavior: smooth;
-}
-.articleLeftChecklist{
-    padding:1px;    
-    width: 50%;
-    height: 100%;
-    border-right: 1px solid rgb(178, 178, 178);
-    overflow-y: auto;
-    pointer-events: painted;
-}
-.listEmployees{
-    display: flex;
-    justify-content:center;
-    min-height: 90%;
-}
-.listEmployeesEmpty {
-    margin-left: 5px;
-}
-.articleLeftChecklist ol, .articleRigthChecklist ol{
-    padding-top:5px;
-    padding-bottom:5px;
-    margin: 5px;
-    background:#f1f2f5;
-    width: 60%;
-}
-
-.articleRigthChecklist{
-    padding:1px;
-    width: 50%;
-    height: 100%;
-    overflow-y: auto;
-    pointer-events: painted;
-}
-.notificationChecklist{
-    display:flex;
-    align-items: center;
-    min-height:20px;
-}
-.unicNotifyOn{
-    margin-left: 10px;
-    color:#326744;
-    font-weight: bold;
-    font-size:16px;
-}
-.unicNotifyOff{
-    margin-left: 10px;
-    color:#B5001A;
-    font-weight: bold;
-    font-size:16px;
-}
-#bodyCheckDiv::-webkit-scrollbar {
-    height: 5px;
-}
-
-#bodyCheckDiv::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-#bodyCheckDiv::-webkit-scrollbar-thumb {
-    background: #326744;
-    border-radius: 10px;
-}
-
 .cardCheck {
-    flex:none;
-    width:75%; 
-    height: 170px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     margin: 5px;
     border: solid 1px rgb(178, 178, 178);
     background: white;
+    width: 120px;
+    height: 100px;
     padding: 3px;
     border-radius: 5px;
-    scroll-snap-align: start;
-    pointer-events: none;
+}
+#bodyCheckDiv {
+    display: grid;
+    width: 100%;
+    height: 89%;
+    justify-content: center;
+    align-items: center;
+    grid-template-areas: "cardCheck cardCheck cardCheck";
 }
 .cardCheck header {
     border-bottom: solid 1px rgb(178, 178, 178);
     padding-bottom: 3px;
-    height: 18px;
 }
 .cardCheck section {
-    display: flex;
     margin-top: 5px;
     font-size: 14px;
-    height:80%;
-}
-.listQuestionsHeader{
-    display: flex;
-    align-items: center;
-    width:100%;
-    /* border-bottom: solid 1px rgb(178, 178, 178); */
-}
-.listQuestions{
-    display:none;
-    flex-direction: column;
-    align-items: center;
-    height:40px;
-    width:100%;
-}
-.viewQuizList{
-    background-image: url("../../assets/images/down.svg"); 
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    width: 18px;   
-    height:18px; 
-    margin-left: 10px;;
 }
 #recordDiv {
     margin: 5px;
     height: 50%;
     border-top: solid 5px white;
     overflow-y: auto;
-}
-@media screen and (min-width: 1500px){
-    #bodySection p{
-        font-size:17px;
-        margin: 5px;
-    }
-    #welcom p, .listQuestions, .listEmployees{
-        font-size:16px;
-    }
-    #bodySection h1{
-        font-size:23px;
-    }
-    #bodySection h2{
-        font-size: 20px;
-    }
-  
-    .cardMessageUser{
-        padding: 5px;
-    }
-    .cardMessageUser p{
-        font-size:18px;
-    }
-    .cardMessageUser img{
-        width:50px;
-        height:50px;
-        border-radius: 25px;
-    }
-    .cardCheck{
-        height:230px;
-    }
-    .listEmployees{
-        min-height:85%;
-    }
-    .viewQuizList{
-        margin-left: 2px;
-    }
-   
 }

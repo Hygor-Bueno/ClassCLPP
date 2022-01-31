@@ -12,6 +12,7 @@ export class convertBase64{
             image.src = src;
             response = image;
         } else {
+            console.log("Aqui estou eu!")
             let imgVazia = document.createElement('img');
             imgVazia.src = "./assets/images/user.png";
             response = imgVazia;
