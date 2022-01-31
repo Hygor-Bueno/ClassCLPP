@@ -15,7 +15,7 @@ export class Routers {
 		local ? local.innerHTML = "" : local;
 
 		document.getElementById("content").insertAdjacentHTML("beforeend", this.modalLoading.main())
-		await this.loadPage(employee.get("&id=" + localStorage.getItem("id"),true),null,35,2).then(data=>{console.log(data)})
+		await this.loadPage(employee.get("&id=" + localStorage.getItem("id"),true),null,35,2)
 
 		localStorage.setItem('router', params)
 		document.getElementById('message').setAttribute('style', 'display:none')	
@@ -26,7 +26,7 @@ export class Routers {
 				case 'home':
 					result = new HomePage;					
 					document.getElementById('StylePages').setAttribute('href', "./Pages/Home/home.css")
-					await this.loadPage(result["main"](),local,70,25).then(data=>{console.log(data)})
+					await this.loadPage(result["main"](),local,70,25)
 					result.settings()
 					break;
 				case 'checklistCreate':
@@ -40,26 +40,24 @@ export class Routers {
 					result = new ChecklistCreatedPage;
 					localStorage.removeItem('checklist')
 					let req = await result.arrayCheckList();
-					await this.loadPage(result["main"](req),local,70,10).then(data=>{console.log(data)})
+					await this.loadPage(result["main"](req),local,70,10)
 					result.setting(req);
 					break;
 				case 'record':
 					document.getElementById('StylePages').setAttribute('href', "./Pages/Record/record.css")				
 					result = new RecordPage;
 					let reqCheck = await result.getChecklist();
-					await this.loadPage(result["main"](reqCheck),local,70,10).then(data=>{console.log(data)})
+					await this.loadPage(result["main"](reqCheck),local,70,10)
 					await result.setting(reqCheck)
 					break;
 				case 'message':
 					result = new MessagePage;
 					document.getElementById('StylePages').setAttribute('href', "./Pages/Message/message.css")
-					// local.insertAdjacentHTML("beforeend", await result.main());
-					await this.loadPage(result["main"](),local,70,10).then(data=>{console.log(data)})
+					await this.loadPage(result["main"](),local,70,10)
 					result.setting()
 					break;
 			}
 			this.modalLoading.settingLoading(100,10)
-			setTimeout(() => {},1000)
 			return result;
 		}
 	}
@@ -71,7 +69,6 @@ export class Routers {
 				local.insertAdjacentHTML("beforeend", await elementMethod);		
 			}else{
 				await elementMethod;
-				console.log(await elementMethod)
 			}
 			resolve("sucess")	
 		})
