@@ -118,6 +118,14 @@ input {
 #buttonRecordPizza,
 #buttonRecordPercentage {
   opacity: 0.3;
+  cursor: pointer;
+}
+
+#filterBtn,
+#clearBtn,
+.sel,
+.buttonRecordPrint {
+  cursor: pointer;
 }
 
 #dashbord {
