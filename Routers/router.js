@@ -14,11 +14,11 @@ export class Routers {
 		let local = document.getElementById('content');
 		local ? local.innerHTML = "" : local;
 		// Insere e abre o modal de loading
-		document.getElementById("content").insertAdjacentHTML("beforeend", this.modalLoading.main())
-		await this.loadPage(employee.get("&id=" + localStorage.getItem("id"), true), null, 35, 2)
-		localStorage.setItem('router', params)
+		document.getElementById("content").insertAdjacentHTML("beforeend", this.modalLoading.main());
+		await this.loadPage(employee.get("&id=" + localStorage.getItem("id"), true), null, 35, 2);
+		localStorage.setItem('router', params);
 		// Fecha a aba de mensagens caso ela esteja aberta.
-		document.getElementById('message').setAttribute('style', 'display:none')
+		document.getElementById('message').setAttribute('style', 'display:none');
 		if (local) {
 			switch (params) {
 				case 'home':
@@ -34,7 +34,7 @@ export class Routers {
 					await this.pageRecord(local);
 					break;
 				case 'message':
-					await this.pageMessage(local)
+					await this.pageMessage(local);
 					break;
 			}
 			this.modalLoading.settingLoading(100, 10)
@@ -43,24 +43,24 @@ export class Routers {
 	async pageHome(local) {
 		let result;
 		result = new HomePage;
-		document.getElementById('StylePages').setAttribute('href', "./Pages/Home/home.css")
-		await this.loadPage(result["main"](), local, 70, 25)
-		result.settings()
+		document.getElementById('StylePages').setAttribute('href', "./Pages/Home/home.css");
+		await this.loadPage(result["main"](), local, 70, 25);
+		result.settings();
 	}
 	pageChecklistCreate(local) {
 		let result;
 		result = new ChecklistCreatePage;
-		document.getElementById('StylePages').setAttribute('href', "")
+		document.getElementById('StylePages').setAttribute('href', "");
 		local.insertAdjacentHTML("beforeend", result.main());
 		result.setting();
 	}
 	async pageChecklistCreated(local) {
 		let result;
-		document.getElementById('StylePages').setAttribute('href', "./Pages/Checklist/ChecklistCriated/checklist.css")
+		document.getElementById('StylePages').setAttribute('href', "./Pages/Checklist/ChecklistCriated/checklist.css");
 		result = new ChecklistCreatedPage;
-		localStorage.removeItem('checklist')
+		localStorage.removeItem('checklist');
 		let req = await result.arrayCheckList();
-		await this.loadPage(result["main"](req), local, 70, 10)
+		await this.loadPage(result["main"](req), local, 70, 10);
 		result.setting(req);
 	}
 	async pageRecord(local) {
@@ -68,20 +68,20 @@ export class Routers {
 		document.getElementById('StylePages').setAttribute('href', "./Pages/Record/record.css")
 		result = new RecordPage;
 		let reqCheck = await result.getChecklist();
-		await this.loadPage(result["main"](reqCheck), local, 70, 10)
-		await result.setting(reqCheck)
+		await this.loadPage(result["main"](reqCheck), local, 70, 10);
+		await result.setting(reqCheck);
 	}
 	async pageMessage(local) {
 		let result;
 		result = new MessagePage;
-		document.getElementById('StylePages').setAttribute('href', "./Pages/Message/message.css")
-		await this.loadPage(result["main"](), local, 70, 10)
-		result.setting()
+		document.getElementById('StylePages').setAttribute('href', "./Pages/Message/message.css");
+		await this.loadPage(result["main"](), local, 70, 10);
+		result.setting();
 	}
 
 	async loadPage(elementMethod, local, percentage, speed) {
 		return new Promise(async (resolve) => {
-			this.modalLoading.settingLoading(percentage, speed)
+			this.modalLoading.settingLoading(percentage, speed);
 			if (local) {
 				local.insertAdjacentHTML("beforeend", await elementMethod);
 			} else {
