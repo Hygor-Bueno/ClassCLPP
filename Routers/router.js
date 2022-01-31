@@ -10,67 +10,84 @@ export class Routers {
 	modalLoading = new ModalLoading;
 	async routers(params) {
 		let employee = new Employee;
-
+		/** Limpa a div content para receber um novo conteúdo */
 		let local = document.getElementById('content');
 		local ? local.innerHTML = "" : local;
-
+		// Insere e abre o modal de loading
 		document.getElementById("content").insertAdjacentHTML("beforeend", this.modalLoading.main())
-		await this.loadPage(employee.get("&id=" + localStorage.getItem("id"),true),null,35,2)
-
+		await this.loadPage(employee.get("&id=" + localStorage.getItem("id"), true), null, 35, 2)
 		localStorage.setItem('router', params)
-		document.getElementById('message').setAttribute('style', 'display:none')	
-			
+		// Fecha a aba de mensagens caso ela esteja aberta.
+		document.getElementById('message').setAttribute('style', 'display:none')
 		if (local) {
-			let result;
 			switch (params) {
 				case 'home':
-					result = new HomePage;					
-					document.getElementById('StylePages').setAttribute('href', "./Pages/Home/home.css")
-					await this.loadPage(result["main"](),local,70,25)
-					result.settings()
+					await this.pageHome(local);
 					break;
 				case 'checklistCreate':
-					result = new ChecklistCreatePage;
-					document.getElementById('StylePages').setAttribute('href', "")
-					local.insertAdjacentHTML("beforeend", result.main());
-					result.setting();
+					this.pageChecklistCreate(local);
 					break;
 				case 'checklistCreated':
-					document.getElementById('StylePages').setAttribute('href', "./Pages/Checklist/ChecklistCriated/checklist.css")
-					result = new ChecklistCreatedPage;
-					localStorage.removeItem('checklist')
-					let req = await result.arrayCheckList();
-					await this.loadPage(result["main"](req),local,70,10)
-					result.setting(req);
+					await this.pageChecklistCreated(local);
 					break;
 				case 'record':
-					document.getElementById('StylePages').setAttribute('href', "./Pages/Record/record.css")				
-					result = new RecordPage;
-					let reqCheck = await result.getChecklist();
-					await this.loadPage(result["main"](reqCheck),local,70,10)
-					await result.setting(reqCheck)
+					await this.pageRecord(local);
 					break;
 				case 'message':
-					result = new MessagePage;
-					document.getElementById('StylePages').setAttribute('href', "./Pages/Message/message.css")
-					await this.loadPage(result["main"](),local,70,10)
-					result.setting()
+					await this.pageMessage(local)
 					break;
 			}
-			this.modalLoading.settingLoading(100,10)
-			return result;
+			this.modalLoading.settingLoading(100, 10)
 		}
 	}
+	async pageHome(local) {
+		let result;
+		result = new HomePage;
+		document.getElementById('StylePages').setAttribute('href', "./Pages/Home/home.css")
+		await this.loadPage(result["main"](), local, 70, 25)
+		result.settings()
+	}
+	pageChecklistCreate(local) {
+		let result;
+		result = new ChecklistCreatePage;
+		document.getElementById('StylePages').setAttribute('href', "")
+		local.insertAdjacentHTML("beforeend", result.main());
+		result.setting();
+	}
+	async pageChecklistCreated(local) {
+		let result;
+		document.getElementById('StylePages').setAttribute('href', "./Pages/Checklist/ChecklistCriated/checklist.css")
+		result = new ChecklistCreatedPage;
+		localStorage.removeItem('checklist')
+		let req = await result.arrayCheckList();
+		await this.loadPage(result["main"](req), local, 70, 10)
+		result.setting(req);
+	}
+	async pageRecord(local) {
+		let result;
+		document.getElementById('StylePages').setAttribute('href', "./Pages/Record/record.css")
+		result = new RecordPage;
+		let reqCheck = await result.getChecklist();
+		await this.loadPage(result["main"](reqCheck), local, 70, 10)
+		await result.setting(reqCheck)
+	}
+	async pageMessage(local) {
+		let result;
+		result = new MessagePage;
+		document.getElementById('StylePages').setAttribute('href', "./Pages/Message/message.css")
+		await this.loadPage(result["main"](), local, 70, 10)
+		result.setting()
+	}
 
-	async loadPage(elementMethod,local,percentage, speed){
-		return new Promise( async(resolve) => {						
+	async loadPage(elementMethod, local, percentage, speed) {
+		return new Promise(async (resolve) => {
 			this.modalLoading.settingLoading(percentage, speed)
-			if(local){
-				local.insertAdjacentHTML("beforeend", await elementMethod);		
-			}else{
+			if (local) {
+				local.insertAdjacentHTML("beforeend", await elementMethod);
+			} else {
 				await elementMethod;
 			}
-			resolve("sucess")	
+			resolve("sucess")
 		})
 	}
 }
