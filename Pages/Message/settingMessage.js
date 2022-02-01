@@ -49,8 +49,7 @@ export class SettingMessage {
         <input type="file" accept=".doc, .pdf, image/png, image/jpg, image/jpeg, image/gif, video/mp4," id="file">
         <label for="file"><img class="fileButton" src="./assets/images/clip.svg"></label>
         <input type="text" class="msg_write" id='inputSend' maxlength="200">
-        <img class="buttonSendMsg" id='buttonSend' src="./assets/images/enviar.svg">
-        `;
+        <img class="buttonSendMsg" id='buttonSend' src="./assets/images/enviar.svg">`;
         $('.footSend').insertAdjacentHTML('beforeend', chargeButton);
         this.clickSend()
     }
@@ -80,14 +79,16 @@ export class SettingMessage {
         $_all(local).forEach(element => element.addEventListener('click', () => { this.clickEvents(element); this.chergeSendButtom()}))
     }
     async clickEvents(element) {
-        this.tradeDiv()
-        this.preparatePages()
+        this.tradeDiv();
+        this.preparatePages();
         this.changeHeader(element);
-        this.consultGroup()
+        this.consultGroup();
         $('.user_in').setAttribute('style', 'display:flex');
+        $('.searchUnic').setAttribute('style', 'display:none');
         $('.templateSearchUser').setAttribute('style', 'display:none');
         element.querySelector('.imgNotify') && element.querySelector('.imgNotify').setAttribute('src', './assets/images/notification.svg');
         await this.chargePageMsg(this.usefulComponents.splitString(element.getAttribute('id'), '_'), 'beforeend');
+        console.log(this.usefulComponents.splitString(element.getAttribute('id'), '_'))
         this.chatIdSender = this.usefulComponents.splitString(element.getAttribute('id'), '_');
         this.chatIdPage = `#${$('.msg_out section').getAttribute('id')}`;
         this.chatScroll = `.msg_out`;
@@ -98,8 +99,8 @@ export class SettingMessage {
     preparatePages(){
         this.pages = 1;
         $('.msg_out ').remove();
-        $('.msg_in').insertAdjacentHTML("afterbegin",'<div class="msg_out style_scroll" id="bodyMessageDiv"></div>')
-        this.modalImg()
+        $('.msg_in').insertAdjacentHTML("afterbegin",'<div class="msg_out style_scroll" id="bodyMessageDiv"></div>');
+        this.modalImg();
     }
     async chargePageMsg(split, position) {
         let object = split[0] == 'send' ? { 'id': split[1], 'destiny': '&id_send=' } : { 'id': split[1], 'destiny': '&id_group=' };
@@ -118,41 +119,50 @@ export class SettingMessage {
             </div>`)
     }
     searchUser() {
+        this.chargeEmploy()
         $('.searchUser').addEventListener('click', async() => {
-            $('.templateSearchUser').insertAdjacentHTML('beforeend', await this.methodUnited())
             if ($('.user_in').style.display == 'flex') {
                 $('.user_in').setAttribute('style', 'display:none')
+                $('.searchUnic').setAttribute('style', 'display:none')
                 $('.templateSearchUser').setAttribute('style', 'display:flex')
             } else {
                 $('.templateSearchUser').setAttribute('style', 'display:none')
+                $('.searchUnic').setAttribute('style', 'display:none')
                 $('.user_in').setAttribute('style', 'display:flex')
             }
+            this.clickDivUser('.templateSearchUser .divUser')
         })
     }
+    async chargeEmploy(){
+        if(!$('.templateSearchUser .divUser')) {
+            $('.templateSearchUser').insertAdjacentHTML('beforeend', await this.methodUnited())
+        }
+    }
     createListUser() {
-        let nameArray = []
+        let nameArray = []       
         const divArray = $_all('.templateSearchUser .divUser')
         for (let index = 0; index < divArray.length; index++) {
             nameArray.push({
-                'name': $(`#${divArray[index].getAttribute('id')} p`).innerText, 'id': divArray[index].getAttribute('id')
-                    .replace('sender_', ' ')
+                'name': $(`#${divArray[index].getAttribute('id')} p`).innerText, 'id': divArray[index].getAttribute('id').replace('sender_', ' ')
             })
         }
         return nameArray
     }
     searchName() {
         $('.searchName').addEventListener('click', async () => {
+            this.chargeEmploy()
             if ($('.searchUserBar').value) {
-                let searchName = $('.searchUserBar').value
-                let findName = this.createListUser().filter(valor => valor.name.toLowerCase().includes(searchName.toLowerCase()))
-                $('.user_in').setAttribute('style', 'display:none')
-                $('.templateSearchUser').innerHTML = " "
-                $('.templateSearchUser').setAttribute('style', 'display:flex')
+                let searchName = $('.searchUserBar').value;
+                let findName = this.createListUser().filter(valor => valor.name.toLowerCase().includes(searchName.toLowerCase()));
+                $('.searchUnic').innerHTML = '';
+                $('.user_in').setAttribute('style', 'display:none');
+                $('.templateSearchUser').setAttribute('style', 'display:none');
+                $('.searchUnic').setAttribute('style', 'display:flex');
                 for (let i = 0; i < findName.length; i++) {
                     if (!findName[i].id.includes(localStorage.getItem('id'))) $('.searchUnic').insertAdjacentHTML("afterbegin", await this.listUser.main(findName[i].id))
                 }
             }
-            this.clickDivUser('.searchUnic')
+            this.clickDivUser('.searchUnic .divUser')
         })
         $('.searchUserBar').addEventListener('keypress', (e) => { if (e.key === 'Enter') $('.searchName').click() })
     }
@@ -181,6 +191,7 @@ export class SettingMessage {
         })
     }
     usersInGroup() {
+        this.chargeEmploy()
         let idsUsers = ""
         $_all('.templateSearchUser .divUser').forEach((element) => idsUsers += element.outerHTML)
         this.listUser.checkBoxUser(idsUsers)
@@ -228,8 +239,10 @@ export class SettingMessage {
     notificationMsg() {
         let notific = $('.messageSend') && $_all('.messageSend')[$_all('.messageSend').length - 1].getAttribute('data-view')
         if (notific == 1) {
+            !$('.colabHead div:nth-child(3) img') ? $('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notify.svg'):
             $('.colabHead div:nth-child(3) img').setAttribute('src', './assets/images/notify.svg')
         } else {
+            !$('.colabHead div:nth-child(3) img') ? $('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notification.svg'):
             $('.colabHead div:nth-child(3) img').setAttribute('src', './assets/images/notification.svg')
         }
     }
@@ -238,7 +251,6 @@ export class SettingMessage {
         let response = ""
         let auxArray = []
         let nameId = dataId.data.sort((a, b) => a.user.trim().localeCompare(b.user.trim()))
-        console.log(nameId)
         for (const iterator of nameId) {  
             auxArray.push(this.listUser.main(iterator.id))
         }
