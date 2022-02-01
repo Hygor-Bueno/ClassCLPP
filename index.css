@@ -538,13 +538,17 @@ ATENÇÃO
     margin-right: 10px;
 }
 #containerBodyQuestion{
+    display: flex;
+    justify-content: center;
     overflow-y: auto;
     height:360px;
 }
 
 #bodyQuestion {
+    width: 100%;
     background: white;
     padding: 5px;
+    height:200px;
 }
 .handSignature{
     display:flex;
@@ -618,7 +622,7 @@ ATENÇÃO
     display: flex;
     align-items: center;
     justify-content:center;
-    padding:5px;
+    flex-direction:column;
 }
 .signatureCpfCreated input{
     background: transparent;
@@ -627,6 +631,8 @@ ATENÇÃO
     display: flex;
     flex-direction:column;
     margin-left: 10px;
+    margin-bottom: 10px;
+    width:80%;
 }
 
 /* SPINNER */

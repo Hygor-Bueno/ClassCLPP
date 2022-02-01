@@ -111,7 +111,17 @@
     flex-direction: column;
     align-items: center;
   }
-
+  #containerBodyQuestion{
+    width:100%;
+  }
+  .signatureCpfCreated{
+    width:100%;
+    display:flex;
+    flex-direction: column;
+  }
+  .signatureCpfCreated div{
+    margin-bottom: 10px;
+  }
   #form,
   .checklistCreated {
     width: 85%;
