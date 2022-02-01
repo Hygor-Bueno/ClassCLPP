@@ -20,7 +20,7 @@ export class ModalLoading {
     animate() {
         if (count >= values) {
             clearInterval(this.openInterval)
-            if (values == 100) {       
+            if (values == 100) {      
                 document.querySelector('.loading').parentElement.removeChild(document.querySelector('.loading'));
                 count = 4;
                 values = 1;

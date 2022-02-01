@@ -13,7 +13,7 @@ export class ListUser {
       const user = new Users();
       await user.populate(id_user);
       let data = `
-        <div class="divUser" id="sender_${user.getId_user()}" data-update=0>
+        <div class="divUser" id="send_${user.getId_user()}" data-update=0>
             <div class="divColab">
                 <img id="photoUser" src="${user.getPhoto().src}"/>
                 <p>${user.getName()}</p>
@@ -71,7 +71,6 @@ export class ListUser {
   }
 
   insertVerification(list) {
-    console.log(list)
     for (const iterator of list) {
       iterator.addEventListener("click", () => {
         iterator.getAttribute("data-update") == 0 ? iterator.setAttribute("data-update", 1) : iterator.setAttribute("data-update", 0);
@@ -102,9 +101,8 @@ export class ListUser {
   async validationUserChecklist(idCheck) {
     let userCheckList = new UserCheckList();
     let userAccess = await userCheckList.get("&id_checklist=" + idCheck);
-    userAccess &&
-      userAccess.forEach((element) => {
-        this.markUser(`sender_${element.id_user}`);
+    userAccess && userAccess.forEach((element) => {
+        this.markUser(`send_${element.id_user}`);
       });
   }
   insertChecked() {
