@@ -41,6 +41,8 @@ export class MessagePage extends SettingMessage {
                 </div>
                 <div class="templateSearchUser style_scroll" style="display:none">       
                 </div>
+                <div class="searchUnic style_scroll" style="display:none">       
+                </div>
             </div>
             <div class="presentation"style="display:flex">
                 <img class="imgPresentation" src="./assets/images/logoPPG.png">
