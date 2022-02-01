@@ -29,7 +29,6 @@ export class UsefulComponents {
     }
     checkField(local) {
         let valid = true;
-
         for (let field of this.formular.querySelectorAll(local)) {
             const label = field.previousElementSibling.innerText;
             if (!field.value) {

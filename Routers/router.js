@@ -65,7 +65,7 @@ export class Routers {
 		localStorage.removeItem('checklist');
 		let req = await result.arrayCheckList();
 		await this.loadPage(result["main"](req), local, 70, 10);
-		result.setting(req);
+		await result.setting(req);
 	}
 	async pageRecord(local) {
 		let result;
@@ -77,7 +77,6 @@ export class Routers {
 	}
 	async pageMessage(local) {
 		try{
-
 			let result;
 			result = new MessagePage;
 			document.getElementById('StylePages').setAttribute('href', "./Pages/Message/message.css");

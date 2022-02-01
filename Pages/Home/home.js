@@ -7,6 +7,7 @@ import { MessageList } from "../../Components/messageList.js";
 import { SettingHome } from "./settingHome.js";
 import { ObjectChecklist } from "../../Components/objects/checklistObject.js";
 import { WebSocketCLPP } from "../../Connection/WebSocket.js";
+import { TemplateChecklist } from "../../Components/templateChecklist.js";
 
 var employee = new Employee;
 var usefulComponents = new UsefulComponents;
@@ -21,6 +22,7 @@ export class HomePage extends SettingHome {
     accessClpp;
     checklistJson = {};
     message;
+    teplateChecklist = new TemplateChecklist
 
     async main() {
         this.userJson = await employee.get("&id=" + localStorage.getItem("id"),true);
@@ -89,7 +91,7 @@ export class HomePage extends SettingHome {
         try {
         resp =  Object.keys(this.checklistJson).map((element) => (
             `<div class="cardCheck" id="check_${this.checklistJson[element].getIdChecklist()}">
-                    <header><h2>${this.checklistJson[element].getTitle().slice(0, 30) + "..."}</h2></header>
+                    <header><h2>${this.checklistJson[element].getTitle().slice(0, 30) + "..."}</h2><button type="button" class="editBtnCss editChecklistCard" id="btnCheckCard_${this.checklistJson[element].getIdChecklist()}"></button></header>
                     <section>
                         <article class="articleLeftChecklist style_scroll"> 
                             <div class="notificationChecklist">
@@ -191,6 +193,5 @@ export class HomePage extends SettingHome {
                 ws.informPreview([document.querySelector('#bodyMessageDiv header').getAttribute('data-destiny'),document.querySelector('#bodyMessageDiv header').getAttribute('data-id')])
             }
         }
-        // ${getNotify.group_id ? ``:``}
     }
 }

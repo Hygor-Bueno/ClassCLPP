@@ -39,7 +39,6 @@ export class SettingChecklist {
       this.checklistsUser[element.id] = response;
     });
   }
-
   async setting(array) {
     await this.constructorObject(array);
     await this.list();
@@ -47,6 +46,7 @@ export class SettingChecklist {
     this.listUsers();
     this.viewChecklist();
     this.deleteChecklist();
+    localStorage.getItem("editChecklist") && $(`#checklist_${localStorage.getItem("editChecklist")} .view`).click();
   }
 
   async queryButton() {
@@ -208,6 +208,8 @@ export class SettingChecklist {
       this.templateCheck.checklist.setDate_final($("#formCheclist #dateFinal").value)
       this.templateCheck.checklist.updateChecklistDataBase();
       localStorage.removeItem('checklist')
+      localStorage.removeItem('editChecklist')
+
       closeModalCheck();
       let router = new Routers;
       router.routers(localStorage.getItem('router'))

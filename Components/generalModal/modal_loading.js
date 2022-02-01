@@ -20,16 +20,14 @@ export class ModalLoading {
     animate() {
         if (count >= values) {
             clearInterval(this.openInterval)
-            if (values == 100) {
-                console.log(count , values)
+            if (values == 100) {       
                 document.querySelector('.loading').parentElement.removeChild(document.querySelector('.loading'));
                 count = 4;
                 values = 1;
             }
         } else {
             count++;
-           if(document.querySelector('.porcent')){  document.querySelector('.porcent').textContent = count + "%"; console.log("vral")}
-
+           if(document.querySelector('.porcent')) document.querySelector('.porcent').textContent = count + "%";
         }
     }
 }
