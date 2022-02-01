@@ -88,7 +88,6 @@ export class SettingMessage {
         $('.templateSearchUser').setAttribute('style', 'display:none');
         element.querySelector('.imgNotify') && element.querySelector('.imgNotify').setAttribute('src', './assets/images/notification.svg');
         await this.chargePageMsg(this.usefulComponents.splitString(element.getAttribute('id'), '_'), 'beforeend');
-        console.log(this.usefulComponents.splitString(element.getAttribute('id'), '_'))
         this.chatIdSender = this.usefulComponents.splitString(element.getAttribute('id'), '_');
         this.chatIdPage = `#${$('.msg_out section').getAttribute('id')}`;
         this.chatScroll = `.msg_out`;
@@ -179,31 +178,30 @@ export class SettingMessage {
             </div>`
             openModal(nameGroup);
             this.saveGroup()
-            this.settingGroup()
         })
     }
     saveGroup() {
         $('.buttonProgress').addEventListener('click', async () => {
             await this.groupMessage.main($('.nameGroup input').value)
             closeModal()
-            this.usersInGroup()
-            this.settingGroup()
+            this.usersInGroup(1)
         })
     }
-    usersInGroup() {
+    usersInGroup(check) {
         this.chargeEmploy()
         let idsUsers = ""
         $_all('.templateSearchUser .divUser').forEach((element) => idsUsers += element.outerHTML)
         this.listUser.checkBoxUser(idsUsers)
         $('#templateListUser').insertAdjacentHTML("afterbegin", `
-            <div id="displayHeader">  
-                <div id="borderBack">
-                    <img src="./assets/images/cancel.svg" title ="Fechar">
-                </div>
-                <header id="headerUserList">
-                    <h1>Incluir Usuario:</h1>
-                </header>
-            </div>`)
+        <div id="displayHeader">  
+        <div id="borderBack">
+        <img src="./assets/images/cancel.svg" title ="Fechar">
+        </div>
+        <header id="headerUserList">
+        <h1>Usuário do grupo:</h1>
+        </header>
+        </div>`)
+        check == 1 && this.settingGroup()
     }
     settingGroup() {
         getB_id('borderBack').addEventListener('click', () => closeModal())
@@ -217,7 +215,7 @@ export class SettingMessage {
     }
     consultGroup() {
         if ($('.colabHead .btnOnlyGroup')) $('.btnOnlyGroup').addEventListener('click', () => {
-            this.usersInGroup();
+            this.usersInGroup(0);
             getB_id('borderBack').addEventListener('click', () => closeModal())
         })
     }
@@ -247,10 +245,10 @@ export class SettingMessage {
         }
     }
     async methodUnited() {
-        let dataId = await this.userAccess.get('&application_id=7&web', false)
+        let dataId = await this.userAccess.get('&application_id=7&web', false);
         let response = ""
         let auxArray = []
-        let nameId = dataId.data.sort((a, b) => a.user.trim().localeCompare(b.user.trim()))
+        let nameId = dataId.data.sort((a, b) => a.user.trim().localeCompare(b.user.trim()));
         for (const iterator of nameId) {  
             auxArray.push(this.listUser.main(iterator.id))
         }

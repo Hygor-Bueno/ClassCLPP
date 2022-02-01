@@ -71,7 +71,6 @@ export class ListUser {
   }
 
   insertVerification(list) {
-    console.log(list)
     for (const iterator of list) {
       iterator.addEventListener("click", () => {
         iterator.getAttribute("data-update") == 0 ? iterator.setAttribute("data-update", 1) : iterator.setAttribute("data-update", 0);
@@ -102,9 +101,8 @@ export class ListUser {
   async validationUserChecklist(idCheck) {
     let userCheckList = new UserCheckList();
     let userAccess = await userCheckList.get("&id_checklist=" + idCheck);
-    userAccess &&
-      userAccess.forEach((element) => {
-        this.markUser(`sender_${element.id_user}`);
+    userAccess && userAccess.forEach((element) => {
+        this.markUser(`send_${element.id_user}`);
       });
   }
   insertChecked() {
