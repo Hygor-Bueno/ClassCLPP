@@ -6,9 +6,6 @@ import { GeneralModal } from '../../Components/generalModal/modal_geral.js'
 import { Message } from "../../Connection/Message.js";
 import { WebSocketCLPP } from "../../Connection/WebSocket.js";
 import { Routers } from "../../Routers/router.js";
-import { ChecklistCreatedPage } from "../Checklist/ChecklistCriated/checklist.js";
-import { ConnectionCLPP } from "../../Connection/ConnectionCLPP.js";
-import { ObjectChecklist } from "../../Components/objects/checklistObject.js";
 
 var listMessage = new MessageList
 var validator = new Validation
@@ -77,7 +74,7 @@ export class SettingHome {
     settingsButtonChat(idSender) {
         getB_id('buttonReply').addEventListener('click', () => this.closeMessage());
         getB_id('buttonSend').addEventListener('click', () => { this.buttonSend(idSender, getB_id('inputSend').value, 1, '#bodyMessageDiv section') });
-        getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
+        getB_id('inputSend').addEventListener('keypress', (enter) => {if (enter.key === 'Enter') getB_id('buttonSend').click()})
     }
     async buttonSend(idSender, message, type, local, localScroll) {
         if (type == 2 ? true : validator.minLength(message, 0) && validator.maxLength(message, 200)) {
