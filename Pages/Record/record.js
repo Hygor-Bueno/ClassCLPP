@@ -18,42 +18,60 @@ export class RecordPage extends SettingRecord {
                         </div>                   
                         <div class="bodyChecklist" style="display:block" id="checklistBlock">
 
-
                             <div class="questionChecklist">
                                 <label class="titleOptionBlock">Titulo das checkList</label>
-                                <div class="sel" id="titleChecklist" type="checkbox">
-                                <div>
-                                    <p>Selecione o checklist</p>
-                                </div>
+                                <div class="sel" id="titleChecklist">
+                                    <div class="selectButton">
+                                        <p id="selectTitulo">Selecione o checklist: </p> 
+                                        <button type="button" data-linked="titleChecklistOption" data-function="titleChecklist"></button>
+                                    </div>
+                                    <div class="testandoTest" id="titleChecklistOption" style="display:none"> 
                                         ${this.templateOption(objectChecklist, 'description')}    
+                                    </div>
                                 </div>
                             </div>
+
                             <div class="questionChecklist">
                                 <label class="titleOptionBlock">Titulo das Perguntas</label>
-                                <select class="sel" id="titleQuestion">
-                                    <option class="option" value="none" selected="" disabled="" hidden="">Selecione a pergunta</option>
-                                </select>
+                                <div class="sel" id="titleQuestion">
+                                    <div class="selectButton">
+                                        <p id="selectTitulo">Selecione a pergunta:</p> 
+                                        <button data-function="titleQuestion"></button>
+                                    </div>
+                                    <div class="testandoTest" style="display:none"> 
+                                    </div>
+                                </div>    
                             </div>
+                            
                             <div class="questionChecklist">
                                 <label class="titleOptionBlock">Validade</label>
-                                <select class="sel" id="titleDate">
-                                    <option class="option" value="none" selected="" disabled="" hidden="">Selecione a data</option>
-                                </select>
+                                <div class="sel" id="titleDate">
+                                    <div class="selectButton">
+                                        <p id="selectTitulo">Selecione a validade:</p> 
+                                        <button type="button" data-linked="validCheckBlock" data-function="validade"></button>
+                                    </div>
+                                    <div class="testandoTest" id="validCheckBlock" style="display:none">
+                                    </div>                      
+                                </div>
                             </div>
+
                         </div>
                     </div>
-                    <div class="titleBlock">
+                    
+                    <div class="questionChecklist">
                         <div class="titleFilter">
                             <h1>Unidades</h1>
                         </div>
-                        <div id="unidGroupBlock" class="bodyChecklist" style="display:block"">
-                            <div class="questionChecklist">
-                                <select class="sel" id=shop>
-                                    <option class="option" value="none" selected="" disabled="" hidden="">Opções</option>
-                                </select>
+                        <div class="sel" id="shop">
+                            <div class="selectButton">
+                                <p id="selectTitulo">Selecione a unidade:</p> 
+                                <button type="button" data-linked="selShop" data-function="unidade"></button>
                             </div>
-                        </div>      
+                            <div id="selShop" style="display:none">
+                            </div>                   
+                        </div> 
                     </div>
+
                     <div class="titleBlock">                
                         <div class="titleFilter">     
                             <h1>Por data</h1>    
