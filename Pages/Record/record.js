@@ -58,12 +58,12 @@ export class RecordPage extends SettingRecord {
                         </div>
                     </div>
                     
-                    <div class="questionChecklist">
+                    <div class="titleBlock">
                         <div class="titleFilter">
                             <h1>Unidades</h1>
                         </div>
                         <div class="sel" id="shop">
-                            <div class="selectButton">
+                            <div class="selectButtonUnid">
                                 <p id="selectTitulo">Selecione a unidade:</p> 
                                 <button type="button" data-linked="selShop" data-function="unidade"></button>
                             </div>

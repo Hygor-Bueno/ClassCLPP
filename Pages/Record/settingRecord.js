@@ -117,7 +117,6 @@ export class SettingRecord {
         }
     }
     openClose(element) {
-        console.log(element.style)
         getB_id(element.getAttribute("data-linked")).style.display == 'none'
             ? getB_id(element.getAttribute("data-linked")).setAttribute("style", "display:block")
             : getB_id(element.getAttribute("data-linked")).setAttribute("style", "display:none")
