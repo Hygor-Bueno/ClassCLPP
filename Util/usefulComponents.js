@@ -14,7 +14,7 @@ export class UsefulComponents {
         return response[2] + "/" + response[1] + "/" + response[0]
     }
     splitStringName(stringToSplit, separator) {
-        var arrayOfStrings = this.splitString(stringToSplit, separator)
+        var arrayOfStrings = this.splitString(stringToSplit.trim(), separator)
         if (arrayOfStrings.length - 1 == 0) {
             arrayOfStrings.push(separator)
         }
@@ -29,7 +29,6 @@ export class UsefulComponents {
     }
     checkField(local) {
         let valid = true;
-
         for (let field of this.formular.querySelectorAll(local)) {
             const label = field.previousElementSibling.innerText;
             if (!field.value) {

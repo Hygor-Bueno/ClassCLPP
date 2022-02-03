@@ -14,21 +14,20 @@ export class ModalLoading {
     }
     settingLoading(newValue, speed) {
         values = newValue
-        console.log("Estopei", clearInterval(this.openInterval))
+        clearInterval(this.openInterval)
         this.openInterval = setInterval(() => this.animate(), speed);
     }
     animate() {
-        if (count == values) console.warn(count, values)
-        if (count == values) {
-            console.log("Estopei", clearInterval(this.openInterval))
-            if (values == 100) {
+        if (count >= values) {
+            clearInterval(this.openInterval)
+            if (values == 100) {      
                 document.querySelector('.loading').parentElement.removeChild(document.querySelector('.loading'));
                 count = 4;
                 values = 1;
             }
         } else {
             count++;
-            document.querySelector('.porcent').textContent = count + "%"
+           if(document.querySelector('.porcent')) document.querySelector('.porcent').textContent = count + "%";
         }
     }
 }

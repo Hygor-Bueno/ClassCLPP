@@ -17,51 +17,73 @@ export class RecordPage extends SettingRecord {
                             <h1>Checklist</h1>            
                         </div>                   
                         <div class="bodyChecklist" style="display:block" id="checklistBlock">
+
                             <div class="questionChecklist">
-                                <label>Titulo das checkList</label>
-                                <select class="sel" id="titleChecklist" type="checkbox">
-                                    <option class="option" value="none" selected="" disabled="" hidden="">Selecione o checklist</option>
-                                        ${this.templateOption(objectChecklist, 'description')}
-                                </select>
+                                <label class="titleOptionBlock">Titulo das checkList</label>
+                                <div class="sel" id="titleChecklist">
+                                    <div class="selectButton">
+                                        <p id="selectTitulo">Selecione o checklist: </p> 
+                                        <button type="button" data-linked="titleChecklistOption" data-function="titleChecklist"></button>
+                                    </div>
+                                    <div class="testandoTest" id="titleChecklistOption" style="display:none"> 
+                                        ${this.templateOption(objectChecklist, 'description')}    
+                                    </div>
+                                </div>
                             </div>
+
                             <div class="questionChecklist">
-                                <label>Titulo das Perguntas</label>
-                                <select class="sel" id="titleQuestion">                                
-                                    <option class="option" value="none" selected="" disabled="" hidden="">Selecione a pergunta</option>
-                                </select>
+                                <label class="titleOptionBlock">Titulo das Perguntas</label>
+                                <div class="sel" id="titleQuestion">
+                                    <div class="selectButton">
+                                        <p id="selectTitulo">Selecione a pergunta:</p> 
+                                        <button data-function="titleQuestion"></button>
+                                    </div>
+                                    <div class="testandoTest" style="display:none"> 
+                                    </div>
+                                </div>    
                             </div>
+                            
                             <div class="questionChecklist">
-                                <label>Validade</label>
-                                <select class="sel" id="titleDate">
-                                    <option class="option" value="none" selected="" disabled="" hidden="">Selecione a data</option>
-                                </select>
+                                <label class="titleOptionBlock">Validade</label>
+                                <div class="sel" id="titleDate">
+                                    <div class="selectButton">
+                                        <p id="selectTitulo">Selecione a validade:</p> 
+                                        <button type="button" data-linked="validCheckBlock" data-function="validade"></button>
+                                    </div>
+                                    <div class="testandoTest" id="validCheckBlock" style="display:none">
+                                    </div>                      
+                                </div>
                             </div>
+
                         </div>
                     </div>
-                    <div class="titleBlock">                
-                        <div class="titleFilter">     
-                            <h1>Unidades</h1>     
+                    
+                    <div class="questionChecklist">
+                        <div class="titleFilter">
+                            <h1>Unidades</h1>
                         </div>
-                        <div id="unidGroupBlock" class="bodyChecklist" style="display:block"">
-                            <div class="questionChecklist">
-                                <select class="sel" id=shop>
-                                    <option class="option" value="none" selected="" disabled="" hidden="">Opções</option>
-                                </select>
+                        <div class="sel" id="shop">
+                            <div class="selectButton">
+                                <p id="selectTitulo">Selecione a unidade:</p> 
+                                <button type="button" data-linked="selShop" data-function="unidade"></button>
                             </div>
-                        </div>      
+                            <div id="selShop" style="display:none">
+                            </div>                   
+                        </div> 
                     </div>
+
                     <div class="titleBlock">                
                         <div class="titleFilter">     
                             <h1>Por data</h1>    
                         </div>
                         <div id="dateBlock" class="bodyChecklist" style="display:block">
                             <div class="questionChecklist">
-                                <label>Data inicial</label>
-                                <input type="date"></input>
+                                <label class="titleOptionBlock">Data inicial</label>
+                                <input class="sel" type="date"></input>
                             </div>
                             <div class="questionChecklist">
-                                <label>Data final</label>
-                                <input type="date"></input>
+                                <label class="titleOptionBlock">Data final</label>
+                                <input class="sel" type="date"></input>
                             </div>
                         </div>
                     </div>
@@ -78,7 +100,7 @@ export class RecordPage extends SettingRecord {
                         <input type="text" placeholder="Nome do relatório"/>
                     </section>
                     <aside id="buttonPrint">
-                        <button type="button" class="buttonRecordPrint"></button>
+                        <button type="button" class="buttonRecordPrint" data-function="buttonRecordPrint" id="buttonRecordPrint"></button>
                     </aside>
                 </header>
 
@@ -87,9 +109,9 @@ export class RecordPage extends SettingRecord {
                             <h1>Dashboard</h1>
                         </div>
                         <div id="buttonGraphic">
-                            <button type="button" class="buttonRecordBar"></button>
-                            <button type="button" class="buttonRecordPizza"></button> 
-                            <button type="button" class="buttonRecordPercentage"></button>
+                            <button type="button" class="buttonRecordGraphic" id="buttonRecordBar" data-function="buttonRecordGraphic"></button>
+                            <button type="button" class="buttonRecordGraphic" id="buttonRecordPizza" data-function="buttonRecordGraphic"></button> 
+                            <button type="button" class="buttonRecordGraphic" id="buttonRecordPercentage" data-function="buttonRecordGraphic" style="opacity: 1"></button>
                         </div>
                 </div>
                 <body id="graphicRecord">

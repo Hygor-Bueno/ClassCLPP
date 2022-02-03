@@ -170,6 +170,9 @@ b {
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
 }
+.editChecklistCard{
+    pointer-events: painted;
+}
 .articleLeftChecklist{
     padding:1px;    
     width: 50%;
@@ -244,9 +247,13 @@ b {
     pointer-events: none;
 }
 .cardCheck header {
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
     border-bottom: solid 1px rgb(178, 178, 178);
     padding-bottom: 3px;
-    height: 18px;
+    min-height: 18px;
+
 }
 .cardCheck section {
     display: flex;

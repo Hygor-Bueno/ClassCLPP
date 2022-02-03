@@ -28,8 +28,8 @@ export class ChecklistCreatedPage extends SettingChecklist {
         `;
     return response;
   }
-
   async arrayCheckList() {
     return await this.getChecklist.get('&web&id_user=' + localStorage.getItem('id'))
   }
+  
 }

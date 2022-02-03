@@ -16,15 +16,16 @@ export class MessagePage extends SettingMessage {
     
     
     async main() {
-        this.employeeAccess = await this.userAccess.get('&application_id=7&web', false);
         const id = localStorage.getItem('id')
-        const getInfo = await this.message.get("&id=" + id)
-        await this.messageList.separator(getInfo)        
-        const user = new Users();
-        getInfo.forEach(objs => { 
-            user.userInner(objs)
-            userJson[objs.id_user ? 'user_' + objs.id_user :'group_'+ objs.id_group] = user.classObj()
-        })
+        const getInfo = await this.message.get("&id="+ id)
+        if(getInfo) {
+            await this.messageList.separator(getInfo)   
+            const user = new Users();
+            getInfo.forEach(objs => { 
+                user.userInner(objs)
+                userJson[objs.id_user ? 'user_' + objs.id_user :'group_'+ objs.id_group] = user.classObj()
+            })
+        }
         let response =
             `
         <div class="containerMsg">
@@ -32,16 +33,15 @@ export class MessagePage extends SettingMessage {
                 <header class="searchHead">
                     <img class="searchName" src="./assets/images/Search.svg">
                     <input type="text" class="searchUserBar">
-                    <img class="searchUser" src="./assets/images/person_black_24dp.svg">
-                    <img class="searchGroup" src="./assets/images/groups_black_24dp.svg">
+                    <img class="searchUser" src="./assets/images/icons8-search-client-24.png">
+                    <img class="searchGroup" src="./assets/images/icons8-people-working-together-50.png">
                 </header>
                 <div class="user_in style_scroll" style="display:flex">
                     ${this.userReceived(this.convertArray(userJson))}
                 </div>
-                <div class="templateSearchUser style_scroll" style="display:none"> 
-                    ${await this.methodUnited(this.employeeAccess)}           
+                <div class="templateSearchUser style_scroll" style="display:none">       
                 </div>
-                <div class="searchUnic style_scroll" style="display:none">
+                <div class="searchUnic style_scroll" style="display:none">       
                 </div>
             </div>
             <div class="presentation"style="display:flex">

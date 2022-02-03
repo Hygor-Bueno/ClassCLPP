@@ -33,32 +33,32 @@ export class WebSocketCLPP {
         setTimeout(() => { this.connectWebSocket() }, 1000)
         isConnected = false
     }
-    async OnMessage(ev) {        
+    async OnMessage(ev) {
         let getNotify = JSON.parse(ev.data)
 
         if (getNotify.objectType == 'notification') {
-            console.log(' ****** vizualizaram sua mensagem ****** ')
-            this.routerSettingsWs(localStorage.getItem('router'), '_viewed',getNotify)
+            //console.log(' ****** vizualizaram sua mensagem ****** ')
+            this.routerSettingsWs(localStorage.getItem('router'), '_viewed', getNotify)
         } else if (getNotify.message) {
-            console.log(' ****** Você recebeu uma mensagem ****** ')
-            this.routerSettingsWs(localStorage.getItem('router'), '_received',getNotify)
+            //console.log(' ****** Você recebeu uma mensagem ****** ')
+            this.routerSettingsWs(localStorage.getItem('router'), '_received', getNotify)
         }
     }
-    messageViewed(param){
+    messageViewed(param) {
         const Msg = new MessagePage;
         Msg.visualizationMsg(param)
     }
-    async messageReceived(param){      
+    async messageReceived(param) {
         const msg = new MessagePage;
         msg.setNotify(param)
     }
-    homeReceived(param){
+    homeReceived(param) {
         var home = new HomePage;
         home.upMsgReceived(param, document.getElementById('bodyChDiv'))
     }
     routerSettingsWs(page, path, param) {
         page += path
-        console.log(param)
+        //console.log(param)
         switch (page) {
             case 'message_viewed':
                 this.messageViewed(param);
@@ -70,22 +70,22 @@ export class WebSocketCLPP {
                 this.homeReceived(param);
                 break;
             default:
-                console.error('Atenção, página não encontrada ou inválida! Pagina: '+page)
+                //console.error('Atenção, página não encontrada ou inválida! Pagina: '+page)
                 break;
         }
     }
     // "Eu visualizei a mensagem"
     informPreview(idSender) {
         const jsonString = {}
-            jsonString.type = 3;
-            jsonString[idSender[0] == 'send' ? 'send_id': 'id_group'] = idSender[1]
+        jsonString.type = 3;
+        jsonString[idSender[0] == 'send' ? 'send_id' : 'id_group'] = idSender[1]
         ws.send(JSON.stringify(jsonString))
     }
     // Eu estou enviando a mensagem  
     informSending(idMessage, idUserSend) {
         let jsonString = {}
-            jsonString.type = 2,
-            jsonString[idUserSend[0] == 'send' ? 'send_id': 'group_id'] = idUserSend[1], 
+        jsonString.type = 2,
+            jsonString[idUserSend[0] == 'send' ? 'send_id' : 'group_id'] = idUserSend[1],
             jsonString.last_id = idMessage
         ws.send(JSON.stringify(jsonString))
     }
