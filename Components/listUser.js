@@ -112,6 +112,7 @@ export class ListUser {
     let filterUpdate = nodeListForArray.filter((element) => {
       return element.getAttribute("data-update") == 1;
     });
+    
     filterUpdate.forEach((element) => {
       let user = element.getAttribute("id").split("_")[1];
       jsonParams.id_user = user;

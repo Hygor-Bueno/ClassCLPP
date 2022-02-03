@@ -208,7 +208,7 @@ export class SettingMessage {
         </div>`)
         check == 1 && this.settingGroup()
         check == 0 && getB_id('borderBack').addEventListener('click', () => closeModal());
-        getB_id('saveGroup').addEventListener('click', () => {})
+        check == 0 && getB_id('saveGroup').addEventListener('click', () => {this.listUser.updateChecked({id_group: $('.colabHead').getAttribute('data-id').split('_')[1]},"CLPP/Group.php")})
     }
     settingGroup() {
         getB_id('borderBack').addEventListener('click', () => closeModal())
@@ -227,6 +227,7 @@ export class SettingMessage {
     }
      async showUsers(idGroup) {
         let response = await this.connectionCLPP.get("&id=" + idGroup,"CLPP/Group.php")
+        console.log(response)
         response.data.forEach(user => { user.id_user != localStorage.getItem('id') && this.listUser.markUser(`send_${user.id_user}`)})
     }
     visualizationMsg(params) {
