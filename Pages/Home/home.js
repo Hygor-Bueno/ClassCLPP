@@ -31,6 +31,7 @@ export class HomePage extends SettingHome {
         let nameUser = usefulComponents.splitStringName(this.userJson.name, " ")
         let response =
             `
+            
             <div id="homeDiv">
                 <section id="homeLeft">
                     <header id="welcom">
@@ -184,7 +185,7 @@ export class HomePage extends SettingHome {
         await listMessage.receiverName();
         if (document.getElementById('bodyChDiv')) {
             document.getElementById('bodyChDiv').insertAdjacentHTML('beforeend', await this.messageReceived());
-            this.settings();
+            this.notifyMessage()
             if (document.getElementById('bodyMessageDiv') && aux == document.querySelector('#bodyMessageDiv header').getAttribute('data-id')) {
                 document.querySelector('#bodyMessageDiv section').insertAdjacentHTML('beforeend', `${getNotify.type == 2 ?
                     `<div class="messageReceived formatImg">${getNotify.group_id ? `<span>${listMessage.employeers[getNotify.send_user]+": "}</span>`:""}<img src=http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/${getNotify.message}></div>` : `<div class= "messageReceived"> ${getNotify.group_id ? `<span>${listMessage.employeers[getNotify.send_user].user+": "}</span>`:``} <p>${getNotify.message}</p></div>`}`)

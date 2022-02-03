@@ -99,6 +99,7 @@ body {
 .menu .principal ul {
     position: absolute;
     visibility: hidden;
+    z-index: 1;
 }
 
 .menu ul li:hover ul {
@@ -140,6 +141,7 @@ body {
 }
 
 #content {
+    position:relative;
     background: #f1f2f5;
     width: 100%;
     height: 100%;
@@ -372,42 +374,7 @@ button {
     width: 38px;
     height:28px;
 }
-/* 
-ATENÇÃO
-<===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===>
-*/
-/*Validar o que é necessário e deletar o resto*/
+
 /* PARTE RESPONSÁVEL POR FORMATAR O ESTILO DO FORMULÁRIO DO CHECKLIST */
 #formCheclist {
     display: flex;
@@ -690,4 +657,22 @@ ATENÇÃO
     to{
         transform: rotate(360deg);
     }
+}
+
+/* Modal de nitificação de mesnagens:  */
+#notifyReceivedMessage{
+    box-shadow: 0 0 0.5em black;
+    display: block;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    width:250px;
+    height:60px;
+    background: rgba(68, 199, 112, 0.2);
+    padding:10px;
+    border-radius: 10px;
+}
+
+#notifyReceivedMessage:hover{    
+    box-shadow: inset 0 0 0.5em black;
 }
