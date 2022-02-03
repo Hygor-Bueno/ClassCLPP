@@ -34,9 +34,9 @@ export class RecordPage extends SettingRecord {
                             <div class="questionChecklist">
                                 <label class="titleOptionBlock">Titulo das Perguntas</label>
                                 <div class="sel" id="titleQuestion">
-                                    <div class="selectButton">
-                                        <p id="selectTitulo">Selecione a pergunta:</p> 
-                                        <button data-function="titleQuestion"></button>
+                                    <div class="selectButton" >
+                                        <p id="selectTituloQuestion">Selecione a pergunta:</p> 
+                                        <button data-function="titleQuestion" id="selectQuestionCheck"></button>
                                     </div>
                                     <div class="testandoTest" style="display:none"> 
                                     </div>
@@ -48,7 +48,7 @@ export class RecordPage extends SettingRecord {
                                 <div class="sel" id="titleDate">
                                     <div class="selectButton">
                                         <p id="selectTitulo">Selecione a validade:</p> 
-                                        <button type="button" data-linked="validCheckBlock" data-function="validade"></button>
+                                        <button type="button" data-linked="validCheckBlock" data-function="validade" id="selectValidadCheck"></button>
                                     </div>
                                     <div class="testandoTest" id="validCheckBlock" style="display:none">
                                     </div>                      
