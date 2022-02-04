@@ -9,6 +9,7 @@ import { TemplateChecklist } from "../../../Components/templateChecklist.js";
 import { Validation } from "../../../Util/validation.js";
 import { ErrorHandling } from "../../../Util/errorHandling.js";
 import { Routers } from "../../../Routers/router.js";
+import { modalReceivedMessage } from "../../../Components/generalModal/modal_receivedMessage.js";
 let idQuestion;
 export class SettingChecklist {
   checklist = new Checklist();
@@ -47,6 +48,11 @@ export class SettingChecklist {
     this.viewChecklist();
     this.deleteChecklist();
     localStorage.getItem("editChecklist") && $(`#checklist_${localStorage.getItem("editChecklist")} .view`).click();
+    getB_id("testandoModalMenssage").addEventListener("click",()=>{
+      let alert = new modalReceivedMessage;
+      getB_id("content").insertAdjacentHTML("beforeend",alert.main({name:"Hygor Bueno"}));
+
+    })
   }
 
   async queryButton() {

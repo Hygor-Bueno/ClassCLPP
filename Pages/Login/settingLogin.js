@@ -10,7 +10,7 @@ export class SettingLogin {
             loginUser.password = document.getElementById('userPassword').value
 
             let login = new Login();
-            let req = await login.post(loginUser)
+            let req = await login.post(loginUser,true)
             
             if (req && !req.error){
                 localStorage.setItem('router','home')
