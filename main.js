@@ -17,6 +17,8 @@ var webSocket = new WebSocketCLPP();
         if(await version.main()){
             document.querySelector('body').insertAdjacentHTML('beforeend',pageLogin.main())
             pageLogin.buttonLogin()
+            document.querySelector('.login__form').addEventListener('keypress', (element)=>{if(element.key === "Enter") {
+                document.querySelector(".login__submit").click()}})
         }else{
             alert("Atenção! Sua versão está desatualizada.")
         }

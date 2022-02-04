@@ -16,20 +16,16 @@ export class SettingRecord {
         this.clickPage();
         this.jsonChecklists(objectChecklist);
         this.templateDate(objectChecklist);
-        /* getB_id('titleChecklist').onchange = () => {
-            this.populaQuestion()
-        }
- */
         let req = await this.getShop()
         getB_id('selShop').insertAdjacentHTML('beforeend', this.templateOption(null, 'description', req))
 
         getB_id('titleDate').onchange = () => {
             let selectChecklist = getB_id('titleChecklist')
             this.populaValidade(selectChecklist)
-            // this.populaQuestion()
             selectChecklist.disabled = true;
         }
         this.blockQuestion()
+        // this.changeTitle()
     }
 
     jsonChecklists(objectChecklist) {
@@ -134,36 +130,54 @@ export class SettingRecord {
     }
 
     ativaQuestion() {
-        getB_id('selectQuestionCheck').setAttribute("style", "opacity:1")
-        getB_id('selectTituloQuestion').setAttribute("style", "opacity:1")
+        getB_id('selectButtonQuestion').setAttribute("style", "display:flex")
+        getB_id('selectButtonValidade').setAttribute("style", "display:flex")
+        getB_id('selectButtonReserva').setAttribute("style", "display:none")
+        getB_id('selectButtonReservaValidade').setAttribute("style", "display:none")
     }
 
     bloqueiaQuestion() {
-        getB_id('selectQuestionCheck').setAttribute("style", "opacity:0.3")
-        getB_id('selectTituloQuestion').setAttribute("style", "opacity:0.3")
+
+        getB_id('selectButtonQuestion').setAttribute("style", "display:none")
+        getB_id('selectButtonValidade').setAttribute("style", "display:none")
+
+        getB_id('selectButtonReserva').setAttribute("style", "display:flex")
+        getB_id('selectButtonReserva').setAttribute("style", "opacity:0.3")
+
+        getB_id('selectButtonReservaValidade').setAttribute("style", "display:flex")
+        getB_id('selectButtonReservaValidade').setAttribute("style", "opacity:0.3")
     }
 
     blockQuestion() {
         getB_id('titleChecklistOption').onchange = () => {
-            let cont = 0
+            let cont = this.m();
             document.querySelectorAll('#titleChecklistOption input[type=checkbox]').forEach(element => {
                 if (element.checked) cont++;
+                console.log(cont)
             })
-            if (cont >= 2) this.bloqueiaQuestion()
-            if (cont <= 1) this.ativaQuestion()
+            if (cont.length >= 2) this.bloqueiaQuestion()
+            if (cont.length <= 1) this.ativaQuestion()
         }
     }
 
-    changeTitle() {
-        getB_id('titleChecklistOption').onchange = () => {
-            let cont = 0
-            document.querySelectorAll('#titleChecklistOption input[type=checkbox]').forEach(element => {
-                if (element.checked) cont++;
-            })
-            if (cont <= 1) this.ativaQuestion()
-            if (cont >= 2) this.bloqueiaQuestion()
-        }
+    m(local) {
+
+        let array
+        // array vazio
+        //percorrer o local ['#titleChecklistOption input[type=checkbox]'] forEach(element=>{})
+        // dar um arra.push(element) que estiver selecionado;
+        // retornar o array populado;
     }
+
+    n(array) {
+        // verificar se array é maior do que 1
+        // se for maior retornar Multiplas checklist
+        // senão for maior retornar valor.
+    }
+    n2(valor, local) {
+
+    }
+
 
     async getChecklist() {
         return await this.connectionCLPP.get("&web=&id_user=" + localStorage.getItem("id"), 'CLPP/Checklist.php')
