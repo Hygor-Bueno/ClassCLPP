@@ -59,7 +59,9 @@
 }
 
 #selectTitulo,
-#selectTituloQuestion {
+#selectTituloQuestion,
+#selectTituloQuestionReserva,
+#selectTituloQuestionReservaValidade {
   /* border: 1px solid black; */
   background-color: white;
   width: 174px;
@@ -127,7 +129,11 @@ input {
 }
 
 .selectButton,
-.selectButtonUnid {
+#selectButtonValidade,
+#selectButtonQuestion,
+.selectButtonUnid,
+#selectButtonReserva,
+#selectButtonReservaValidade {
   display: flex;
   justify-content: space-between;
   background-color: white;
@@ -139,11 +145,22 @@ input {
 }
 
 .selectButton button,
-.selectButtonUnid button {
+#selectButtonValidade button,
+#selectButtonQuestion button,
+.selectButtonUnid button,
+#selectButtonReserva button,
+#selectButtonReservaValidade button {
   background-image: url("../../assets/images/down.svg");
   background-size: cover;
   width: 23px;
   height: 23px;
+}
+
+#selectButtonReserva,
+#selectButtonReservaValidade {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 /* PARTE DO RELATORIO - GRAFICOS */

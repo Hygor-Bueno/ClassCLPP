@@ -34,11 +34,13 @@ export class RecordPage extends SettingRecord {
                             <div class="questionChecklist">
                                 <label class="titleOptionBlock">Titulo das Perguntas</label>
                                 <div class="sel" id="titleQuestion">
-                                    <div class="selectButton" >
+                                    <div id="selectButtonQuestion" style="display:flex">
                                         <p id="selectTituloQuestion">Selecione a pergunta:</p> 
                                         <button data-function="titleQuestion" id="selectQuestionCheck"></button>
                                     </div>
-                                    <div class="testandoTest" style="display:none"> 
+                                    <div id="selectButtonReserva" style="display:none">
+                                        <p id="selectTituloQuestionReserva">Multiplas checklist</p> 
+                                        <button data-function="titleQuestion" id="selectQuestionCheckReserva"></button>
                                     </div>
                                 </div>    
                             </div>
@@ -46,12 +48,17 @@ export class RecordPage extends SettingRecord {
                             <div class="questionChecklist">
                                 <label class="titleOptionBlock">Validade</label>
                                 <div class="sel" id="titleDate">
-                                    <div class="selectButton">
+                                    <div id="selectButtonValidade">
                                         <p id="selectTitulo">Selecione a validade:</p> 
                                         <button type="button" data-linked="validCheckBlock" data-function="validade" id="selectValidadCheck"></button>
                                     </div>
                                     <div class="testandoTest" id="validCheckBlock" style="display:none">
-                                    </div>                      
+                                    </div> 
+                                    
+                                    <div id="selectButtonReservaValidade" style="display:none">
+                                        <p id="selectTituloQuestionReservaValidade">Multiplas checklist</p> 
+                                        <button data-function="titleQuestion" id="selectQuestionCheckReservaValidade"></button>
+                                    </div>
                                 </div>
                             </div>
 
