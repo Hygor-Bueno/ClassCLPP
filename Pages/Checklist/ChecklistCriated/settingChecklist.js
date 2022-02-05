@@ -48,10 +48,30 @@ export class SettingChecklist {
     this.viewChecklist();
     this.deleteChecklist();
     localStorage.getItem("editChecklist") && $(`#checklist_${localStorage.getItem("editChecklist")} .view`).click();
-    getB_id("testandoModalMenssage").addEventListener("click",()=>{
-      let alert = new modalReceivedMessage;
-      getB_id("content").insertAdjacentHTML("beforeend",alert.main({name:"Hygor Bueno"}));
+    getB_id("testandoModalMenssage").addEventListener("click", async () => {
 
+      // let alert = new modalReceivedMessage;
+      // getB_id("content").insertAdjacentHTML("beforeend",alert.main({name:"Hygor Bueno"}));let unique = [...new Set(response)];
+
+      // // PARTE 01: Pegar as chaves distintas getKeys(array,key);
+      // let response = await this.connectionCLPP.get("&web&checklist=331&id_user=148", "CLPP/Record.php")
+      // let array = []
+      // response.data.forEach((element) => array.push(element.id_user))
+      // let unique = [...new Set(array)];
+      // console.log(unique,response.data)
+
+      // // PARTE 02: organizar o array por chaves sortArray(keys,array);
+      // let response2 = [];
+      // unique.forEach(e=>{response.data.filter(element => {if (element.id_user == e) response2.push(element) })})
+      // console.log(response2)
+
+      // // PARTE 03: organizar o array por chaves sortArray(keys,array);    
+      // let response3 = [];
+      // let array2 = [];
+      // response2.forEach((element) => array2.push(element.date))
+      // let unique2 =  [...new Set(array2)];
+      // unique2.forEach(e=>{response2.filter(element => {if (element.date == e) response3.push(element) })})
+      // console.log(response3);
     })
   }
 
@@ -69,6 +89,7 @@ export class SettingChecklist {
       this.deleteChecklist();
     });
   }
+
   clean() {
     getB_id("getCheckList").innerHTML = "";
   }
@@ -171,8 +192,8 @@ export class SettingChecklist {
   }
   async saveQuestionMethod() {
 
-    if (this.templateCheck.validationQuestion()) {      
-      let req = await this.connectionCLPP.get(`&user_id=${localStorage.getItem("id")}&id=${this.templateCheck.checklist.getIdChecklist()}`,'CLPP/Question.php')
+    if (this.templateCheck.validationQuestion()) {
+      let req = await this.connectionCLPP.get(`&user_id=${localStorage.getItem("id")}&id=${this.templateCheck.checklist.getIdChecklist()}`, 'CLPP/Question.php')
       this.templateCheck.idQuestion = req.next_id
       let object = this.templateCheck.addQuestion(this.templateCheck.idQuestion)
       await this.templateCheck.checklist.saveQuestionsBD(object)
