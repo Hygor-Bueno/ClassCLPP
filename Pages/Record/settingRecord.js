@@ -24,7 +24,6 @@ export class SettingRecord {
             selectChecklist.disabled = true;
         }
         this.blockQuestion()
-        console.log(objectChecklist)
     }
 
     jsonChecklists(objectChecklist) {
@@ -56,6 +55,9 @@ export class SettingRecord {
                 this.openClose(element)
                 break;
             case "unidade":
+                this.openClose(element)
+                break;
+            case "titleQuestion":
                 this.openClose(element)
                 break;
             default:
@@ -127,30 +129,64 @@ export class SettingRecord {
         })
     }
 
-    ativaQuestion() {
-        getB_id('selectButtonQuestion').setAttribute("style", "display:flex")
+    ativaValidade() {
         getB_id('selectButtonValidade').setAttribute("style", "display:flex")
-        getB_id('selectButtonReserva').setAttribute("style", "display:none")
         getB_id('selectButtonReservaValidade').setAttribute("style", "display:none")
     }
 
-    bloqueiaQuestion() {
-        getB_id('selectButtonQuestion').setAttribute("style", "display:none")
+    blockValidade() {
         getB_id('selectButtonValidade').setAttribute("style", "display:none")
-        getB_id('selectButtonReserva').setAttribute("style", "display:flex")
-        getB_id('selectButtonReserva').setAttribute("style", "opacity:0.3")
         getB_id('selectButtonReservaValidade').setAttribute("style", "display:flex")
         getB_id('selectButtonReservaValidade').setAttribute("style", "opacity:0.3")
     }
 
+    ativaQuestion() {
+        getB_id('selectButtonQuestion').setAttribute("style", "display:flex")
+        getB_id('selectButtonReserva').setAttribute("style", "display:none")
+    }
+
+    bloqueiaQuestion() {
+        getB_id('selectButtonQuestion').setAttribute("style", "display:none")
+        getB_id('selectButtonReserva').setAttribute("style", "display:flex")
+        getB_id('selectButtonReserva').setAttribute("style", "opacity:0.3")
+    }
+
     blockQuestion() {
-        getB_id('titleChecklistOption').onchange = () => {
+        getB_id('titleChecklistOption').onchange = async () => {
             let cont = this.walksArray('#titleChecklistOption input[type=checkbox]')
+            let reqQuestion = await this.getQuestion()
+            getB_id('titleQuestionOption').insertAdjacentHTML('beforeend', this.templateOption(null, 'description', reqQuestion))
+            this.todos()
             this.validateParameter(cont.length, cont);
-            if (cont.length >= 2) this.bloqueiaQuestion()
-            if (cont.length <= 1) this.ativaQuestion()
+            if (cont.length >= 2) {
+                this.bloqueiaQuestion()
+            }
+            if (cont.length <= 1) {
+                this.ativaQuestion()
+
+            }
+
+            if (cont.length >= 1.0) this.blockValidade()
+            if (cont.length <= 0) this.ativaValidade()
+
+
         }
     }
+
+
+
+
+    todos() {
+        document.querySelectorAll('#titleChecklistOption input[type=checkbox]').forEach(element => {
+            if (document.querySelector('#todos').checked == true) {
+                element.checked = true
+            }
+        })
+    }
+
+
+
+
 
     walksArray(local) {
         let array = []
@@ -173,4 +209,10 @@ export class SettingRecord {
         let response = await this.connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')
         return response.data
     }
-} 
+
+    async getQuestion() {
+        let cont = this.walksArray('#titleChecklistOption input[type=checkbox]')
+        let response = await this.connectionCLPP.get("&id=" + cont[0].attributes[2].value + "&user_id=" + localStorage.getItem("id"), 'CLPP/Question.php')
+        return response.data
+    }
+}  
