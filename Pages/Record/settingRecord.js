@@ -18,14 +18,12 @@ export class SettingRecord {
         this.templateDate(objectChecklist);
         let req = await this.getShop()
         getB_id('selShop').insertAdjacentHTML('beforeend', this.templateOption(null, 'description', req))
-
         getB_id('titleDate').onchange = () => {
             let selectChecklist = getB_id('titleChecklist')
             this.populaValidade(selectChecklist)
             selectChecklist.disabled = true;
         }
         this.blockQuestion()
-        // this.changeTitle()
     }
 
     jsonChecklists(objectChecklist) {
@@ -38,9 +36,7 @@ export class SettingRecord {
 
     clickPage() {
         document.addEventListener("click", (event) => {
-            if (event.target.tagName.toLowerCase() == "button") {
-                this.functionFilter(event.target)
-            }
+            if (event.target.tagName.toLowerCase() == "button") this.functionFilter(event.target)
         })
     }
 
@@ -59,6 +55,9 @@ export class SettingRecord {
                 this.openClose(element)
                 break;
             case "unidade":
+                this.openClose(element)
+                break;
+            case "titleQuestion":
                 this.openClose(element)
                 break;
             default:
@@ -93,7 +92,12 @@ export class SettingRecord {
         let response = ""
         let auxArray = array || objectChecklist.data
         auxArray.map(element => {
-            element[key] ? response += `<div class="testandoTest"><input type="checkbox" class="option" data-id="${element.id}" value="${element[key]}"><p class="valorCheck">${element[key]}</p></input></div>` : ""
+            element[key] ? response +=
+                `<div class="testandoTest">
+                <input type="checkbox" class="option" data-id="${element.id}" value="${element[key]}">
+                    <p class="valorCheck">${element[key]}</p>
+                </input>
+            </div>` : ""
         })
         return response;
     }
@@ -114,70 +118,89 @@ export class SettingRecord {
             }
             jsonDate.push(newJson)
         })
-        $('#titleDate .testandoTest').insertAdjacentHTML('beforeend',
-            this.templateOption(null, 'date', jsonDate))
+        $('#titleDate .testandoTest').insertAdjacentHTML('beforeend', this.templateOption(null, 'date', jsonDate))
     }
 
     buttonGraphic(element) {
         let array = [getB_id('buttonRecordBar'), getB_id('buttonRecordPizza'), getB_id('buttonRecordPercentage')]
         array.forEach((e) => {
-            if (element.getAttribute('id') == e.getAttribute('id')) {
-                e.setAttribute("style", "opacity: 1")
-            } else {
-                e.setAttribute("style", "opacity: 0.3")
-            }
+            if (element.getAttribute('id') == e.getAttribute('id')) e.setAttribute("style", "opacity: 1")
+            else e.setAttribute("style", "opacity: 0.3")
         })
     }
 
-    ativaQuestion() {
-        getB_id('selectButtonQuestion').setAttribute("style", "display:flex")
+    ativaValidade() {
         getB_id('selectButtonValidade').setAttribute("style", "display:flex")
-        getB_id('selectButtonReserva').setAttribute("style", "display:none")
         getB_id('selectButtonReservaValidade').setAttribute("style", "display:none")
     }
 
-    bloqueiaQuestion() {
-
-        getB_id('selectButtonQuestion').setAttribute("style", "display:none")
+    blockValidade() {
         getB_id('selectButtonValidade').setAttribute("style", "display:none")
-
-        getB_id('selectButtonReserva').setAttribute("style", "display:flex")
-        getB_id('selectButtonReserva').setAttribute("style", "opacity:0.3")
-
         getB_id('selectButtonReservaValidade').setAttribute("style", "display:flex")
         getB_id('selectButtonReservaValidade').setAttribute("style", "opacity:0.3")
     }
 
+    ativaQuestion() {
+        getB_id('selectButtonQuestion').setAttribute("style", "display:flex")
+        getB_id('selectButtonReserva').setAttribute("style", "display:none")
+    }
+
+    bloqueiaQuestion() {
+        getB_id('selectButtonQuestion').setAttribute("style", "display:none")
+        getB_id('selectButtonReserva').setAttribute("style", "display:flex")
+        getB_id('selectButtonReserva').setAttribute("style", "opacity:0.3")
+    }
+
     blockQuestion() {
-        getB_id('titleChecklistOption').onchange = () => {
-            let cont = this.m();
-            document.querySelectorAll('#titleChecklistOption input[type=checkbox]').forEach(element => {
-                if (element.checked) cont++;
-                console.log(cont)
-            })
-            if (cont.length >= 2) this.bloqueiaQuestion()
-            if (cont.length <= 1) this.ativaQuestion()
+        getB_id('titleChecklistOption').onchange = async () => {
+            let cont = this.walksArray('#titleChecklistOption input[type=checkbox]')
+            let reqQuestion = await this.getQuestion()
+            getB_id('titleQuestionOption').insertAdjacentHTML('beforeend', this.templateOption(null, 'description', reqQuestion))
+            this.todos()
+            this.validateParameter(cont.length, cont);
+            if (cont.length >= 2) {
+                this.bloqueiaQuestion()
+            }
+            if (cont.length <= 1) {
+                this.ativaQuestion()
+
+            }
+
+            if (cont.length >= 1.0) this.blockValidade()
+            if (cont.length <= 0) this.ativaValidade()
+
+
         }
     }
 
-    m(local) {
 
-        let array
-        // array vazio
-        //percorrer o local ['#titleChecklistOption input[type=checkbox]'] forEach(element=>{})
-        // dar um arra.push(element) que estiver selecionado;
-        // retornar o array populado;
+
+
+    todos() {
+        document.querySelectorAll('#titleChecklistOption input[type=checkbox]').forEach(element => {
+            if (document.querySelector('#todos').checked == true) {
+                element.checked = true
+            }
+        })
     }
 
-    n(array) {
-        // verificar se array é maior do que 1
-        // se for maior retornar Multiplas checklist
-        // senão for maior retornar valor.
-    }
-    n2(valor, local) {
 
+
+
+
+    walksArray(local) {
+        let array = []
+        document.querySelectorAll(local).forEach(element => {
+            if (element.checked) array.push(element)
+        })
+        return array
     }
 
+    validateParameter(array, cont) {
+        if (array > 1) document.getElementById("selectTitulo").innerHTML = "Multi selecionado"
+        else if (array == 1) document.getElementById("selectTitulo").innerHTML = cont[0].defaultValue.toLowerCase().slice(0, 20) + ".."
+        else if (array == 0) document.getElementById("selectTitulo").innerHTML = "Selecione o checklist:"
+    }
 
     async getChecklist() {
         return await this.connectionCLPP.get("&web=&id_user=" + localStorage.getItem("id"), 'CLPP/Checklist.php')
@@ -186,4 +209,10 @@ export class SettingRecord {
         let response = await this.connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')
         return response.data
     }
-} 
+
+    async getQuestion() {
+        let cont = this.walksArray('#titleChecklistOption input[type=checkbox]')
+        let response = await this.connectionCLPP.get("&id=" + cont[0].attributes[2].value + "&user_id=" + localStorage.getItem("id"), 'CLPP/Question.php')
+        return response.data
+    }
+}  
