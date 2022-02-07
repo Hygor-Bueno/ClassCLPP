@@ -182,6 +182,7 @@ export class HomePage extends SettingHome {
     }
     async upMsgReceived(getNotify) {
         let aux = getNotify.group_id || getNotify.send_user 
+        console.log(getNotify);
         await listMessage.receiverName();
         if (document.getElementById('bodyChDiv')) {
             document.getElementById('bodyChDiv').insertAdjacentHTML('beforeend', await this.messageReceived());

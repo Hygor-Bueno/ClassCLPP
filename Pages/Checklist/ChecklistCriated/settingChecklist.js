@@ -9,7 +9,7 @@ import { TemplateChecklist } from "../../../Components/templateChecklist.js";
 import { Validation } from "../../../Util/validation.js";
 import { ErrorHandling } from "../../../Util/errorHandling.js";
 import { Routers } from "../../../Routers/router.js";
-import { modalReceivedMessage } from "../../../Components/generalModal/modal_receivedMessage.js";
+
 let idQuestion;
 export class SettingChecklist {
   checklist = new Checklist();
@@ -49,29 +49,46 @@ export class SettingChecklist {
     this.deleteChecklist();
     localStorage.getItem("editChecklist") && $(`#checklist_${localStorage.getItem("editChecklist")} .view`).click();
     getB_id("testandoModalMenssage").addEventListener("click", async () => {
+      // PARTE 01: Pegar as chaves distintas getKeys(array,key);
+      let response = await this.connectionCLPP.get("&web&id_user=148&date_init_response='2022-02-04'", "CLPP/Record.php")
+      let array = []
+      response.data.forEach((element) => array.push(element.id_user))
+      let unique = [...new Set(array)];
+      console.log(unique,response.data)
 
-      // let alert = new modalReceivedMessage;
-      // getB_id("content").insertAdjacentHTML("beforeend",alert.main({name:"Hygor Bueno"}));let unique = [...new Set(response)];
+      // PARTE 02: organizar o array por chaves sortArray(keys,array); For User
+      let response2 = [];
+      unique.forEach(e=>{response.data.filter(element => {if (element.id_user == e) response2.push(element) })})
+      console.log(response2)
 
-      // // PARTE 01: Pegar as chaves distintas getKeys(array,key);
-      // let response = await this.connectionCLPP.get("&web&checklist=331&id_user=148", "CLPP/Record.php")
-      // let array = []
-      // response.data.forEach((element) => array.push(element.id_user))
-      // let unique = [...new Set(array)];
-      // console.log(unique,response.data)
+      // PARTE 03: organizar o array por chaves sortArray(keys,array);    FOr Date
+      let response3 = [];
+      let array2 = [];
+      response2.forEach((element) => array2.push(element.date))
+      let unique2 =  [...new Set(array2)];
+      unique2.forEach(e=>{response2.filter(element => {if (element.date == e) response3.push(element) })})
+      console.log(response3);
 
-      // // PARTE 02: organizar o array por chaves sortArray(keys,array);
-      // let response2 = [];
-      // unique.forEach(e=>{response.data.filter(element => {if (element.id_user == e) response2.push(element) })})
-      // console.log(response2)
 
-      // // PARTE 03: organizar o array por chaves sortArray(keys,array);    
-      // let response3 = [];
-      // let array2 = [];
-      // response2.forEach((element) => array2.push(element.date))
-      // let unique2 =  [...new Set(array2)];
-      // unique2.forEach(e=>{response2.filter(element => {if (element.date == e) response3.push(element) })})
-      // console.log(response3);
+      //PARTE 04: For Checklist;
+      let response4 = [];
+      let array4  = [];
+      let unique4 = [];
+      response3.forEach((element) => array4.push(element.id_checklist))
+      unique4 = [...new Set(array4)];
+      unique4.forEach(e=>{response3.filter(element => {if (element.id_checklist == e) response4.push(element) })})
+      response4.forEach(e=>console.log(e.id_checklist,e.id_option_question,e.id_user, "<== User",e.date))
+
+      // let response5 = [];
+      // let array5  = [];
+      // let unique5 = [];
+      // response4.forEach((element) => array5.push(element.id_option_question))
+      // unique5 = [...new Set(array5)];
+      // unique5.forEach(e=>{response4.filter(element => {if (element.id_option_question == e) response5.push(element) })})
+      // console.log(response5)  
+
+
+
     })
   }
 
