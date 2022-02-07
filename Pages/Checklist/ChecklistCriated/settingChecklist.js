@@ -9,7 +9,7 @@ import { TemplateChecklist } from "../../../Components/templateChecklist.js";
 import { Validation } from "../../../Util/validation.js";
 import { ErrorHandling } from "../../../Util/errorHandling.js";
 import { Routers } from "../../../Routers/router.js";
-import { modalReceivedMessage } from "../../../Components/generalModal/modal_receivedMessage.js";
+
 let idQuestion;
 export class SettingChecklist {
   checklist = new Checklist();
@@ -47,6 +47,7 @@ export class SettingChecklist {
     this.viewChecklist();
     this.deleteChecklist();
     localStorage.getItem("editChecklist") && $(`#checklist_${localStorage.getItem("editChecklist")} .view`).click();
+
     getB_id("testandoModalMenssage").addEventListener("click",async ()=>{
       // let alert = new modalReceivedMessage;
       // getB_id("content").insertAdjacentHTML("beforeend",alert.main({name:"Hygor Bueno"}));
@@ -54,6 +55,7 @@ export class SettingChecklist {
       let a= []
       response.data.filter(item => {if(a.indexOf(item.id_user)<0)return a.push(item.id_user)})
       console.log(a)
+
     })
   }
   async queryButton() {
@@ -70,6 +72,7 @@ export class SettingChecklist {
       this.deleteChecklist();
     });
   }
+
   clean() {
     getB_id("getCheckList").innerHTML = "";
   }
@@ -169,8 +172,8 @@ export class SettingChecklist {
   }
   async saveQuestionMethod() {
 
-    if (this.templateCheck.validationQuestion()) {      
-      let req = await this.connectionCLPP.get(`&user_id=${localStorage.getItem("id")}&id=${this.templateCheck.checklist.getIdChecklist()}`,'CLPP/Question.php')
+    if (this.templateCheck.validationQuestion()) {
+      let req = await this.connectionCLPP.get(`&user_id=${localStorage.getItem("id")}&id=${this.templateCheck.checklist.getIdChecklist()}`, 'CLPP/Question.php')
       this.templateCheck.idQuestion = req.next_id
       let object = this.templateCheck.addQuestion(this.templateCheck.idQuestion)
       await this.templateCheck.checklist.saveQuestionsBD(object)

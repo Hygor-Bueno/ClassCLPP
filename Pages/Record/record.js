@@ -1,6 +1,7 @@
 import { Record } from "../../Connection/Record.js";
 import { SettingRecord } from "./settingRecord.js";
 
+
 export class RecordPage extends SettingRecord {
     getRecord = new Record
     async main(objectChecklist) {
@@ -11,7 +12,7 @@ export class RecordPage extends SettingRecord {
                 <div id="titleMain">
                     <h1>Filtra Checklist</h1>
                 </div> 
-                <section  id="bodyAside">
+                <section  id="bodyAside" class=" style_scroll">
                     <div class="titleBlock">                
                         <div class="titleFilter">     
                             <h1>Checklist</h1>            
@@ -26,6 +27,21 @@ export class RecordPage extends SettingRecord {
                                         <button type="button" data-linked="titleChecklistOption" data-function="titleChecklist"></button>
                                     </div>
                                     <div class="testandoTest" id="titleChecklistOption" style="display:none"> 
+
+
+
+                             
+
+                                        <div class="testandoTest">
+                                            <input type="checkbox" class="option" id="todos" value="">
+                                                <p class="valorCheck">Todos</p>
+                                            </input>
+                                        </div>
+
+
+
+
+
                                         ${this.templateOption(objectChecklist, 'description')}    
                                     </div>
                                 </div>
@@ -36,12 +52,15 @@ export class RecordPage extends SettingRecord {
                                 <div class="sel" id="titleQuestion">
                                     <div id="selectButtonQuestion" style="display:flex">
                                         <p id="selectTituloQuestion">Selecione a pergunta:</p> 
-                                        <button data-function="titleQuestion" id="selectQuestionCheck"></button>
+                                        <button data-linked="titleQuestionOption" data-function="titleQuestion" id="selectQuestionCheck"></button>
+                                    </div>
+                                    <div class="testandoTest" id="titleQuestionOption" style="display:none"> 
                                     </div>
                                     <div id="selectButtonReserva" style="display:none">
                                         <p id="selectTituloQuestionReserva">Multiplas checklist</p> 
                                         <button data-function="titleQuestion" id="selectQuestionCheckReserva"></button>
                                     </div>
+                                    
                                 </div>    
                             </div>
                             

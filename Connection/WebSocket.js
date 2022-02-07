@@ -1,3 +1,4 @@
+import { modalReceivedMessage } from "../Components/generalModal/modal_receivedMessage.js";
 import { HomePage } from "../Pages/Home/home.js";
 import { MessagePage } from "../Pages/Message/message.js";
 import { Message } from "./Message.js";
@@ -37,10 +38,10 @@ export class WebSocketCLPP {
         let getNotify = JSON.parse(ev.data)
 
         if (getNotify.objectType == 'notification') {
-            //console.log(' ****** vizualizaram sua mensagem ****** ')
+            console.log(' ****** vizualizaram sua mensagem ****** ')
             this.routerSettingsWs(localStorage.getItem('router'), '_viewed', getNotify)
         } else if (getNotify.message) {
-            //console.log(' ****** Você recebeu uma mensagem ****** ')
+            console.log(' ****** Você recebeu uma mensagem ****** ')
             this.routerSettingsWs(localStorage.getItem('router'), '_received', getNotify)
         }
     }
@@ -56,9 +57,20 @@ export class WebSocketCLPP {
         var home = new HomePage;
         home.upMsgReceived(param, document.getElementById('bodyChDiv'))
     }
+    async alertMessage(param,page) {
+        if(page == 'checklistCreated_received' || page == 'checklistCreate_received' || page == "record_received"){
+
+            let alert = new modalReceivedMessage;
+            document.getElementById("content").insertAdjacentHTML("beforeend", alert.main(await alert.getDataUser(param.send_user)));
+            alert.settings();
+            setTimeout(() => {
+                document.getElementById('notifyReceivedMessage') && document.getElementById('notifyReceivedMessage').remove();
+            }, 2000)
+        }
+    }
     routerSettingsWs(page, path, param) {
         page += path
-        //console.log(param)
+        console.log(page)
         switch (page) {
             case 'message_viewed':
                 this.messageViewed(param);
@@ -70,10 +82,11 @@ export class WebSocketCLPP {
                 this.homeReceived(param);
                 break;
             default:
-                //console.error('Atenção, página não encontrada ou inválida! Pagina: '+page)
+                this.alertMessage(param, page);
                 break;
         }
     }
+
     // "Eu visualizei a mensagem"
     informPreview(idSender) {
         const jsonString = {}
