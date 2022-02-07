@@ -31,7 +31,6 @@ export class SettingChecklist {
       this.listsUsersCheck += await this.listUser.main(iterator.id);
     }
   }
-
   async constructorObject(array) {
     //Esssa parte popula o checklist
     await array.forEach(async element => {
@@ -48,13 +47,15 @@ export class SettingChecklist {
     this.viewChecklist();
     this.deleteChecklist();
     localStorage.getItem("editChecklist") && $(`#checklist_${localStorage.getItem("editChecklist")} .view`).click();
-    getB_id("testandoModalMenssage").addEventListener("click",()=>{
-      let alert = new modalReceivedMessage;
-      getB_id("content").insertAdjacentHTML("beforeend",alert.main({name:"Hygor Bueno"}));
-
+    getB_id("testandoModalMenssage").addEventListener("click",async ()=>{
+      // let alert = new modalReceivedMessage;
+      // getB_id("content").insertAdjacentHTML("beforeend",alert.main({name:"Hygor Bueno"}));
+      let response =  await this.connectionCLPP.get('&web&id_user=148', 'CLPP/Response.php')
+      let a= []
+      response.data.filter(item => {if(a.indexOf(item.id_user)<0)return a.push(item.id_user)})
+      console.log(a)
     })
   }
-
   async queryButton() {
     let searchCheck;
     getB_id("searchName").addEventListener("click", async () => {
@@ -72,11 +73,9 @@ export class SettingChecklist {
   clean() {
     getB_id("getCheckList").innerHTML = "";
   }
-
   popIclude(objectCheck) {
     getB_id("getCheckList").insertAdjacentHTML("beforeend", this.getCheckListCreted(objectCheck));
   }
-
   listUsers() {
     $_all(".groups").forEach(element => {
       element.addEventListener("click", () => {
@@ -84,7 +83,6 @@ export class SettingChecklist {
       });
     });
   }
-
   viewChecklist() {
     $_all(".view").forEach(element => {
       element.addEventListener("click", () => {

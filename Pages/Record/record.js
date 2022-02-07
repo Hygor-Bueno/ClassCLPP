@@ -6,8 +6,8 @@ export class RecordPage extends SettingRecord {
     async main(objectChecklist) {
         document.getElementById("message").setAttribute("style", "display:none");
         let response =
-            `
-            <aside id="asideFilter">
+            `<div id="divRecord">
+                <aside id="asideFilter">
                 <div id="titleMain">
                     <h1>Filtra Checklist</h1>
                 </div> 
@@ -135,7 +135,7 @@ export class RecordPage extends SettingRecord {
                     </aside>
                 </body>
             </section>
-            
+           </div> 
         `
         return response;
     }

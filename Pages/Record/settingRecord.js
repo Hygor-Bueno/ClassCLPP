@@ -1,6 +1,6 @@
 import { ObjectChecklist } from "../../Components/objects/checklistObject.js";
 import { ConnectionCLPP } from "../../Connection/ConnectionCLPP.js";
-import { getB_id, $, $_all, openModalCheck, closeModalCheck } from "../../Util/compressSyntaxe.js";
+import { getB_id, $, $_all, openModal, closeModal } from "../../Util/compressSyntaxe.js";
 import { UsefulComponents } from "../../Util/usefulComponents.js";
 
 export class SettingRecord {
@@ -61,6 +61,9 @@ export class SettingRecord {
             case "unidade":
                 this.openClose(element)
                 break;
+            case "buttonRecordPrint":
+                //openModal()
+            break;
             default:
                 console.error("data-function")
         }
@@ -99,23 +102,15 @@ export class SettingRecord {
     }
 
     templateDate(objectChecklist) {
-        let objDateId;
-        let objDateInit;
-        let objDateFinal;
-        let newJson;
         let jsonDate = [];
         objectChecklist.data.forEach(element => {
-            objDateId = element.id
-            objDateInit = element.date_init
-            objDateFinal = element.date_final
-            newJson = {
-                date: objDateInit ? this.userFulComponents.convertData(objDateInit, "-") + " - " + this.userFulComponents.convertData(objDateFinal, "-") : false,
-                id: (objDateId)
+            let newJson = {
+                date: element.date_init ? this.userFulComponents.convertData(element.date_init, "-") + " - " + this.userFulComponents.convertData(element.date_final, "-") : false,
+                id: (element.id)
             }
             jsonDate.push(newJson)
         })
-        $('#titleDate .testandoTest').insertAdjacentHTML('beforeend',
-            this.templateOption(null, 'date', jsonDate))
+        $('#titleDate .testandoTest').insertAdjacentHTML('beforeend', this.templateOption(null, 'date', jsonDate))
     }
 
     buttonGraphic(element) {
