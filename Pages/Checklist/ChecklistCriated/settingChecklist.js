@@ -31,7 +31,6 @@ export class SettingChecklist {
       this.listsUsersCheck += await this.listUser.main(iterator.id);
     }
   }
-
   async constructorObject(array) {
     //Esssa parte popula o checklist
     await array.forEach(async element => {
@@ -48,50 +47,17 @@ export class SettingChecklist {
     this.viewChecklist();
     this.deleteChecklist();
     localStorage.getItem("editChecklist") && $(`#checklist_${localStorage.getItem("editChecklist")} .view`).click();
-    getB_id("testandoModalMenssage").addEventListener("click", async () => {
-      // PARTE 01: Pegar as chaves distintas getKeys(array,key);
-      let response = await this.connectionCLPP.get("&web&id_user=148&date_init_response='2022-02-04'", "CLPP/Record.php")
-      let array = []
-      response.data.forEach((element) => array.push(element.id_user))
-      let unique = [...new Set(array)];
-      console.log(unique,response.data)
 
-      // PARTE 02: organizar o array por chaves sortArray(keys,array); For User
-      let response2 = [];
-      unique.forEach(e=>{response.data.filter(element => {if (element.id_user == e) response2.push(element) })})
-      console.log(response2)
-
-      // PARTE 03: organizar o array por chaves sortArray(keys,array);    FOr Date
-      let response3 = [];
-      let array2 = [];
-      response2.forEach((element) => array2.push(element.date))
-      let unique2 =  [...new Set(array2)];
-      unique2.forEach(e=>{response2.filter(element => {if (element.date == e) response3.push(element) })})
-      console.log(response3);
-
-
-      //PARTE 04: For Checklist;
-      let response4 = [];
-      let array4  = [];
-      let unique4 = [];
-      response3.forEach((element) => array4.push(element.id_checklist))
-      unique4 = [...new Set(array4)];
-      unique4.forEach(e=>{response3.filter(element => {if (element.id_checklist == e) response4.push(element) })})
-      response4.forEach(e=>console.log(e.id_checklist,e.id_option_question,e.id_user, "<== User",e.date))
-
-      // let response5 = [];
-      // let array5  = [];
-      // let unique5 = [];
-      // response4.forEach((element) => array5.push(element.id_option_question))
-      // unique5 = [...new Set(array5)];
-      // unique5.forEach(e=>{response4.filter(element => {if (element.id_option_question == e) response5.push(element) })})
-      // console.log(response5)  
-
-
+    getB_id("testandoModalMenssage").addEventListener("click",async ()=>{
+      // let alert = new modalReceivedMessage;
+      // getB_id("content").insertAdjacentHTML("beforeend",alert.main({name:"Hygor Bueno"}));
+      let response =  await this.connectionCLPP.get('&web&id_user=148', 'CLPP/Response.php')
+      let a= []
+      response.data.filter(item => {if(a.indexOf(item.id_user)<0)return a.push(item.id_user)})
+      console.log(a)
 
     })
   }
-
   async queryButton() {
     let searchCheck;
     getB_id("searchName").addEventListener("click", async () => {
@@ -110,11 +76,9 @@ export class SettingChecklist {
   clean() {
     getB_id("getCheckList").innerHTML = "";
   }
-
   popIclude(objectCheck) {
     getB_id("getCheckList").insertAdjacentHTML("beforeend", this.getCheckListCreted(objectCheck));
   }
-
   listUsers() {
     $_all(".groups").forEach(element => {
       element.addEventListener("click", () => {
@@ -122,7 +86,6 @@ export class SettingChecklist {
       });
     });
   }
-
   viewChecklist() {
     $_all(".view").forEach(element => {
       element.addEventListener("click", () => {

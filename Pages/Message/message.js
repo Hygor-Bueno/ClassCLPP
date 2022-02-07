@@ -17,9 +17,9 @@ export class MessagePage extends SettingMessage {
     
     async main() {
         const id = localStorage.getItem('id')
-        const getInfo = await this.message.get("&id=" + id)
+        const getInfo = await this.message.get("&id="+ id)
         if(getInfo) {
-            await this.messageList.separator(getInfo)        
+            await this.messageList.separator(getInfo)   
             const user = new Users();
             getInfo.forEach(objs => { 
                 user.userInner(objs)
