@@ -57,10 +57,9 @@ export class SettingRecord {
             case "unidade":
                 this.openClose(element)
                 break;
-
-            case "buttonRecordPrint":
-                //openModal()
-            break;
+            case "titleQuestion":
+                this.openClose(element)
+                break;
             default:
                 console.error("data-function")
         }
@@ -92,6 +91,7 @@ export class SettingRecord {
     templateOption(objectChecklist, key, array) {
         let response = ""
         let auxArray = array || objectChecklist.data
+        console.log
         auxArray.map(element => {
             element[key] ? response +=
                 `<div class="testandoTest">
@@ -149,19 +149,20 @@ export class SettingRecord {
         getB_id('titleChecklistOption').onchange = async () => {
             let cont = this.walksArray('#titleChecklistOption input[type=checkbox]')
             let reqQuestion = await this.getQuestion()
+            console.log(reqQuestion)
             getB_id('titleQuestionOption').insertAdjacentHTML('beforeend', this.templateOption(null, 'description', reqQuestion))
             this.todos()
             this.validateParameter(cont.length, cont);
             if (cont.length >= 2) {
                 this.bloqueiaQuestion()
+                this.blockValidade()
             }
             if (cont.length <= 1) {
                 this.ativaQuestion()
-
+                this.ativaValidade()
             }
-
-            if (cont.length >= 1.0) this.blockValidade()
-            if (cont.length <= 0) this.ativaValidade()
+            /*  if (cont.length >= 1.0) this.blockValidade()
+             if (cont.length <= 0) this.ativaValidade() */
 
 
         }
@@ -199,6 +200,7 @@ export class SettingRecord {
     async getChecklist() {
         return await this.connectionCLPP.get("&web=&id_user=" + localStorage.getItem("id"), 'CLPP/Checklist.php')
     }
+
     async getShop() {
         let response = await this.connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')
         return response.data
@@ -207,6 +209,7 @@ export class SettingRecord {
     async getQuestion() {
         let cont = this.walksArray('#titleChecklistOption input[type=checkbox]')
         let response = await this.connectionCLPP.get("&id=" + cont[0].attributes[2].value + "&user_id=" + localStorage.getItem("id"), 'CLPP/Question.php')
+        console.log(response.data)
         return response.data
     }
 }  
