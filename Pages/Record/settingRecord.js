@@ -59,6 +59,9 @@ export class SettingRecord {
             case "unidade":
                 this.openClose(element)
                 break;
+            case "titleQuestion":
+                this.openClose(element)
+                break;
             case "buttonRecordPrint":
                 openModal(this.recordObject.alertSave())
                 this.recordObject.settingBtnAlertSave()
@@ -94,6 +97,7 @@ export class SettingRecord {
     templateOption(objectChecklist, key, array) {
         let response = ""
         let auxArray = array || objectChecklist.data
+        console.log
         auxArray.map(element => {
             element[key] ? response +=
                 `<div class="testandoTest">
@@ -126,12 +130,14 @@ export class SettingRecord {
     }
 
     ativaValidade() {
+
         getB_id('selectButtonValidade').setAttribute("style", "display:flex")
         getB_id('selectButtonReservaValidade').setAttribute("style", "display:none")
     }
 
     blockValidade() {
         getB_id('selectButtonValidade').setAttribute("style", "display:none")
+        getB_id('validCheckBlock').setAttribute("style", "display:none")
         getB_id('selectButtonReservaValidade').setAttribute("style", "display:flex")
         getB_id('selectButtonReservaValidade').setAttribute("style", "opacity:0.3")
     }
@@ -150,27 +156,25 @@ export class SettingRecord {
     blockQuestion() {
         getB_id('titleChecklistOption').onchange = async () => {
             let cont = this.walksArray('#titleChecklistOption input[type=checkbox]')
-            let reqQuestion = await this.getQuestion()
-            getB_id('titleQuestionOption').insertAdjacentHTML('beforeend', this.templateOption(null, 'description', reqQuestion))
-            this.todos()
-            this.validateParameter(cont.length, cont);
+            if (cont.length == 1) {
+                let reqQuestion = await this.getQuestion()
+                getB_id('titleQuestionOption').insertAdjacentHTML('beforeend', this.templateOption(null, 'description', reqQuestion))
+                this.todos()
+                this.validateParameter(cont.length, cont);
+            }
             if (cont.length >= 2) {
                 this.bloqueiaQuestion()
+                // this.blockValidade()
             }
             if (cont.length <= 1) {
                 this.ativaQuestion()
-
+                // this.ativaValidade()
             }
 
             if (cont.length >= 1.0) this.blockValidade()
-            if (cont.length <= 0) this.ativaValidade()
-
-
+            if (cont.length < 1) this.ativaValidade()
         }
     }
-
-
-
 
     todos() {
         document.querySelectorAll('#titleChecklistOption input[type=checkbox]').forEach(element => {
@@ -179,10 +183,6 @@ export class SettingRecord {
             }
         })
     }
-
-
-
-
 
     walksArray(local) {
         let array = []
@@ -201,6 +201,7 @@ export class SettingRecord {
     async getChecklist() {
         return await this.connectionCLPP.get("&web=&id_user=" + localStorage.getItem("id"), 'CLPP/Checklist.php')
     }
+
     async getShop() {
         let response = await this.connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')
         return response.data
@@ -208,7 +209,11 @@ export class SettingRecord {
 
     async getQuestion() {
         let cont = this.walksArray('#titleChecklistOption input[type=checkbox]')
-        let response = await this.connectionCLPP.get("&id=" + cont[0].attributes[2].value + "&user_id=" + localStorage.getItem("id"), 'CLPP/Question.php')
-        return response.data
+        console.log(cont.length)
+        if (cont.length != 0) {
+            let response = await this.connectionCLPP.get("&id=" + cont[0].attributes[2].value + "&user_id=" + localStorage.getItem("id"), 'CLPP/Question.php')
+            console.log(response.data)
+            return response.data
+        }
     }
 }  
