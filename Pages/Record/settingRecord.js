@@ -27,15 +27,13 @@ export class SettingRecord {
         }
         this.blockQuestion()
     }
-
     jsonChecklists(objectChecklist) {
         objectChecklist.data.forEach(async (element) => {
             const objectChecklist = new ObjectChecklist;
             await objectChecklist.loadingCheckDataBase(element)
-            this.jsonCheck[element.id] = objectChecklist
+            this.jsonCheck[element.id] = objectChecklist            
         })
     }
-
     clickPage() {
         $('#divRecord').addEventListener("click", (event) => {
             if (event.target.tagName.toLowerCase() == "button") this.functionFilter(event.target)
@@ -124,7 +122,7 @@ export class SettingRecord {
             else e.setAttribute("style", "opacity: 0.3")
         })
     }
-
+    //eneableSelect(local) disableSelect(local)
     ativaValidade() {
         getB_id('selectButtonValidade').setAttribute("style", "display:flex")
         getB_id('selectButtonReservaValidade').setAttribute("style", "display:none")
@@ -161,17 +159,10 @@ export class SettingRecord {
                 this.ativaQuestion()
 
             }
-
             if (cont.length >= 1.0) this.blockValidade()
             if (cont.length <= 0) this.ativaValidade()
-
-
         }
     }
-
-
-
-
     todos() {
         document.querySelectorAll('#titleChecklistOption input[type=checkbox]').forEach(element => {
             if (document.querySelector('#todos').checked == true) {
@@ -179,16 +170,12 @@ export class SettingRecord {
             }
         })
     }
-
-
-
-
-
     walksArray(local) {
         let array = []
         document.querySelectorAll(local).forEach(element => {
             if (element.checked) array.push(element)
         })
+        console.log(array)
         return array
     }
 

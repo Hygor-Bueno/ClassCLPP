@@ -22,7 +22,6 @@ export class RecordObject extends ConnectionCLPP {
             </div> `
         return modalAlert;
     }
-
     settingBtnAlertSave(){
         $('#modalAlert').addEventListener('click', (e) => {
             if (e.target.tagName.toLowerCase() == 'button') this.filtarBtnModalAlert(e.target)
