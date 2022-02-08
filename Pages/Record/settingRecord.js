@@ -1,4 +1,5 @@
 import { ObjectChecklist } from "../../Components/objects/checklistObject.js";
+import { RecordObject } from "../../Components/objects/recordObject.js";
 import { ConnectionCLPP } from "../../Connection/ConnectionCLPP.js";
 import { getB_id, $, $_all, openModal, closeModal } from "../../Util/compressSyntaxe.js";
 import { UsefulComponents } from "../../Util/usefulComponents.js";
@@ -11,6 +12,7 @@ export class SettingRecord {
     expanded = false;
     connectionCLPP = new ConnectionCLPP;
     userFulComponents = new UsefulComponents;
+    recordObject = new RecordObject;
 
     async setting(objectChecklist) {
         this.clickPage();
@@ -35,7 +37,7 @@ export class SettingRecord {
     }
 
     clickPage() {
-        document.addEventListener("click", (event) => {
+        $('#divRecord').addEventListener("click", (event) => {
             if (event.target.tagName.toLowerCase() == "button") this.functionFilter(event.target)
         })
     }
@@ -57,10 +59,10 @@ export class SettingRecord {
             case "unidade":
                 this.openClose(element)
                 break;
-
             case "buttonRecordPrint":
-                //openModal()
-            break;
+                openModal(this.recordObject.alertSave())
+                this.recordObject.settingBtnAlertSave()
+                break;
             default:
                 console.error("data-function")
         }
