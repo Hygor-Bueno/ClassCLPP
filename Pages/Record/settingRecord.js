@@ -89,8 +89,6 @@ export class SettingRecord {
     }
 
     clearDate() {
-        //this.controllerSelect("selectTitulo", "Selecione o checklist:", false)
-
         const data = document.querySelectorAll("input[type='date']")
         data.forEach(date => { date.value = "" })
         document.getElementById("selectTitulo").innerHTML = "Selecione o checklist:"
@@ -99,7 +97,6 @@ export class SettingRecord {
     templateOption(objectChecklist, key, array) {
         let response = ""
         let auxArray = array || objectChecklist.data
-        console.log(objectChecklist)
         auxArray.map(element => {
             element[key] ? response +=
                 `<div class="testandoTest">
@@ -142,24 +139,24 @@ export class SettingRecord {
             this.validateParameter(arrayChecked.length, arrayChecked);
             if (!getB_id('todos').checked) {
                 if (arrayChecked.length == 1) {
-                    let reqQuestion = await this.getQuestion()
+                    let reqQuestion = await this.getQuestion(arrayChecked)
                     getB_id('titleQuestionOption').insertAdjacentHTML('beforeend', this.templateOption(null, 'description', reqQuestion))
                     this.controllerSelect("selectButtonValidade", "Checklist selecionada", false)
                     this.controllerSelect('selectButtonQuestion', "Selecione a pergunta:", true)
                 } else if (arrayChecked.length >= 2) {
-                    console.log("aqui viado", !getB_id('todos').checked)
                     this.controllerSelect("selectButtonQuestion", "Multiplos checklist", false)
                 } else if (arrayChecked.length <= 0) {
                     this.controllerSelect('selectButtonValidade', "Selecione a validade:", true)
                 }
             } else {
-                this.selectAllAtivado()
+                this.selectAll()
+                
             }
         }
     }
 
 
-    selectAllAtivado() {
+    selectAll() {
         document.querySelectorAll('#titleChecklistOption input[type=checkbox]').forEach(element => {
             element.checked = true
             document.querySelector('#selectTitulo').innerHTML = "Multiplos checklist"
@@ -171,7 +168,9 @@ export class SettingRecord {
     walksArray(local) {
         let array = []
         document.querySelectorAll(local).forEach(element => {
-            if (element.checked) array.push(element)
+            if (element.checked){
+                array.push(element)
+            } 
         })
         return array
     }
@@ -191,9 +190,10 @@ export class SettingRecord {
         return response.data
     }
 
-    async getQuestion() {
-        let cont = this.walksArray('#titleChecklistOption input[type=checkbox]')
+    async getQuestion(cont) {
+        //let cont = this.walksArray('#titleChecklistOption input[type=checkbox]')
         if (cont.length != 0) {
+            // console.log(this.jsonCheck[cont[0].attributes[2].value])
             let response = await this.connectionCLPP.get("&id=" + cont[0].attributes[2].value + "&user_id=" + localStorage.getItem("id"), 'CLPP/Question.php')
             return response.data
         }
