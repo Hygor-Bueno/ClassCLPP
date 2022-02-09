@@ -18,7 +18,6 @@ export class RecordPage extends SettingRecord {
                             <h1>Checklist</h1>            
                         </div>                   
                         <div class="bodyChecklist" style="display:block" id="checklistBlock">
-
                             <div class="questionChecklist">
                                 <label class="titleOptionBlock">Titulo das checkList</label>
                                 <div class="sel" id="titleChecklist">
@@ -27,26 +26,23 @@ export class RecordPage extends SettingRecord {
                                         <button type="button" data-linked="titleChecklistOption" data-function="titleChecklist"></button>
                                     </div>
                                     <div class="testandoTest" id="titleChecklistOption" style="display:none"> 
-
-
-
-                             
-
                                         <div class="testandoTest">
-                                            <input type="checkbox" class="option" id="todos" value="">
+                                        
+                                            <input type="checkbox" class="option" data-id="todos" id="todos">
                                                 <p class="valorCheck">Todos</p>
                                             </input>
+
+
+
+                                    
+
+
+
                                         </div>
-
-
-
-
-
                                         ${this.templateOption(objectChecklist, 'description')}    
                                     </div>
                                 </div>
                             </div>
-
                             <div class="questionChecklist">
                                 <label class="titleOptionBlock">Titulo das Perguntas</label>
                                 <div class="sel" id="titleQuestion">
@@ -60,10 +56,8 @@ export class RecordPage extends SettingRecord {
                                         <p id="selectTituloQuestionReserva">Multiplas checklist</p> 
                                         <button data-function="titleQuestion" id="selectQuestionCheckReserva"></button>
                                     </div>
-                                    
                                 </div>    
                             </div>
-                            
                             <div class="questionChecklist">
                                 <label class="titleOptionBlock">Validade</label>
                                 <div class="sel" id="titleDate">
@@ -72,18 +66,15 @@ export class RecordPage extends SettingRecord {
                                         <button type="button" data-linked="validCheckBlock" data-function="validade" id="selectValidadCheck"></button>
                                     </div>
                                     <div class="testandoTest" id="validCheckBlock" style="display:none">
-                                    </div> 
-                                    
+                                    </div>
                                     <div id="selectButtonReservaValidade" style="display:none">
-                                        <p id="selectTituloQuestionReservaValidade">Multiplas checklist</p> 
+                                        <p id="selectTituloQuestionReservaValidade">Checklist selecionada</p> 
                                         <button data-function="titleQuestion" id="selectCheckReservaValidade"></button>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </div>
-                    
                     <div class="titleBlock">
                         <div class="titleFilter">
                             <h1>Unidades</h1>
@@ -97,10 +88,9 @@ export class RecordPage extends SettingRecord {
                             </div>                   
                         </div> 
                     </div>
-
                     <div class="titleBlock">                
                         <div class="titleFilter">     
-                            <h1>Por data</h1>    
+                            <h1>Datas das respostas</h1>    
                         </div>
                         <div id="dateBlock" class="bodyChecklist" style="display:block">
                             <div class="questionChecklist">
@@ -119,7 +109,6 @@ export class RecordPage extends SettingRecord {
                     <button type="button" id="clearBtn" data-function="clearBtn"> LIMPAR </button> 
                 </div>
             </aside>
-
             <section id="corpoRecord">
                 <header id="header">
                     <section id="inputTitle">
@@ -129,7 +118,6 @@ export class RecordPage extends SettingRecord {
                         <button type="button" class="buttonRecordPrint" data-function="buttonRecordPrint" id="buttonRecordPrint"></button>
                     </aside>
                 </header>
-
                 <div id="headerGraphic">
                         <div id="dashbord">
                             <h1>Dashboard</h1>
@@ -144,11 +132,9 @@ export class RecordPage extends SettingRecord {
                     <section id="graphicMain">
                         <h1>Principal</h1>
                     </section>
-
                     <aside id="unityGraphic">
                         <h1>Unidade</h1>
                     </aside>
-
                     <aside id="checklistGraphic">
                         <h1>Checklist</h1>
                     </aside>

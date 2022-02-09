@@ -87,11 +87,13 @@ export class SettingRecord {
             options.checked = false
         });
         this.ativaQuestion();
+        this.ativaValidade()
     }
 
     clearDate() {
         const data = document.querySelectorAll("input[type='date']")
         data.forEach(date => { date.value = "" })
+        document.getElementById("selectTitulo").innerHTML = "Selecione o checklist:"
     }
 
     templateOption(objectChecklist, key, array) {
@@ -130,7 +132,6 @@ export class SettingRecord {
     }
 
     ativaValidade() {
-
         getB_id('selectButtonValidade').setAttribute("style", "display:flex")
         getB_id('selectButtonReservaValidade').setAttribute("style", "display:none")
     }
@@ -151,6 +152,7 @@ export class SettingRecord {
         getB_id('selectButtonQuestion').setAttribute("style", "display:none")
         getB_id('selectButtonReserva').setAttribute("style", "display:flex")
         getB_id('selectButtonReserva').setAttribute("style", "opacity:0.3")
+        getB_id('titleQuestionOption').setAttribute("style", "display:none")
     }
 
     blockQuestion() {
@@ -159,29 +161,17 @@ export class SettingRecord {
             if (cont.length == 1) {
                 let reqQuestion = await this.getQuestion()
                 getB_id('titleQuestionOption').insertAdjacentHTML('beforeend', this.templateOption(null, 'description', reqQuestion))
-                this.todos()
                 this.validateParameter(cont.length, cont);
-            }
-            if (cont.length >= 2) {
+            } if (cont.length >= 2) {
+                this.validateParameter(cont.length, cont);
                 this.bloqueiaQuestion()
-                // this.blockValidade()
-            }
-            if (cont.length <= 1) {
+            } if (cont.length <= 1) {
+                this.validateParameter(cont.length, cont);
                 this.ativaQuestion()
-                // this.ativaValidade()
             }
-
             if (cont.length >= 1.0) this.blockValidade()
             if (cont.length < 1) this.ativaValidade()
         }
-    }
-
-    todos() {
-        document.querySelectorAll('#titleChecklistOption input[type=checkbox]').forEach(element => {
-            if (document.querySelector('#todos').checked == true) {
-                element.checked = true
-            }
-        })
     }
 
     walksArray(local) {
@@ -194,8 +184,8 @@ export class SettingRecord {
 
     validateParameter(array, cont) {
         if (array > 1) document.getElementById("selectTitulo").innerHTML = "Multi selecionado"
-        else if (array == 1) document.getElementById("selectTitulo").innerHTML = cont[0].defaultValue.toLowerCase().slice(0, 20) + ".."
-        else if (array == 0) document.getElementById("selectTitulo").innerHTML = "Selecione o checklist:"
+        if (array == 1) document.getElementById("selectTitulo").innerHTML = cont[0].defaultValue.toLowerCase().slice(0, 20) + ".."
+        if (array < 1) document.getElementById("selectTitulo").innerHTML = "Selecione o checklist:"
     }
 
     async getChecklist() {
