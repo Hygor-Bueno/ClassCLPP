@@ -62,7 +62,7 @@ export class RecordPage extends SettingRecord {
                                     
                                     <div id="selectButtonReservaValidade" style="display:none">
                                         <p id="selectTituloQuestionReservaValidade">Multiplas checklist</p> 
-                                        <button data-function="titleQuestion" id="selectQuestionCheckReservaValidade"></button>
+                                        <button data-function="titleQuestion" id="selectCheckReservaValidade"></button>
                                     </div>
                                 </div>
                             </div>
