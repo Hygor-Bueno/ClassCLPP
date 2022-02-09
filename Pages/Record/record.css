@@ -1,5 +1,4 @@
-
-#divRecord{
+#divRecord {
   display: flex;
   width: 100%;
   height: 100%;
@@ -112,7 +111,7 @@ input {
 }
 
 .buttonMain button {
-  height: 50px;
+  height: 35px;
 }
 
 .valorCheck {
@@ -308,38 +307,38 @@ input {
   border-radius: 5px;
 }
 
-#alertMsg{
-  grid-column:1/4;
+#alertMsg {
+  grid-column: 1/4;
   grid-row: 1/3;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-#alertMsg h1{
+#alertMsg h1 {
   font-size: 18px;
 }
 
-#alertBtn{
+#alertBtn {
   grid-column: 1/4;
-  grid-row:3/4;
+  grid-row: 3/4;
   display: flex;
   align-items: center;
   justify-content: space-evenly;
 }
 
-#saveFile{
+#saveFile {
   border-radius: 5px;
   background: #326744;
   height: 30px;
-  color:white;
+  color: white;
 }
 
-#cancelFile{
-  background: #B5001A;
+#cancelFile {
+  background: #b5001a;
   border-radius: 5px;
   height: 30px;
-  color:white;
+  color: white;
 }
 
 @media screen and (min-width: 1500px) {
