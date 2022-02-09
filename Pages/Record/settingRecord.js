@@ -158,6 +158,7 @@ export class SettingRecord {
         }
     }
 
+
     selectAllAtivado() {
         document.querySelectorAll('#titleChecklistOption input[type=checkbox]').forEach(element => {
             element.checked = true
