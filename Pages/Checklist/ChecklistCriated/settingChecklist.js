@@ -9,6 +9,7 @@ import { TemplateChecklist } from "../../../Components/templateChecklist.js";
 import { Validation } from "../../../Util/validation.js";
 import { ErrorHandling } from "../../../Util/errorHandling.js";
 import { Routers } from "../../../Routers/router.js";
+
 let idQuestion;
 export class SettingChecklist {
   checklist = new Checklist();
@@ -30,7 +31,6 @@ export class SettingChecklist {
       this.listsUsersCheck += await this.listUser.main(iterator.id);
     }
   }
-
   async constructorObject(array) {
     //Esssa parte popula o checklist
     await array.forEach(async element => {
@@ -48,7 +48,6 @@ export class SettingChecklist {
     this.deleteChecklist();
     localStorage.getItem("editChecklist") && $(`#checklist_${localStorage.getItem("editChecklist")} .view`).click();
   }
-
   async queryButton() {
     let searchCheck;
     getB_id("searchName").addEventListener("click", async () => {
@@ -66,11 +65,9 @@ export class SettingChecklist {
   clean() {
     getB_id("getCheckList").innerHTML = "";
   }
-
   popIclude(objectCheck) {
     getB_id("getCheckList").insertAdjacentHTML("beforeend", this.getCheckListCreted(objectCheck));
   }
-
   listUsers() {
     $_all(".groups").forEach(element => {
       element.addEventListener("click", () => {
@@ -78,7 +75,6 @@ export class SettingChecklist {
       });
     });
   }
-
   viewChecklist() {
     $_all(".view").forEach(element => {
       element.addEventListener("click", () => {
@@ -109,7 +105,6 @@ export class SettingChecklist {
     document.getElementById('checkCreateDiv').addEventListener("click", (element) => {
       if (element.target.tagName.toLowerCase() == 'button' || element.target.tagName.toLowerCase() == 'img') {
         if (element.target.id) {
-          console.log(element.target.id.split('_'))
           this.functionsButton(element.target.id.split('_'))
         }
       }
@@ -165,9 +160,9 @@ export class SettingChecklist {
   }
   async saveQuestionMethod() {
 
-    if (this.templateCheck.validationQuestion()) {      
-      let req = await this.connectionCLPP.get(`&user_id=${localStorage.getItem("id")}&id=${this.templateCheck.checklist.getIdChecklist()}`,'CLPP/Question.php')
-      this.templateCheck.idQuestion = req.next_id
+    if (this.templateCheck.validationQuestion()) {
+      let req = await this.connectionCLPP.get(`&user_id=${localStorage.getItem("id")}&id=${this.templateCheck.checklist.getIdChecklist()}`, 'CLPP/Question.php')
+      this.templateCheck.idQuestion = req.nextId
       let object = this.templateCheck.addQuestion(this.templateCheck.idQuestion)
       await this.templateCheck.checklist.saveQuestionsBD(object)
       getB_id('questionCreated').insertAdjacentHTML('beforeend', this.templateCheck.questionsCreated([object], this.templateCheck.idQuestion))

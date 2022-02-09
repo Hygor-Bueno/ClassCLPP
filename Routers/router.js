@@ -14,7 +14,7 @@ export class Routers {
 		let local = document.getElementById('content');
 		local ? local.innerHTML = "" : local;
 		// Insere e abre o modal de loading
-		document.getElementById("content").insertAdjacentHTML("beforeend", this.modalLoading.main());
+		document.querySelector("body").insertAdjacentHTML("beforeend", this.modalLoading.main());
 		await this.loadPage(employee.get("&id=" + localStorage.getItem("id"), true), null, 35, 2);
 		localStorage.setItem('router', params);
 		// Fecha a aba de mensagens caso ela esteja aberta.

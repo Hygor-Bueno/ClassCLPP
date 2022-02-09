@@ -115,7 +115,6 @@ export class TemplateChecklist {
     }
 
     proceedChecklist(object) {
-        console.log(object.dataFinal)
         this.checklist.loadingChecklist(object);
         getB_id('nameChecklist').value = object.nameChecklist
         if (object.notify != "0") {
@@ -429,7 +428,6 @@ export class TemplateChecklist {
     }
     getValueSelect(local) {
         let select = $(local)
-        console.log($(local))
         let value = select.options[select.selectedIndex].value;
         return value
     }

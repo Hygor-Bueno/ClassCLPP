@@ -8,27 +8,32 @@ body {
     font-family: "titillium_web";
     src: url("./assets/fonts/titillium_web.ttf") format("truetype");
 }
- @media screen and (min-width: 1500px){
-    #checkCreateDiv p,#checkCreateDiv label, #checkCreateDiv input, #checkCreateDiv select,#checkCreateDiv option{
-        font-size:17px;
+
+@media screen and (min-width: 1500px) {
+    #checkCreateDiv p, #checkCreateDiv label, #checkCreateDiv input, #checkCreateDiv select, #checkCreateDiv option {
+        font-size: 17px;
     }
-    #checkCreateDiv h1{
-        font-size:20px;
+
+    #checkCreateDiv h1 {
+        font-size: 20px;
     }
-    #groupButtons button{
+
+    #groupButtons button {
         width: 40px;
         height: 30px;
 
     }
-    #editableQuestion{
-        height:80%;
+
+    #editableQuestion {
+        height: 80%;
     }
-    #settingFooterButton{
-        display:flex;
+
+    #settingFooterButton {
+        display: flex;
         align-items: center;
-        height:20%;
+        height: 20%;
     }
-} 
+}
 
 .container {
     position: fixed;
@@ -68,13 +73,15 @@ body {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    margin:0px;
+    margin: 0px;
     padding: 0px;
 }
-.principal ul{
-    margin:0px;
+
+.principal ul {
+    margin: 0px;
     padding: 0px;
 }
+
 .menu ul {
     list-style: none;
     position: relative;
@@ -99,6 +106,7 @@ body {
 .menu .principal ul {
     position: absolute;
     visibility: hidden;
+    z-index: 1;
 }
 
 .menu ul li:hover ul {
@@ -140,6 +148,7 @@ body {
 }
 
 #content {
+    position: relative;
     background: #f1f2f5;
     width: 100%;
     height: 100%;
@@ -169,6 +178,7 @@ button {
     .nav {
         height: 7%;
     }
+
     #photoUser {
         height: 55px;
         width: 55px;
@@ -272,7 +282,8 @@ button {
     margin: 8px;
     cursor: pointer;
 }
-#borderBack img{
+
+#borderBack img {
     width: 100%;
 }
 
@@ -300,7 +311,7 @@ button {
     height: 150px;
 }
 
-#containerChecklist{
+#containerChecklist {
     display: none;
     justify-content: center;
     align-items: center;
@@ -311,103 +322,77 @@ button {
     left: 0;
     z-index: 90;
 }
-#sectionCheck{
+
+#sectionCheck {
     display: flex;
     background: rgba(255, 255, 255);
-    width:1000px;
-    height:600px;
+    width: 1000px;
+    height: 600px;
     box-shadow: 0px 0px 50px black;
 }
-#divForm, #btnQuestion{
+
+#divForm, #btnQuestion {
     display: flex;
-    justify-content:space-between;
+    justify-content: space-between;
 }
+
 /* Estilos dos botões da página*/
-.saveBtnCss{
-    background-image: url('./assets/images/save.svg'); 
+.saveBtnCss {
+    background-image: url('./assets/images/save.svg');
     background-repeat: no-repeat;
     background-position: center;
     width: 38px;
-    height:28px;
+    height: 28px;
 }
-.addBtnCss{
-    background-image: url('./assets/images/add.svg'); 
+
+.addBtnCss {
+    background-image: url('./assets/images/add.svg');
     background-repeat: no-repeat;
     background-position: center;
     width: 38px;
-    height:28px;
+    height: 28px;
 }
-.viewBtnCss{
-    background-image: url('./assets/images/olho.svg'); 
+
+.viewBtnCss {
+    background-image: url('./assets/images/olho.svg');
     background-repeat: no-repeat;
     background-position: center;
     width: 38px;
-    height:28px;
+    height: 28px;
 }
-.groupsBtnCss{
-    background-image: url('./assets/images/groups_black_24dp.svg'); 
+
+.groupsBtnCss {
+    background-image: url('./assets/images/groups_black_24dp.svg');
     background-repeat: no-repeat;
     background-position: center;
     width: 38px;
-    height:28px;
+    height: 28px;
 }
-.editBtnCss{
-    background-image: url('./assets/images/pencil.svg'); 
+
+.editBtnCss {
+    background-image: url('./assets/images/pencil.svg');
     background-repeat: no-repeat;
     background-position: center;
     width: 38px;
-    height:28px;
+    height: 28px;
 }
-.deleteBtnCss{
-    background-image: url('./assets/images/delete.svg'); 
+
+.deleteBtnCss {
+    background-image: url('./assets/images/delete.svg');
     background-repeat: no-repeat;
     background-position: center;
     width: 38px;
-    height:28px;
+    height: 28px;
 }
-.notificationBtnCss{
-    background-image: url('./assets/images/alertNotify.svg'); 
+
+.notificationBtnCss {
+    background-image: url('./assets/images/alertNotify.svg');
     background-repeat: no-repeat;
     background-position: center;
     width: 38px;
-    height:28px;
+    height: 28px;
 }
-/* 
-ATENÇÃO
-<===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===
-===>
-*/
-/*Validar o que é necessário e deletar o resto*/
+
 /* PARTE RESPONSÁVEL POR FORMATAR O ESTILO DO FORMULÁRIO DO CHECKLIST */
 #formCheclist {
     display: flex;
@@ -417,26 +402,33 @@ ATENÇÃO
     width: 99%;
     margin: 5px 0;
 }
+
 #formCheclist button {
     margin: 0 5px;
 }
+
 #groupForm {
     display: flex;
     padding-bottom: 5px;
 }
+
 #groupButtons {
     padding-bottom: 5px;
 }
+
 #groupFormDate {
     display: flex;
     align-items: center;
 }
+
 #groupFormDate input {
     margin: 0 5px;
 }
+
 #groupFormDate {
     display: flex;
 }
+
 /* FORMATAÇÕES GERAIS DO CHECKLIST */
 #checkCreateDiv {
     display: flex;
@@ -445,10 +437,12 @@ ATENÇÃO
     height: 97%;
     width: 100%;
 }
+
 #checkCreateDiv button {
     border: none;
     /* background: none; */
 }
+
 /*CORPO DO CHECKLIST */
 #bodyCheckEditable {
     display: flex;
@@ -458,6 +452,7 @@ ATENÇÃO
     align-items: center;
     justify-content: center;
 }
+
 /*FORMATAÇÃO DO SECTION CHECKLIST */
 #questionCreated {
     border-right: 1px solid rgb(178, 178, 178);
@@ -465,55 +460,65 @@ ATENÇÃO
     width: 60%;
     height: 95%;
 }
-#questionCreated{
+
+#questionCreated {
     display: flex;
     flex-direction: column;
     align-items: center;
     overflow-y: auto;
-    background:white;
+    background: white;
 }
-.containerQuestionCreated header{
+
+.containerQuestionCreated header {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding:5px;
+    padding: 5px;
     border-bottom: 1px solid rgb(178, 178, 178);
 }
-.containerQuestionCreated header h1{
-    width:80%;
+
+.containerQuestionCreated header h1 {
+    width: 80%;
 }
+
 /* .divGroupButton{
     width:200px;
 } */
-.containerQuestionCreated section{
+.containerQuestionCreated section {
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding:5px; 
+    padding: 5px;
 }
-.containerQuestionCreated section input{
+
+.containerQuestionCreated section input {
     margin-right: 5px;
 }
-#questionCreated h1{
-    font-size:22px;
-    font-weight:bold;
+
+#questionCreated h1 {
+    font-size: 22px;
+    font-weight: bold;
 }
-#questionCreated p{
-    font-size:18px;
+
+#questionCreated p {
+    font-size: 18px;
 
 }
-.questionCreated{
-    background:#f1f2f5;
+
+.questionCreated {
+    background: #f1f2f5;
     width: 70%;
-    padding:5px;
-    margin:5px;
+    padding: 5px;
+    margin: 5px;
     border-radius: 5px;
 }
+
 /*FORMATAÇÃO DO ASIDE CHECKLIST */
 #bodyCheckEditable aside {
     height: 95%;
     width: 40%;
 }
+
 /*CORPO DA ASIDE CHECKLIST */
 #editableQuestion header {
     display: flex;
@@ -522,9 +527,11 @@ ATENÇÃO
     background: WHITE;
     padding: 5px;
 }
+
 #typeQuestion {
     padding: 5px;
 }
+
 #headerQuestion {
     margin-top: 10px;
     display: flex;
@@ -534,61 +541,73 @@ ATENÇÃO
     background: white;
     border-bottom: 1px solid rgb(178, 178, 178);
 }
+
 #headerQuestion input {
     margin-right: 10px;
 }
-#containerBodyQuestion{
+
+#containerBodyQuestion {
     display: flex;
     justify-content: center;
     overflow-y: auto;
-    height:360px;
+    height: 360px;
 }
 
 #bodyQuestion {
     width: 100%;
     background: white;
     padding: 5px;
-    height:200px;
+    height: 200px;
 }
-.handSignature{
-    display:flex;
+
+.handSignature {
+    display: flex;
     align-items: center;
-    height:50px;
+    height: 50px;
 }
-.handSignature input{
+
+.handSignature input {
     margin-left: 10px;
     height: 18px;
 }
-.handSignature img{
+
+.handSignature img {
     margin-left: 10px;
     width: 25px;
     height: 25px;
 }
-#handSignatureImg{
+
+#handSignatureImg {
     margin-left: 10px;
     width: 25px;
     height: 25px;
 }
-.handSignatureCreated{
+
+.handSignatureCreated {
     margin-top: 10px;
 }
+
 .sectionOption {
     width: 100%;
     display: flex;
     justify-content: space-between;
 }
-.sectionOption div{
+
+.sectionOption div {
     display: flex;
     align-items: center;
 }
+
 .optionEditable input {
     background: none;
 }
-.inputEditable{
-    width:110px;
+
+.inputEditable {
+    width: 110px;
     margin-right: 15px;
     margin-left: 5px;
 }
+
 .footerOption {
     border-bottom: 1px solid rgb(178, 178, 178);
     margin-bottom: 5px;
@@ -605,89 +624,118 @@ ATENÇÃO
 .checkPhoto, .checkObservation {
     margin: 5px;
 }
-#settingFooterButton{
+
+#settingFooterButton {
     border-top: 1px solid rgb(178, 178, 178);
     display: flex;
     justify-content: space-around;
 }
+
 #btnAddQuestion, #btnSaveChecklist {
     margin-top: 5px;
-    opacity: 0.8;  
+    opacity: 0.8;
     height: 7vh;
-    width: 8vw; 
+    width: 8vw;
     border-radius: 5px;
 }
 
-.signatureCpfCreated{
+.signatureCpfCreated {
     display: flex;
     align-items: center;
-    justify-content:center;
-    flex-direction:column;
+    justify-content: center;
+    flex-direction: column;
 }
-.signatureCpfCreated input{
+
+.signatureCpfCreated input {
     background: transparent;
 }
-.nameResponsible, .cpfResponsible{
+
+.nameResponsible, .cpfResponsible {
     display: flex;
-    flex-direction:column;
+    flex-direction: column;
     margin-left: 10px;
     margin-bottom: 10px;
-    width:80%;
+    width: 80%;
 }
 
 /* SPINNER */
-.loading{
+.loading {
     width: 100%;
     height: 100%;
-    background:rgba(0, 0, 0, 0.5); 
+    background: rgba(0, 0, 0, 0.5);
     position: absolute;
-    top:0;
-    left:0;
-    display:flex;
-    align-items:center;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
     justify-content: center;
     z-index: 90;
 }
-.spinner{
+
+.spinner {
     position: relative;
-    width:5rem;
-    height:5rem;
-    border-radius:50%;
-    background-color:white;
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    background-color: white;
 }
+
 .spinner::before,
-.spinner:after{
+.spinner:after {
     content: "";
     position: absolute;
     border-radius: 50%;
 }
 
-.spinner::before{
+.spinner::before {
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, black 50%, #35b715 50%);;
+    background: linear-gradient(90deg, black 50%, #35b715 50%);
+    ;
     animation: spin .5s infinite linear;
 }
-.spinner:after{
+
+.spinner:after {
     width: 90%;
     height: 90%;
-    background:black;
-    top:50%;
-    left:50%;
+    background: black;
+    top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
 }
-.porcent{
-    color:white;
+
+.porcent {
+    color: white;
     font-size: 20px;
     font-weight: 400;
     z-index: 1;
     position: absolute;
-    top:50%;
-    left:50%;
+    top: 50%;
+    left: 50%;
     transform: translate(-50%, -50%);
 }
-@keyframes spin{
-    to{
+
+@keyframes spin {
+    to {
         transform: rotate(360deg);
     }
+}
+
+/* Modal de nitificação de mesnagens:  */
+#notifyReceivedMessage {
+    box-shadow: 0 0 0.5em black;
+    display: block;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    width: 250px;
+    height: 60px;
+    background: #abd6b9;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+#notifyReceivedMessage:hover {
+    box-shadow: inset 0 0 0.5em black;
+    cursor: pointer;
 }

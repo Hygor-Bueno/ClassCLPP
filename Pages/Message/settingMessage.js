@@ -200,7 +200,7 @@ export class SettingMessage {
         $('#templateListUser').insertAdjacentHTML("afterbegin", `
         <div id="displayHeader">  
             <div id="borderBack">
-                <img src="./assets/images/cancel.svg" title ="Fechar">
+                <img src="./assets/images/cancel.svg" title ="Fechar">    
             </div>
             <header id="headerUserList">
                 <h1>Usuário do grupo:</h1>
@@ -227,7 +227,6 @@ export class SettingMessage {
     }
      async showUsers(idGroup) {
         let response = await this.connectionCLPP.get("&id=" + idGroup,"CLPP/Group.php")
-        console.log(response)
         response.data.forEach(user => { user.id_user != localStorage.getItem('id') && this.listUser.markUser(`send_${user.id_user}`)})
     }
     visualizationMsg(params) {
