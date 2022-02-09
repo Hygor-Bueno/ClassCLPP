@@ -9,6 +9,7 @@ import { WebSocketCLPP } from "../../Connection/WebSocket.js";
 import { UserAccess } from "../../Connection/UserAccess.js";
 import { GroupMessage } from "../../Components/objects/groupMessage.js";
 import { Routers } from "../../Routers/router.js";
+import { ConnectionCLPP } from "../../Connection/ConnectionCLPP.js";
 
 export class SettingMessage {
     userAccess = new UserAccess;
@@ -16,6 +17,7 @@ export class SettingMessage {
     messageList = new MessageList;
     usefulComponents = new UsefulComponents;
     settingHome = new SettingHome;
+    connectionCLPP = new ConnectionCLPP;
     message = new Message;
     ws = new WebSocketCLPP;
     listUser = new ListUser;
@@ -37,7 +39,6 @@ export class SettingMessage {
         this.searchName()
         this.modalImg()
         this.createGroup()
-        
     }
     clickSend() {
         getB_id('buttonSend').addEventListener('click', () => {this.sendMsg();this.notificationMsg();});
@@ -153,17 +154,17 @@ export class SettingMessage {
             if ($('.searchUserBar').value) {
                 let searchName = $('.searchUserBar').value;
                 let findName = this.createListUser().filter(valor => valor.name.toLowerCase().includes(searchName.toLowerCase()));
-                $('.searchUnic').innerHTML = '';
                 $('.user_in').setAttribute('style', 'display:none');
                 $('.templateSearchUser').setAttribute('style', 'display:none');
-                $('.searchUnic').setAttribute('style', 'display:flex');
+                $('.searchUnic').innerHTML = '';
                 for (let i = 0; i < findName.length; i++) {
-                    if (!findName[i].id.includes(localStorage.getItem('id'))) $('.searchUnic').insertAdjacentHTML("afterbegin", await this.listUser.main(findName[i].id))
+                    if (!findName[i].id.includes(localStorage.getItem('id'))) $('.searchUnic').insertAdjacentHTML("afterbegin", await this.listUser.main(findName[i].id.split('_')[1]))
                 }
+                $('.searchUnic').setAttribute('style', 'display:flex');
             }
             this.clickDivUser('.searchUnic .divUser')
         })
-        $('.searchUserBar').addEventListener('keypress', (e) => { if (e.key === 'Enter') $('.searchName').click() })
+        $('.searchUserBar').addEventListener('keypress', (e) => { if (e.key === 'Enter') $('.searchName').click()})
     }
     createGroup() {
         $('.searchGroup').addEventListener('click', () => {
@@ -178,30 +179,36 @@ export class SettingMessage {
             </div>`
             openModal(nameGroup);
             this.saveGroup()
+            getB_id('borderBack').addEventListener('click', () => closeModal())
         })
     }
     saveGroup() {
         $('.buttonProgress').addEventListener('click', async () => {
-            await this.groupMessage.main($('.nameGroup input').value)
-            closeModal()
-            this.usersInGroup(1)
+           if($('.nameGroup input').value){ 
+                await this.groupMessage.main($('.nameGroup input').value)
+                closeModal()
+                this.usersInGroup(1)
+            }
         })
     }
-    usersInGroup(check) {
+    async usersInGroup(check) {
         this.chargeEmploy()
         let idsUsers = ""
+        check == 0 && this.showUsers($('.colabHead').getAttribute('data-id').split('_')[1])
         $_all('.templateSearchUser .divUser').forEach((element) => idsUsers += element.outerHTML)
-        this.listUser.checkBoxUser(idsUsers)
+       await this.listUser.checkBoxUser(idsUsers)
         $('#templateListUser').insertAdjacentHTML("afterbegin", `
         <div id="displayHeader">  
-        <div id="borderBack">
-        <img src="./assets/images/cancel.svg" title ="Fechar">
-        </div>
-        <header id="headerUserList">
-        <h1>Usuário do grupo:</h1>
-        </header>
+            <div id="borderBack">
+                <img src="./assets/images/cancel.svg" title ="Fechar">    
+            </div>
+            <header id="headerUserList">
+                <h1>Usuário do grupo:</h1>
+            </header>
         </div>`)
         check == 1 && this.settingGroup()
+        check == 0 && getB_id('borderBack').addEventListener('click', () => closeModal());
+        check == 0 && getB_id('saveGroup').addEventListener('click', () => {this.listUser.updateChecked({id_group: $('.colabHead').getAttribute('data-id').split('_')[1]},"CLPP/Group.php")})
     }
     settingGroup() {
         getB_id('borderBack').addEventListener('click', () => closeModal())
@@ -216,8 +223,11 @@ export class SettingMessage {
     consultGroup() {
         if ($('.colabHead .btnOnlyGroup')) $('.btnOnlyGroup').addEventListener('click', () => {
             this.usersInGroup(0);
-            getB_id('borderBack').addEventListener('click', () => closeModal())
         })
+    }
+     async showUsers(idGroup) {
+        let response = await this.connectionCLPP.get("&id=" + idGroup,"CLPP/Group.php")
+        response.data.forEach(user => { user.id_user != localStorage.getItem('id') && this.listUser.markUser(`send_${user.id_user}`)})
     }
     visualizationMsg(params) {
         if ($('.colabHead .divColab') && $('.colabHead').getAttribute('data-id').split('_')[1] == params.user) {
@@ -275,5 +285,4 @@ export class SettingMessage {
         $('.presentation').setAttribute('style', 'display:none')
         $('.part2').setAttribute('style', 'display:flex') 
     }
-
 }

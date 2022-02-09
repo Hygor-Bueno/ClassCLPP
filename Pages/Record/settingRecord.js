@@ -1,6 +1,7 @@
 import { ObjectChecklist } from "../../Components/objects/checklistObject.js";
+import { RecordObject } from "../../Components/objects/recordObject.js";
 import { ConnectionCLPP } from "../../Connection/ConnectionCLPP.js";
-import { getB_id, $, $_all, openModalCheck, closeModalCheck } from "../../Util/compressSyntaxe.js";
+import { getB_id, $, $_all, openModal, closeModal } from "../../Util/compressSyntaxe.js";
 import { UsefulComponents } from "../../Util/usefulComponents.js";
 
 export class SettingRecord {
@@ -11,73 +12,21 @@ export class SettingRecord {
     expanded = false;
     connectionCLPP = new ConnectionCLPP;
     userFulComponents = new UsefulComponents;
+    recordObject = new RecordObject;
 
     async setting(objectChecklist) {
         this.clickPage();
         this.jsonChecklists(objectChecklist);
         this.templateDate(objectChecklist);
-        getB_id('titleChecklist').onchange = () => {
-            this.populaQuestion()
-        }
-
         let req = await this.getShop()
         getB_id('selShop').insertAdjacentHTML('beforeend', this.templateOption(null, 'description', req))
-
         getB_id('titleDate').onchange = () => {
             let selectChecklist = getB_id('titleChecklist')
             this.populaValidade(selectChecklist)
-            this.populaQuestion()
             selectChecklist.disabled = true;
         }
+        this.blockQuestion()
     }
-
-    /* openCloseFilter(view, click) {
-        click.addEventListener("click", () => {
-            view.setAttribute('style', view.style.display == 'none' ? "display:block" : "display:none")
-        })
-    }
-
-    // clearOption(local, message) {
-    //     getB_id(local).innerHTML = ""
-    //     getB_id(local).insertAdjacentHTML('beforeend', `<option class="option" value="none" selected="" disabled="" hidden="">${message}</option>`)
-    // }
-
-
-    openCloseTitleCheck() {
-        let localClicavel = document.querySelector('.sel')
-        let localAparece = document.querySelector('.testandoTest')
-        this.openCloseFilter(localAparece, localClicavel);
-    }
-
-    openCloseValidade() {
-        let localClicavel = document.querySelector('#titleDate')
-        let localAparece = document.querySelector('.bodyChecklist').lastElementChild
-        this.openCloseFilter(localAparece, localClicavel);
-    } */
-
-    // let selectChecklist = getB_id('titleChecklist')
-    // selectChecklist.disabled = false;
-    // this.clearOption('titleQuestion', 'Selecione a pergunta')
-
-    //element[key].insertAdjacentHTML('afterbegin', `<input type="checkbox" class="option" data-id="${element.id}" value="${element[key]}">${element[key]}</input>`)
-
-    /* populaValidade(selectChecklist) {
-        let select = getB_id('titleDate')
-        let indexSelect = select.selectedIndex;
-        let idCheckSelected = select.options[indexSelect].getAttribute("data-id");
-        console.log(idCheckSelected)
-        this.jsonCheck[idCheckSelected].getQuestion()
-        selectChecklist.value = this.jsonCheck[idCheckSelected].getTitle()
-    } */
-
-    // populaQuestion() {
-    //     getB_id('titleQuestion').innerHTML = ""
-    //     let select = getB_id('titleChecklist');
-    //     // let indexSelect = select.selectedIndex;
-    //     // let idCheckSelected = select.options[indexSelect].getAttribute("data-id");
-    //     getB_id('titleQuestion').insertAdjacentHTML('beforeend', '<div class="subTestandoTest"><input type="checkbox" class="option"><p class="valorCheck"></p></input></div>')
-    //     getB_id('titleQuestion').insertAdjacentHTML('beforeend', this.templateOption(null, "description", this.jsonCheck[idCheckSelected].getQuestion()))
-    // }
 
     jsonChecklists(objectChecklist) {
         objectChecklist.data.forEach(async (element) => {
@@ -88,10 +37,8 @@ export class SettingRecord {
     }
 
     clickPage() {
-        document.addEventListener("click", (event) => {
-            if (event.target.tagName.toLowerCase() == "button") {
-                this.functionFilter(event.target)
-            }
+        $('#divRecord').addEventListener("click", (event) => {
+            if (event.target.tagName.toLowerCase() == "button") this.functionFilter(event.target)
         })
     }
 
@@ -112,79 +59,143 @@ export class SettingRecord {
             case "unidade":
                 this.openClose(element)
                 break;
+            case "titleQuestion":
+                this.openClose(element)
+                break;
+            case "buttonRecordPrint":
+                openModal(this.recordObject.alertSave())
+                this.recordObject.settingBtnAlertSave()
+                break;
             default:
                 console.error("data-function")
         }
     }
     openClose(element) {
-        console.log(element.style)
         getB_id(element.getAttribute("data-linked")).style.display == 'none'
             ? getB_id(element.getAttribute("data-linked")).setAttribute("style", "display:block")
             : getB_id(element.getAttribute("data-linked")).setAttribute("style", "display:none")
     }
-
 
     clearFilter() {
         this.resetOptions()
         this.clearDate()
     }
 
-
     resetOptions() {
         const clear = document.querySelectorAll(".option")
         clear.forEach(options => {
             options.checked = false
         });
+        this.ativaQuestion();
     }
-
 
     clearDate() {
         const data = document.querySelectorAll("input[type='date']")
         data.forEach(date => { date.value = "" })
     }
 
-
     templateOption(objectChecklist, key, array) {
         let response = ""
         let auxArray = array || objectChecklist.data
+        console.log
         auxArray.map(element => {
-
-
-            element[key] ? response += `<div class="testandoTest"><input type="checkbox" class="option" data-id="${element.id}" value="${element[key]}"><p class="valorCheck">${element[key]}</p></input></div>` : ""
+            element[key] ? response +=
+                `<div class="testandoTest">
+                <input type="checkbox" class="option" data-id="${element.id}" value="${element[key]}">
+                    <p class="valorCheck">${element[key]}</p>
+                </input>
+            </div>` : ""
         })
         return response;
     }
 
     templateDate(objectChecklist) {
-        let objDateId;
-        let objDateInit;
-        let objDateFinal;
-        let newJson;
         let jsonDate = [];
         objectChecklist.data.forEach(element => {
-            objDateId = element.id
-            objDateInit = element.date_init
-            objDateFinal = element.date_final
-            newJson = {
-                date: objDateInit ? this.userFulComponents.convertData(objDateInit, "-") + " - " + this.userFulComponents.convertData(objDateFinal, "-") : false,
-                id: (objDateId)
+            let newJson = {
+                date: element.date_init ? this.userFulComponents.convertData(element.date_init, "-") + " - " + this.userFulComponents.convertData(element.date_final, "-") : false,
+                id: (element.id)
             }
             jsonDate.push(newJson)
-
         })
-        $('#titleDate .testandoTest').insertAdjacentHTML('beforeend',
-            this.templateOption(null, 'date', jsonDate))
+        $('#titleDate .testandoTest').insertAdjacentHTML('beforeend', this.templateOption(null, 'date', jsonDate))
     }
 
     buttonGraphic(element) {
         let array = [getB_id('buttonRecordBar'), getB_id('buttonRecordPizza'), getB_id('buttonRecordPercentage')]
         array.forEach((e) => {
-            if (element.getAttribute('id') == e.getAttribute('id')) {
-                e.setAttribute("style", "opacity: 1")
-            } else {
-                e.setAttribute("style", "opacity: 0.3")
+            if (element.getAttribute('id') == e.getAttribute('id')) e.setAttribute("style", "opacity: 1")
+            else e.setAttribute("style", "opacity: 0.3")
+        })
+    }
+
+    ativaValidade() {
+
+        getB_id('selectButtonValidade').setAttribute("style", "display:flex")
+        getB_id('selectButtonReservaValidade').setAttribute("style", "display:none")
+    }
+
+    blockValidade() {
+        getB_id('selectButtonValidade').setAttribute("style", "display:none")
+        getB_id('validCheckBlock').setAttribute("style", "display:none")
+        getB_id('selectButtonReservaValidade').setAttribute("style", "display:flex")
+        getB_id('selectButtonReservaValidade').setAttribute("style", "opacity:0.3")
+    }
+
+    ativaQuestion() {
+        getB_id('selectButtonQuestion').setAttribute("style", "display:flex")
+        getB_id('selectButtonReserva').setAttribute("style", "display:none")
+    }
+
+    bloqueiaQuestion() {
+        getB_id('selectButtonQuestion').setAttribute("style", "display:none")
+        getB_id('selectButtonReserva').setAttribute("style", "display:flex")
+        getB_id('selectButtonReserva').setAttribute("style", "opacity:0.3")
+    }
+
+    blockQuestion() {
+        getB_id('titleChecklistOption').onchange = async () => {
+            let cont = this.walksArray('#titleChecklistOption input[type=checkbox]')
+            if (cont.length == 1) {
+                let reqQuestion = await this.getQuestion()
+                getB_id('titleQuestionOption').insertAdjacentHTML('beforeend', this.templateOption(null, 'description', reqQuestion))
+                this.todos()
+                this.validateParameter(cont.length, cont);
+            }
+            if (cont.length >= 2) {
+                this.bloqueiaQuestion()
+                // this.blockValidade()
+            }
+            if (cont.length <= 1) {
+                this.ativaQuestion()
+                // this.ativaValidade()
+            }
+
+            if (cont.length >= 1.0) this.blockValidade()
+            if (cont.length < 1) this.ativaValidade()
+        }
+    }
+
+    todos() {
+        document.querySelectorAll('#titleChecklistOption input[type=checkbox]').forEach(element => {
+            if (document.querySelector('#todos').checked == true) {
+                element.checked = true
             }
         })
+    }
+
+    walksArray(local) {
+        let array = []
+        document.querySelectorAll(local).forEach(element => {
+            if (element.checked) array.push(element)
+        })
+        return array
+    }
+
+    validateParameter(array, cont) {
+        if (array > 1) document.getElementById("selectTitulo").innerHTML = "Multi selecionado"
+        else if (array == 1) document.getElementById("selectTitulo").innerHTML = cont[0].defaultValue.toLowerCase().slice(0, 20) + ".."
+        else if (array == 0) document.getElementById("selectTitulo").innerHTML = "Selecione o checklist:"
     }
 
     async getChecklist() {
@@ -195,4 +206,14 @@ export class SettingRecord {
         let response = await this.connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')
         return response.data
     }
-} 
+
+    async getQuestion() {
+        let cont = this.walksArray('#titleChecklistOption input[type=checkbox]')
+        console.log(cont.length)
+        if (cont.length != 0) {
+            let response = await this.connectionCLPP.get("&id=" + cont[0].attributes[2].value + "&user_id=" + localStorage.getItem("id"), 'CLPP/Question.php')
+            console.log(response.data)
+            return response.data
+        }
+    }
+}  
