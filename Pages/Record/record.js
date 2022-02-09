@@ -1,9 +1,6 @@
-import { Record } from "../../Connection/Record.js";
 import { SettingRecord } from "./settingRecord.js";
 
-
 export class RecordPage extends SettingRecord {
-    getRecord = new Record
     async main(objectChecklist) {
         document.getElementById("message").setAttribute("style", "display:none");
         let response =
