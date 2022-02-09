@@ -3,7 +3,6 @@ import { ErrorHandling } from "../Util/errorHandling.js";
 export class UserAccess{
     errorHandling = new ErrorHandling();
     async get(params,err){
-        console.log(params)
         typeof params === "string" || typeof params === "object" ? params : err = params;
         let URL = localStorage.getItem('server') + '/Controller/CCPP/UserAccess.php?app_id=7&AUTH=' + localStorage.getItem('token')
         let req

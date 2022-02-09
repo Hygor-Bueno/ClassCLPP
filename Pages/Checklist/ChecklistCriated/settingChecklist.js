@@ -48,16 +48,6 @@ export class SettingChecklist {
     this.deleteChecklist();
     localStorage.getItem("editChecklist") && $(`#checklist_${localStorage.getItem("editChecklist")} .view`).click();
 
-    getB_id("testandoModalMenssage").addEventListener("click",async ()=>{
-      // let alert = new modalReceivedMessage;
-      // getB_id("content").insertAdjacentHTML("beforeend",alert.main({name:"Hygor Bueno"}));
-      let response =  await this.connectionCLPP.get('&web&id_user=148', 'CLPP/Response.php')
-      let a= []
-      response.data.filter(item => {if(a.indexOf(item.id_user)<0)return a.push(item.id_user)})
-      console.log(a)
-
-    })
-  }
   async queryButton() {
     let searchCheck;
     getB_id("searchName").addEventListener("click", async () => {
@@ -116,7 +106,6 @@ export class SettingChecklist {
     document.getElementById('checkCreateDiv').addEventListener("click", (element) => {
       if (element.target.tagName.toLowerCase() == 'button' || element.target.tagName.toLowerCase() == 'img') {
         if (element.target.id) {
-          console.log(element.target.id.split('_'))
           this.functionsButton(element.target.id.split('_'))
         }
       }
@@ -174,7 +163,7 @@ export class SettingChecklist {
 
     if (this.templateCheck.validationQuestion()) {
       let req = await this.connectionCLPP.get(`&user_id=${localStorage.getItem("id")}&id=${this.templateCheck.checklist.getIdChecklist()}`, 'CLPP/Question.php')
-      this.templateCheck.idQuestion = req.next_id
+      this.templateCheck.idQuestion = req.nextId
       let object = this.templateCheck.addQuestion(this.templateCheck.idQuestion)
       await this.templateCheck.checklist.saveQuestionsBD(object)
       getB_id('questionCreated').insertAdjacentHTML('beforeend', this.templateCheck.questionsCreated([object], this.templateCheck.idQuestion))

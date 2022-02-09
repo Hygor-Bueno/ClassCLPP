@@ -28,7 +28,6 @@ export class Routers {
 					this.pageChecklistCreate(local);
 					break;
 				case 'checklistCreated':
-					console.log('checklistCreated')
 					await this.pageChecklistCreated(local);
 					break;
 				case 'record':
