@@ -141,7 +141,7 @@ export class SettingRecord {
             if (arrayChecked.length == 1) {
                 let reqQuestion = await this.getQuestion()
                 getB_id('titleQuestionOption').insertAdjacentHTML('beforeend', this.templateOption(null, 'description', reqQuestion))
-                this.todos()
+                this.selectAll()
                 this.controllerSelect("selectButtonValidade", "Multiplos checklist", false)
                 this.controllerSelect('selectButtonQuestion', "Selecione a pergunta:", true)
             } else if (arrayChecked.length >= 2) {
@@ -152,7 +152,7 @@ export class SettingRecord {
         }
     }
 
-    todos() {
+    selectAll() {
         document.querySelectorAll('#titleChecklistOption input[type=checkbox]').forEach(element => {
             if (document.querySelector('#todos').checked == true) {
                 element.checked = true
