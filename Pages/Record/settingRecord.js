@@ -75,8 +75,8 @@ export class SettingRecord {
     }
 
     clearFilter() {
-        this.resetOptions()
         this.clearDate()
+        this.resetOptions()
     }
 
     resetOptions() {
@@ -84,11 +84,13 @@ export class SettingRecord {
         clear.forEach(options => {
             options.checked = false
         });
-        this.ativaQuestion();
-        this.ativaValidade()
+        this.controllerSelect('selectButtonQuestion', "Selecione a pergunta:", true)
+        this.controllerSelect('selectButtonValidade', "Selecione a validade:", true)
     }
 
     clearDate() {
+        //this.controllerSelect("selectTitulo", "Selecione o checklist:", false)
+
         const data = document.querySelectorAll("input[type='date']")
         data.forEach(date => { date.value = "" })
         document.getElementById("selectTitulo").innerHTML = "Selecione o checklist:"
@@ -97,7 +99,7 @@ export class SettingRecord {
     templateOption(objectChecklist, key, array) {
         let response = ""
         let auxArray = array || objectChecklist.data
-        console.log
+        console.log(objectChecklist)
         auxArray.map(element => {
             element[key] ? response +=
                 `<div class="testandoTest">
@@ -138,27 +140,33 @@ export class SettingRecord {
         getB_id('titleChecklistOption').onchange = async () => {
             let arrayChecked = this.walksArray('#titleChecklistOption input[type=checkbox]')
             this.validateParameter(arrayChecked.length, arrayChecked);
-            if (arrayChecked.length == 1) {
-                let reqQuestion = await this.getQuestion()
-                getB_id('titleQuestionOption').insertAdjacentHTML('beforeend', this.templateOption(null, 'description', reqQuestion))
-                this.todos()
-                this.controllerSelect("selectButtonValidade", "Multiplos checklist", false)
-                this.controllerSelect('selectButtonQuestion', "Selecione a pergunta:", true)
-            } else if (arrayChecked.length >= 2) {
-                this.controllerSelect("selectButtonQuestion", "Multiplos checklist", false)
-            } else if (arrayChecked.length <= 0) {
-                this.controllerSelect('selectButtonValidade', "Selecione a validade:", true)
+            if (!getB_id('todos').checked) {
+                if (arrayChecked.length == 1) {
+                    let reqQuestion = await this.getQuestion()
+                    getB_id('titleQuestionOption').insertAdjacentHTML('beforeend', this.templateOption(null, 'description', reqQuestion))
+                    this.controllerSelect("selectButtonValidade", "Checklist selecionada", false)
+                    this.controllerSelect('selectButtonQuestion', "Selecione a pergunta:", true)
+                } else if (arrayChecked.length >= 2) {
+                    console.log("aqui viado", !getB_id('todos').checked)
+                    this.controllerSelect("selectButtonQuestion", "Multiplos checklist", false)
+                } else if (arrayChecked.length <= 0) {
+                    this.controllerSelect('selectButtonValidade', "Selecione a validade:", true)
+                }
+            } else {
+                this.selectAllAtivado()
             }
         }
     }
 
-    todos() {
+    selectAllAtivado() {
         document.querySelectorAll('#titleChecklistOption input[type=checkbox]').forEach(element => {
-            if (document.querySelector('#todos').checked == true) {
-                element.checked = true
-            }
+            element.checked = true
+            document.querySelector('#selectTitulo').innerHTML = "Multiplos checklist"
+            this.controllerSelect("selectButtonValidade", "Multiplos checklist", false)
+            this.controllerSelect("selectButtonQuestion", "Multiplos checklist", false)
         })
     }
+
     walksArray(local) {
         let array = []
         document.querySelectorAll(local).forEach(element => {

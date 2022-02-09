@@ -29,7 +29,7 @@ export class RecordPage extends SettingRecord {
                                                 <p class="valorCheck">Todos</p>
                                             </input>
                                         </div>
-                                        ${this.templateOption(objectChecklist, 'description')}    
+                                        ${this.templateOption(objectChecklist, 'description', null)}    
                                     </div>
                                 </div>
                             </div>
