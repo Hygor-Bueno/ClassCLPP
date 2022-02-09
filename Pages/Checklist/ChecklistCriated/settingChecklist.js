@@ -62,7 +62,6 @@ export class SettingChecklist {
       this.deleteChecklist();
     });
   }
-
   clean() {
     getB_id("getCheckList").innerHTML = "";
   }

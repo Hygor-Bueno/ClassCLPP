@@ -22,14 +22,13 @@ export class RecordObject extends ConnectionCLPP {
             </div> `
         return modalAlert;
     }
-
     settingBtnAlertSave(){
-        $('#modalAlert').addEventListener('click', (e) => {
-            if (e.target.tagName.toLowerCase() == 'button') this.filtarBtnModalAlert(e.target)
+        $('#modalAlert').addEventListener('click', (element) => {
+            if (element.target.tagName.toLowerCase() == 'button') this.filtarBtnModalAlert(element.target)
         })
     }
-    filtarBtnModalAlert(elem){
-        switch (elem.getAttribute('id')){
+    filtarBtnModalAlert(element){
+        switch (element.getAttribute('id')){
             case ("saveFile"):
                 console.log("saveFile")
                 break;
