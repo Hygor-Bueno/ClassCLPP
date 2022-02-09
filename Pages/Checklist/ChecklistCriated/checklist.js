@@ -17,7 +17,6 @@ export class ChecklistCreatedPage extends SettingChecklist {
               <p>Data Final:</p>
               <input type="date" id="dateFinal"/>
           </div>
-          <button type="button" id="testandoModalMenssage">T</button>
           <div id="search">
               <img id="searchName" src="./assets/images/Search.svg">
           </div>
