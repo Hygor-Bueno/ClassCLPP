@@ -39,4 +39,7 @@ export class RecordObject extends ConnectionCLPP {
                 console.error("not found!")       
         }
     }
+    // saveReport(){
+        
+    // }
 }
