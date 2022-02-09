@@ -162,7 +162,6 @@ export class SettingRecord {
         document.querySelectorAll(local).forEach(element => {
             if (element.checked) array.push(element)
         })
-        console.log(array)
         return array
     }
 
@@ -183,10 +182,8 @@ export class SettingRecord {
 
     async getQuestion() {
         let cont = this.walksArray('#titleChecklistOption input[type=checkbox]')
-        console.log(cont.length)
         if (cont.length != 0) {
             let response = await this.connectionCLPP.get("&id=" + cont[0].attributes[2].value + "&user_id=" + localStorage.getItem("id"), 'CLPP/Question.php')
-            console.log(response.data)
             return response.data
         }
     }
