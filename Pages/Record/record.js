@@ -27,7 +27,8 @@ export class RecordPage extends SettingRecord {
                                     </div>
                                     <div class="testandoTest" id="titleChecklistOption" style="display:none"> 
                                         <div class="testandoTest">
-                                            <input type="checkbox" class="option" id="todos" value="">
+                                        
+                                            <input type="checkbox" class="option" data-id="todos" id="todos">
                                                 <p class="valorCheck">Todos</p>
                                             </input>
                                         </div>
@@ -58,10 +59,8 @@ export class RecordPage extends SettingRecord {
                                     </div> 
                                 </div>
                             </div>
-
                         </div>
                     </div>
-                    
                     <div class="titleBlock">
                         <div class="titleFilter">
                             <h1>Unidades</h1>
@@ -75,10 +74,9 @@ export class RecordPage extends SettingRecord {
                             </div>                   
                         </div> 
                     </div>
-
                     <div class="titleBlock">                
                         <div class="titleFilter">     
-                            <h1>Por data</h1>    
+                            <h1>Datas das respostas</h1>    
                         </div>
                         <div id="dateBlock" class="bodyChecklist" style="display:block">
                             <div class="questionChecklist">
@@ -120,11 +118,9 @@ export class RecordPage extends SettingRecord {
                     <section id="graphicMain">
                         <h1>Principal</h1>
                     </section>
-
                     <aside id="unityGraphic">
                         <h1>Unidade</h1>
                     </aside>
-
                     <aside id="checklistGraphic">
                         <h1>Checklist</h1>
                     </aside>
