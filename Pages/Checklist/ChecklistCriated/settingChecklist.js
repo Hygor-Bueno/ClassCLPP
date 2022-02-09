@@ -48,50 +48,29 @@ export class SettingChecklist {
     this.viewChecklist();
     this.deleteChecklist();
     localStorage.getItem("editChecklist") && $(`#checklist_${localStorage.getItem("editChecklist")} .view`).click();
+
     getB_id("testandoModalMenssage").addEventListener("click", async () => {
       // PARTE 01: Pegar as chaves distintas getKeys(array,key);
-      let response = await this.connectionCLPP.get("&web&id_user=148&date_init_response='2022-02-04'", "CLPP/Record.php")
-      let array = []
-      response.data.forEach((element) => array.push(element.id_user))
-      let unique = [...new Set(array)];
-      console.log(unique,response.data)
-
-      // PARTE 02: organizar o array por chaves sortArray(keys,array); For User
-      let response2 = [];
-      unique.forEach(e=>{response.data.filter(element => {if (element.id_user == e) response2.push(element) })})
-      console.log(response2)
-
-      // PARTE 03: organizar o array por chaves sortArray(keys,array);    FOr Date
-      let response3 = [];
-      let array2 = [];
-      response2.forEach((element) => array2.push(element.date))
-      let unique2 =  [...new Set(array2)];
-      unique2.forEach(e=>{response2.filter(element => {if (element.date == e) response3.push(element) })})
-      console.log(response3);
-
-
-      //PARTE 04: For Checklist;
-      let response4 = [];
-      let array4  = [];
-      let unique4 = [];
-      response3.forEach((element) => array4.push(element.id_checklist))
-      unique4 = [...new Set(array4)];
-      unique4.forEach(e=>{response3.filter(element => {if (element.id_checklist == e) response4.push(element) })})
-      response4.forEach(e=>console.log(e.id_checklist,e.id_option_question,e.id_user, "<== User",e.date))
-
-      // let response5 = [];
-      // let array5  = [];
-      // let unique5 = [];
-      // response4.forEach((element) => array5.push(element.id_option_question))
-      // unique5 = [...new Set(array5)];
-      // unique5.forEach(e=>{response4.filter(element => {if (element.id_option_question == e) response5.push(element) })})
-      // console.log(response5)  
-
-
-
+      let response = await this.connectionCLPP.get("&web&id_user=148&date_init_response='2022-02-08'", "CLPP/Response.php") 
+      let orderByChecklist = []
+      let assistant = this.getKeys(response);
+      for (let index = 0; index < assistant.length; index++) {    
+        orderByChecklist.push(response.data.filter(element =>element.id_user == assistant[index][0] && element.date == assistant[index][1] && element.id_checklist == assistant[index][2] && element.id_shop == assistant[index][3]))
+      }
+      console.log(response)   
     })
   }
-
+  getKeys(response){
+    let assistant = "";
+    let responses = [];
+    response.data.forEach(((element) => {
+      if (element.id_user != assistant) {
+        assistant = element.id_user
+        responses.push([element.id_user,element.date,element.id_checklist,element.id_shop])
+      }
+    }))
+    return response
+  }
   async queryButton() {
     let searchCheck;
     getB_id("searchName").addEventListener("click", async () => {
@@ -153,7 +132,6 @@ export class SettingChecklist {
     document.getElementById('checkCreateDiv').addEventListener("click", (element) => {
       if (element.target.tagName.toLowerCase() == 'button' || element.target.tagName.toLowerCase() == 'img') {
         if (element.target.id) {
-          console.log(element.target.id.split('_'))
           this.functionsButton(element.target.id.split('_'))
         }
       }
@@ -211,7 +189,7 @@ export class SettingChecklist {
 
     if (this.templateCheck.validationQuestion()) {
       let req = await this.connectionCLPP.get(`&user_id=${localStorage.getItem("id")}&id=${this.templateCheck.checklist.getIdChecklist()}`, 'CLPP/Question.php')
-      this.templateCheck.idQuestion = req.next_id
+      this.templateCheck.idQuestion = req.nextId
       let object = this.templateCheck.addQuestion(this.templateCheck.idQuestion)
       await this.templateCheck.checklist.saveQuestionsBD(object)
       getB_id('questionCreated').insertAdjacentHTML('beforeend', this.templateCheck.questionsCreated([object], this.templateCheck.idQuestion))
