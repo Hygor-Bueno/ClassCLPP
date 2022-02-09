@@ -341,6 +341,10 @@ input {
   color: white;
 }
 
+.titleOptionBlock {
+  margin-bottom: 2px;
+}
+
 @media screen and (min-width: 1500px) {
   .titleOptionBlock,
   #titleMain {

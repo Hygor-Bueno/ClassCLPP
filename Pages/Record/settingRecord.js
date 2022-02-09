@@ -99,7 +99,7 @@ export class SettingRecord {
     templateOption(objectChecklist, key, array) {
         let response = ""
         let auxArray = array || objectChecklist.data
-        console.log(objectChecklist)
+
         auxArray.map(element => {
             element[key] ? response +=
                 `<div class="testandoTest">
@@ -132,12 +132,19 @@ export class SettingRecord {
     }
 
     controllerSelect(local, message, check) {
-        check ? getB_id(local).setAttribute("style", "opacity:1") : getB_id(local).setAttribute("style", "opacity:0.3")
+        if (check) {
+            getB_id(local).setAttribute("style", "opacity:1")
+            $(`#${local} button`).disabled = false
+        } else {
+            getB_id(local).setAttribute("style", "opacity:0.3")
+            $(`#${local} button`).disabled = true
+        }
         $(`#${local} p`).innerText = message
     }
 
     blockQuestion() {
         getB_id('titleChecklistOption').onchange = async () => {
+            getB_id('titleQuestionOption').innerHTML = ""
             let arrayChecked = this.walksArray('#titleChecklistOption input[type=checkbox]')
             this.validateParameter(arrayChecked.length, arrayChecked);
             if (!getB_id('todos').checked) {
@@ -147,8 +154,8 @@ export class SettingRecord {
                     this.controllerSelect("selectButtonValidade", "Checklist selecionada", false)
                     this.controllerSelect('selectButtonQuestion', "Selecione a pergunta:", true)
                 } else if (arrayChecked.length >= 2) {
-                    console.log("aqui viado", !getB_id('todos').checked)
                     this.controllerSelect("selectButtonQuestion", "Multiplos checklist", false)
+
                 } else if (arrayChecked.length <= 0) {
                     this.controllerSelect('selectButtonValidade', "Selecione a validade:", true)
                 }
@@ -172,7 +179,6 @@ export class SettingRecord {
         document.querySelectorAll(local).forEach(element => {
             if (element.checked) array.push(element)
         })
-        console.log(array)
         return array
     }
 
@@ -193,10 +199,8 @@ export class SettingRecord {
 
     async getQuestion() {
         let cont = this.walksArray('#titleChecklistOption input[type=checkbox]')
-        console.log(cont.length)
         if (cont.length != 0) {
             let response = await this.connectionCLPP.get("&id=" + cont[0].attributes[2].value + "&user_id=" + localStorage.getItem("id"), 'CLPP/Question.php')
-            console.log(response.data)
             return response.data
         }
     }

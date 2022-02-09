@@ -38,10 +38,10 @@ export class RecordPage extends SettingRecord {
                             </div>
                             <div class="questionChecklist">
                                 <label class="titleOptionBlock">Titulo das Perguntas</label>
-                                <div class="sel" id="titleQuestion">
-                                    <div id="selectButtonQuestion" style="display:flex">
+                                <div class="sel" id="titleQuestion" >
+                                    <div id="selectButtonQuestion" style="display:flex; opacity:0.3" >
                                         <p id="selectTituloQuestion">Selecione a pergunta:</p> 
-                                        <button data-linked="titleQuestionOption" data-function="titleQuestion" id="selectQuestionCheck"></button>
+                                        <button data-linked="titleQuestionOption" data-function="titleQuestion" id="selectQuestionCheck" disabled></button>
                                     </div>
                                     <div class="testandoTest" id="titleQuestionOption" style="display:none"> 
                                     </div>
