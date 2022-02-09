@@ -47,7 +47,7 @@ export class SettingChecklist {
     this.viewChecklist();
     this.deleteChecklist();
     localStorage.getItem("editChecklist") && $(`#checklist_${localStorage.getItem("editChecklist")} .view`).click();
-
+  }
   async queryButton() {
     let searchCheck;
     getB_id("searchName").addEventListener("click", async () => {
