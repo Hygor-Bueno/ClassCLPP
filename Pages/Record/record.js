@@ -44,10 +44,7 @@ export class RecordPage extends SettingRecord {
                                     </div>
                                     <div class="testandoTest" id="titleQuestionOption" style="display:none"> 
                                     </div>
-                                    <div id="selectButtonReserva" style="display:none">
-                                        <p id="selectTituloQuestionReserva">Multiplas checklist</p> 
-                                        <button data-function="titleQuestion" id="selectQuestionCheckReserva"></button>
-                                    </div>                                   
+                                                                    
                                 </div>    
                             </div>                            
                             <div class="questionChecklist">
@@ -59,11 +56,6 @@ export class RecordPage extends SettingRecord {
                                     </div>
                                     <div class="testandoTest" id="validCheckBlock" style="display:none">
                                     </div> 
-                                    
-                                    <div id="selectButtonReservaValidade" style="display:none">
-                                        <p id="selectTituloQuestionReservaValidade">Multiplas checklist</p> 
-                                        <button data-function="titleQuestion" id="selectCheckReservaValidade"></button>
-                                    </div>
                                 </div>
                             </div>
 
