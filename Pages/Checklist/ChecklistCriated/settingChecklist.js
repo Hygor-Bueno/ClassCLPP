@@ -49,27 +49,7 @@ export class SettingChecklist {
     this.deleteChecklist();
     localStorage.getItem("editChecklist") && $(`#checklist_${localStorage.getItem("editChecklist")} .view`).click();
 
-    getB_id("testandoModalMenssage").addEventListener("click", async () => {
-      // PARTE 01: Pegar as chaves distintas getKeys(array,key);
-      let response = await this.connectionCLPP.get("&web&id_user=148&date_init_response='2022-02-08'", "CLPP/Response.php") 
-      let orderByChecklist = []
-      let assistant = this.getKeys(response);
-      for (let index = 0; index < assistant.length; index++) {    
-        orderByChecklist.push(response.data.filter(element =>element.id_user == assistant[index][0] && element.date == assistant[index][1] && element.id_checklist == assistant[index][2] && element.id_shop == assistant[index][3]))
-      }
-      console.log(response)   
-    })
-  }
-  getKeys(response){
-    let assistant = "";
-    let responses = [];
-    response.data.forEach(((element) => {
-      if (element.id_user != assistant) {
-        assistant = element.id_user
-        responses.push([element.id_user,element.date,element.id_checklist,element.id_shop])
-      }
-    }))
-    return response
+    
   }
   async queryButton() {
     let searchCheck;
@@ -85,7 +65,6 @@ export class SettingChecklist {
       this.deleteChecklist();
     });
   }
-
   clean() {
     getB_id("getCheckList").innerHTML = "";
   }
