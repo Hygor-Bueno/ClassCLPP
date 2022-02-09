@@ -31,7 +31,6 @@ export class SettingChecklist {
       this.listsUsersCheck += await this.listUser.main(iterator.id);
     }
   }
-
   async constructorObject(array) {
     //Esssa parte popula o checklist
     await array.forEach(async element => {
@@ -68,11 +67,9 @@ export class SettingChecklist {
   clean() {
     getB_id("getCheckList").innerHTML = "";
   }
-
   popIclude(objectCheck) {
     getB_id("getCheckList").insertAdjacentHTML("beforeend", this.getCheckListCreted(objectCheck));
   }
-
   listUsers() {
     $_all(".groups").forEach(element => {
       element.addEventListener("click", () => {
@@ -80,7 +77,6 @@ export class SettingChecklist {
       });
     });
   }
-
   viewChecklist() {
     $_all(".view").forEach(element => {
       element.addEventListener("click", () => {

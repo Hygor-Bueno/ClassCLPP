@@ -29,6 +29,7 @@ export class GroupMessage extends ConnectionCLPP {
         this.post(response,'CLPP/Group.php')
     }
     saveGroupAll(){
+        this.saveGroup(this.#id_creator)
         this.#id_user.forEach(value =>this.saveGroup(value))
         this.#id_user = [];
     }
