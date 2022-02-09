@@ -27,7 +27,6 @@ export class SettingRecord {
         }
         this.blockQuestion()
     }
-
     jsonChecklists(objectChecklist) {
         objectChecklist.data.forEach(async (element) => {
             const objectChecklist = new ObjectChecklist;
@@ -35,7 +34,6 @@ export class SettingRecord {
             this.jsonCheck[element.id] = objectChecklist
         })
     }
-
     clickPage() {
         $('#divRecord').addEventListener("click", (event) => {
             if (event.target.tagName.toLowerCase() == "button") this.functionFilter(event.target)
@@ -131,54 +129,42 @@ export class SettingRecord {
         })
     }
 
-    ativaValidade() {
-        getB_id('selectButtonValidade').setAttribute("style", "display:flex")
-        getB_id('selectButtonReservaValidade').setAttribute("style", "display:none")
-    }
-
-    blockValidade() {
-        getB_id('selectButtonValidade').setAttribute("style", "display:none")
-        getB_id('validCheckBlock').setAttribute("style", "display:none")
-        getB_id('selectButtonReservaValidade').setAttribute("style", "display:flex")
-        getB_id('selectButtonReservaValidade').setAttribute("style", "opacity:0.3")
-    }
-
-    ativaQuestion() {
-        getB_id('selectButtonQuestion').setAttribute("style", "display:flex")
-        getB_id('selectButtonReserva').setAttribute("style", "display:none")
-    }
-
-    bloqueiaQuestion() {
-        getB_id('selectButtonQuestion').setAttribute("style", "display:none")
-        getB_id('selectButtonReserva').setAttribute("style", "display:flex")
-        getB_id('selectButtonReserva').setAttribute("style", "opacity:0.3")
-        getB_id('titleQuestionOption').setAttribute("style", "display:none")
+    controllerSelect(local, message, check) {
+        check ? getB_id(local).setAttribute("style", "opacity:1") : getB_id(local).setAttribute("style", "opacity:0.3")
+        $(`#${local} p`).innerText = message
     }
 
     blockQuestion() {
         getB_id('titleChecklistOption').onchange = async () => {
-            let cont = this.walksArray('#titleChecklistOption input[type=checkbox]')
-            if (cont.length == 1) {
+            let arrayChecked = this.walksArray('#titleChecklistOption input[type=checkbox]')
+            this.validateParameter(arrayChecked.length, arrayChecked);
+            if (arrayChecked.length == 1) {
                 let reqQuestion = await this.getQuestion()
                 getB_id('titleQuestionOption').insertAdjacentHTML('beforeend', this.templateOption(null, 'description', reqQuestion))
-                this.validateParameter(cont.length, cont);
-            } if (cont.length >= 2) {
-                this.validateParameter(cont.length, cont);
-                this.bloqueiaQuestion()
-            } if (cont.length <= 1) {
-                this.validateParameter(cont.length, cont);
-                this.ativaQuestion()
+                this.todos()
+                this.controllerSelect("selectButtonValidade", "Multiplos checklist", false)
+                this.controllerSelect('selectButtonQuestion', "Selecione a pergunta:", true)
+            } else if (arrayChecked.length >= 2) {
+                this.controllerSelect("selectButtonQuestion", "Multiplos checklist", false)
+            } else if (arrayChecked.length <= 0) {
+                this.controllerSelect('selectButtonValidade', "Selecione a validade:", true)
             }
-            if (cont.length >= 1.0) this.blockValidade()
-            if (cont.length < 1) this.ativaValidade()
         }
     }
 
+    todos() {
+        document.querySelectorAll('#titleChecklistOption input[type=checkbox]').forEach(element => {
+            if (document.querySelector('#todos').checked == true) {
+                element.checked = true
+            }
+        })
+    }
     walksArray(local) {
         let array = []
         document.querySelectorAll(local).forEach(element => {
             if (element.checked) array.push(element)
         })
+        console.log(array)
         return array
     }
 
