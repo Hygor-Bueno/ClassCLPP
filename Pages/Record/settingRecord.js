@@ -1,6 +1,6 @@
 import { ObjectChecklist } from "../../Components/objects/checklistObject.js";
 import { RecordObject } from "../../Components/objects/recordObject.js";
-import { ConnectionCLPP } from "../../Connection/ConnectionCLPP.js";
+
 import { getB_id, $, $_all, openModal, closeModal } from "../../Util/compressSyntaxe.js";
 import { UsefulComponents } from "../../Util/usefulComponents.js";
 
@@ -10,7 +10,7 @@ export class SettingRecord {
     searchDateFinal;
     jsonCheck = {};
     expanded = false;
-    connectionCLPP = new ConnectionCLPP;
+    typeGraph = "porcentagem"
     userFulComponents = new UsefulComponents;
     recordObject = new RecordObject;
 
@@ -60,6 +60,10 @@ export class SettingRecord {
             case "buttonRecordPrint":
                 openModal(this.recordObject.alertSave())
                 this.recordObject.settingBtnAlertSave()
+                break;
+            case "graphicButton":
+                // alert("Você arirá um gráfico")
+                this.recordObject.clppGraphics([["teste", 27], ["teste2", 38]], "#mainGraphic", this.typeGraph);
                 break;
             default:
                 console.error("data-function")
@@ -121,9 +125,29 @@ export class SettingRecord {
     buttonGraphic(element) {
         let array = [getB_id('buttonRecordBar'), getB_id('buttonRecordPizza'), getB_id('buttonRecordPercentage')]
         array.forEach((e) => {
-            if (element.getAttribute('id') == e.getAttribute('id')) e.setAttribute("style", "opacity: 1")
-            else e.setAttribute("style", "opacity: 0.3")
+            if (element.getAttribute('id') == e.getAttribute('id')){
+                e.setAttribute("style", "opacity: 1")
+                this.changeChartType(e.getAttribute('id'));
+            }else{
+                e.setAttribute("style", "opacity: 0.3")
+            }
         })
+    }
+
+    changeChartType(value) {
+        this.closeGraphic();
+        if(value == 'buttonRecordBar'){
+            this.typeGraph = "barra"
+        }else if(value == 'buttonRecordPizza'){
+            this.typeGraph = "pizza"
+        }else{
+            this.typeGraph = "porcentagem"
+        }
+    }
+
+    closeGraphic(){
+        getB_id('mainGraphic').getContext('2d').clearRect(0, 0, getB_id('mainGraphic').width, getB_id('mainGraphic').height)
+        this.recordObject.graphicRecord && this.recordObject.graphicRecord.destroy();
     }
 
     controllerSelect(local, message, check) {
@@ -210,19 +234,19 @@ export class SettingRecord {
     }
 
     async getChecklist() {
-        return await this.connectionCLPP.get("&web=&id_user=" + localStorage.getItem("id"), 'CLPP/Checklist.php')
+        return await this.recordObject.get("&web=&id_user=" + localStorage.getItem("id"), 'CLPP/Checklist.php')
     }
 
     async getShop() {
-        let response = await this.connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')
+        let response = await this.recordObject.get("&company_id=1", 'CCPP/Shop.php')
         return response.data
     }
 
     async getQuestion(cont) {
         //let cont = this.walksArray('#titleChecklistOption input[type=checkbox]')
         if (cont.length != 0) {
-            // console.log(this.jsonCheck[cont[0].attributes[2].value])
-            let response = await this.connectionCLPP.get("&id=" + cont[0].attributes[2].value + "&user_id=" + localStorage.getItem("id"), 'CLPP/Question.php')
+            console.log(this.jsonCheck[cont[0].attributes[2].value])
+            let response = await this.recordObject.get("&id=" + cont[0].attributes[2].value + "&user_id=" + localStorage.getItem("id"), 'CLPP/Question.php')
             return response.data
         }
     }
