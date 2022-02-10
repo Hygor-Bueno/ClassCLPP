@@ -64,6 +64,9 @@ export class SettingRecord {
                 openModal(this.recordObject.alertSave())
                 this.recordObject.settingBtnAlertSave()
                 break;
+            case "filterBtn": 
+                this.recordObject.saveReport()
+                break;    
             default:
                 console.error("data-function")
         }
@@ -153,17 +156,15 @@ export class SettingRecord {
                     this.controllerSelect('selectButtonQuestion', "Selecione a pergunta:", true)
                 } else if (arrayChecked.length >= 2) {
                     this.controllerSelect("selectButtonQuestion", "Multiplos checklist", false)
-
                 } else if (arrayChecked.length <= 0) {
                     this.controllerSelect('selectButtonValidade', "Selecione a validade:", true)
+                    this.controllerSelect("selectButtonQuestion", "Selecione a pergunta:", false)
                 }
             } else {
-                this.selectAll()
-                
+                this.selectAll() 
             }
         }
     }
-
 
     selectAll() {
         document.querySelectorAll('#titleChecklistOption input[type=checkbox]').forEach(element => {

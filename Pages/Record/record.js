@@ -78,11 +78,11 @@ export class RecordPage extends SettingRecord {
                         <div id="dateBlock" class="bodyChecklist" style="display:block">
                             <div class="questionChecklist">
                                 <label class="titleOptionBlock">Data inicial</label>
-                                <input class="sel" type="date"></input>
+                                <input class="sel" id="initDate" type="date"></input>
                             </div>
                             <div class="questionChecklist">
                                 <label class="titleOptionBlock">Data final</label>
-                                <input class="sel" type="date"></input>
+                                <input class="sel" id="finalDate" type="date"></input>
                             </div>
                         </div>
                     </div>
