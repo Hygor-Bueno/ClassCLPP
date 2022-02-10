@@ -203,7 +203,7 @@ export class SettingRecord {
         //let cont = this.walksArray('#titleChecklistOption input[type=checkbox]')
 
         if (cont.length != 0) {
-            // console.log(this.jsonCheck[cont[0].attributes[2].value])
+            console.log(this.jsonCheck[cont[0].attributes[2].value])
             let response = await this.connectionCLPP.get("&id=" + cont[0].attributes[2].value + "&user_id=" + localStorage.getItem("id"), 'CLPP/Question.php')
             return response.data
         }
