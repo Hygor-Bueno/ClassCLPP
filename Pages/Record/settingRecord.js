@@ -18,15 +18,11 @@ export class SettingRecord {
         this.clickPage();
         this.jsonChecklists(objectChecklist);
         this.templateDate(objectChecklist);
-        let req = await this.getShop()
-        getB_id('selShop').insertAdjacentHTML('beforeend', this.templateOption(null, 'description', req))
-        getB_id('titleDate').onchange = () => {
-            let selectChecklist = getB_id('titleChecklist')
-            this.populaValidade(selectChecklist)
-            selectChecklist.disabled = true;
-        }
+        this.populaShop()
         this.blockQuestion()
+        this.pegandoValidade()
     }
+
     jsonChecklists(objectChecklist) {
         objectChecklist.data.forEach(async (element) => {
             const objectChecklist = new ObjectChecklist;
@@ -34,6 +30,7 @@ export class SettingRecord {
             this.jsonCheck[element.id] = objectChecklist
         })
     }
+
     clickPage() {
         $('#divRecord').addEventListener("click", (event) => {
             if (event.target.tagName.toLowerCase() == "button") this.functionFilter(event.target)
@@ -104,7 +101,7 @@ export class SettingRecord {
 
         auxArray.map(element => {
             element[key] ? response +=
-                `<div class="testandoTest">
+                `<div class="optionSelect">
                 <input type="checkbox" class="option" data-id="${element.id}" value="${element[key]}">
                     <p class="valorCheck">${element[key]}</p>
                 </input>
@@ -122,7 +119,7 @@ export class SettingRecord {
             }
             jsonDate.push(newJson)
         })
-        $('#titleDate .testandoTest').insertAdjacentHTML('beforeend', this.templateOption(null, 'date', jsonDate))
+        $('#titleDate .optionSelect').insertAdjacentHTML('beforeend', this.templateOption(null, 'date', jsonDate))
     }
 
     buttonGraphic(element) {
@@ -160,8 +157,28 @@ export class SettingRecord {
         } else {
             getB_id(local).setAttribute("style", "opacity:0.3")
             $(`#${local} button`).disabled = true
+        } $(`#${local} p`).innerText = message
+    }
+
+    async populaShop() {
+        let req = await this.getShop()
+        getB_id('selShop').insertAdjacentHTML('beforeend', this.templateOption(null, 'description', req))
+    }
+
+    pegandoValidade() {
+        getB_id('validCheckBlock').onchange = (ev) => {
+            let arrayValidade = this.walksArray('#validCheckBlock input[type=checkbox]')
+            if (ev.target.checked) {
+                let arrayChecked = this.walksArray2('#titleChecklistOption input[type=checkbox]', arrayValidade[0].attributes[2].value)
+                arrayValidade.forEach(element => {
+                    arrayChecked = this.walksArray2('#titleChecklistOption input[type=checkbox]', element.attributes[2].value)
+                    arrayChecked.checked = true
+                })
+            } else {
+                let element = this.walksArray2('#titleChecklistOption input[type=checkbox]', ev.target.getAttribute("data-id"))
+                element.checked = false;
+            }
         }
-        $(`#${local} p`).innerText = message
     }
 
     blockQuestion() {
@@ -175,18 +192,11 @@ export class SettingRecord {
                     getB_id('titleQuestionOption').insertAdjacentHTML('beforeend', this.templateOption(null, 'description', reqQuestion))
                     this.controllerSelect("selectButtonValidade", "Checklist selecionada", false)
                     this.controllerSelect('selectButtonQuestion', "Selecione a pergunta:", true)
-                } else if (arrayChecked.length >= 2) {
-                    this.controllerSelect("selectButtonQuestion", "Multiplos checklist", false)
-
-                } else if (arrayChecked.length <= 0) {
-                    this.controllerSelect('selectButtonValidade', "Selecione a validade:", true)
-                }
-            } else {
-                this.selectAll()
-            }
+                } else if (arrayChecked.length >= 2) this.controllerSelect("selectButtonQuestion", "Multiplos checklist", false)
+                else if (arrayChecked.length <= 0) this.controllerSelect('selectButtonValidade', "Selecione a validade:", true)
+            } else this.selectAll()
         }
     }
-
 
     selectAll() {
         document.querySelectorAll('#titleChecklistOption input[type=checkbox]').forEach(element => {
@@ -207,6 +217,16 @@ export class SettingRecord {
         return array
     }
 
+    walksArray2(local, id) {
+        let response
+        document.querySelectorAll(local).forEach(element => {
+            if (element.getAttribute("data-id") == id) {
+                response = element
+            }
+        })
+        return response
+    }
+
     validateParameter(array, cont) {
         if (array > 1) document.getElementById("selectTitulo").innerHTML = "Multi selecionado"
         if (array == 1) document.getElementById("selectTitulo").innerHTML = cont[0].defaultValue.toLowerCase().slice(0, 20) + ".."
@@ -224,7 +244,6 @@ export class SettingRecord {
 
     async getQuestion(cont) {
         //let cont = this.walksArray('#titleChecklistOption input[type=checkbox]')
-
         if (cont.length != 0) {
             console.log(this.jsonCheck[cont[0].attributes[2].value])
             let response = await this.recordObject.get("&id=" + cont[0].attributes[2].value + "&user_id=" + localStorage.getItem("id"), 'CLPP/Question.php')
