@@ -1,4 +1,4 @@
-import {$,$_all,getB_id, closeModal} from "../../Util/compressSyntaxe.js";
+import { $, $_all, getB_id, closeModal } from "../../Util/compressSyntaxe.js";
 import { ConnectionCLPP } from "../../Connection/ConnectionCLPP.js";
 import { UsefulComponents } from "../../Util/usefulComponents.js";
 
@@ -9,10 +9,13 @@ export class RecordObject extends ConnectionCLPP {
     #type;
     #description;
     #filters;
+
     #checkInfo = {}
     userFulComponents = new UsefulComponents;
 
-    alertSave(){
+    graphicRecord;
+
+    alertSave() {
         const modalAlert = `
             <div id="modalAlert">
                 <div id="alertMsg">
@@ -25,6 +28,7 @@ export class RecordObject extends ConnectionCLPP {
             </div> `
         return modalAlert;
     }
+
     settingBtnAlertSave(){
         getB_id('cancelFile').addEventListener('click', () => {
             closeModal()
@@ -65,5 +69,74 @@ export class RecordObject extends ConnectionCLPP {
             if (ele.checked && ele.getAttribute('data-id') != exception) checklistJson.push(ele.getAttribute('data-id'))
         })
         return checklistJson;
+
+    filtarBtnModalAlert(element) {
+        switch (element.getAttribute('id')) {
+            case ("saveFile"):
+                console.log("saveFile")
+                break;
+            case ("cancelFile"):
+                closeModal()
+                break;
+            default:
+                console.error("not found!")
+        }
+    }
+    // saveReport(){
+
+    // }
+    clppGraphics(arrayValues, context, types) {
+       this.graphicRecord =  new Chart(document.querySelector(`${context}`).getContext("2d"),
+            {
+                type: this.typeGraphics(types),
+                data: {
+                    labels: [...arrayValues.map(item => item[0])],
+
+                    datasets: [
+                        {
+                            label: "Porcentagem de vendas",
+                            data: [...arrayValues.map(item => item[1])],
+                           
+                            backgroundColor: [
+                                "#ccc", "blue", "red",
+                            ],
+                            borderColor: "#000",
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            ticks: {
+                                callback: function (value) {
+                                    return value + " %"
+                                }
+                            },
+                            suggestedMax: 100
+                        }
+                    }
+                }
+            });
+    }
+
+    typeGraphics(value) {
+        console.log(value.trim().toLowerCase());
+        let response;
+        switch (value.trim().toLowerCase()) {
+            case "pizza":
+                response = "pie";
+                break;
+            case "barra":
+                response = "bar"
+                break;
+            case "linha":
+                response = "line"
+                break;
+            default:
+                response = "doughnut"
+        }
+        return response;
+
     }
 }

@@ -22,8 +22,8 @@ export class RecordPage extends SettingRecord {
                                         <p id="selectTitulo">Selecione o checklist: </p> 
                                         <button type="button" data-linked="titleChecklistOption" data-function="titleChecklist"></button>
                                     </div>
-                                    <div class="testandoTest" id="titleChecklistOption" style="display:none"> 
-                                        <div class="testandoTest">
+                                    <div class="optionSelect" id="titleChecklistOption" style="display:none"> 
+                                        <div class="optionSelect">
                                         
                                             <input type="checkbox" class="option" data-id="todos" id="todos">
                                                 <p class="valorCheck">Todos</p>
@@ -40,7 +40,7 @@ export class RecordPage extends SettingRecord {
                                         <p id="selectTituloQuestion">Selecione a pergunta:</p> 
                                         <button data-linked="titleQuestionOption" data-function="titleQuestion" id="selectQuestionCheck" disabled></button>
                                     </div>
-                                    <div class="testandoTest" id="titleQuestionOption" style="display:none"> 
+                                    <div class="optionSelect" id="titleQuestionOption" style="display:none"> 
                                     </div>
                                                                     
                                 </div>    
@@ -52,7 +52,7 @@ export class RecordPage extends SettingRecord {
                                         <p id="selectTitulo">Selecione a validade:</p> 
                                         <button type="button" data-linked="validCheckBlock" data-function="validade" id="selectValidadCheck"></button>
                                     </div>
-                                    <div class="testandoTest" id="validCheckBlock" style="display:none">
+                                    <div class="optionSelect" id="validCheckBlock" style="display:none">
                                     </div> 
                                 </div>
                             </div>
@@ -113,7 +113,10 @@ export class RecordPage extends SettingRecord {
                 </div>
                 <body id="graphicRecord">
                     <section id="graphicMain">
-                        <h1>Principal</h1>
+                        <header><h1>Principal</h1><button type="button" id="graphicButton" data-function="graphicButton">G</button></header>
+                        <div id="containerGraphicMain">
+                            <canvas id="mainGraphic"></canvas>
+                        </div>
                     </section>
                     <aside id="unityGraphic">
                         <h1>Unidade</h1>
