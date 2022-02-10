@@ -113,7 +113,10 @@ export class RecordPage extends SettingRecord {
                 </div>
                 <body id="graphicRecord">
                     <section id="graphicMain">
-                        <h1>Principal</h1>
+                        <header><h1>Principal</h1><button type="button" id="graphicButton" data-function="graphicButton">G</button></header>
+                        <div id="containerGraphicMain">
+                            <canvas id="mainGraphic"></canvas>
+                        </div>
                     </section>
                     <aside id="unityGraphic">
                         <h1>Unidade</h1>
