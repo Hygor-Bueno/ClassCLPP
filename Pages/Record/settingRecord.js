@@ -61,10 +61,16 @@ export class SettingRecord {
                 openModal(this.recordObject.alertSave())
                 this.recordObject.settingBtnAlertSave()
                 break;
+
+            case "filterBtn": 
+                this.recordObject.saveReport()
+                break;    
+
             case "graphicButton":
                 // alert("Você arirá um gráfico")
                 this.recordObject.clppGraphics([["teste", 27], ["teste2", 38]], "#mainGraphic", this.typeGraph);
                 break;
+
             default:
                 console.error("data-function")
         }
@@ -192,9 +198,11 @@ export class SettingRecord {
                     getB_id('titleQuestionOption').insertAdjacentHTML('beforeend', this.templateOption(null, 'description', reqQuestion))
                     this.controllerSelect("selectButtonValidade", "Checklist selecionada", false)
                     this.controllerSelect('selectButtonQuestion', "Selecione a pergunta:", true)
+
                 } else if (arrayChecked.length >= 2) this.controllerSelect("selectButtonQuestion", "Multiplos checklist", false)
                 else if (arrayChecked.length <= 0) this.controllerSelect('selectButtonValidade', "Selecione a validade:", true)
             } else this.selectAll()
+
         }
     }
 
