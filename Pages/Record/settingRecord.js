@@ -20,6 +20,9 @@ export class SettingRecord {
         this.populaShop()
         this.blockQuestion()
         this.pegandoValidade()
+        let req = await this.recordObject.get("&id_user=148&date_init_response='2022-02-08'","CLPP/Response.php")
+        console.log(req)
+        req && this.recordObject.separateChecklist(req)
     }
 
     jsonChecklists(objectChecklist) {

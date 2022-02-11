@@ -88,4 +88,41 @@ export class RecordObject extends ConnectionCLPP {
         }
         return response;
     }
+
+    separateChecklist(response) {
+        console.log(response)
+        let orderByChecklist = [];
+        let assistent = this.getKeys(response);
+        assistent.forEach(elemKey => {
+            orderByChecklist.push(response.data.filter(element => { return elemKey[0] == element.id_user && elemKey[1] == element.date && elemKey[2] == element.id_checklist && elemKey[3] == element.id_shop }));
+        })
+        this.calc(orderByChecklist)
+        return orderByChecklist;
+    }
+    getKeys(response) {
+        let assistent = "";
+        let check = ""
+        let date = "";
+        let filterKeys = [];
+        response.data.forEach(element => {
+            if ((element.id_user != assistent || element.id_checklist != check) || date != element.id_shop) {
+                assistent = element.id_user;
+                check = element.id_checklist;
+                date = element.id_shop;
+                filterKeys.push([element.id_user, element.date, element.id_checklist, element.id_shop])
+            }
+        })
+        return filterKeys;
+    }
+    calc(responseChecklist) {
+        let question = 0
+        let soma=0;
+        for (const iterator of responseChecklist) {   
+            question += parseFloat(iterator[0].qtd_questions) 
+            for (const iterator2 of iterator) {
+                soma += parseFloat(iterator2.value)
+                console.log(iterator2.value)
+            }
+        }
+    }
 }
