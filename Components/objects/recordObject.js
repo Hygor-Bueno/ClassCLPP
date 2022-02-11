@@ -29,7 +29,7 @@ export class RecordObject extends ConnectionCLPP {
         return modalAlert;
     }
 
-    settingBtnAlertSave(){
+    settingBtnAlertSave() {
         getB_id('cancelFile').addEventListener('click', () => {
             closeModal()
         })
@@ -37,38 +37,39 @@ export class RecordObject extends ConnectionCLPP {
             console.log('saveFile')
         })
     }
-    saveReport(){
+    saveReport() {
         this.lockInfo()
-        let json ={
-            id_user: localStorage.getItem("id"), 
+        let json = {
+            id_user: localStorage.getItem("id"),
             point: " ",
             date: this.userFulComponents.currentDate(),
-            type: " ", 
+            type: " ",
             nome: $('#inputTitle input[type=text]').value,
             filters: this.#checkInfo
         }
         console.log(json)
     }
-    lockInfo(){
+    lockInfo() {
         this.#checkInfo = {
-            checklist:{
-                titles:this.selectInfo('#titleChecklistOption input[type=checkbox]',"todos"), 
-                question:this.selectInfo("#titleQuestion input[type=checkbox]"),
-                date_checklist:this.selectInfo("#validCheckBlock input[type=checkbox]")
+            checklist: {
+                titles: this.selectInfo('#titleChecklistOption input[type=checkbox]', "todos"),
+                question: this.selectInfo("#titleQuestion input[type=checkbox]"),
+                date_checklist: this.selectInfo("#validCheckBlock input[type=checkbox]")
             },
-            id_shops:[this.selectInfo("#selShop input[type=checkbox]")],
-            date_response:{
-                date_init_response:getB_id("initDate").value,
-                date_final_response:getB_id("finalDate").value
+            id_shops: [this.selectInfo("#selShop input[type=checkbox]")],
+            date_response: {
+                date_init_response: getB_id("initDate").value,
+                date_final_response: getB_id("finalDate").value
             }
         }
     }
-    selectInfo(local,exception){
+    selectInfo(local, exception) {
         let checklistJson = []
-        $_all(local).forEach((ele)=>{
+        $_all(local).forEach((ele) => {
             if (ele.checked && ele.getAttribute('data-id') != exception) checklistJson.push(ele.getAttribute('data-id'))
         })
         return checklistJson;
+    }
 
     filtarBtnModalAlert(element) {
         switch (element.getAttribute('id')) {
@@ -86,7 +87,7 @@ export class RecordObject extends ConnectionCLPP {
 
     // }
     clppGraphics(arrayValues, context, types) {
-       this.graphicRecord =  new Chart(document.querySelector(`${context}`).getContext("2d"),
+        this.graphicRecord = new Chart(document.querySelector(`${context}`).getContext("2d"),
             {
                 type: this.typeGraphics(types),
                 data: {
@@ -96,7 +97,7 @@ export class RecordObject extends ConnectionCLPP {
                         {
                             label: "Porcentagem de vendas",
                             data: [...arrayValues.map(item => item[1])],
-                           
+
                             backgroundColor: [
                                 "#ccc", "blue", "red",
                             ],
@@ -121,7 +122,7 @@ export class RecordObject extends ConnectionCLPP {
     }
 
     typeGraphics(value) {
-        console.log(value.trim().toLowerCase());
+        //console.log(value.trim().toLowerCase());
         let response;
         switch (value.trim().toLowerCase()) {
             case "pizza":
