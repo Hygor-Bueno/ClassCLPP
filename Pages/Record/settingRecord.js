@@ -1,6 +1,5 @@
 import { ObjectChecklist } from "../../Components/objects/checklistObject.js";
 import { RecordObject } from "../../Components/objects/recordObject.js";
-
 import { getB_id, $, $_all, openModal, closeModal } from "../../Util/compressSyntaxe.js";
 import { UsefulComponents } from "../../Util/usefulComponents.js";
 
@@ -10,7 +9,7 @@ export class SettingRecord {
     searchDateFinal;
     jsonCheck = {};
     expanded = false;
-    typeGraph = "porcentagem"
+    typeGraph = 3
     userFulComponents = new UsefulComponents;
     recordObject = new RecordObject;
 
@@ -58,14 +57,12 @@ export class SettingRecord {
                 this.openClose(element)
                 break;
             case "buttonRecordPrint":
-                openModal(this.recordObject.alertSave())
-                this.recordObject.settingBtnAlertSave()
+                openModal(this.alertSave())
+                this.settingBtnAlertSave()
                 break;
-
             case "filterBtn": 
-                this.recordObject.saveReport()
+                this.recordObject.setFilters(this.lockInfo())
                 break;    
-
             case "graphicButton":
                 // alert("Você arirá um gráfico")
                 this.recordObject.clppGraphics([["teste", 27], ["teste2", 38]], "#mainGraphic", this.typeGraph);
@@ -85,7 +82,6 @@ export class SettingRecord {
         this.clearDate()
         this.resetOptions()
     }
-
     resetOptions() {
         const clear = document.querySelectorAll(".option")
         clear.forEach(options => {
@@ -94,13 +90,11 @@ export class SettingRecord {
         this.controllerSelect('selectButtonQuestion', "Selecione a pergunta:", true)
         this.controllerSelect('selectButtonValidade', "Selecione a validade:", true)
     }
-
     clearDate() {
         const data = document.querySelectorAll("input[type='date']")
         data.forEach(date => { date.value = "" })
         document.getElementById("selectTitulo").innerHTML = "Selecione o checklist:"
     }
-
     templateOption(objectChecklist, key, array) {
         let response = ""
         let auxArray = array || objectChecklist.data
@@ -115,7 +109,6 @@ export class SettingRecord {
         })
         return response;
     }
-
     templateDate(objectChecklist) {
         let jsonDate = [];
         objectChecklist.data.forEach(element => {
@@ -127,7 +120,6 @@ export class SettingRecord {
         })
         $('#titleDate .optionSelect').insertAdjacentHTML('beforeend', this.templateOption(null, 'date', jsonDate))
     }
-
     buttonGraphic(element) {
         let array = [getB_id('buttonRecordBar'), getB_id('buttonRecordPizza'), getB_id('buttonRecordPercentage')]
         array.forEach((e) => {
@@ -139,23 +131,20 @@ export class SettingRecord {
             }
         })
     }
-
     changeChartType(value) {
         this.closeGraphic();
         if(value == 'buttonRecordBar'){
-            this.typeGraph = "barra"
+            this.typeGraph = 2
         }else if(value == 'buttonRecordPizza'){
-            this.typeGraph = "pizza"
+            this.typeGraph = 1
         }else{
-            this.typeGraph = "porcentagem"
+            this.typeGraph = 3
         }
     }
-
     closeGraphic(){
         getB_id('mainGraphic').getContext('2d').clearRect(0, 0, getB_id('mainGraphic').width, getB_id('mainGraphic').height)
         this.recordObject.graphicRecord && this.recordObject.graphicRecord.destroy();
     }
-
     controllerSelect(local, message, check) {
         if (check) {
             getB_id(local).setAttribute("style", "opacity:1")
@@ -165,12 +154,10 @@ export class SettingRecord {
             $(`#${local} button`).disabled = true
         } $(`#${local} p`).innerText = message
     }
-
     async populaShop() {
         let req = await this.getShop()
         getB_id('selShop').insertAdjacentHTML('beforeend', this.templateOption(null, 'description', req))
     }
-
     pegandoValidade() {
         getB_id('validCheckBlock').onchange = (ev) => {
             let arrayValidade = this.walksArray('#validCheckBlock input[type=checkbox]')
@@ -186,7 +173,6 @@ export class SettingRecord {
             }
         }
     }
-
     blockQuestion() {
         getB_id('titleChecklistOption').onchange = async () => {
             getB_id('titleQuestionOption').innerHTML = ""
@@ -205,7 +191,6 @@ export class SettingRecord {
 
         }
     }
-
     selectAll() {
         document.querySelectorAll('#titleChecklistOption input[type=checkbox]').forEach(element => {
             element.checked = true
@@ -214,7 +199,6 @@ export class SettingRecord {
             this.controllerSelect("selectButtonQuestion", "Multiplos checklist", false)
         })
     }
-
     walksArray(local) {
         let array = []
         document.querySelectorAll(local).forEach(element => {
@@ -224,7 +208,6 @@ export class SettingRecord {
         })
         return array
     }
-
     walksArray2(local, id) {
         let response
         document.querySelectorAll(local).forEach(element => {
@@ -234,28 +217,75 @@ export class SettingRecord {
         })
         return response
     }
-
     validateParameter(array, cont) {
         if (array > 1) document.getElementById("selectTitulo").innerHTML = "Multi selecionado"
         if (array == 1) document.getElementById("selectTitulo").innerHTML = cont[0].defaultValue.toLowerCase().slice(0, 20) + ".."
         if (array < 1) document.getElementById("selectTitulo").innerHTML = "Selecione o checklist:"
     }
-
     async getChecklist() {
         return await this.recordObject.get("&web=&id_user=" + localStorage.getItem("id"), 'CLPP/Checklist.php')
     }
-
     async getShop() {
         let response = await this.recordObject.get("&company_id=1", 'CCPP/Shop.php')
         return response.data
     }
-
     async getQuestion(cont) {
         //let cont = this.walksArray('#titleChecklistOption input[type=checkbox]')
         if (cont.length != 0) {
-            console.log(this.jsonCheck[cont[0].attributes[2].value])
+            //console.log(this.jsonCheck[cont[0].attributes[2].value].getQuestion()[0])
             let response = await this.recordObject.get("&id=" + cont[0].attributes[2].value + "&user_id=" + localStorage.getItem("id"), 'CLPP/Question.php')
             return response.data
         }
+    }
+    alertSave() {
+        const modalAlert = `
+            <div id="modalAlert">
+                <div id="alertMsg">
+                    <h1>Deseja salvar o arquivo em seu computador?</h1>
+                </div>    
+                <footer id="alertBtn">
+                    <button id="saveFile">Salvar</button>
+                    <button id="cancelFile">Cancelar</button>
+                </footer>
+            </div> `
+        return modalAlert;
+    }
+    settingBtnAlertSave(){
+        getB_id('cancelFile').addEventListener('click', () => {
+            closeModal()
+        })
+        getB_id('saveFile').addEventListener('click', () => {
+            this.setDateObj()
+            this.recordObject.saveReport()
+            closeModal()
+        })
+    }
+    setDateObj(){
+        this.recordObject.setId_user(localStorage.getItem("id"))
+        this.recordObject.setDescritpion($('#inputTitle input[type=text]').value)
+        //this.recordObject.setPoint(" ")
+        this.recordObject.setType(this.typeGraph)
+        this.recordObject.setDate(this.userFulComponents.currentDate())
+    }
+    lockInfo(){
+        return {
+            checklist:{
+                titles:this.selectInfo('#titleChecklistOption input[type=checkbox]',"todos"), 
+                question:this.selectInfo("#titleQuestion input[type=checkbox]"),
+                date_checklist:this.selectInfo("#validCheckBlock input[type=checkbox]")
+            },
+            id_shops:[this.selectInfo("#selShop input[type=checkbox]")],
+            date_response:{
+                date_init_response:getB_id("initDate").value,
+                date_final_response:getB_id("finalDate").value
+            }
+        }
+    }
+    selectInfo(local,exception){
+        let checklistJson = []
+        $_all(local).forEach((ele)=>{
+            if (ele.checked && ele.getAttribute('data-id') != exception) checklistJson.push(ele.getAttribute('data-id'))
+        })
+        return checklistJson;
     }
 }  
