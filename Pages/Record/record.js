@@ -98,7 +98,7 @@ export class RecordPage extends SettingRecord {
                         <input type="text" placeholder="Nome do relatório"/>
                     </section>
                     <aside id="buttonPrint">
-                        <button type="button" class="buttonRecordPrint" data-function="buttonRecordPrint" id="buttonRecordPrint"></button>
+                        <button type="button" class="buttonRecordPrint" data-function="buttonRecordPrint" id="buttonRecordPrint" disabled style="opacity: 0.3"></button>
                     </aside>
                 </header>
                 <div id="headerGraphic">
