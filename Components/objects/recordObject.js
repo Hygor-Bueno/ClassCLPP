@@ -1,6 +1,4 @@
-import { $, $_all, getB_id, closeModal } from "../../Util/compressSyntaxe.js";
 import { ConnectionCLPP } from "../../Connection/ConnectionCLPP.js";
-import { UsefulComponents } from "../../Util/usefulComponents.js";
 
 export class RecordObject extends ConnectionCLPP {
     #id_user;
@@ -10,81 +8,35 @@ export class RecordObject extends ConnectionCLPP {
     #description;
     #filters;
 
-    #checkInfo = {}
-    userFulComponents = new UsefulComponents;
-
     graphicRecord;
 
-    alertSave() {
-        const modalAlert = `
-            <div id="modalAlert">
-                <div id="alertMsg">
-                    <h1>Deseja salvar o arquivo em seu computador?</h1>
-                </div>    
-                <footer id="alertBtn">
-                    <button id="saveFile">Salvar</button>
-                    <button id="cancelFile">Cancelar</button>
-                </footer>
-            </div> `
-        return modalAlert;
-    }
+    getId_user() {return this.#id_user}
+    getPoint() {return this.#point}
+    getDate() {return this.#date}
+    getType() {return this.#type}
+    getDescription() {return this.#description}
+    getFilters() {return this.#filters}
 
-    settingBtnAlertSave() {
-        getB_id('cancelFile').addEventListener('click', () => {
-            closeModal()
-        })
-        getB_id('saveFile').addEventListener('click', () => {
-            console.log('saveFile')
-        })
-    }
-    saveReport() {
-        this.lockInfo()
-        let json = {
-            id_user: localStorage.getItem("id"),
-            point: " ",
-            date: this.userFulComponents.currentDate(),
-            type: " ",
-            nome: $('#inputTitle input[type=text]').value,
-            filters: this.#checkInfo
+    setId_user(id_user) {this.#id_user = id_user}
+    setPoint(point) {this.#point = point}
+    setDate(date) {this.#date = date}
+    setType(type) {this.#type = type}
+    setDescritpion(description) {this.#description = description}
+    setFilters(filters) {this.#filters = filters}
+
+
+    saveReport(){
+        let json ={
+            id_user: this.#id_user, 
+            point: this.#point,
+            date: this.#date,
+            type: this.#type, 
+            nome: this.#description,
+            filters: this.#filters
         }
         console.log(json)
-    }
-    lockInfo() {
-        this.#checkInfo = {
-            checklist: {
-                titles: this.selectInfo('#titleChecklistOption input[type=checkbox]', "todos"),
-                question: this.selectInfo("#titleQuestion input[type=checkbox]"),
-                date_checklist: this.selectInfo("#validCheckBlock input[type=checkbox]")
-            },
-            id_shops: [this.selectInfo("#selShop input[type=checkbox]")],
-            date_response: {
-                date_init_response: getB_id("initDate").value,
-                date_final_response: getB_id("finalDate").value
-            }
-        }
-    }
-    selectInfo(local, exception) {
-        let checklistJson = []
-        $_all(local).forEach((ele) => {
-            if (ele.checked && ele.getAttribute('data-id') != exception) checklistJson.push(ele.getAttribute('data-id'))
-        })
-        return checklistJson;
-    }
-    filtarBtnModalAlert(element) {
-        switch (element.getAttribute('id')) {
-            case ("saveFile"):
-                console.log("saveFile")
-                break;
-            case ("cancelFile"):
-                closeModal()
-                break;
-            default:
-                console.error("not found!")
-        }
-    }
-    // saveReport(){
+    } 
 
-    // }
     clppGraphics(arrayValues, context, types) {
         this.graphicRecord = new Chart(document.querySelector(`${context}`).getContext("2d"),
             {
@@ -119,25 +71,22 @@ export class RecordObject extends ConnectionCLPP {
                 }
             });
     }
-
     typeGraphics(value) {
-        console.log(value.trim().toLowerCase());
+
         let response;
-        switch (value.trim().toLowerCase()) {
-            case "pizza":
+
+        switch (value) {
+            case 1:
                 response = "pie";
                 break;
-            case "barra":
+            case 2:
                 response = "bar"
                 break;
-            case "linha":
-                response = "line"
-                break;
-            default:
+            case 3:
                 response = "doughnut"
+                break;           
         }
         return response;
-
     }
 
     separateChecklist(response) {
