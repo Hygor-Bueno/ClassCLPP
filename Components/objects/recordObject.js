@@ -24,6 +24,7 @@ export class RecordObject extends ConnectionCLPP {
     setDescritpion(description) {this.#description = description}
     setFilters(filters) {this.#filters = filters}
 
+
     saveReport(){
         let json ={
             id_user: this.#id_user, 
@@ -35,8 +36,9 @@ export class RecordObject extends ConnectionCLPP {
         }
         console.log(json)
     } 
+
     clppGraphics(arrayValues, context, types) {
-       this.graphicRecord =  new Chart(document.querySelector(`${context}`).getContext("2d"),
+        this.graphicRecord = new Chart(document.querySelector(`${context}`).getContext("2d"),
             {
                 type: this.typeGraphics(types),
                 data: {
@@ -46,7 +48,7 @@ export class RecordObject extends ConnectionCLPP {
                         {
                             label: "Porcentagem de vendas",
                             data: [...arrayValues.map(item => item[1])],
-                           
+
                             backgroundColor: [
                                 "#ccc", "blue", "red",
                             ],
@@ -70,6 +72,7 @@ export class RecordObject extends ConnectionCLPP {
             });
     }
     typeGraphics(value) {
+
         let response;
 
         switch (value) {

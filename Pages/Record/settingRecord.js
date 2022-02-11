@@ -61,6 +61,7 @@ export class SettingRecord {
                 openModal(this.alertSave())
                 this.settingBtnAlertSave()
                 break;
+
             case "filterBtn": 
                 this.controllerBtns(["#buttonRecordPrint"], false)
                 this.recordObject.setFilters(this.lockInfo())
@@ -125,16 +126,17 @@ export class SettingRecord {
     buttonGraphic(element) {
         let array = [getB_id('buttonRecordBar'), getB_id('buttonRecordPizza'), getB_id('buttonRecordPercentage')]
         array.forEach((e) => {
-            if (element.getAttribute('id') == e.getAttribute('id')){
+            if (element.getAttribute('id') == e.getAttribute('id')) {
                 e.setAttribute("style", "opacity: 1")
                 this.changeChartType(e.getAttribute('id'));
-            }else{
+            } else {
                 e.setAttribute("style", "opacity: 0.3")
             }
         })
     }
     changeChartType(value) {
         this.closeGraphic();
+
         if(value == 'buttonRecordBar'){
             this.typeGraph = 2
         }else if(value == 'buttonRecordPizza'){
@@ -162,16 +164,21 @@ export class SettingRecord {
         getB_id('selShop').insertAdjacentHTML('beforeend', this.templateOption(null, 'description', req))
     }
     pegandoValidade() {
-        getB_id('validCheckBlock').onchange = (ev) => {
+        let array = [];
+        getB_id('validCheckBlock').onchange = (validade) => {
             let arrayValidade = this.walksArray('#validCheckBlock input[type=checkbox]')
-            if (ev.target.checked) {
+            if (validade.target.checked) {
                 let arrayChecked = this.walksArray2('#titleChecklistOption input[type=checkbox]', arrayValidade[0].attributes[2].value)
+                array.push(arrayChecked)
+
+                this.validateParameter(array.length, arrayChecked);
                 arrayValidade.forEach(element => {
                     arrayChecked = this.walksArray2('#titleChecklistOption input[type=checkbox]', element.attributes[2].value)
                     arrayChecked.checked = true
+
                 })
             } else {
-                let element = this.walksArray2('#titleChecklistOption input[type=checkbox]', ev.target.getAttribute("data-id"))
+                let element = this.walksArray2('#titleChecklistOption input[type=checkbox]', validade.target.getAttribute("data-id"))
                 element.checked = false;
             }
         }
@@ -180,7 +187,7 @@ export class SettingRecord {
         getB_id('titleChecklistOption').onchange = async () => {
             getB_id('titleQuestionOption').innerHTML = ""
             let arrayChecked = this.walksArray('#titleChecklistOption input[type=checkbox]')
-            this.validateParameter(arrayChecked.length, arrayChecked);
+            this.validateParameter(arrayChecked.length, arrayChecked[0].attributes[3]);
             if (!getB_id('todos').checked) {
                 if (arrayChecked.length == 1) {
                     let reqQuestion = await this.getQuestion(arrayChecked)
@@ -191,7 +198,6 @@ export class SettingRecord {
                 } else if (arrayChecked.length >= 2) this.controllerSelect("selectButtonQuestion", "Multiplos checklist", false)
                 else if (arrayChecked.length <= 0) this.controllerSelect('selectButtonValidade', "Selecione a validade:", true)
             } else this.selectAll()
-
         }
     }
     selectAll() {
@@ -222,7 +228,7 @@ export class SettingRecord {
     }
     validateParameter(array, cont) {
         if (array > 1) document.getElementById("selectTitulo").innerHTML = "Multi selecionado"
-        if (array == 1) document.getElementById("selectTitulo").innerHTML = cont[0].defaultValue.toLowerCase().slice(0, 20) + ".."
+        if (array == 1) document.getElementById("selectTitulo").innerHTML = cont.value.toLowerCase().slice(0, 20) + ".."
         if (array < 1) document.getElementById("selectTitulo").innerHTML = "Selecione o checklist:"
     }
     async getChecklist() {
@@ -235,7 +241,9 @@ export class SettingRecord {
     async getQuestion(cont) {
         //let cont = this.walksArray('#titleChecklistOption input[type=checkbox]')
         if (cont.length != 0) {
+
             //console.log(this.jsonCheck[cont[0].attributes[2].value].getQuestion()[0])
+
             let response = await this.recordObject.get("&id=" + cont[0].attributes[2].value + "&user_id=" + localStorage.getItem("id"), 'CLPP/Question.php')
             return response.data
         }
