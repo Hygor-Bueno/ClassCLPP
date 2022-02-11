@@ -39,6 +39,7 @@ export class SettingRecord {
     functionFilter(element) {
         switch (element.getAttribute("data-function")) {
             case "clearBtn":
+                this.controllerBtns(["#buttonRecordPrint"], true)
                 this.clearFilter()
                 break;
             case "buttonRecordGraphic":
@@ -61,6 +62,7 @@ export class SettingRecord {
                 this.settingBtnAlertSave()
                 break;
             case "filterBtn": 
+                this.controllerBtns(["#buttonRecordPrint"], false)
                 this.recordObject.setFilters(this.lockInfo())
                 break;    
             case "graphicButton":
@@ -152,7 +154,8 @@ export class SettingRecord {
         } else {
             getB_id(local).setAttribute("style", "opacity:0.3")
             $(`#${local} button`).disabled = true
-        } $(`#${local} p`).innerText = message
+        } 
+        $(`#${local} p`).innerText = message
     }
     async populaShop() {
         let req = await this.getShop()
@@ -287,5 +290,11 @@ export class SettingRecord {
             if (ele.checked && ele.getAttribute('data-id') != exception) checklistJson.push(ele.getAttribute('data-id'))
         })
         return checklistJson;
+    }
+    controllerBtns(btns, parans){ 
+        btns.forEach(btn => {
+            $(btn).disabled = parans;
+            $(btn).setAttribute('style', parans ? "opacity: .3":"opacity: 1")
+        })
     }
 }  
