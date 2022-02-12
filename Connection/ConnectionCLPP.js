@@ -10,14 +10,13 @@ export class ConnectionCLPP {
         this.validationParams(params, pathFile, err);
         this.settingUrl(`/Controller/${this.pathFile}?app_id=7&AUTH=`, params)
         let req;
-        // console.log(this.URL)
+        
         await fetch(this.URL)
             .then(response => response.json())
             .then(body => {
                 if (body.error) throw new Error(body.message)
                 req = body;
             }).catch(erro => {
-                console.error(erro, this.err)
                 if (this.err) this.errorHandling.main(erro)
             })
         this.cleanParams();

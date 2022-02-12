@@ -1,4 +1,5 @@
 import { ConnectionCLPP } from "../../Connection/ConnectionCLPP.js";
+import { ClppGraphichObject } from "./clppGraphichObject.js";
 
 export class RecordObject extends ConnectionCLPP {
     #id_user;
@@ -7,8 +8,7 @@ export class RecordObject extends ConnectionCLPP {
     #type;
     #description;
     #filters;
-
-    graphicRecord;
+    clppGraphich = new ClppGraphichObject
 
     getId_user() {return this.#id_user}
     getPoint() {return this.#point}
@@ -24,7 +24,6 @@ export class RecordObject extends ConnectionCLPP {
     setDescritpion(description) {this.#description = description}
     setFilters(filters) {this.#filters = filters}
 
-
     saveReport(){
         let json ={
             id_user: this.#id_user, 
@@ -37,66 +36,14 @@ export class RecordObject extends ConnectionCLPP {
         console.log(json)
     } 
 
-    clppGraphics(arrayValues, context, types) {
-        this.graphicRecord = new Chart(document.querySelector(`${context}`).getContext("2d"),
-            {
-                type: this.typeGraphics(types),
-                data: {
-                    labels: [...arrayValues.map(item => item[0])],
-
-                    datasets: [
-                        {
-                            label: "Porcentagem de vendas",
-                            data: [...arrayValues.map(item => item[1])],
-
-                            backgroundColor: [
-                                "#ccc", "blue", "red",
-                            ],
-                            borderColor: "#000",
-                            borderWidth: 1
-                        }
-                    ]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            ticks: {
-                                callback: function (value) {
-                                    return value + " %"
-                                }
-                            },
-                            suggestedMax: 100
-                        }
-                    }
-                }
-            });
-    }
-    typeGraphics(value) {
-
-        let response;
-
-        switch (value) {
-            case 1:
-                response = "pie";
-                break;
-            case 2:
-                response = "bar"
-                break;
-            case 3:
-                response = "doughnut"
-                break;           
-        }
-        return response;
-    }
-
-    separateChecklist(response) {
-        console.log(response)
+    separateChecklist(response,objectChecklist,objectShops) {
         let orderByChecklist = [];
         let assistent = this.getKeys(response);
         assistent.forEach(elemKey => {
             orderByChecklist.push(response.data.filter(element => { return elemKey[0] == element.id_user && elemKey[1] == element.date && elemKey[2] == element.id_checklist && elemKey[3] == element.id_shop }));
         })
-        this.calc(orderByChecklist)
+        // this.computePercent(orderByChecklist) // Calcula o valor geral do checklist
+        
         return orderByChecklist;
     }
     getKeys(response) {
@@ -114,15 +61,35 @@ export class RecordObject extends ConnectionCLPP {
         })
         return filterKeys;
     }
-    calc(responseChecklist) {
+    getDataForGraphic(orderByChecklist,objectChecklist,objectShops){       
+        let response = []
+        orderByChecklist.forEach(checklist => {
+            // console.log("-------------------------------------------")
+            let description, percent;
+            description = objectChecklist[checklist[0].id_checklist].getTitle().slice(0,15)+ " - " + objectShops[checklist[0].id_shop].description+" ( "+checklist[0].date+" ) ";
+            percent = this.computePercent([checklist])
+            // console.log(description,percent+"%")
+            response.push([description,percent])
+        })
+        console.log(response)
+        return response;
+    }
+
+    computePercent(responseChecklist) {       
         let question = 0
-        let soma=0;
-        for (const iterator of responseChecklist) {   
-            question += parseFloat(iterator[0].qtd_questions) 
-            for (const iterator2 of iterator) {
-                soma += parseFloat(iterator2.value)
-                console.log(iterator2.value)
+        let sum=0;
+        let ignore=0;
+        for (const allQuestion of responseChecklist) {   
+            question += parseFloat(allQuestion[0].qtd_questions) 
+            for (const options of allQuestion) {
+                if(options.type <=2){
+                    sum += parseFloat(options.value)
+                }else{
+                    ignore++;
+                }
             }
         }
+        
+      return (100/(question-ignore) * sum).toFixed(2)
     }
 }
