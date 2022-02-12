@@ -114,15 +114,23 @@ export class RecordObject extends ConnectionCLPP {
         })
         return filterKeys;
     }
-    calc(responseChecklist) {
+    
+    computePercent(responseChecklist) {       
         let question = 0
-        let soma=0;
-        for (const iterator of responseChecklist) {   
-            question += parseFloat(iterator[0].qtd_questions) 
-            for (const iterator2 of iterator) {
-                soma += parseFloat(iterator2.value)
-                console.log(iterator2.value)
+        let sum=0;
+        let ignore=0;
+        for (const allQuestion of responseChecklist) {   
+            question += parseFloat(allQuestion[0].qtd_questions) 
+            for (const options of allQuestion) {
+                if(options.type <=2){
+                    sum += parseFloat(options.value)
+                    console.log(options.value, sum)
+                }else{
+                    ignore++;
+                }
             }
         }
+        
+      return 100/(question-ignore) * sum
     }
 }
