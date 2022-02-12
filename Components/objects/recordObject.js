@@ -90,13 +90,12 @@ export class RecordObject extends ConnectionCLPP {
     }
 
     separateChecklist(response) {
-        console.log(response)
         let orderByChecklist = [];
         let assistent = this.getKeys(response);
         assistent.forEach(elemKey => {
             orderByChecklist.push(response.data.filter(element => { return elemKey[0] == element.id_user && elemKey[1] == element.date && elemKey[2] == element.id_checklist && elemKey[3] == element.id_shop }));
         })
-        this.calc(orderByChecklist)
+        this.computePercent(orderByChecklist)
         return orderByChecklist;
     }
     getKeys(response) {
@@ -114,7 +113,7 @@ export class RecordObject extends ConnectionCLPP {
         })
         return filterKeys;
     }
-    
+
     computePercent(responseChecklist) {       
         let question = 0
         let sum=0;
@@ -124,7 +123,6 @@ export class RecordObject extends ConnectionCLPP {
             for (const options of allQuestion) {
                 if(options.type <=2){
                     sum += parseFloat(options.value)
-                    console.log(options.value, sum)
                 }else{
                     ignore++;
                 }
