@@ -70,7 +70,7 @@ export class SettingRecord {
                 break;    
             case "graphicButton":
                 // alert("Você arirá um gráfico")
-                this.recordObject.clppGraphics([["teste", 51], ["teste2", 12], ["teste3", 60],["teste4", 70],["teste5", 38]], "#mainGraphic", this.typeGraph);
+                this.recordObject.clppGraphich.clppGraphics([["teste", 51], ["teste2", 12], ["teste3", 60],["teste4", 70],["teste5", 38]], "#mainGraphic", this.typeGraph);
                 break;
 
             default:
@@ -149,7 +149,7 @@ export class SettingRecord {
     }
     closeGraphic(){
         getB_id('mainGraphic').getContext('2d').clearRect(0, 0, getB_id('mainGraphic').width, getB_id('mainGraphic').height)
-        this.recordObject.graphicRecord && this.recordObject.graphicRecord.destroy();
+        this.recordObject.clppGraphich.graphicRecord && this.recordObject.clppGraphich.graphicRecord.destroy();
     }
     controllerSelect(local, message, check) {
         if (check) {
