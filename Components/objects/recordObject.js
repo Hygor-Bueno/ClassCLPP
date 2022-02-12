@@ -10,8 +10,6 @@ export class RecordObject extends ConnectionCLPP {
     #filters;
     clppGraphich = new ClppGraphichObject
 
-   
-
     getId_user() {return this.#id_user}
     getPoint() {return this.#point}
     getDate() {return this.#date}
@@ -26,7 +24,6 @@ export class RecordObject extends ConnectionCLPP {
     setDescritpion(description) {this.#description = description}
     setFilters(filters) {this.#filters = filters}
 
-
     saveReport(){
         let json ={
             id_user: this.#id_user, 
@@ -38,13 +35,15 @@ export class RecordObject extends ConnectionCLPP {
         }
         console.log(json)
     } 
-    separateChecklist(response) {
+
+    separateChecklist(response,objectChecklist,objectShops) {
         let orderByChecklist = [];
         let assistent = this.getKeys(response);
         assistent.forEach(elemKey => {
             orderByChecklist.push(response.data.filter(element => { return elemKey[0] == element.id_user && elemKey[1] == element.date && elemKey[2] == element.id_checklist && elemKey[3] == element.id_shop }));
         })
-        this.computePercent(orderByChecklist)
+        // this.computePercent(orderByChecklist) // Calcula o valor geral do checklist
+        
         return orderByChecklist;
     }
     getKeys(response) {
@@ -62,6 +61,19 @@ export class RecordObject extends ConnectionCLPP {
         })
         return filterKeys;
     }
+    getDataForGraphic(orderByChecklist,objectChecklist,objectShops){       
+        let response = []
+        orderByChecklist.forEach(checklist => {
+            // console.log("-------------------------------------------")
+            let description, percent;
+            description = objectChecklist[checklist[0].id_checklist].getTitle().slice(0,15)+ " - " + objectShops[checklist[0].id_shop].description+" ( "+checklist[0].date+" ) ";
+            percent = this.computePercent([checklist])
+            // console.log(description,percent+"%")
+            response.push([description,percent])
+        })
+        console.log(response)
+        return response;
+    }
 
     computePercent(responseChecklist) {       
         let question = 0
@@ -78,6 +90,6 @@ export class RecordObject extends ConnectionCLPP {
             }
         }
         
-      return 100/(question-ignore) * sum
+      return (100/(question-ignore) * sum).toFixed(2)
     }
 }

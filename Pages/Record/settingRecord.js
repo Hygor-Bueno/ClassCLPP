@@ -8,22 +8,26 @@ export class SettingRecord {
     searchDateInit;
     searchDateFinal;
     jsonCheck = {};
+    jsonShop = {};
     expanded = false;
     typeGraph = 3
     userFulComponents = new UsefulComponents;
     recordObject = new RecordObject;
 
+
     async setting(objectChecklist) {
         this.clickPage();
         this.jsonChecklists(objectChecklist);
         this.templateDate(objectChecklist);
-        this.populaShop()
-        this.blockQuestion()
-        this.pegandoValidade()
-        let req = await this.recordObject.get("&id_user=148&date_init_response='2022-02-08'","CLPP/Response.php")
-        req && this.recordObject.separateChecklist(req)
-    }
+        await this.populaShop();
+        this.shopJson(await this.getShop());
+        this.blockQuestion();
+        this.pegandoValidade();
+        setTimeout(async () => {
 
+        }, 1000);
+
+    }
     jsonChecklists(objectChecklist) {
         objectChecklist.data.forEach(async (element) => {
             const objectChecklist = new ObjectChecklist;
@@ -38,7 +42,7 @@ export class SettingRecord {
         })
     }
 
-    functionFilter(element) {
+    async functionFilter(element) {
         switch (element.getAttribute("data-function")) {
             case "clearBtn":
                 this.controllerBtns(["#buttonRecordPrint"], true)
@@ -64,15 +68,15 @@ export class SettingRecord {
                 this.settingBtnAlertSave()
                 break;
 
-            case "filterBtn": 
+            case "filterBtn":
                 this.controllerBtns(["#buttonRecordPrint"], false)
                 this.recordObject.setFilters(this.lockInfo())
-                break;    
+                break;
             case "graphicButton":
                 // alert("Você arirá um gráfico")
-                this.recordObject.clppGraphich.clppGraphics([["teste", 51], ["teste2", 12], ["teste3", 60],["teste4", 70],["teste5", 38]], "#mainGraphic", this.typeGraph);
+                let req = await this.recordObject.get("&id_user=148&date_init_response='2022-02-08'", "CLPP/Response.php");
+                this.recordObject.clppGraphich.clppGraphics(this.recordObject.getDataForGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop), "#mainGraphic", this.typeGraph);
                 break;
-
             default:
                 console.error("data-function")
         }
@@ -139,15 +143,15 @@ export class SettingRecord {
     changeChartType(value) {
         this.closeGraphic();
 
-        if(value == 'buttonRecordBar'){
+        if (value == 'buttonRecordBar') {
             this.typeGraph = 2
-        }else if(value == 'buttonRecordPizza'){
+        } else if (value == 'buttonRecordPizza') {
             this.typeGraph = 1
-        }else{
+        } else {
             this.typeGraph = 3
         }
     }
-    closeGraphic(){
+    closeGraphic() {
         getB_id('mainGraphic').getContext('2d').clearRect(0, 0, getB_id('mainGraphic').width, getB_id('mainGraphic').height)
         this.recordObject.clppGraphich.graphicRecord && this.recordObject.clppGraphich.graphicRecord.destroy();
     }
@@ -158,7 +162,7 @@ export class SettingRecord {
         } else {
             getB_id(local).setAttribute("style", "opacity:0.3")
             $(`#${local} button`).disabled = true
-        } 
+        }
         $(`#${local} p`).innerText = message
     }
     async populaShop() {
@@ -176,8 +180,7 @@ export class SettingRecord {
                 this.validateParameter(array.length, arrayChecked);
                 arrayValidade.forEach(element => {
                     arrayChecked = this.walksArray2('#titleChecklistOption input[type=checkbox]', element.attributes[2].value)
-                    arrayChecked.checked = true
-
+                    arrayChecked.checked = true;
                 })
             } else {
                 let element = this.walksArray2('#titleChecklistOption input[type=checkbox]', validade.target.getAttribute("data-id"))
@@ -240,6 +243,11 @@ export class SettingRecord {
         let response = await this.recordObject.get("&company_id=1", 'CCPP/Shop.php')
         return response.data
     }
+    shopJson(response) {
+        response.forEach(shop => {
+            this.jsonShop[shop.id] = shop
+        })
+    }
     async getQuestion(cont) {
         //let cont = this.walksArray('#titleChecklistOption input[type=checkbox]')
         if (cont.length != 0) {
@@ -263,7 +271,7 @@ export class SettingRecord {
             </div> `
         return modalAlert;
     }
-    settingBtnAlertSave(){
+    settingBtnAlertSave() {
         getB_id('cancelFile').addEventListener('click', () => {
             closeModal()
         })
@@ -273,38 +281,38 @@ export class SettingRecord {
             closeModal()
         })
     }
-    setDateObj(){
+    setDateObj() {
         this.recordObject.setId_user(localStorage.getItem("id"))
         this.recordObject.setDescritpion($('#inputTitle input[type=text]').value)
         //this.recordObject.setPoint(" ")
         this.recordObject.setType(this.typeGraph)
         this.recordObject.setDate(this.userFulComponents.currentDate())
     }
-    lockInfo(){
+    lockInfo() {
         return {
-            checklist:{
-                titles:this.selectInfo('#titleChecklistOption input[type=checkbox]',"todos"), 
-                question:this.selectInfo("#titleQuestion input[type=checkbox]"),
-                date_checklist:this.selectInfo("#validCheckBlock input[type=checkbox]")
+            checklist: {
+                titles: this.selectInfo('#titleChecklistOption input[type=checkbox]', "todos"),
+                question: this.selectInfo("#titleQuestion input[type=checkbox]"),
+                date_checklist: this.selectInfo("#validCheckBlock input[type=checkbox]")
             },
-            id_shops:[this.selectInfo("#selShop input[type=checkbox]")],
-            date_response:{
-                date_init_response:getB_id("initDate").value,
-                date_final_response:getB_id("finalDate").value
+            id_shops: [this.selectInfo("#selShop input[type=checkbox]")],
+            date_response: {
+                date_init_response: getB_id("initDate").value,
+                date_final_response: getB_id("finalDate").value
             }
         }
     }
-    selectInfo(local,exception){
+    selectInfo(local, exception) {
         let checklistJson = []
-        $_all(local).forEach((ele)=>{
+        $_all(local).forEach((ele) => {
             if (ele.checked && ele.getAttribute('data-id') != exception) checklistJson.push(ele.getAttribute('data-id'))
         })
         return checklistJson;
     }
-    controllerBtns(btns, parans){ 
+    controllerBtns(btns, parans) {
         btns.forEach(btn => {
             $(btn).disabled = parans;
-            $(btn).setAttribute('style', parans ? "opacity: .3":"opacity: 1")
+            $(btn).setAttribute('style', parans ? "opacity: .3" : "opacity: 1")
         })
     }
 }  
