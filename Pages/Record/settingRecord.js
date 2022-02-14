@@ -13,7 +13,7 @@ export class SettingRecord {
     typeGraph = 3
     userFulComponents = new UsefulComponents;
     recordObject = new RecordObject;
-
+    fockingArray = localStorage.getItem("JSONfilters") ? JSON.parse(localStorage.getItem("JSONfilters")):"" 
 
     async setting(objectChecklist) {
         this.clickPage();
@@ -71,15 +71,26 @@ export class SettingRecord {
             case "filterBtn":
                 this.controllerBtns(["#buttonRecordPrint"], false)
                 this.recordObject.setFilters(this.lockInfo())
-                break;
+                break;    
             case "graphicButton":
-                // alert("Você arirá um gráfico")
+                // alert("Você abrirá um gráfico")
                 let req = await this.recordObject.get("&id_user=148&date_init_response='2022-02-08'", "CLPP/Response.php");
                 this.recordObject.clppGraphich.clppGraphics(this.recordObject.getDataForGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop), "#mainGraphic", this.typeGraph);
+                break;
+            case "teste":
+                //this.loadSavedReports("#titleChecklistOption input[type=checkbox]" , this.fockingArray.filters.checklist.titles, "#titleChecklistOption")
+                !localStorage.getItem("JSONfilters") && localStorage.setItem("JSONfilters",JSON.stringify(this.recordObject.getJsonRecord()))//apagar quando cards da home estiver ok 
+                this.noGusta(this.fockingArray.filters)
                 break;
             default:
                 console.error("data-function")
         }
+    }
+    noGusta(stop_json){
+        console.log(stop_json.checklist)
+        Object.keys(stop_json.checklist).forEach(element => {
+            stop_json.checklist[element] != "" && console.log(stop_json.checklist[element])
+        })
     }
     openClose(element) {
         getB_id(element.getAttribute("data-linked")).style.display == 'none'
@@ -249,9 +260,7 @@ export class SettingRecord {
     async getQuestion(cont) {
         //let cont = this.walksArray('#titleChecklistOption input[type=checkbox]')
         if (cont.length != 0) {
-
             //console.log(this.jsonCheck[cont[0].attributes[2].value].getQuestion()[0])
-
             let response = await this.recordObject.get("&id=" + cont[0].attributes[2].value + "&user_id=" + localStorage.getItem("id"), 'CLPP/Question.php')
             return response.data
         }
@@ -282,7 +291,7 @@ export class SettingRecord {
     setDateObj() {
         this.recordObject.setId_user(localStorage.getItem("id"))
         this.recordObject.setDescritpion($('#inputTitle input[type=text]').value)
-        //this.recordObject.setPoint("")
+        this.recordObject.setPoint(0)
         this.recordObject.setType(this.typeGraph)
         this.recordObject.setDate(this.userFulComponents.currentDate())
     }
@@ -312,5 +321,9 @@ export class SettingRecord {
             $(btn).disabled = parans;
             $(btn).setAttribute('style', parans ? "opacity: .3" : "opacity: 1")
         })
+    }
+    loadSavedReports(local, loading, twoLocal){
+        $(twoLocal).setAttribute('style', "display:block")
+        $_all(local).forEach(check => {loading.includes(check.getAttribute('data-id')) ? check.checked = true : check.checked = false})
     }
 }  
