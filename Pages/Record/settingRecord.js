@@ -13,7 +13,7 @@ export class SettingRecord {
     typeGraph = 3
     userFulComponents = new UsefulComponents;
     recordObject = new RecordObject;
-
+    fockingArray = localStorage.getItem("JSONfilters") ? JSON.parse(localStorage.getItem("JSONfilters")):"" 
 
     async setting(objectChecklist) {
         this.clickPage();
@@ -68,15 +68,27 @@ export class SettingRecord {
             case "filterBtn":
                 this.controllerBtns(["#buttonRecordPrint"], false)
                 this.recordObject.setFilters(this.lockInfo())
-                break;
+                break;    
             case "graphicButton":
-                // alert("Você arirá um gráfico")
+                // alert("Você abrirá um gráfico")
                 let req = await this.recordObject.get("&id_user=148&date_init_response='2022-02-08'", "CLPP/Response.php");
                 this.recordObject.clppGraphich.clppGraphics(this.recordObject.getDataForGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop), "#mainGraphic", this.typeGraph);
+                break;
+            case "teste":
+                //this.loadSavedReports("#titleChecklistOption input[type=checkbox]" , this.fockingArray.filters.checklist.titles, "#titleChecklistOption")
+                !localStorage.getItem("JSONfilters") && localStorage.setItem("JSONfilters",JSON.stringify(this.recordObject.getJsonRecord()))//apagar quando cards da home estiver ok 
+                this.noGusta(this.fockingArray.filters)
                 break;
             default:
                 console.error("data-function")
         }
+    }
+
+    noGusta(stop_json){
+        console.log(stop_json.checklist)
+        Object.keys(stop_json.checklist).forEach(element => {
+            stop_json.checklist[element] != "" && console.log(stop_json.checklist[element])
+        })
     }
 
     openClose(element) {
@@ -108,7 +120,6 @@ export class SettingRecord {
     templateOption(objectChecklist, key, array) {
         let response = ""
         let auxArray = array || objectChecklist.data
-
         auxArray.map(element => {
             element[key] ? response +=
                 `<div class="optionSelect">
@@ -215,11 +226,13 @@ export class SettingRecord {
                     this.controllerSelect("selectButtonValidade", "Checklist selecionada", false)
                     getB_id('validCheckBlock').setAttribute("style", "display:none")
                     this.controllerSelect('selectButtonQuestion', "Selecione a pergunta:", true)
+
                 } else if (arrayChecked.length > 1) this.controllerSelect("selectButtonQuestion", "Multiplos checklist", false)
                 else if (arrayChecked.length < 1) {
                     this.controllerSelect('selectButtonValidade', "Selecione a validade:", true)
                     this.controllerSelect('selectButtonQuestion', "Selecione a checklist:", false)
                 }
+
             } else this.selectAll()
         }
     }
@@ -273,10 +286,12 @@ export class SettingRecord {
         })
     }
 
+
     getQuestion(cont) {
         if (cont.length != 0) {
             let oi = this.jsonCheck[cont[0].attributes[2].value].getQuestion()
             return oi
+
         }
     }
 
@@ -308,7 +323,7 @@ export class SettingRecord {
     setDateObj() {
         this.recordObject.setId_user(localStorage.getItem("id"))
         this.recordObject.setDescritpion($('#inputTitle input[type=text]').value)
-        //this.recordObject.setPoint(" ")
+        this.recordObject.setPoint(0)
         this.recordObject.setType(this.typeGraph)
         this.recordObject.setDate(this.userFulComponents.currentDate())
     }
@@ -341,5 +356,9 @@ export class SettingRecord {
             $(btn).disabled = parans;
             $(btn).setAttribute('style', parans ? "opacity: .3" : "opacity: 1")
         })
+    }
+    loadSavedReports(local, loading, twoLocal){
+        $(twoLocal).setAttribute('style', "display:block")
+        $_all(local).forEach(check => {loading.includes(check.getAttribute('data-id')) ? check.checked = true : check.checked = false})
     }
 }  
