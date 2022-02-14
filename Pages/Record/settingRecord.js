@@ -107,7 +107,6 @@ export class SettingRecord {
     templateOption(objectChecklist, key, array) {
         let response = ""
         let auxArray = array || objectChecklist.data
-
         auxArray.map(element => {
             element[key] ? response +=
                 `<div class="optionSelect">
@@ -199,7 +198,6 @@ export class SettingRecord {
                     getB_id('titleQuestionOption').insertAdjacentHTML('beforeend', this.templateOption(null, 'description', reqQuestion))
                     this.controllerSelect("selectButtonValidade", "Checklist selecionada", false)
                     this.controllerSelect('selectButtonQuestion', "Selecione a pergunta:", true)
-
                 } else if (arrayChecked.length >= 2) this.controllerSelect("selectButtonQuestion", "Multiplos checklist", false)
                 else if (arrayChecked.length <= 0) this.controllerSelect('selectButtonValidade', "Selecione a validade:", true)
             } else this.selectAll()
@@ -284,7 +282,7 @@ export class SettingRecord {
     setDateObj() {
         this.recordObject.setId_user(localStorage.getItem("id"))
         this.recordObject.setDescritpion($('#inputTitle input[type=text]').value)
-        //this.recordObject.setPoint(" ")
+        //this.recordObject.setPoint("")
         this.recordObject.setType(this.typeGraph)
         this.recordObject.setDate(this.userFulComponents.currentDate())
     }
