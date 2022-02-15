@@ -26,7 +26,6 @@ export class ConnectionCLPP {
         this.validationParams(params, pathFile, err);
         this.settingUrl(`/Controller/${this.pathFile}?app_id=7&AUTH=`)
         let req
-        console.log(this.URL)
         await fetch(this.URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

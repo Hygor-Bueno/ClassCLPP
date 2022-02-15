@@ -36,6 +36,7 @@ export class RecordObject extends ConnectionCLPP {
             nome: this.#description,
             filters: this.#filters
         }
+        console.log(this.#jsonRecord)
     } 
 
     separateChecklist(response,objectChecklist,objectShops) {

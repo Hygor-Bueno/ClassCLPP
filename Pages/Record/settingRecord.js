@@ -13,7 +13,6 @@ export class SettingRecord {
     typeGraph = 3
     userFulComponents = new UsefulComponents;
     recordObject = new RecordObject;
-    fockingArray = localStorage.getItem("JSONfilters") ? JSON.parse(localStorage.getItem("JSONfilters")):"" 
 
     async setting(objectChecklist) {
         this.clickPage();
@@ -68,6 +67,7 @@ export class SettingRecord {
             case "filterBtn":
                 this.controllerBtns(["#buttonRecordPrint"], false)
                 this.recordObject.setFilters(this.lockInfo())
+                //let req = await this.recordObject.get(`&id_user=${localStorage.getItem('id')}&date_init_response=${this.recordObject.getDate().date_init_response}`, "CLPP/Response.php");
                 break;    
             case "graphicButton":
                 // alert("Você abrirá um gráfico")
@@ -75,20 +75,25 @@ export class SettingRecord {
                 this.recordObject.clppGraphich.clppGraphics(this.recordObject.getDataForGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop), "#mainGraphic", this.typeGraph);
                 break;
             case "teste":
-                //this.loadSavedReports("#titleChecklistOption input[type=checkbox]" , this.fockingArray.filters.checklist.titles, "#titleChecklistOption")
-                !localStorage.getItem("JSONfilters") && localStorage.setItem("JSONfilters",JSON.stringify(this.recordObject.getJsonRecord()))//apagar quando cards da home estiver ok 
-                this.noGusta(this.fockingArray.filters)
+                this.loadSavedReports(this.fockingArray.filters)
                 break;
             default:
                 console.error("data-function")
         }
     }
 
-    noGusta(stop_json){
-        console.log(stop_json.checklist)
+    loadSavedReports(stop_json){
         Object.keys(stop_json.checklist).forEach(element => {
-            stop_json.checklist[element] != "" && console.log(stop_json.checklist[element])
+            stop_json.checklist[element] != "" && stop_json.checklist[element].forEach(ele => getB_id(`${ele}`).checked = true)
         })
+        stop_json.id_shops[0].forEach(elem => getB_id(`${elem}`).checked = true)
+        this.loadDateCharge(stop_json)
+    }
+
+    loadDateCharge(dateJson){  
+        let date = dateJson.date_response
+        getB_id("initDate").value = date.date_init_response
+        getB_id("finalDate").value = date.date_final_response
     }
 
     openClose(element) {
@@ -123,7 +128,7 @@ export class SettingRecord {
         auxArray.map(element => {
             element[key] ? response +=
                 `<div class="optionSelect">
-                <input type="checkbox" class="option" data-id="${element.id}" value="${element[key]}">
+                <input type="checkbox" class="option" id="${element.id}" data-id="${element.id}" value="${element[key]}">
                     <p class="valorCheck">${element[key]}</p>
                 </input>
             </div>` : ""
@@ -191,6 +196,7 @@ export class SettingRecord {
     pegandoValidade() {
         let array = [];
         getB_id('validCheckBlock').onchange = (validade) => {
+
             let arrayValidade = this.walksArray('#validCheckBlock input[type=checkbox]')
             if (validade.target.checked) {
                 let arrayChecked = this.walksArray2('#titleChecklistOption input[type=checkbox]', arrayValidade[0].attributes[2].value)
@@ -211,6 +217,7 @@ export class SettingRecord {
                     this.controllerSelect("selectButtonQuestion", "Selecione a checklist", false)
                 }
             }
+
         }
     }
 
@@ -356,9 +363,5 @@ export class SettingRecord {
             $(btn).disabled = parans;
             $(btn).setAttribute('style', parans ? "opacity: .3" : "opacity: 1")
         })
-    }
-    loadSavedReports(local, loading, twoLocal){
-        $(twoLocal).setAttribute('style', "display:block")
-        $_all(local).forEach(check => {loading.includes(check.getAttribute('data-id')) ? check.checked = true : check.checked = false})
     }
 }  
