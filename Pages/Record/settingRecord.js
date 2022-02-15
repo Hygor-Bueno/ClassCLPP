@@ -13,7 +13,7 @@ export class SettingRecord {
     typeGraph = 3
     userFulComponents = new UsefulComponents;
     recordObject = new RecordObject;
-    fockingArray = localStorage.getItem("JSONfilters") ? JSON.parse(localStorage.getItem("JSONfilters")):"" 
+    fockingArray = localStorage.getItem("JSONfilters") ? JSON.parse(localStorage.getItem("JSONfilters")) : ""
 
     async setting(objectChecklist) {
         this.clickPage();
@@ -46,6 +46,9 @@ export class SettingRecord {
                 this.controllerBtns(["#buttonRecordPrint"], true)
                 this.clearFilter()
                 break;
+            case "filterBtn":
+                this.filter()
+                break;
             case "buttonRecordGraphic":
                 this.buttonGraphic(element)
                 break;
@@ -68,7 +71,7 @@ export class SettingRecord {
             case "filterBtn":
                 this.controllerBtns(["#buttonRecordPrint"], false)
                 this.recordObject.setFilters(this.lockInfo())
-                break;    
+                break;
             case "graphicButton":
                 // alert("Você abrirá um gráfico")
                 let req = await this.recordObject.get("&id_user=148&date_init_response='2022-02-08'", "CLPP/Response.php");
@@ -76,7 +79,7 @@ export class SettingRecord {
                 break;
             case "teste":
                 //this.loadSavedReports("#titleChecklistOption input[type=checkbox]" , this.fockingArray.filters.checklist.titles, "#titleChecklistOption")
-                !localStorage.getItem("JSONfilters") && localStorage.setItem("JSONfilters",JSON.stringify(this.recordObject.getJsonRecord()))//apagar quando cards da home estiver ok 
+                !localStorage.getItem("JSONfilters") && localStorage.setItem("JSONfilters", JSON.stringify(this.recordObject.getJsonRecord()))//apagar quando cards da home estiver ok 
                 this.noGusta(this.fockingArray.filters)
                 break;
             default:
@@ -84,7 +87,7 @@ export class SettingRecord {
         }
     }
 
-    noGusta(stop_json){
+    noGusta(stop_json) {
         console.log(stop_json.checklist)
         Object.keys(stop_json.checklist).forEach(element => {
             stop_json.checklist[element] != "" && console.log(stop_json.checklist[element])
@@ -116,6 +119,25 @@ export class SettingRecord {
         data.forEach(date => { date.value = "" })
         document.getElementById("selectTitulo").innerHTML = "Selecione o checklist:"
     }
+
+    /*     filter() {
+            let arrayCheck = this.walksArray('#titleChecklistOption input[type=checkbox]')
+            let arrayShop = this.walksArray('#selShop input[type=checkbox]')
+            let arrayValidade = this.walksArray('#validCheckBlock input[type=checkbox]')
+            let arrayQuestion = this.walksArray('#titleQuestionOption input[type=checkbox]')
+            let jsonFilter;
+            if (arrayCheck.length >= 1) {
+                alert('Puxou so pela checklist')
+                jsonFilter = {
+                    Checklist: arrayCheck.length >= 1 ? arrayCheck[0].value : "Null",
+                    Shop: arrayShop.length >= 1 ? arrayShop[0].value : "Null",
+                    Questão: arrayQuestion.length >= 1 ? arrayQuestion[0].value : "Null",
+                    Validade: arrayValidade.length >= 1 ? arrayValidade[0].value : "Null",
+                }
+                console.log(jsonFilter)
+                return jsonFilter
+            } alert('selecione uma checklist')
+        } */
 
     templateOption(objectChecklist, key, array) {
         let response = ""
@@ -289,8 +311,8 @@ export class SettingRecord {
 
     getQuestion(cont) {
         if (cont.length != 0) {
-            let oi = this.jsonCheck[cont[0].attributes[2].value].getQuestion()
-            return oi
+            let question = this.jsonCheck[cont[0].attributes[2].value].getQuestion()
+            return question
 
         }
     }
@@ -357,8 +379,8 @@ export class SettingRecord {
             $(btn).setAttribute('style', parans ? "opacity: .3" : "opacity: 1")
         })
     }
-    loadSavedReports(local, loading, twoLocal){
+    loadSavedReports(local, loading, twoLocal) {
         $(twoLocal).setAttribute('style', "display:block")
-        $_all(local).forEach(check => {loading.includes(check.getAttribute('data-id')) ? check.checked = true : check.checked = false})
+        $_all(local).forEach(check => { loading.includes(check.getAttribute('data-id')) ? check.checked = true : check.checked = false })
     }
 }  
