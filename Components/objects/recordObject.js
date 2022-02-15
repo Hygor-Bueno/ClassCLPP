@@ -32,20 +32,21 @@ export class RecordObject extends ConnectionCLPP {
             id_user: this.#id_user, 
             point: this.#point,
             date: this.#date,
-            type: this.#type, 
+            type: this.#type,
             nome: this.#description,
             filters: this.#filters
         }
+        console.log(this.#jsonRecord)
     } 
 
-    separateChecklist(response,objectChecklist,objectShops) {
+    separateChecklist(response, objectChecklist, objectShops) {
         let orderByChecklist = [];
         let assistent = this.getKeys(response);
         assistent.forEach(elemKey => {
             orderByChecklist.push(response.data.filter(element => { return elemKey[0] == element.id_user && elemKey[1] == element.date && elemKey[2] == element.id_checklist && elemKey[3] == element.id_shop }));
         })
-        // this.computePercent(orderByChecklist) // Calcula o valor geral do checklist
-        
+        console.log(this.computePercent(orderByChecklist, 1)) // Calcula o valor geral do checklist
+
         return orderByChecklist;
     }
     getKeys(response) {
@@ -63,35 +64,40 @@ export class RecordObject extends ConnectionCLPP {
         })
         return filterKeys;
     }
-    getDataForGraphic(orderByChecklist,objectChecklist,objectShops){       
+    generalGraphic(orderByChecklist, objectChecklist, objectShops) {
+        let dataSpecific = this.getDataForGraphic(orderByChecklist, objectChecklist, objectShops)
+        console.log(dataSpecific)
+        console.log("/*/*/////*/*/****/*/*")
+        console.log(this.computePercent(orderByChecklist, 1))
+        return dataSpecific
+    }
+    getDataForGraphic(orderByChecklist, objectChecklist, objectShops) {
         let response = []
         orderByChecklist.forEach(checklist => {
-            // console.log("-------------------------------------------")
             let description, percent;
-            description = objectChecklist[checklist[0].id_checklist].getTitle().slice(0,15)+ " - " + objectShops[checklist[0].id_shop].description+" ( "+checklist[0].date+" ) ";
-            percent = this.computePercent([checklist])
-            // console.log(description,percent+"%")
-            response.push([description,percent])
+            description = objectChecklist[checklist[0].id_checklist].getTitle().slice(0, 15) + " - " + objectShops[checklist[0].id_shop].description + " ( " + checklist[0].date + " ) ";
+            percent = this.computePercent([checklist], orderByChecklist.length)
+            response.push([description, percent])
         })
-        console.log(response)
         return response;
     }
 
-    computePercent(responseChecklist) {       
-        let question = 0
-        let sum=0;
-        let ignore=0;
-        for (const allQuestion of responseChecklist) {   
-            question += parseFloat(allQuestion[0].qtd_questions) 
+    computePercent(responseChecklist, max) {
+        console.log(max)
+        let question = 0;
+        let sum = 0;
+        let ignore = 0;
+        for (const allQuestion of responseChecklist) {
+            question += parseFloat(allQuestion[0].qtd_questions);
             for (const options of allQuestion) {
-                if(options.type <=2){
+                if (options.type <= 2) {
                     sum += parseFloat(options.value)
-                }else{
+                } else {
                     ignore++;
                 }
             }
         }
-        
-      return (100/(question-ignore) * sum).toFixed(2)
+        // console.log((100 / (question - ignore) * sum).toFixed(2), (100 / (question - ignore) * sum).toFixed(2) / max, " ==> ", responseChecklist)
+        return (100 / (question - ignore) * sum).toFixed(2) / max
     }
 }
