@@ -49,6 +49,7 @@ export class RecordObject extends ConnectionCLPP {
         return orderByChecklist;
     }
     getKeys(response) {
+        console.log(response)
         let assistent = "";
         let check = ""
         let date = "";
@@ -63,26 +64,26 @@ export class RecordObject extends ConnectionCLPP {
         })
         return filterKeys;
     }
-    generalGraphic(orderByChecklist, objectChecklist, objectShops) {
-        let dataSpecific = this.getDataForGraphic(orderByChecklist, objectChecklist, objectShops)
-        console.log(dataSpecific)
-        console.log("/*/*/////*/*/****/*/*")
-        console.log(this.computePercent(orderByChecklist, 1))
+    generalGraphic(orderByChecklist) {
+        let point= this.computePercent(orderByChecklist, 1)
+        let dataSpecific = [["Não Satisfatório",100 - point], ["satisfatório",point]]
         return dataSpecific
     }
     getDataForGraphic(orderByChecklist, objectChecklist, objectShops) {
         let response = []
+        let aux = 0;
         orderByChecklist.forEach(checklist => {
             let description, percent;
             description = objectChecklist[checklist[0].id_checklist].getTitle().slice(0, 15) + " - " + objectShops[checklist[0].id_shop].description + " ( " + checklist[0].date + " ) ";
             percent = this.computePercent([checklist], orderByChecklist.length)
+            aux += percent
             response.push([description, percent])
         })
+        response.unshift(["Não Satisfatório",100 - aux]) 
         return response;
     }
 
     computePercent(responseChecklist, max) {
-        console.log(max)
         let question = 0;
         let sum = 0;
         let ignore = 0;
@@ -96,6 +97,7 @@ export class RecordObject extends ConnectionCLPP {
                 }
             }
         }
+        console.log(sum, " <- Total! ",100 / (question - ignore))
         // console.log((100 / (question - ignore) * sum).toFixed(2), (100 / (question - ignore) * sum).toFixed(2) / max, " ==> ", responseChecklist)
         return (100 / (question - ignore) * sum).toFixed(2) / max
     }
