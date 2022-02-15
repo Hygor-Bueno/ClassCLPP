@@ -37,7 +37,7 @@ export class RecordPage extends SettingRecord {
                                 <label class="titleOptionBlock">Titulo das Perguntas</label>
                                 <div class="sel" id="titleQuestion" >
                                     <div id="selectButtonQuestion" style="display:flex; opacity:0.3" >
-                                        <p id="selectTituloQuestion">Selecione a pergunta:</p> 
+                                        <p id="selectTituloQuestion">Selecione a checklist:</p> 
                                         <button data-linked="titleQuestionOption" data-function="titleQuestion" id="selectQuestionCheck" disabled></button>
                                     </div>
                                     <div class="optionSelect" id="titleQuestionOption" style="display:none"> 
@@ -97,6 +97,7 @@ export class RecordPage extends SettingRecord {
                     <section id="inputTitle">
                         <input type="text" placeholder="Nome do relatório"/>
                     </section>
+                    <button type="button" id="teste" data-function="teste">teste</button>
                     <aside id="buttonPrint">
                         <button type="button" class="buttonRecordPrint" data-function="buttonRecordPrint" id="buttonRecordPrint" disabled style="opacity: 0.3"></button>
                     </aside>

@@ -8,33 +8,35 @@ export class RecordObject extends ConnectionCLPP {
     #type;
     #description;
     #filters;
+    #jsonRecord;
     clppGraphich = new ClppGraphichObject
 
-    getId_user() { return this.#id_user }
-    getPoint() { return this.#point }
-    getDate() { return this.#date }
-    getType() { return this.#type }
-    getDescription() { return this.#description }
-    getFilters() { return this.#filters }
+    getId_user() {return this.#id_user}
+    getPoint() {return this.#point}
+    getDate() {return this.#date}
+    getType() {return this.#type}
+    getDescription() {return this.#description}
+    getFilters() {return this.#filters}
+    getJsonRecord() {return this.#jsonRecord}
 
-    setId_user(id_user) { this.#id_user = id_user }
-    setPoint(point) { this.#point = point }
-    setDate(date) { this.#date = date }
-    setType(type) { this.#type = type }
-    setDescritpion(description) { this.#description = description }
-    setFilters(filters) { this.#filters = filters }
+    setId_user(id_user) {this.#id_user = id_user}
+    setPoint(point) {this.#point = point}
+    setDate(date) {this.#date = date}
+    setType(type) {this.#type = type}
+    setDescritpion(description) {this.#description = description}
+    setFilters(filters) {this.#filters = filters}
+    setJsonRecord(jsonRecord) {this.#jsonRecord = jsonRecord}
 
-    saveReport() {
-        let json = {
-            id_user: this.#id_user,
+    saveReport(){
+        this.#jsonRecord={
+            id_user: this.#id_user, 
             point: this.#point,
             date: this.#date,
             type: this.#type,
             nome: this.#description,
             filters: this.#filters
         }
-        console.log(json)
-    }
+    } 
 
     separateChecklist(response, objectChecklist, objectShops) {
         let orderByChecklist = [];
