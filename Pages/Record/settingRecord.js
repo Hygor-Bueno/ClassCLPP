@@ -74,8 +74,8 @@ export class SettingRecord {
                 break;
             case "graphicButton":
                 // alert("Você arirá um gráfico")
-                let req = await this.recordObject.get("&id_user=148&date_init_response='2022-02-08'", "CLPP/Response.php");
-                this.recordObject.clppGraphich.clppGraphics(this.recordObject.getDataForGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop), "#mainGraphic", this.typeGraph);
+                let req = await this.recordObject.get("&id_user=148&date_init_response='2022-02-14'", "CLPP/Response.php");
+                this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop), "#mainGraphic", this.typeGraph);
                 break;
             default:
                 console.error("data-function")
