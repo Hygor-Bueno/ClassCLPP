@@ -1,9 +1,10 @@
-export class ClppGraphichObject{
+export class ClppGraphichObject {
     graphicRecord;
     clppGraphics(arrayValues, context, types) {
-        
+        let transparency = 0.4
+        let noS = arrayValues[0][0] == "Não Satisfatório" 
+        console.log(noS)
         let heightY = arrayValues.length
-        let transparency = 0.6
         this.graphicRecord = new Chart(document.querySelector(`${context}`).getContext("2d"),
             {
                 type: this.typeGraphics(types),
@@ -11,12 +12,10 @@ export class ClppGraphichObject{
                     labels: [...arrayValues.map(item => item[0])],
                     datasets: [
                         {
-                            label: "Porcentagem de vendas",
+                            label: "Porcentagem",
                             data: [...arrayValues.map(item => item[1])],
-                            backgroundColor: [
-                                `rgba(192,192,192,${transparency})`,`rgba(255,0,0,${transparency})`, `rgba(0,0,255,${transparency})`, `rgba(50,103,68,${transparency})`, `rgba(246,239,29,${transparency})`, `rgba(204,0,204,${transparency})`
-                            ],
-                            borderColor: ["rgb(192,192,192)","rgb(255,0,0)","rgb(0,0,255)","rgb(50,103,68)","rgb(246,239,29)","rgb(204,0,204)"],
+                            backgroundColor: this.colorsGraphics(transparency,noS),
+                            borderColor: this.borderColorGraphics(noS),
                             borderWidth: 1
                         }
                     ]
@@ -29,14 +28,13 @@ export class ClppGraphichObject{
                                     return value + " %"
                                 }
                             },
-                            suggestedMax: heightY < 7 ? 100 : "" 
+                            suggestedMax: heightY < 7 ? 100 : ""
                         }
                     }
                 }
             });
     }
     typeGraphics(value) {
-
         let response;
 
         switch (value) {
@@ -48,8 +46,55 @@ export class ClppGraphichObject{
                 break;
             case 3:
                 response = "doughnut"
-                break;           
+                break;
         }
         return response;
+    }
+
+    colorsGraphics(transparency,noS) {
+        let color = [
+            `rgba(246, 143, 31,${transparency})`,
+            `rgba(46, 49, 146,${transparency})`,
+
+            `rgba(255, 195, 36,${transparency})`,
+            `rgba(73, 23, 110,${transparency})`,
+
+            `rgba(254, 241, 4,${transparency})`,
+            `rgba(108, 32, 128,${transparency})`,
+
+            `rgba(65, 150, 59,${transparency})`,
+            `rgba(219, 17, 98,${transparency})`,
+
+            `rgba(5, 99, 35,${transparency})`,
+            `rgba(237, 27, 36,${transparency})`,
+
+            `rgba(2, 107, 100,${transparency})`,
+            `rgba(242, 100, 50,${transparency})`
+        ]
+        noS && color.unshift(`rgba(131,131,131,${transparency})`)
+        return color;
+    }
+    borderColorGraphics(noS) {
+        let borderColor = [
+            `rgb(246, 143, 31)`,
+            `rgb(46, 49, 146)`,
+            
+            `rgb(255, 195, 36)`,
+            `rgb(73, 23, 110)`,
+            
+            `rgb(254, 241, 4)`,
+            `rgb(108, 32, 128)`,
+            
+            `rgb(65, 150, 59)`,
+            `rgb(219, 17, 98)`,
+            
+            `rgb(5, 99, 35)`,
+            `rgb(237, 27, 36)`,
+            
+            `rgb(2, 107, 100)`,
+            `rgb(242, 100, 50)`
+        ]
+        noS && borderColor.unshift(`rgb(131,131,131)`)
+        return borderColor;
     }
 }
