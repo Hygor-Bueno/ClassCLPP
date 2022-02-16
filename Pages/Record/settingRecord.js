@@ -67,7 +67,7 @@ export class SettingRecord {
             case "filterBtn":
                 this.controllerBtns(["#buttonRecordPrint"], false)
                 this.recordObject.setFilters(this.lockInfo())
-                //let req = await this.recordObject.get(`&id_user=${localStorage.getItem('id')}&date_init_response=${this.recordObject.getDate().date_init_response}`, "CLPP/Response.php");
+                this.recordObject.returnGet()
                 break;    
             case "graphicButton":
                 // alert("Você abrirá um gráfico")
@@ -81,7 +81,6 @@ export class SettingRecord {
                 console.error("data-function")
         }
     }
-
 
     loadSavedReports(stop_json){
         let jsonFilters = stop_json.filters
