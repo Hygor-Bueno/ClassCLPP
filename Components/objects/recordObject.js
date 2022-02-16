@@ -39,15 +39,19 @@ export class RecordObject extends ConnectionCLPP {
         }
     } 
 
-    async returnGet(){
-        let response = await this.get(`&id_user=${id}&date_init_response='${this.#filters.date_response.date_init_response}'`, "CLPP/Response.php")
-        console.log(this.#filters)
-    }
-
+    
     getParamsForFilters(){
-        filtersJson = {
-            
-        }
+        let keys;
+        let values;
+        Object.keys(this.#filters).forEach(element => {
+            console.log(Object.keys(this.#filters[element]))
+        })
+        //let params = `&${"chave"}=${"valor"}`
+    }
+    
+    async returnGet(){
+        let response = []
+        //response.push(await this.get(`&id_user=${id}&date_init_response='${this.#filters.date_response.date_init_response}'`, "CLPP/Response.php"))
     }
 
     separateChecklist(response, objectChecklist, objectShops) {
@@ -81,19 +85,19 @@ export class RecordObject extends ConnectionCLPP {
         let dataSpecific = [["Não Satisfatório",100 - point], ["satisfatório",point]]
         return dataSpecific
     }
-    specificGraphic(orderByChecklist, objectChecklist, objectShops, especifc){
-        let dataSpecific = this.getDataForGraphic(orderByChecklist, objectChecklist, objectShops, especifc)
+    specificGraphic(orderByChecklist, objectChecklist, objectShops, specific){
+        let dataSpecific = this.getDataForGraphic(orderByChecklist, objectChecklist, objectShops, specific)
         console.log(dataSpecific.shift())
         return dataSpecific
     }
 
-    getDataForGraphic(orderByChecklist, objectChecklist, objectShops, especifc) {
+    getDataForGraphic(orderByChecklist, objectChecklist, objectShops, specific) {
         let response = []
         let aux = 0;
         orderByChecklist.forEach(checklist => {
             let description, percent;
             description = objectChecklist[checklist[0].id_checklist].getTitle().slice(0, 15) + " - " + objectShops[checklist[0].id_shop].description + " ( " + checklist[0].date + " ) ";
-            percent = this.computePercent([checklist], especifc || orderByChecklist.length)
+            percent = this.computePercent([checklist], specific || orderByChecklist.length)
             aux += percent
             response.push([description, percent])
         })

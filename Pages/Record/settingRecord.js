@@ -67,7 +67,7 @@ export class SettingRecord {
             case "filterBtn":
                 this.controllerBtns(["#buttonRecordPrint"], false)
                 this.recordObject.setFilters(this.lockInfo())
-                this.recordObject.returnGet()
+                this.recordObject.getParamsForFilters()
                 break;    
             case "graphicButton":
                 // alert("Você abrirá um gráfico")
