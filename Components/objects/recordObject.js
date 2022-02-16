@@ -1,5 +1,6 @@
 import { ConnectionCLPP } from "../../Connection/ConnectionCLPP.js";
 import { ClppGraphichObject } from "./clppGraphichObject.js";
+const id = localStorage.getItem("id")
 
 export class RecordObject extends ConnectionCLPP {
     #id_user;
@@ -36,10 +37,20 @@ export class RecordObject extends ConnectionCLPP {
             name: this.#description,
             filters: this.#filters
         }
-        console.log(this.#jsonRecord)
     } 
 
-    separateChecklist(response) {
+    async returnGet(){
+        let response = await this.get(`&id_user=${id}&date_init_response='${this.#filters.date_response.date_init_response}'`, "CLPP/Response.php")
+        console.log(this.#filters)
+    }
+
+    getParamsForFilters(){
+        filtersJson = {
+            
+        }
+    }
+
+    separateChecklist(response, objectChecklist, objectShops) {
         let orderByChecklist = [];
         let assistent = this.getKeys(response);
         assistent.forEach(elemKey => {
