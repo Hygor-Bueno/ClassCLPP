@@ -39,7 +39,7 @@ export class RecordObject extends ConnectionCLPP {
         console.log(this.#jsonRecord)
     } 
 
-    separateChecklist(response, objectChecklist, objectShops) {
+    separateChecklist(response) {
         let orderByChecklist = [];
         let assistent = this.getKeys(response);
         assistent.forEach(elemKey => {
@@ -70,13 +70,19 @@ export class RecordObject extends ConnectionCLPP {
         let dataSpecific = [["Não Satisfatório",100 - point], ["satisfatório",point]]
         return dataSpecific
     }
-    getDataForGraphic(orderByChecklist, objectChecklist, objectShops) {
+    specificGraphic(orderByChecklist, objectChecklist, objectShops, especifc){
+        let dataSpecific = this.getDataForGraphic(orderByChecklist, objectChecklist, objectShops, especifc)
+        console.log(dataSpecific.shift())
+        return dataSpecific
+    }
+
+    getDataForGraphic(orderByChecklist, objectChecklist, objectShops, especifc) {
         let response = []
         let aux = 0;
         orderByChecklist.forEach(checklist => {
             let description, percent;
             description = objectChecklist[checklist[0].id_checklist].getTitle().slice(0, 15) + " - " + objectShops[checklist[0].id_shop].description + " ( " + checklist[0].date + " ) ";
-            percent = this.computePercent([checklist], orderByChecklist.length)
+            percent = this.computePercent([checklist], especifc || orderByChecklist.length)
             aux += percent
             response.push([description, percent])
         })
@@ -98,8 +104,6 @@ export class RecordObject extends ConnectionCLPP {
                 }
             }
         }
-        console.log(sum, " <- Total! ",100 / (question - ignore))
-        // console.log((100 / (question - ignore) * sum).toFixed(2), (100 / (question - ignore) * sum).toFixed(2) / max, " ==> ", responseChecklist)
         return (100 / (question - ignore) * sum).toFixed(2) / max
     }
 }

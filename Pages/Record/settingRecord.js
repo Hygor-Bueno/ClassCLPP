@@ -73,25 +73,20 @@ export class SettingRecord {
             case "filterBtn":
                 this.controllerBtns(["#buttonRecordPrint"], false)
                 this.recordObject.setFilters(this.lockInfo())
-
-
                 //let req = await this.recordObject.get(`&id_user=${localStorage.getItem('id')}&date_init_response=${this.recordObject.getDate().date_init_response}`, "CLPP/Response.php");
                 break;    
-
             case "graphicButton":
                 // alert("Você abrirá um gráfico")
-                let req = await this.recordObject.get("&id_user=148&date_init_response='2022-02-15'&id_shop=2", "CLPP/Response.php");
-                this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop), "#mainGraphic", this.typeGraph);
-                // this.recordObject.clppGraphich.clppGraphics(this.recordObject.getDataForGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop), "#mainGraphic", this.typeGraph);
+                let req = await this.recordObject.get("&id_user=148&date_init_response='2022-02-8'", "CLPP/Response.php");
+                // this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(this.recordObject.separateChecklist(req)), "#mainGraphic", this.typeGraph);
+                this.recordObject.clppGraphich.clppGraphics(this.recordObject.getDataForGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop), "#mainGraphic", this.typeGraph);
+                // this.recordObject.clppGraphich.clppGraphics(this.recordObject.specificGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop,1), "#mainGraphic", this.typeGraph);
                 break;
             case "teste":
-
                 //this.loadSavedReports("#titleChecklistOption input[type=checkbox]" , this.fockingArray.filters.checklist.titles, "#titleChecklistOption")
                 !localStorage.getItem("JSONfilters") && localStorage.setItem("JSONfilters", JSON.stringify(this.recordObject.getJsonRecord()))//apagar quando cards da home estiver ok 
                 this.noGusta(this.fockingArray.filters)
-
                 this.loadSavedReports(this.fockingArray.filters)
-
                 break;
             default:
                 console.error("data-function")
