@@ -14,9 +14,6 @@ export class SettingRecord {
     userFulComponents = new UsefulComponents;
     recordObject = new RecordObject;
 
-    fockingArray = localStorage.getItem("JSONfilters") ? JSON.parse(localStorage.getItem("JSONfilters")) : ""
-
-
     async setting(objectChecklist) {
         this.clickPage();
         this.jsonChecklists(objectChecklist);
@@ -48,9 +45,6 @@ export class SettingRecord {
                 this.controllerBtns(["#buttonRecordPrint"], true)
                 this.clearFilter()
                 break;
-            case "filterBtn":
-                this.filter()
-                break;
             case "buttonRecordGraphic":
                 this.buttonGraphic(element)
                 break;
@@ -73,24 +67,15 @@ export class SettingRecord {
             case "filterBtn":
                 this.controllerBtns(["#buttonRecordPrint"], false)
                 this.recordObject.setFilters(this.lockInfo())
-
-
                 //let req = await this.recordObject.get(`&id_user=${localStorage.getItem('id')}&date_init_response=${this.recordObject.getDate().date_init_response}`, "CLPP/Response.php");
                 break;    
-
             case "graphicButton":
                 // alert("Você abrirá um gráfico")
                 let req = await this.recordObject.get("&id_user=148&date_init_response='2022-02-08'", "CLPP/Response.php");
                 this.recordObject.clppGraphich.clppGraphics(this.recordObject.getDataForGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop), "#mainGraphic", this.typeGraph);
                 break;
             case "teste":
-
-                //this.loadSavedReports("#titleChecklistOption input[type=checkbox]" , this.fockingArray.filters.checklist.titles, "#titleChecklistOption")
-                !localStorage.getItem("JSONfilters") && localStorage.setItem("JSONfilters", JSON.stringify(this.recordObject.getJsonRecord()))//apagar quando cards da home estiver ok 
-                this.noGusta(this.fockingArray.filters)
-
-                this.loadSavedReports(this.fockingArray.filters)
-
+                this.loadSavedReports(this.recordObject.getJsonRecord())
                 break;
             default:
                 console.error("data-function")
@@ -99,14 +84,21 @@ export class SettingRecord {
 
 
     loadSavedReports(stop_json){
-        Object.keys(stop_json.checklist).forEach(element => {
-            stop_json.checklist[element] != "" && stop_json.checklist[element].forEach(ele => getB_id(`${ele}`).checked = true)
+        let jsonFilters = stop_json.filters
+        getB_id("inputNameTitles").value = stop_json.name
+        Object.keys(jsonFilters.checklist).forEach(element => {
+            if (jsonFilters.checklist[element] != "") {
+                jsonFilters.checklist[element].forEach(ele => getB_id(`${ele}`).checked = true)
+                element == "titles" && openClose(getB_id("titleChecklistOption")) 
+                element == "question" && openClose(getB_id("titleQuestionOption")) 
+                element == "date_checklist" && openClose(getB_id("validCheckBlock")) 
+            }
         })
-        stop_json.id_shops[0].forEach(elem => getB_id(`${elem}`).checked = true)
-        this.loadDateCharge(stop_json)
+        jsonFilters.id_shops[0].forEach(elem => getB_id(`${elem}`).checked = true)
+        this.loadDate(jsonFilters)
     }
 
-    loadDateCharge(dateJson){  
+    loadDate(dateJson){  
         let date = dateJson.date_response
         getB_id("initDate").value = date.date_init_response
         getB_id("finalDate").value = date.date_final_response
