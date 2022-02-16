@@ -95,7 +95,7 @@ export class RecordPage extends SettingRecord {
             <section id="corpoRecord">
                 <header id="header">
                     <section id="inputTitle">
-                        <input type="text" placeholder="Nome do relatório"/>
+                        <input type="text" id="inputNameTitles" placeholder="Nome do relatório"/>
                     </section>
                     <button type="button" id="teste" data-function="teste">teste</button>
                     <aside id="buttonPrint">

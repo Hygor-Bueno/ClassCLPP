@@ -33,7 +33,7 @@ export class RecordObject extends ConnectionCLPP {
             point: this.#point,
             date: this.#date,
             type: this.#type,
-            nome: this.#description,
+            name: this.#description,
             filters: this.#filters
         }
         console.log(this.#jsonRecord)
