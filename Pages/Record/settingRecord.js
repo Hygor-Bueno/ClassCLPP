@@ -14,6 +14,7 @@ export class SettingRecord {
     userFulComponents = new UsefulComponents;
     recordObject = new RecordObject;
 
+
     async setting(objectChecklist) {
         this.clickPage();
         this.jsonChecklists(objectChecklist);
@@ -23,6 +24,7 @@ export class SettingRecord {
         this.blockQuestion();
         this.pegandoValidade();
         setTimeout(async () => { }, 1000);
+
     }
 
     jsonChecklists(objectChecklist) {
@@ -45,6 +47,7 @@ export class SettingRecord {
                 this.controllerBtns(["#buttonRecordPrint"], true)
                 this.clearFilter()
                 break;
+
             case "buttonRecordGraphic":
                 this.buttonGraphic(element)
                 break;
@@ -67,8 +70,8 @@ export class SettingRecord {
             case "filterBtn":
                 this.controllerBtns(["#buttonRecordPrint"], false)
                 this.recordObject.setFilters(this.lockInfo())
-                this.recordObject.returnGet()
-                break;    
+                this.validationDate()
+                break;
             case "graphicButton":
                 // alert("Você abrirá um gráfico")
                 let req = await this.recordObject.get("&id_user=148&notification", "CLPP/Response.php",true);
@@ -84,8 +87,8 @@ export class SettingRecord {
                 console.error("data-function")
         }
     }
-
-    loadSavedReports(stop_json){
+  
+   loadSavedReports(stop_json){
         let jsonFilters = stop_json.filters
         getB_id("inputNameTitles").value = stop_json.name
         Object.keys(jsonFilters.checklist).forEach(element => {
@@ -105,6 +108,7 @@ export class SettingRecord {
         getB_id("initDate").value = date.date_init_response
         getB_id("finalDate").value = date.date_final_response
     }
+
 
     openClose(element) {
         getB_id(element.getAttribute("data-linked")).style.display == 'none'
@@ -132,24 +136,16 @@ export class SettingRecord {
         document.getElementById("selectTitulo").innerHTML = "Selecione o checklist:"
     }
 
-    /*     filter() {
-            let arrayCheck = this.walksArray('#titleChecklistOption input[type=checkbox]')
-            let arrayShop = this.walksArray('#selShop input[type=checkbox]')
-            let arrayValidade = this.walksArray('#validCheckBlock input[type=checkbox]')
-            let arrayQuestion = this.walksArray('#titleQuestionOption input[type=checkbox]')
-            let jsonFilter;
-            if (arrayCheck.length >= 1) {
-                alert('Puxou so pela checklist')
-                jsonFilter = {
-                    Checklist: arrayCheck.length >= 1 ? arrayCheck[0].value : "Null",
-                    Shop: arrayShop.length >= 1 ? arrayShop[0].value : "Null",
-                    Questão: arrayQuestion.length >= 1 ? arrayQuestion[0].value : "Null",
-                    Validade: arrayValidade.length >= 1 ? arrayValidade[0].value : "Null",
-                }
-                console.log(jsonFilter)
-                return jsonFilter
-            } alert('selecione uma checklist')
-        } */
+    validationDate() {
+        let dateInit = getB_id("initDate").value
+        let dateFinal = getB_id("finalDate").value
+        if (dateInit != 0 && dateFinal == 0) {
+            alert('selecione data final')
+            return
+        } else if (dateInit == 0 && dateFinal != 0) {
+            alert('Selecione data inicial')
+        }
+    }
 
     templateOption(objectChecklist, key, array) {
         let response = ""
@@ -157,7 +153,7 @@ export class SettingRecord {
         auxArray.map(element => {
             element[key] ? response +=
                 `<div class="optionSelect">
-                <input type="checkbox" class="option" id="${element.id}" data-id="${element.id}" value="${element[key]}">
+                <input type="checkbox" class="option" data-id="${element.id}" value="${element[key]}">
                     <p class="valorCheck">${element[key]}</p>
                 </input>
             </div>` : ""
@@ -225,7 +221,6 @@ export class SettingRecord {
     pegandoValidade() {
         let array = [];
         getB_id('validCheckBlock').onchange = (validade) => {
-
             let arrayValidade = this.walksArray('#validCheckBlock input[type=checkbox]')
             if (validade.target.checked) {
                 let arrayChecked = this.walksArray2('#titleChecklistOption input[type=checkbox]', arrayValidade[0].attributes[2].value)
@@ -246,7 +241,6 @@ export class SettingRecord {
                     this.controllerSelect("selectButtonQuestion", "Selecione a checklist", false)
                 }
             }
-
         }
     }
 
@@ -301,6 +295,7 @@ export class SettingRecord {
         })
         return response
     }
+
     validateParameter(array, cont) {
         if (array > 1) document.getElementById("selectTitulo").innerHTML = "Multi selecionado"
         if (array == 1) document.getElementById("selectTitulo").innerHTML = cont.value.toLowerCase().slice(0, 20) + ".."

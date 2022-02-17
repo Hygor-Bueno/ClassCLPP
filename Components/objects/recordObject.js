@@ -39,15 +39,26 @@ export class RecordObject extends ConnectionCLPP {
         }
     } 
 
-    async returnGet(){
-        let response = await this.get(`&id_user=${id}&date_init_response='${this.#filters.date_response.date_init_response}'`, "CLPP/Response.php")
-        console.log(this.#filters)
-    }
-
+    
     getParamsForFilters(){
-        filtersJson = {
-            
-        }
+        console.log(this.#filters.checklist,this.#filters.id_shops, this.#filters.date_response)
+        Object.keys(this.#filters).forEach(element => {
+            Object.keys(this.#filters[element]).forEach(key => {
+                console.log(this.#filters[element][key])
+                this.#filters[element][key] != "" && this.#filters[element][key].forEach(value => {this.returnGet(key,value)
+                })
+            })
+        })
+    }
+    
+    returnGet(keys,values){
+        if(keys == "titles") keys = "checklist";        
+        if(keys == 0) keys = 'id_shop';
+        console.log(keys,values)
+        // let params;
+        // if(values != "") values.forEach(value => {params += `&${keys}=${value}`})
+        // console.log(params)
+        //await this.get(`&id_user=${id}`+ params, "CLPP/Response.php")
     }
 
     separateChecklist(response) {
@@ -81,20 +92,24 @@ export class RecordObject extends ConnectionCLPP {
         let dataSpecific = [["Não Satisfatório",100 - point], ["satisfatório",point]]
         return dataSpecific
     }
+
     specificGraphic(orderByChecklist, objectChecklist, objectShops, especifc){
         let dataSpecific = this.getDataForGraphic(orderByChecklist, objectChecklist, objectShops, especifc)
         dataSpecific.shift()
+
         return dataSpecific
     }
 
-    getDataForGraphic(orderByChecklist, objectChecklist, objectShops, especifc) {
+    getDataForGraphic(orderByChecklist, objectChecklist, objectShops, specific) {
         let response = []
         let aux = 0;
         orderByChecklist.forEach(checklist => {
             let description, percent;
             description = objectChecklist[checklist[0].id_checklist].getTitle().slice(0, 15) + " - " + objectShops[checklist[0].id_shop].description + " ( " + checklist[0].date + " ) ";
+
             percent = this.computePercent([checklist], especifc || orderByChecklist.length)
             console.log(especifc || orderByChecklist.length)
+
             aux += percent
             response.push([description, percent])
         })
