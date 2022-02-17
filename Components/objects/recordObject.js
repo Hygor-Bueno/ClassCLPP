@@ -10,7 +10,7 @@ export class RecordObject extends ConnectionCLPP {
     #description;
     #filters;
     #jsonRecord;
-    clppGraphich = new ClppGraphichObject
+    clppGraphich = new ClppGraphichObject;
 
     getId_user() {return this.#id_user}
     getPoint() {return this.#point}
@@ -50,13 +50,13 @@ export class RecordObject extends ConnectionCLPP {
         }
     }
 
-    separateChecklist(response, objectChecklist, objectShops) {
+    separateChecklist(response) {
         let orderByChecklist = [];
         let assistent = this.getKeys(response);
         assistent.forEach(elemKey => {
             orderByChecklist.push(response.data.filter(element => { return elemKey[0] == element.id_user && elemKey[1] == element.date && elemKey[2] == element.id_checklist && elemKey[3] == element.id_shop }));
         })
-        console.log(this.computePercent(orderByChecklist, 1)) // Calcula o valor geral do checklist
+        // console.log(this.computePercent(orderByChecklist, 1)) // Calcula o valor geral do checklist
 
         return orderByChecklist;
     }
@@ -83,7 +83,7 @@ export class RecordObject extends ConnectionCLPP {
     }
     specificGraphic(orderByChecklist, objectChecklist, objectShops, especifc){
         let dataSpecific = this.getDataForGraphic(orderByChecklist, objectChecklist, objectShops, especifc)
-        console.log(dataSpecific.shift())
+        dataSpecific.shift()
         return dataSpecific
     }
 
@@ -94,6 +94,7 @@ export class RecordObject extends ConnectionCLPP {
             let description, percent;
             description = objectChecklist[checklist[0].id_checklist].getTitle().slice(0, 15) + " - " + objectShops[checklist[0].id_shop].description + " ( " + checklist[0].date + " ) ";
             percent = this.computePercent([checklist], especifc || orderByChecklist.length)
+            console.log(especifc || orderByChecklist.length)
             aux += percent
             response.push([description, percent])
         })
@@ -106,6 +107,7 @@ export class RecordObject extends ConnectionCLPP {
         let sum = 0;
         let ignore = 0;
         for (const allQuestion of responseChecklist) {
+            console.log(allQuestion)
             question += parseFloat(allQuestion[0].qtd_questions);
             for (const options of allQuestion) {
                 if (options.type <= 2) {

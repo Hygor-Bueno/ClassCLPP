@@ -71,6 +71,9 @@ export class ClppGraphichObject {
             `rgba(2, 107, 100,${transparency})`,
             `rgba(242, 100, 50,${transparency})`
         ]
+        for (let index = 0; index < 10; index++) {  
+            color.push(... color);          
+        }
         noS && color.unshift(`rgba(131,131,131,${transparency})`)
         return color;
     }
@@ -94,6 +97,9 @@ export class ClppGraphichObject {
             `rgb(2, 107, 100)`,
             `rgb(242, 100, 50)`
         ]
+        for (let index = 0; index < 10; index++) {  
+            borderColor.push(... borderColor);          
+        }
         noS && borderColor.unshift(`rgb(131,131,131)`)
         return borderColor;
     }

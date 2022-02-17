@@ -71,9 +71,10 @@ export class SettingRecord {
                 break;    
             case "graphicButton":
                 // alert("Você abrirá um gráfico")
-                let req = await this.recordObject.get("&id_user=148&date_init_response='2022-02-8'", "CLPP/Response.php");
+                let req = await this.recordObject.get("&id_user=148&notification", "CLPP/Response.php",true);
+                console.log(req)
                 // this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(this.recordObject.separateChecklist(req)), "#mainGraphic", this.typeGraph);
-                this.recordObject.clppGraphich.clppGraphics(this.recordObject.getDataForGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop), "#mainGraphic", this.typeGraph);
+                // this.recordObject.clppGraphich.clppGraphics(this.recordObject.getDataForGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop), "#mainGraphic", this.typeGraph);
                 // this.recordObject.clppGraphich.clppGraphics(this.recordObject.specificGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop,1), "#mainGraphic", this.typeGraph);
                 break;
             case "teste":
@@ -392,5 +393,4 @@ export class SettingRecord {
             $(btn).setAttribute('style', parans ? "opacity: .3" : "opacity: 1")
         })
     }
-
 }  
