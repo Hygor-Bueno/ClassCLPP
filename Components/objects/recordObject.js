@@ -41,17 +41,24 @@ export class RecordObject extends ConnectionCLPP {
 
     
     getParamsForFilters(){
-        let keys;
-        let values;
+        console.log(this.#filters.checklist,this.#filters.id_shops, this.#filters.date_response)
         Object.keys(this.#filters).forEach(element => {
-            console.log(Object.keys(this.#filters[element]))
+            Object.keys(this.#filters[element]).forEach(key => {
+                console.log(this.#filters[element][key])
+                this.#filters[element][key] != "" && this.#filters[element][key].forEach(value => {this.returnGet(key,value)
+                })
+            })
         })
-        //let params = `&${"chave"}=${"valor"}`
     }
     
-    async returnGet(){
-        let response = []
-        //response.push(await this.get(`&id_user=${id}&date_init_response='${this.#filters.date_response.date_init_response}'`, "CLPP/Response.php"))
+    returnGet(keys,values){
+        if(keys == "titles") keys = "checklist";        
+        if(keys == 0) keys = 'id_shop';
+        console.log(keys,values)
+        // let params;
+        // if(values != "") values.forEach(value => {params += `&${keys}=${value}`})
+        // console.log(params)
+        //await this.get(`&id_user=${id}`+ params, "CLPP/Response.php")
     }
 
     separateChecklist(response, objectChecklist, objectShops) {
