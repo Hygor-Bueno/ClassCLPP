@@ -8,6 +8,8 @@ import { SettingHome } from "./settingHome.js";
 import { ObjectChecklist } from "../../Components/objects/checklistObject.js";
 import { WebSocketCLPP } from "../../Connection/WebSocket.js";
 import { TemplateChecklist } from "../../Components/templateChecklist.js";
+import { ConnectionCLPP } from "../../Connection/ConnectionCLPP.js";
+import { RecordObject } from "../../Components/objects/recordObject.js";
 
 var employee = new Employee;
 var usefulComponents = new UsefulComponents;
@@ -16,22 +18,24 @@ var userAccess = new UserAccess;
 var message = new Message;
 var listMessage = new MessageList;
 var ws = new WebSocketCLPP;
+var connectionCLPP = new ConnectionCLPP;
 
 export class HomePage extends SettingHome {
+
     userJson;
     accessClpp;
     checklistJson = {};
     message;
-    teplateChecklist = new TemplateChecklist
+    teplateChecklist = new TemplateChecklist;
 
     async main() {
-        this.userJson = await employee.get("&id=" + localStorage.getItem("id"),true);
+        this.userJson = await employee.get("&id=" + localStorage.getItem("id"), true);
         await this.createObjChecklist();
+        
         this.accessClpp = await userAccess.get('&application_id=7&web');
         let nameUser = usefulComponents.splitStringName(this.userJson.name, " ")
         let response =
             `
-            
             <div id="homeDiv">
                 <section id="homeLeft">
                     <header id="welcom">
@@ -50,7 +54,10 @@ export class HomePage extends SettingHome {
                         <div id="checkResponseDiv">
                             <header class= "dashboardHome">
                                 <h1> Checklist Respondidos: </h1>
-                            </header>
+                            </header>                         
+                            <div id="bodyReportDiv">
+                                ${await this.reportAnsweredToday(this.checklistJson) || `<p>Whats?</p>`}
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -90,8 +97,8 @@ export class HomePage extends SettingHome {
     checklistCreated() {
         let resp;
         try {
-        resp =  Object.keys(this.checklistJson).map((element) => (
-            `<div class="cardCheck" id="check_${this.checklistJson[element].getIdChecklist()}">
+            resp = Object.keys(this.checklistJson).map((element) => (
+                `<div class="cardCheck" id="check_${this.checklistJson[element].getIdChecklist()}">
                     <header><h2>${this.checklistJson[element].getTitle().slice(0, 30) + "..."}</h2><button type="button" class="editBtnCss editChecklistCard" id="btnCheckCard_${this.checklistJson[element].getIdChecklist()}"></button></header>
                     <section>
                         <article class="articleLeftChecklist style_scroll"> 
@@ -119,17 +126,17 @@ export class HomePage extends SettingHome {
     }
     templateListLinkedEmployees(checklist) {
         let response
-        try{
-            if(!checklist.getLinkedEmployees().length) throw new Error("Não possuí usuários vinculados")
-            response =  `
+        try {
+            if (!checklist.getLinkedEmployees().length) throw new Error("Não possuí usuários vinculados")
+            response = `
             <h2><b>Usuários vinculados: </b></h2>
             <div class="listEmployees">
                 <ol>
                     ${checklist.getLinkedEmployees().map(element => (`<li>${element.getName()}</li>`)).join("")}
                 </ol>
             </div>
-            `    
-        }catch(e){
+            `
+        } catch (e) {
             // console.error(e)
             response = `
             <h2><b>Lista de usuários: </b></h2><br/>         
@@ -140,7 +147,7 @@ export class HomePage extends SettingHome {
     }
     tamplateQuestions(checklist) {
         let jsonQuestion = this.addressIssues(checklist);
-      
+
         return `
         <p><b>Quantidade de Itens:</b> ${jsonQuestion.numberItems}</p>       
         <p><b>Quantidade de Assinaturas:</b> ${jsonQuestion.numberSignatures}</p>
@@ -181,7 +188,7 @@ export class HomePage extends SettingHome {
         }
     }
     async upMsgReceived(getNotify) {
-        let aux = getNotify.group_id || getNotify.send_user 
+        let aux = getNotify.group_id || getNotify.send_user
         console.log(getNotify);
         await listMessage.receiverName();
         if (document.getElementById('bodyChDiv')) {
@@ -189,10 +196,10 @@ export class HomePage extends SettingHome {
             this.notifyMessage()
             if (document.getElementById('bodyMessageDiv') && aux == document.querySelector('#bodyMessageDiv header').getAttribute('data-id')) {
                 document.querySelector('#bodyMessageDiv section').insertAdjacentHTML('beforeend', `${getNotify.type == 2 ?
-                    `<div class="messageReceived formatImg">${getNotify.group_id ? `<span>${listMessage.employeers[getNotify.send_user]+": "}</span>`:""}<img src=http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/${getNotify.message}></div>` : `<div class= "messageReceived"> ${getNotify.group_id ? `<span>${listMessage.employeers[getNotify.send_user].user+": "}</span>`:``} <p>${getNotify.message}</p></div>`}`)
+                    `<div class="messageReceived formatImg">${getNotify.group_id ? `<span>${listMessage.employeers[getNotify.send_user] + ": "}</span>` : ""}<img src=http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/${getNotify.message}></div>` : `<div class= "messageReceived"> ${getNotify.group_id ? `<span>${listMessage.employeers[getNotify.send_user].user + ": "}</span>` : ``} <p>${getNotify.message}</p></div>`}`)
                 document.querySelector('#bodyMessageDiv section').scrollTop = document.querySelector('#bodyMessageDiv section').scrollHeight;
-                console.log([document.querySelector('#bodyMessageDiv header').getAttribute('data-destiny'),document.querySelector('#bodyMessageDiv header').getAttribute('data-id')])
-                ws.informPreview([document.querySelector('#bodyMessageDiv header').getAttribute('data-destiny'),document.querySelector('#bodyMessageDiv header').getAttribute('data-id')])
+                console.log([document.querySelector('#bodyMessageDiv header').getAttribute('data-destiny'), document.querySelector('#bodyMessageDiv header').getAttribute('data-id')])
+                ws.informPreview([document.querySelector('#bodyMessageDiv header').getAttribute('data-destiny'), document.querySelector('#bodyMessageDiv header').getAttribute('data-id')])
             }
         }
     }
