@@ -10,54 +10,80 @@ export class RecordObject extends ConnectionCLPP {
     #description;
     #filters;
     #jsonRecord;
+
     clppGraphich = new ClppGraphichObject;
 
-    getId_user() {return this.#id_user}
-    getPoint() {return this.#point}
-    getDate() {return this.#date}
-    getType() {return this.#type}
-    getDescription() {return this.#description}
-    getFilters() {return this.#filters}
-    getJsonRecord() {return this.#jsonRecord}
+    getId_user() { return this.#id_user }
+    getPoint() { return this.#point }
+    getDate() { return this.#date }
+    getType() { return this.#type }
+    getDescription() { return this.#description }
+    getFilters() { return this.#filters }
+    getJsonRecord() { return this.#jsonRecord }
 
-    setId_user(id_user) {this.#id_user = id_user}
-    setPoint(point) {this.#point = point}
-    setDate(date) {this.#date = date}
-    setType(type) {this.#type = type}
-    setDescritpion(description) {this.#description = description}
-    setFilters(filters) {this.#filters = filters}
-    setJsonRecord(jsonRecord) {this.#jsonRecord = jsonRecord}
+    setId_user(id_user) { this.#id_user = id_user }
+    setPoint(point) { this.#point = point }
+    setDate(date) { this.#date = date }
+    setType(type) { this.#type = type }
+    setDescritpion(description) { this.#description = description }
+    setFilters(filters) { this.#filters = filters }
+    setJsonRecord(jsonRecord) { this.#jsonRecord = jsonRecord }
 
-    saveReport(){
-        this.#jsonRecord={
-            id_user: this.#id_user, 
+    saveReport() {
+        this.#jsonRecord = {
+            id_user: this.#id_user,
             point: this.#point,
             date: this.#date,
             type: this.#type,
             name: this.#description,
             filters: this.#filters
         }
-    } 
-
-    
-    getParamsForFilters(){
-        console.log(this.#filters.checklist,this.#filters.id_shops, this.#filters.date_response)
-        Object.keys(this.#filters).forEach(element => {
-            Object.keys(this.#filters[element]).forEach(key => {
-                console.log(this.#filters[element][key])
-                this.#filters[element][key] != "" && this.#filters[element][key].forEach(value => {this.returnGet(key,value)
-                })
-            })
-        })
     }
-    
-    returnGet(keys,values){
-        if(keys == "titles") keys = "checklist";        
-        if(keys == 0) keys = 'id_shop';
-        console.log(keys,values)
-        // let params;
-        // if(values != "") values.forEach(value => {params += `&${keys}=${value}`})
-        // console.log(params)
+
+
+    getParamsForFilters() {
+        let primaryKey = Object.keys(this.#filters)
+        let secundKey = []
+        let params="";
+        primaryKey.forEach((keys, index) => {
+            
+            if (index != 1) {
+                Object.keys(this.#filters[keys]).forEach(subKey => {
+                    console.log(this.#filters[keys][subKey])
+                    switch (subKey) {
+                        case 'titles':
+                            params += '&id_checklist=' + this.#filters[keys][subKey]
+                            break;
+                        case 'question':
+
+                            break;
+                        case 'date_checklist':
+                            break;
+                        case 'date_init_response':
+                            params += '&date_init_response=' + this.#filters[keys][subKey]
+                            break;
+                        case 'date_final_response':
+                            params += '&date_final_response=' + this.#filters[keys][subKey]
+                            break;
+                    }
+                })
+            } else {
+
+            }
+
+        })
+        console.log(params)
+        // console.log(typeof this.#filters.date_response.date_final_response)
+        console.log(this.#filters.checklist.titles == "", typeof this.#filters.checklist)
+        // console.log(this.#filters.checklist,this.#filters.id_shops, this.#filters.date_response,this.#filters.date_response.date_final_response)
+        // Object.keys(this.#filters.checklist).forEach(keys => {
+        //     this.#filters.checklist[keys].forEach(value => console.log(`&${keys == "titles" ? keys = "checklist" : keys}=${value}`))
+        // })
+        // this.#filters.id_shops.forEach(value => value.forEach(shop=> console.log(`&id_shop=${shop}`)))
+    }
+
+    returnGet(keys, values) {
+        console.log(keys, values)
         //await this.get(`&id_user=${id}`+ params, "CLPP/Response.php")
     }
 
@@ -88,12 +114,12 @@ export class RecordObject extends ConnectionCLPP {
         return filterKeys;
     }
     generalGraphic(orderByChecklist) {
-        let point= this.computePercent(orderByChecklist, 1)
-        let dataSpecific = [["Não Satisfatório",100 - point], ["satisfatório",point]]
+        let point = this.computePercent(orderByChecklist, 1)
+        let dataSpecific = [["Não Satisfatório", 100 - point], ["satisfatório", point]]
         return dataSpecific
     }
 
-    specificGraphic(orderByChecklist, objectChecklist, objectShops, especifc){
+    specificGraphic(orderByChecklist, objectChecklist, objectShops, especifc) {
         let dataSpecific = this.getDataForGraphic(orderByChecklist, objectChecklist, objectShops, especifc)
         dataSpecific.shift()
 
@@ -113,7 +139,7 @@ export class RecordObject extends ConnectionCLPP {
             aux += percent
             response.push([description, percent])
         })
-        response.unshift(["Não Satisfatório",100 - aux]) 
+        response.unshift(["Não Satisfatório", 100 - aux])
         return response;
     }
 
