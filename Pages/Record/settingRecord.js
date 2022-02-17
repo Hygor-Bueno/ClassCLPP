@@ -14,7 +14,6 @@ export class SettingRecord {
     userFulComponents = new UsefulComponents;
     recordObject = new RecordObject;
 
-
     async setting(objectChecklist) {
         this.clickPage();
         this.jsonChecklists(objectChecklist);
@@ -24,7 +23,6 @@ export class SettingRecord {
         this.blockQuestion();
         this.pegandoValidade();
         setTimeout(async () => { }, 1000);
-
     }
 
     jsonChecklists(objectChecklist) {
@@ -47,7 +45,6 @@ export class SettingRecord {
                 this.controllerBtns(["#buttonRecordPrint"], true)
                 this.clearFilter()
                 break;
-
             case "buttonRecordGraphic":
                 this.buttonGraphic(element)
                 break;
@@ -73,18 +70,13 @@ export class SettingRecord {
                 this.validationDate()
                 break;
             case "graphicButton":
-                // alert("Você abrirá um gráfico")
                 let req = await this.recordObject.get("&id_user=148&date_init_response='2022-02-08'", "CLPP/Response.php");
                 this.recordObject.clppGraphich.clppGraphics(this.recordObject.getDataForGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop), "#mainGraphic", this.typeGraph);
-                break;
-            case "teste":
-
                 break;
             default:
                 console.error("data-function")
         }
     }
-
 
     openClose(element) {
         getB_id(element.getAttribute("data-linked")).style.display == 'none'
@@ -155,22 +147,15 @@ export class SettingRecord {
             if (element.getAttribute('id') == e.getAttribute('id')) {
                 e.setAttribute("style", "opacity: 1")
                 this.changeChartType(e.getAttribute('id'));
-            } else {
-                e.setAttribute("style", "opacity: 0.3")
-            }
+            } else e.setAttribute("style", "opacity: 0.3")
         })
     }
 
     changeChartType(value) {
         this.closeGraphic();
-
-        if (value == 'buttonRecordBar') {
-            this.typeGraph = 2
-        } else if (value == 'buttonRecordPizza') {
-            this.typeGraph = 1
-        } else {
-            this.typeGraph = 3
-        }
+        if (value == 'buttonRecordBar') this.typeGraph = 2
+        else if (value == 'buttonRecordPizza') this.typeGraph = 1
+        else this.typeGraph = 3
     }
 
     closeGraphic() {
@@ -185,8 +170,7 @@ export class SettingRecord {
         } else {
             getB_id(local).setAttribute("style", "opacity:0.3")
             $(`#${local} button`).disabled = true
-        }
-        $(`#${local} p`).innerText = message
+        } $(`#${local} p`).innerText = message
     }
 
     async populaShop() {
@@ -232,13 +216,11 @@ export class SettingRecord {
                     this.controllerSelect("selectButtonValidade", "Checklist selecionada", false)
                     getB_id('validCheckBlock').setAttribute("style", "display:none")
                     this.controllerSelect('selectButtonQuestion', "Selecione a pergunta:", true)
-
                 } else if (arrayChecked.length > 1) this.controllerSelect("selectButtonQuestion", "Multiplos checklist", false)
                 else if (arrayChecked.length < 1) {
                     this.controllerSelect('selectButtonValidade', "Selecione a validade:", true)
                     this.controllerSelect('selectButtonQuestion', "Selecione a checklist:", false)
                 }
-
             } else this.selectAll()
         }
     }
@@ -255,9 +237,7 @@ export class SettingRecord {
     walksArray(local) {
         let array = []
         document.querySelectorAll(local).forEach(element => {
-            if (element.checked) {
-                array.push(element)
-            }
+            if (element.checked) array.push(element)
         })
         return array
     }
@@ -265,9 +245,7 @@ export class SettingRecord {
     walksArray2(local, id) {
         let response
         document.querySelectorAll(local).forEach(element => {
-            if (element.getAttribute("data-id") == id) {
-                response = element
-            }
+            if (element.getAttribute("data-id") == id) response = element
         })
         return response
     }
@@ -298,7 +276,6 @@ export class SettingRecord {
         if (cont.length != 0) {
             let question = this.jsonCheck[cont[0].attributes[2].value].getQuestion()
             return question
-
         }
     }
 
@@ -317,9 +294,7 @@ export class SettingRecord {
     }
 
     settingBtnAlertSave() {
-        getB_id('cancelFile').addEventListener('click', () => {
-            closeModal()
-        })
+        getB_id('cancelFile').addEventListener('click', () => { closeModal() })
         getB_id('saveFile').addEventListener('click', () => {
             this.setDateObj()
             this.recordObject.saveReport()

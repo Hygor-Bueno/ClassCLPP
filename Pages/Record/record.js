@@ -41,8 +41,7 @@ export class RecordPage extends SettingRecord {
                                         <button data-linked="titleQuestionOption" data-function="titleQuestion" id="selectQuestionCheck" disabled></button>
                                     </div>
                                     <div class="optionSelect" id="titleQuestionOption" style="display:none"> 
-                                    </div>
-                                                                    
+                                    </div>                              
                                 </div>    
                             </div>                            
                             <div class="questionChecklist">
@@ -111,20 +110,49 @@ export class RecordPage extends SettingRecord {
                             <button type="button" class="buttonRecordGraphic" id="buttonRecordPizza" data-function="buttonRecordGraphic"></button> 
                             <button type="button" class="buttonRecordGraphic" id="buttonRecordPercentage" data-function="buttonRecordGraphic" style="opacity: 1"></button>
                         </div>
+
+                        
                 </div>
+
                 <body id="graphicRecord">
                     <section id="graphicMain">
-                        <header><h1>Principal</h1><button type="button" id="graphicButton" data-function="graphicButton">G</button></header>
+                       
                         <div id="containerGraphicMain">
                             <canvas id="mainGraphic"></canvas>
                         </div>
                     </section>
-                    <aside id="unityGraphic">
-                        <h1>Unidade</h1>
-                    </aside>
-                    <aside id="checklistGraphic">
-                        <h1>Checklist</h1>
-                    </aside>
+
+                        <aside id="unityGraphic">
+                            <div class="btnMiniGrafico">
+                                <select class="selMiniGrafico" style="display:">
+                                    <option type="option">Unidades</option>
+                                    <option type="option">Interlagos</option> 
+                                    <option type="option">Taboao</option>
+                                </select>
+                                <select class="selMiniGrafico" style="display:">
+                                    <option type="option">Barra</option>
+                                    <option type="option">Pizza</option> 
+                                    <option type="option">Porcentagem</option>
+                                </select>
+                            </div>
+                        </aside>
+                   
+                   
+                        <aside id="checklistGraphic" >
+                        <div class="btnMiniGrafico">
+                            <select class="selMiniGrafico" style="display:">
+                                <option type="option">Checklist</option>
+                                <option type="option">Check A</option> 
+                                <option type="option">Check B</option>
+                            </select>
+                            <select class="selMiniGrafico" style="display:">
+                                <option type="option" >Barra</option>
+                                <option type="option" >Pizza</option> 
+                                <option type="option" >Porcentagem</option>
+                            </select>
+                        </div>    
+                        </aside>
+                   
                 </body>
             </section>
            </div> 
