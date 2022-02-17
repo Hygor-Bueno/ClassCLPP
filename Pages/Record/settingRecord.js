@@ -74,15 +74,39 @@ export class SettingRecord {
                 break;
             case "graphicButton":
                 // alert("Você abrirá um gráfico")
-                let req = await this.recordObject.get("&id_user=148&date_init_response='2022-02-08'", "CLPP/Response.php");
-                this.recordObject.clppGraphich.clppGraphics(this.recordObject.getDataForGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop), "#mainGraphic", this.typeGraph);
+                let req = await this.recordObject.get("&id_user=148&notification", "CLPP/Response.php",true);
+                console.log(req)
+                // this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(this.recordObject.separateChecklist(req)), "#mainGraphic", this.typeGraph);
+                // this.recordObject.clppGraphich.clppGraphics(this.recordObject.getDataForGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop), "#mainGraphic", this.typeGraph);
+                // this.recordObject.clppGraphich.clppGraphics(this.recordObject.specificGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop,1), "#mainGraphic", this.typeGraph);
                 break;
             case "teste":
-
+                this.loadSavedReports(this.recordObject.getJsonRecord())
                 break;
             default:
                 console.error("data-function")
         }
+    }
+  
+   loadSavedReports(stop_json){
+        let jsonFilters = stop_json.filters
+        getB_id("inputNameTitles").value = stop_json.name
+        Object.keys(jsonFilters.checklist).forEach(element => {
+            if (jsonFilters.checklist[element] != "") {
+                jsonFilters.checklist[element].forEach(ele => getB_id(`${ele}`).checked = true)
+                element == "titles" && openClose(getB_id("titleChecklistOption")) 
+                element == "question" && openClose(getB_id("titleQuestionOption")) 
+                element == "date_checklist" && openClose(getB_id("validCheckBlock")) 
+            }
+        })
+        jsonFilters.id_shops[0].forEach(elem => getB_id(`${elem}`).checked = true)
+        this.loadDate(jsonFilters)
+    }
+
+    loadDate(dateJson){  
+        let date = dateJson.date_response
+        getB_id("initDate").value = date.date_init_response
+        getB_id("finalDate").value = date.date_final_response
     }
 
 
@@ -363,10 +387,5 @@ export class SettingRecord {
             $(btn).disabled = parans;
             $(btn).setAttribute('style', parans ? "opacity: .3" : "opacity: 1")
         })
-    }
-
-    loadSavedReports(local, loading, twoLocal) {
-        $(twoLocal).setAttribute('style', "display:block")
-        $_all(local).forEach(check => { loading.includes(check.getAttribute('data-id')) ? check.checked = true : check.checked = false })
     }
 }  
