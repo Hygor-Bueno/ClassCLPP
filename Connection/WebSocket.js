@@ -59,7 +59,8 @@ export class WebSocketCLPP {
     }
     async alertMessage(param,page) {
         if(page == 'checklistCreated_received' || page == 'checklistCreate_received' || page == "record_received"){
-
+            const sond = new Audio("./assets/sounds/aud01.mp3");
+            sond.play();
             let alert = new modalReceivedMessage;
             document.getElementById("content").insertAdjacentHTML("beforeend", alert.main(await alert.getDataUser(param.send_user)));
             alert.settings();

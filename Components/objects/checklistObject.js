@@ -38,7 +38,7 @@ export class ObjectChecklist extends ConnectionCLPP {
   getCreatorId() {
     return this.#creatorId;
   }
-  getLinkedEmployees(){
+  getLinkedEmployees() {
     return this.#linkedEmployees;
   }
 
@@ -103,10 +103,10 @@ export class ObjectChecklist extends ConnectionCLPP {
       req.data.forEach((option, index) => { element["op_" + (index + 1)] = option });
     });
   }
-  async loadingLinkedEmployees(checklist){
-    let req = await this.get(`&id_checklist=${checklist.id}`,"CLPP/UserCheckList.php",false);
-    if(req){
-      req.data.forEach(async (element)=>{
+  async loadingLinkedEmployees(checklist) {
+    let req = await this.get(`&id_checklist=${checklist.id}`, "CLPP/UserCheckList.php", false);
+    if (req) {
+      req.data.forEach(async (element) => {
         let user = new Users;
         await user.populate(element.id_user)
         this.#linkedEmployees.push(user)
@@ -115,7 +115,7 @@ export class ObjectChecklist extends ConnectionCLPP {
     // return await user.populate(checklist.id)
   }
   async loadingQuestionDataBase(checklist) {
-    let resp =await this.get(`&id=${checklist.id}&user_id=${checklist.id_creator}`,"CLPP/Question.php",true);
+    let resp = await this.get(`&id=${checklist.id}&user_id=${checklist.id_creator}`, "CLPP/Question.php", true);
     return resp
   }
   async loadingOptionDataBase(id_question) {

@@ -392,7 +392,7 @@ export class TemplateChecklist {
                 response = this.options(id, false, input);
                 break;
             case 4:
-                response = `<div id="bodyQuestion" class="handSignature"><input type="text" placeholder="Assine Aqui..." disabled/><img src="${this.pathImgSignature}" title="Assinatura manual" /></div>`
+                response = `<div id="bodySignature" class="handSignature"><input type="text" placeholder="Assine Aqui..." disabled/><img src="${this.pathImgSignature}" title="Assinatura manual" /></div>`
                 break;
             case 3:
                 response = `

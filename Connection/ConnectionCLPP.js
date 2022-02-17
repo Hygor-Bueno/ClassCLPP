@@ -16,7 +16,6 @@ export class ConnectionCLPP {
                 if (body.error) throw new Error(body.message)
                 req = body;
             }).catch(erro => {
-                console.error(erro, this.err)
                 if (this.err) this.errorHandling.main(erro)
             })
         this.cleanParams();
@@ -26,7 +25,6 @@ export class ConnectionCLPP {
         this.validationParams(params, pathFile, err);
         this.settingUrl(`/Controller/${this.pathFile}?app_id=7&AUTH=`)
         let req
-        console.log(this.URL)
         await fetch(this.URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

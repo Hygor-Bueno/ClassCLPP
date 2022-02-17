@@ -6,6 +6,9 @@ import { GeneralModal } from '../../Components/generalModal/modal_geral.js'
 import { Message } from "../../Connection/Message.js";
 import { WebSocketCLPP } from "../../Connection/WebSocket.js";
 import { Routers } from "../../Routers/router.js";
+import { ConnectionCLPP } from "../../Connection/ConnectionCLPP.js";
+import { RecordObject } from "../../Components/objects/recordObject.js";
+import { ObjectChecklist } from "../../Components/objects/checklistObject.js";
 
 var listMessage = new MessageList
 var validator = new Validation
@@ -13,8 +16,12 @@ var generalModal = new GeneralModal;
 var usefulComponents = new UsefulComponents;
 var messages = new Message;
 var webSocket = new WebSocketCLPP;
+var connectionCLPP = new ConnectionCLPP;
 
 export class SettingHome {
+    recordObject = new RecordObject;
+    checklistObject = new ObjectChecklist;
+
     settings() {
         this.notifyMessage();
         this.carousel();
@@ -110,5 +117,24 @@ export class SettingHome {
             await router.routers("checklistCreated")
         })})
         
+    }
+    async reportAnsweredToday(checklistJson) {
+        let reportDay =  connectionCLPP.get("&id_user=148&notification", "CLPP/Response.php", true);
+        let shops =  connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')
+        let req = await Promise.all([connectionCLPP.get("&id_user=148&notification", "CLPP/Response.php", true),connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')])
+        reportDay = req[0]
+        shops = this.shopJson(req[1].data)
+        console.log(reportDay.data, " <= Checklist",shops, " <= Unidades ", checklistJson, " <= CHecklist")    
+        
+        
+        console.log(this.recordObject.getDataForGraphic([this.recordObject.separateChecklist(reportDay)[0]],checklistJson,shops,1))
+    }
+
+    shopJson(response) {
+        let jsonShop={};
+        response.forEach(shop => {
+            jsonShop[shop.id] = shop
+        })
+       return jsonShop;
     }
 }
