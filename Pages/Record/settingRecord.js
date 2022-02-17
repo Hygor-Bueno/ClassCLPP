@@ -71,6 +71,7 @@ export class SettingRecord {
                 this.controllerBtns(["#buttonRecordPrint"], false)
                 this.recordObject.setFilters(this.lockInfo())
                 this.validationDate()
+                this.recordObject.getParamsForFilters()
                 break;
             case "graphicButton":
                 // alert("Você abrirá um gráfico")
@@ -366,7 +367,7 @@ export class SettingRecord {
                 question: this.selectInfo("#titleQuestion input[type=checkbox]"),
                 date_checklist: this.selectInfo("#validCheckBlock input[type=checkbox]")
             },
-            id_shops: [this.selectInfo("#selShop input[type=checkbox]")],
+            id_shops: this.selectInfo("#selShop input[type=checkbox]"),
             date_response: {
                 date_init_response: getB_id("initDate").value,
                 date_final_response: getB_id("finalDate").value
