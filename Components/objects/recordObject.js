@@ -46,30 +46,33 @@ export class RecordObject extends ConnectionCLPP {
         let getArray = [];
         let markShop = this.#filters['id_shops'].length || 1;
         let markTitle = this.#filters['checklist']['titles'].length || 1;
+        let markQuestion = this.#filters.checklist.question.length || 1;
 
         for (let cnt = 0; cnt < markShop; cnt++) {
             for (let xxx = 0; xxx < markTitle; xxx++) {
-                Object.keys(this.#filters).forEach((keys, index) => {
-                    if (index != 1) {
-                        params += this.getInformation(keys,xxx)
-                    } else {
-                        if(this.#filters['id_shops'][cnt]) params += '&id_shop=' + this.#filters['id_shops'][cnt]
-                    }
-                })
-                getArray.push(`&id_user=${id}`+ params)
-                params = "";
+                for (let y = 0; y < markQuestion; y++) {
+                    Object.keys(this.#filters).forEach((keys, index) => {
+                        if (index != 1) {
+                            params += this.getInformation(keys, xxx, y)
+                        } else {
+                            if (this.#filters['id_shops'][cnt]) params += '&id_shop=' + this.#filters['id_shops'][cnt]
+                        }
+                    })
+                    getArray.push(`&id_user=${id}` + params)
+                    params = "";
+                }
             }
         }
         this.returnGet(getArray)
     }
 
-    getInformation(keys,xxx){
+    getInformation(keys, xxx, y) {
         let params = "";
         Object.keys(this.#filters[keys]).forEach(subKey => {
             if (this.#filters[keys][subKey] != "") {
                 switch (subKey) {
                     case 'question':
-                        //params += '&date_init_response=' + this.#filters[keys][subKey]
+                        params += '&id_question=' + this.#filters[keys][subKey][y]
                         break;
                     case 'date_init_response':
                         params += '&date_init_response=' + this.#filters[keys][subKey]
@@ -88,8 +91,11 @@ export class RecordObject extends ConnectionCLPP {
 
     async returnGet(getArray) {
         let arrayResp = [];
-        getArray.forEach(value => arrayResp.push(this.get(value, "CLPP/Response.php")))
-        await Promise.all(arrayResp).then(data=>{console.log(data[0].data)})
+        for await (let resp of getArray) {
+            let array = await this.get(resp, "CLPP/Response.php")
+            arrayResp = arrayResp.concat(array.data)
+        }
+        return arrayResp;
     }
 
     separateChecklist(response) {
