@@ -49,40 +49,47 @@ export class RecordObject extends ConnectionCLPP {
 
         for (let cnt = 0; cnt < markShop; cnt++) {
             for (let xxx = 0; xxx < markTitle; xxx++) {
-            Object.keys(this.#filters).forEach((keys, index) => {
-                if (index != 1) {
-                    Object.keys(this.#filters[keys]).forEach(subKey => {
-                            if (subKey == 'titles' && this.#filters[keys][subKey] != "") console.log(this.#filters[keys][subKey][xxx])
-                            if (this.#filters[keys][subKey] != "") {
-                                switch (subKey) {
-                                    case 'question':
-                                        //params += '&date_init_response=' + this.#filters[keys][subKey]
-                                        break;
-                                    case 'date_init_response':
-                                        params += '&date_init_response=' + this.#filters[keys][subKey]
-                                        break;
-                                    case 'date_final_response':
-                                        params += '&date_final_response=' + this.#filters[keys][subKey]
-                                        break;
-                                    case 'titles':
-                                        params += '&id_checklist=' + this.#filters['checklist']['titles'][xxx]
-                                        break;
-                                }
-                            }
-                        })
+                Object.keys(this.#filters).forEach((keys, index) => {
+                    if (index != 1) {
+                        params += this.getInformation(keys,xxx)
                     } else {
                         if(this.#filters['id_shops'][cnt]) params += '&id_shop=' + this.#filters['id_shops'][cnt]
                     }
                 })
-                getArray.push(params)
+                getArray.push(`&id_user=${id}`+ params)
                 params = "";
             }
         }
+        this.returnGet(getArray)
     }
 
-    returnGet(keys, values) {
-        console.log(keys, values)
-        //await this.get(`&id_user=${id}`+ params, "CLPP/Response.php")
+    getInformation(keys,xxx){
+        let params = "";
+        Object.keys(this.#filters[keys]).forEach(subKey => {
+            if (this.#filters[keys][subKey] != "") {
+                switch (subKey) {
+                    case 'question':
+                        //params += '&date_init_response=' + this.#filters[keys][subKey]
+                        break;
+                    case 'date_init_response':
+                        params += '&date_init_response=' + this.#filters[keys][subKey]
+                        break;
+                    case 'date_final_response':
+                        params += '&date_final_response=' + this.#filters[keys][subKey]
+                        break;
+                    case 'titles':
+                        params += '&id_checklist=' + this.#filters['checklist']['titles'][xxx]
+                        break;
+                }
+            }
+        })
+        return params;
+    }
+
+    async returnGet(getArray) {
+        let arrayResp = [];
+        getArray.forEach(value => arrayResp.push(this.get(value, "CLPP/Response.php")))
+        await Promise.all(arrayResp).then(data=>{console.log(data[0].data)})
     }
 
     separateChecklist(response) {
