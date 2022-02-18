@@ -42,44 +42,42 @@ export class RecordObject extends ConnectionCLPP {
 
 
     getParamsForFilters() {
-        let primaryKey = Object.keys(this.#filters)
-        let secundKey = []
-        let params="";
-        primaryKey.forEach((keys, index) => {
-            
-            if (index != 1) {
-                Object.keys(this.#filters[keys]).forEach(subKey => {
-                    console.log(this.#filters[keys][subKey])
-                    switch (subKey) {
-                        case 'titles':
-                            params += '&id_checklist=' + this.#filters[keys][subKey]
-                            break;
-                        case 'question':
+        let params = "";
+        let getArray = [];
+        let markShop = this.#filters['id_shops'].length || 1;
+        let markTitle = this.#filters['checklist']['titles'].length || 1;
 
-                            break;
-                        case 'date_checklist':
-                            break;
-                        case 'date_init_response':
-                            params += '&date_init_response=' + this.#filters[keys][subKey]
-                            break;
-                        case 'date_final_response':
-                            params += '&date_final_response=' + this.#filters[keys][subKey]
-                            break;
+        for (let cnt = 0; cnt < markShop; cnt++) {
+            for (let xxx = 0; xxx < markTitle; xxx++) {
+            Object.keys(this.#filters).forEach((keys, index) => {
+                if (index != 1) {
+                    Object.keys(this.#filters[keys]).forEach(subKey => {
+                            if (subKey == 'titles' && this.#filters[keys][subKey] != "") console.log(this.#filters[keys][subKey][xxx])
+                            if (this.#filters[keys][subKey] != "") {
+                                switch (subKey) {
+                                    case 'question':
+                                        //params += '&date_init_response=' + this.#filters[keys][subKey]
+                                        break;
+                                    case 'date_init_response':
+                                        params += '&date_init_response=' + this.#filters[keys][subKey]
+                                        break;
+                                    case 'date_final_response':
+                                        params += '&date_final_response=' + this.#filters[keys][subKey]
+                                        break;
+                                    case 'titles':
+                                        params += '&id_checklist=' + this.#filters['checklist']['titles'][xxx]
+                                        break;
+                                }
+                            }
+                        })
+                    } else {
+                        if(this.#filters['id_shops'][cnt]) params += '&id_shop=' + this.#filters['id_shops'][cnt]
                     }
                 })
-            } else {
-
+                getArray.push(params)
+                params = "";
             }
-
-        })
-        console.log(params)
-        // console.log(typeof this.#filters.date_response.date_final_response)
-        console.log(this.#filters.checklist.titles == "", typeof this.#filters.checklist)
-        // console.log(this.#filters.checklist,this.#filters.id_shops, this.#filters.date_response,this.#filters.date_response.date_final_response)
-        // Object.keys(this.#filters.checklist).forEach(keys => {
-        //     this.#filters.checklist[keys].forEach(value => console.log(`&${keys == "titles" ? keys = "checklist" : keys}=${value}`))
-        // })
-        // this.#filters.id_shops.forEach(value => value.forEach(shop=> console.log(`&id_shop=${shop}`)))
+        }
     }
 
     returnGet(keys, values) {

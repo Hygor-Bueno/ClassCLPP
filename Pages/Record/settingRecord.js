@@ -82,7 +82,6 @@ export class SettingRecord {
             case "teste":
                 this.loadSavedReports(this.recordObject.getJsonRecord())
                 break;
-
             default:
                 console.error("data-function")
         }
