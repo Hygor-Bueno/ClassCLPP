@@ -55,7 +55,7 @@ export class HomePage extends SettingHome {
                             <header class= "dashboardHome">
                                 <h1> Checklist Respondidos: </h1>
                             </header>                         
-                            <div id="bodyReportDiv">
+                            <div id="bodyReportDiv" class="style_scroll">
                             </div>
                         </div>
                     </div>
