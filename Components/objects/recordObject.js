@@ -1,4 +1,5 @@
 import { ConnectionCLPP } from "../../Connection/ConnectionCLPP.js";
+import { UsefulComponents } from "../../Util/usefulComponents.js";
 import { ClppGraphichObject } from "./clppGraphichObject.js";
 const id = localStorage.getItem("id")
 
@@ -104,12 +105,9 @@ export class RecordObject extends ConnectionCLPP {
         assistent.forEach(elemKey => {
             orderByChecklist.push(response.data.filter(element => { return elemKey[0] == element.id_user && elemKey[1] == element.date && elemKey[2] == element.id_checklist && elemKey[3] == element.id_shop }));
         })
-        // console.log(this.computePercent(orderByChecklist, 1)) // Calcula o valor geral do checklist
-
         return orderByChecklist;
     }
     getKeys(response) {
-        console.log(response)
         let assistent = "";
         let check = ""
         let date = "";
@@ -126,7 +124,7 @@ export class RecordObject extends ConnectionCLPP {
     }
     generalGraphic(orderByChecklist) {
         let point = this.computePercent(orderByChecklist, 1)
-        let dataSpecific = [["Não Satisfatório", 100 - point], ["satisfatório", point]]
+        let dataSpecific = [["Não Satisfatório", 100 - point], ["Satisfatório", point]]
         return dataSpecific
     }
 
@@ -142,10 +140,10 @@ export class RecordObject extends ConnectionCLPP {
         let aux = 0;
         orderByChecklist.forEach(checklist => {
             let description, percent;
-            description = objectChecklist[checklist[0].id_checklist].getTitle().slice(0, 15) + " - " + objectShops[checklist[0].id_shop].description + " ( " + checklist[0].date + " ) ";
+            description = objectChecklist[checklist[0].id_checklist].getTitle().slice(0, 10) + " - " + objectShops[checklist[0].id_shop].description +  this.formateDateGraph(checklist[0].date);
 
-            percent = this.computePercent([checklist], especifc || orderByChecklist.length)
-            console.log(especifc || orderByChecklist.length)
+            percent = this.computePercent([checklist], specific || orderByChecklist.length)
+            console.log(specific || orderByChecklist.length)
 
             aux += percent
             response.push([description, percent])
@@ -153,13 +151,17 @@ export class RecordObject extends ConnectionCLPP {
         response.unshift(["Não Satisfatório", 100 - aux])
         return response;
     }
+    formateDateGraph(date){
+        let usefulComponents = new UsefulComponents;
+        let result = usefulComponents.splitString(date,"-")
+        return " "+result[2]+"/"+result[1] 
+    }
 
     computePercent(responseChecklist, max) {
         let question = 0;
         let sum = 0;
         let ignore = 0;
         for (const allQuestion of responseChecklist) {
-            console.log(allQuestion)
             question += parseFloat(allQuestion[0].qtd_questions);
             for (const options of allQuestion) {
                 if (options.type <= 2) {
