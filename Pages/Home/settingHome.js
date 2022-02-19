@@ -9,6 +9,7 @@ import { Routers } from "../../Routers/router.js";
 import { ConnectionCLPP } from "../../Connection/ConnectionCLPP.js";
 import { RecordObject } from "../../Components/objects/recordObject.js";
 import { ObjectChecklist } from "../../Components/objects/checklistObject.js";
+import { ClppGraphichObject } from "../../Components/objects/clppGraphichObject.js";
 
 var listMessage = new MessageList
 var validator = new Validation
@@ -22,11 +23,12 @@ export class SettingHome {
     recordObject = new RecordObject;
     checklistObject = new ObjectChecklist;
 
-    settings() {
+    async settings() {
         this.notifyMessage();
         this.carousel();
         this.buttonCardChecklist();
         this.buttonEditChecklist();
+        await this.reportAnsweredToday(this.checklistJson)
     }
     openMessage() {
         getB_id('message').setAttribute('style', 'display:flex')
@@ -53,7 +55,6 @@ export class SettingHome {
     buttonCardChecklist() {
         $_all('.viewQuizList').forEach(element => {
             element.addEventListener("click", () => {
-                // console.log(getB_id(`listQuestion_${element.getAttribute('data-id')}`))
                 let divList = getB_id(`listQuestion_${element.getAttribute('data-id')}`);
                 if (window.getComputedStyle(divList, null).display == 'none') {
                     divList.style.display = "flex"
@@ -81,7 +82,7 @@ export class SettingHome {
     settingsButtonChat(idSender) {
         getB_id('buttonReply').addEventListener('click', () => this.closeMessage());
         getB_id('buttonSend').addEventListener('click', () => { this.buttonSend(idSender, getB_id('inputSend').value, 1, '#bodyMessageDiv section') });
-        getB_id('inputSend').addEventListener('keypress', (enter) => {if (enter.key === 'Enter') getB_id('buttonSend').click()})
+        getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
     async buttonSend(idSender, message, type, local, localScroll) {
         if (type == 2 ? true : validator.minLength(message, 0) && validator.maxLength(message, 200)) {
@@ -110,31 +111,73 @@ export class SettingHome {
             }
         })
     }
+
     buttonEditChecklist() {
-        $_all(".editChecklistCard").forEach(element => { element.addEventListener("click", async() => {
-            let router = new Routers;
-            localStorage.setItem("editChecklist", element.getAttribute("id").split("_")[1])
-            await router.routers("checklistCreated")
-        })})
-        
-    }
-    async reportAnsweredToday(checklistJson) {
-        let reportDay =  connectionCLPP.get("&id_user=148&notification", "CLPP/Response.php", true);
-        let shops =  connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')
-        let req = await Promise.all([connectionCLPP.get("&id_user=148&notification", "CLPP/Response.php", true),connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')])
-        reportDay = req[0]
-        shops = this.shopJson(req[1].data)
-        console.log(reportDay.data, " <= Checklist",shops, " <= Unidades ", checklistJson, " <= CHecklist")    
-        
-        
-        console.log(this.recordObject.getDataForGraphic([this.recordObject.separateChecklist(reportDay)[0]],checklistJson,shops,1))
+        $_all(".editChecklistCard").forEach(element => {
+            element.addEventListener("click", async () => {
+                let router = new Routers;
+                localStorage.setItem("editChecklist", element.getAttribute("id").split("_")[1])
+                await router.routers("checklistCreated")
+            })
+        })
+
     }
 
+    async reportAnsweredToday(checklistJson) {
+        let reportDay = connectionCLPP.get("&id_user=148&notification", "CLPP/Response.php", true);
+        let shops = await connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')
+        let req = await Promise.all([connectionCLPP.get("&id_user=148&notification", "CLPP/Response.php", true), connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')])
+        reportDay = req[0]
+        shops = this.shopJson(req[1].data)
+        let jsonReportCard = await this.ty(this.recordObject.separateChecklist(reportDay), checklistJson, shops)
+        this.cardRecord(jsonReportCard,'#bodyReportDiv');
+    }
+    async ty(pay, checklistJson, shops) {
+        let response = []
+        for await (const uniqueChecklist of pay) {
+            let userData = await connectionCLPP.get("&id=" + uniqueChecklist[0].id_user, "CCPP/Employee.php")
+            let arrayGraphic = this.recordObject.getDataForGraphic([uniqueChecklist], checklistJson, shops, 1)
+            let result = {}
+            result.cod = uniqueChecklist[0].id_checklist+"_"+uniqueChecklist[0].id_user+"_"+uniqueChecklist[0].id_shop
+            result.user = usefulComponents.splitStringName(userData.data[0].name," ");
+            result.shop = shops[uniqueChecklist[0].id_shop].description;
+            result.porcent = arrayGraphic[1][1];
+            result.graphich = arrayGraphic;
+            response.push(result);
+        }
+        return response
+    }
+    cardRecord(jsonReportCard, context) {
+        console.log(jsonReportCard);
+        console.log()
+
+        $(`${context}`).insertAdjacentHTML("beforeend", jsonReportCard.map(jsonCard => (
+            `
+                <div id="${jsonCard.cod}" class="cardRecordClass" style="display:flex;justify-content:space-between; background:#ADD8E6; margin:5px; min-height:50px;">
+                    <aside>
+                        <p>${jsonCard.user}</p>
+                    </aside>
+                    <section style="width:250px;">
+                        <canvas id="can_${jsonCard.cod}">
+                        </canvas>
+                    </section>
+                </div>
+             `
+        )).join(""))
+        jsonReportCard.forEach(elementGraphic =>  this.Q(elementGraphic))
+       
+
+    }
+    Q(j) {
+        console.log(j)
+        let clppGraphic = new ClppGraphichObject;
+        clppGraphic.clppGraphics(j.graphich, `#can_${j.cod}`, 2)
+    }
     shopJson(response) {
-        let jsonShop={};
+        let jsonShop = {};
         response.forEach(shop => {
             jsonShop[shop.id] = shop
         })
-       return jsonShop;
+        return jsonShop;
     }
 }

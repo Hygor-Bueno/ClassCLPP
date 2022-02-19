@@ -31,7 +31,7 @@ export class HomePage extends SettingHome {
     async main() {
         this.userJson = await employee.get("&id=" + localStorage.getItem("id"), true);
         await this.createObjChecklist();
-        
+        // console.log(await employee.get("&id=5", true))
         this.accessClpp = await userAccess.get('&application_id=7&web');
         let nameUser = usefulComponents.splitStringName(this.userJson.name, " ")
         let response =
@@ -56,7 +56,6 @@ export class HomePage extends SettingHome {
                                 <h1> Checklist Respondidos: </h1>
                             </header>                         
                             <div id="bodyReportDiv">
-                                ${await this.reportAnsweredToday(this.checklistJson) || `<p>Whats?</p>`}
                             </div>
                         </div>
                     </div>

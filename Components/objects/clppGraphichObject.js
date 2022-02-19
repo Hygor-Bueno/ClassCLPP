@@ -3,7 +3,7 @@ export class ClppGraphichObject {
     clppGraphics(arrayValues, context, types) {
         let transparency = 0.4
         let noS = arrayValues[0][0] == "Não Satisfatório" 
-        console.log(noS)
+        console.log(document.querySelector(`${context}`),context)
         let heightY = arrayValues.length
         this.graphicRecord = new Chart(document.querySelector(`${context}`).getContext("2d"),
             {
@@ -21,16 +21,16 @@ export class ClppGraphichObject {
                     ]
                 },
                 options: {
-                    scales: {
-                        y: {
-                            ticks: {
-                                callback: function (value) {
-                                    return value + " %"
-                                }
-                            },
-                            suggestedMax: heightY < 7 ? 100 : ""
-                        }
-                    }
+                    // scales: {
+                    //     y: {
+                    //         ticks: {
+                    //             callback: function (value) {
+                    //                 return value + " %"
+                    //             }
+                    //         },
+                    //         suggestedMax: heightY < 7 ? 100 : ""
+                    //     }
+                    // }
                 }
             });
     }

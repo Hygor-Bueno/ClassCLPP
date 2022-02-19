@@ -41,7 +41,6 @@ export class RecordObject extends ConnectionCLPP {
 
     async returnGet(){
         let response = await this.get(`&id_user=${id}&date_init_response='${this.#filters.date_response.date_init_response}'`, "CLPP/Response.php")
-        console.log(this.#filters)
     }
 
     getParamsForFilters(){
@@ -56,12 +55,9 @@ export class RecordObject extends ConnectionCLPP {
         assistent.forEach(elemKey => {
             orderByChecklist.push(response.data.filter(element => { return elemKey[0] == element.id_user && elemKey[1] == element.date && elemKey[2] == element.id_checklist && elemKey[3] == element.id_shop }));
         })
-        // console.log(this.computePercent(orderByChecklist, 1)) // Calcula o valor geral do checklist
-
         return orderByChecklist;
     }
     getKeys(response) {
-        console.log(response)
         let assistent = "";
         let check = ""
         let date = "";
@@ -94,7 +90,6 @@ export class RecordObject extends ConnectionCLPP {
             let description, percent;
             description = objectChecklist[checklist[0].id_checklist].getTitle().slice(0, 15) + " - " + objectShops[checklist[0].id_shop].description + " ( " + checklist[0].date + " ) ";
             percent = this.computePercent([checklist], especifc || orderByChecklist.length)
-            console.log(especifc || orderByChecklist.length)
             aux += percent
             response.push([description, percent])
         })
@@ -107,7 +102,6 @@ export class RecordObject extends ConnectionCLPP {
         let sum = 0;
         let ignore = 0;
         for (const allQuestion of responseChecklist) {
-            console.log(allQuestion)
             question += parseFloat(allQuestion[0].qtd_questions);
             for (const options of allQuestion) {
                 if (options.type <= 2) {
