@@ -67,9 +67,11 @@ export class SettingRecord {
             case "filterBtn":
                 this.controllerBtns(["#buttonRecordPrint"], false)
                 this.recordObject.setFilters(this.lockInfo())
-                this.recordObject.returnGet()
-                break;    
+                this.validationDate()
+                this.recordObject.getParamsForFilters()
+                break;
             case "graphicButton":
+
                 // alert("Você abrirá um gráfico")
                 let req = await this.recordObject.get("&id_user=148&notification", "CLPP/Response.php",true);
                 console.log(req)
@@ -84,8 +86,8 @@ export class SettingRecord {
                 console.error("data-function")
         }
     }
-
-    loadSavedReports(stop_json){
+  
+   loadSavedReports(stop_json){
         let jsonFilters = stop_json.filters
         getB_id("inputNameTitles").value = stop_json.name
         Object.keys(jsonFilters.checklist).forEach(element => {
@@ -132,24 +134,16 @@ export class SettingRecord {
         document.getElementById("selectTitulo").innerHTML = "Selecione o checklist:"
     }
 
-    /*     filter() {
-            let arrayCheck = this.walksArray('#titleChecklistOption input[type=checkbox]')
-            let arrayShop = this.walksArray('#selShop input[type=checkbox]')
-            let arrayValidade = this.walksArray('#validCheckBlock input[type=checkbox]')
-            let arrayQuestion = this.walksArray('#titleQuestionOption input[type=checkbox]')
-            let jsonFilter;
-            if (arrayCheck.length >= 1) {
-                alert('Puxou so pela checklist')
-                jsonFilter = {
-                    Checklist: arrayCheck.length >= 1 ? arrayCheck[0].value : "Null",
-                    Shop: arrayShop.length >= 1 ? arrayShop[0].value : "Null",
-                    Questão: arrayQuestion.length >= 1 ? arrayQuestion[0].value : "Null",
-                    Validade: arrayValidade.length >= 1 ? arrayValidade[0].value : "Null",
-                }
-                console.log(jsonFilter)
-                return jsonFilter
-            } alert('selecione uma checklist')
-        } */
+    validationDate() {
+        let dateInit = getB_id("initDate").value
+        let dateFinal = getB_id("finalDate").value
+        if (dateInit != 0 && dateFinal == 0) {
+            alert('selecione data final')
+            return
+        } else if (dateInit == 0 && dateFinal != 0) {
+            alert('Selecione data inicial')
+        }
+    }
 
     templateOption(objectChecklist, key, array) {
         let response = ""
@@ -157,7 +151,7 @@ export class SettingRecord {
         auxArray.map(element => {
             element[key] ? response +=
                 `<div class="optionSelect">
-                <input type="checkbox" class="option" id="${element.id}" data-id="${element.id}" value="${element[key]}">
+                <input type="checkbox" class="option" data-id="${element.id}" value="${element[key]}">
                     <p class="valorCheck">${element[key]}</p>
                 </input>
             </div>` : ""
@@ -183,22 +177,15 @@ export class SettingRecord {
             if (element.getAttribute('id') == e.getAttribute('id')) {
                 e.setAttribute("style", "opacity: 1")
                 this.changeChartType(e.getAttribute('id'));
-            } else {
-                e.setAttribute("style", "opacity: 0.3")
-            }
+            } else e.setAttribute("style", "opacity: 0.3")
         })
     }
 
     changeChartType(value) {
         this.closeGraphic();
-
-        if (value == 'buttonRecordBar') {
-            this.typeGraph = 2
-        } else if (value == 'buttonRecordPizza') {
-            this.typeGraph = 1
-        } else {
-            this.typeGraph = 3
-        }
+        if (value == 'buttonRecordBar') this.typeGraph = 2
+        else if (value == 'buttonRecordPizza') this.typeGraph = 1
+        else this.typeGraph = 3
     }
 
     closeGraphic() {
@@ -213,8 +200,7 @@ export class SettingRecord {
         } else {
             getB_id(local).setAttribute("style", "opacity:0.3")
             $(`#${local} button`).disabled = true
-        }
-        $(`#${local} p`).innerText = message
+        } $(`#${local} p`).innerText = message
     }
 
     async populaShop() {
@@ -225,7 +211,6 @@ export class SettingRecord {
     pegandoValidade() {
         let array = [];
         getB_id('validCheckBlock').onchange = (validade) => {
-
             let arrayValidade = this.walksArray('#validCheckBlock input[type=checkbox]')
             if (validade.target.checked) {
                 let arrayChecked = this.walksArray2('#titleChecklistOption input[type=checkbox]', arrayValidade[0].attributes[2].value)
@@ -246,7 +231,6 @@ export class SettingRecord {
                     this.controllerSelect("selectButtonQuestion", "Selecione a checklist", false)
                 }
             }
-
         }
     }
 
@@ -262,13 +246,11 @@ export class SettingRecord {
                     this.controllerSelect("selectButtonValidade", "Checklist selecionada", false)
                     getB_id('validCheckBlock').setAttribute("style", "display:none")
                     this.controllerSelect('selectButtonQuestion', "Selecione a pergunta:", true)
-
                 } else if (arrayChecked.length > 1) this.controllerSelect("selectButtonQuestion", "Multiplos checklist", false)
                 else if (arrayChecked.length < 1) {
                     this.controllerSelect('selectButtonValidade', "Selecione a validade:", true)
                     this.controllerSelect('selectButtonQuestion', "Selecione a checklist:", false)
                 }
-
             } else this.selectAll()
         }
     }
@@ -285,9 +267,7 @@ export class SettingRecord {
     walksArray(local) {
         let array = []
         document.querySelectorAll(local).forEach(element => {
-            if (element.checked) {
-                array.push(element)
-            }
+            if (element.checked) array.push(element)
         })
         return array
     }
@@ -295,12 +275,11 @@ export class SettingRecord {
     walksArray2(local, id) {
         let response
         document.querySelectorAll(local).forEach(element => {
-            if (element.getAttribute("data-id") == id) {
-                response = element
-            }
+            if (element.getAttribute("data-id") == id) response = element
         })
         return response
     }
+
     validateParameter(array, cont) {
         if (array > 1) document.getElementById("selectTitulo").innerHTML = "Multi selecionado"
         if (array == 1) document.getElementById("selectTitulo").innerHTML = cont.value.toLowerCase().slice(0, 20) + ".."
@@ -327,7 +306,6 @@ export class SettingRecord {
         if (cont.length != 0) {
             let question = this.jsonCheck[cont[0].attributes[2].value].getQuestion()
             return question
-
         }
     }
 
@@ -346,9 +324,7 @@ export class SettingRecord {
     }
 
     settingBtnAlertSave() {
-        getB_id('cancelFile').addEventListener('click', () => {
-            closeModal()
-        })
+        getB_id('cancelFile').addEventListener('click', () => { closeModal() })
         getB_id('saveFile').addEventListener('click', () => {
             this.setDateObj()
             this.recordObject.saveReport()
@@ -371,7 +347,7 @@ export class SettingRecord {
                 question: this.selectInfo("#titleQuestion input[type=checkbox]"),
                 date_checklist: this.selectInfo("#validCheckBlock input[type=checkbox]")
             },
-            id_shops: [this.selectInfo("#selShop input[type=checkbox]")],
+            id_shops: this.selectInfo("#selShop input[type=checkbox]"),
             date_response: {
                 date_init_response: getB_id("initDate").value,
                 date_final_response: getB_id("finalDate").value

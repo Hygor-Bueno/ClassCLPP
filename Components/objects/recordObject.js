@@ -10,43 +10,92 @@ export class RecordObject extends ConnectionCLPP {
     #description;
     #filters;
     #jsonRecord;
+
     clppGraphich = new ClppGraphichObject;
 
-    getId_user() {return this.#id_user}
-    getPoint() {return this.#point}
-    getDate() {return this.#date}
-    getType() {return this.#type}
-    getDescription() {return this.#description}
-    getFilters() {return this.#filters}
-    getJsonRecord() {return this.#jsonRecord}
+    getId_user() { return this.#id_user }
+    getPoint() { return this.#point }
+    getDate() { return this.#date }
+    getType() { return this.#type }
+    getDescription() { return this.#description }
+    getFilters() { return this.#filters }
+    getJsonRecord() { return this.#jsonRecord }
 
-    setId_user(id_user) {this.#id_user = id_user}
-    setPoint(point) {this.#point = point}
-    setDate(date) {this.#date = date}
-    setType(type) {this.#type = type}
-    setDescritpion(description) {this.#description = description}
-    setFilters(filters) {this.#filters = filters}
-    setJsonRecord(jsonRecord) {this.#jsonRecord = jsonRecord}
+    setId_user(id_user) { this.#id_user = id_user }
+    setPoint(point) { this.#point = point }
+    setDate(date) { this.#date = date }
+    setType(type) { this.#type = type }
+    setDescritpion(description) { this.#description = description }
+    setFilters(filters) { this.#filters = filters }
+    setJsonRecord(jsonRecord) { this.#jsonRecord = jsonRecord }
 
-    saveReport(){
-        this.#jsonRecord={
-            id_user: this.#id_user, 
+    saveReport() {
+        this.#jsonRecord = {
+            id_user: this.#id_user,
             point: this.#point,
             date: this.#date,
             type: this.#type,
             name: this.#description,
             filters: this.#filters
         }
-    } 
-
-    async returnGet(){
-        let response = await this.get(`&id_user=${id}&date_init_response='${this.#filters.date_response.date_init_response}'`, "CLPP/Response.php")
     }
 
-    getParamsForFilters(){
-        filtersJson = {
-            
+
+    getParamsForFilters() {
+        let params = "";
+        let getArray = [];
+        let markShop = this.#filters['id_shops'].length || 1;
+        let markTitle = this.#filters['checklist']['titles'].length || 1;
+        let markQuestion = this.#filters.checklist.question.length || 1;
+
+        for (let cnt = 0; cnt < markShop; cnt++) {
+            for (let xxx = 0; xxx < markTitle; xxx++) {
+                for (let y = 0; y < markQuestion; y++) {
+                    Object.keys(this.#filters).forEach((keys, index) => {
+                        if (index != 1) {
+                            params += this.getInformation(keys, xxx, y)
+                        } else {
+                            if (this.#filters['id_shops'][cnt]) params += '&id_shop=' + this.#filters['id_shops'][cnt]
+                        }
+                    })
+                    getArray.push(`&id_user=${id}` + params)
+                    params = "";
+                }
+            }
         }
+        this.returnGet(getArray)
+    }
+
+    getInformation(keys, xxx, y) {
+        let params = "";
+        Object.keys(this.#filters[keys]).forEach(subKey => {
+            if (this.#filters[keys][subKey] != "") {
+                switch (subKey) {
+                    case 'question':
+                        params += '&id_question=' + this.#filters[keys][subKey][y]
+                        break;
+                    case 'date_init_response':
+                        params += '&date_init_response=' + this.#filters[keys][subKey]
+                        break;
+                    case 'date_final_response':
+                        params += '&date_final_response=' + this.#filters[keys][subKey]
+                        break;
+                    case 'titles':
+                        params += '&id_checklist=' + this.#filters['checklist']['titles'][xxx]
+                        break;
+                }
+            }
+        })
+        return params;
+    }
+
+    async returnGet(getArray) {
+        let arrayResp = [];
+        for await (let resp of getArray) {
+            let array = await this.get(resp, "CLPP/Response.php")
+            arrayResp = arrayResp.concat(array.data)
+        }
+        return arrayResp;
     }
 
     separateChecklist(response) {
@@ -73,27 +122,32 @@ export class RecordObject extends ConnectionCLPP {
         return filterKeys;
     }
     generalGraphic(orderByChecklist) {
-        let point= this.computePercent(orderByChecklist, 1)
-        let dataSpecific = [["Não Satisfatório",100 - point], ["satisfatório",point]]
-        return dataSpecific
-    }
-    specificGraphic(orderByChecklist, objectChecklist, objectShops, especifc){
-        let dataSpecific = this.getDataForGraphic(orderByChecklist, objectChecklist, objectShops, especifc)
-        dataSpecific.shift()
+        let point = this.computePercent(orderByChecklist, 1)
+        let dataSpecific = [["Não Satisfatório", 100 - point], ["satisfatório", point]]
         return dataSpecific
     }
 
-    getDataForGraphic(orderByChecklist, objectChecklist, objectShops, especifc) {
+    specificGraphic(orderByChecklist, objectChecklist, objectShops, especifc) {
+        let dataSpecific = this.getDataForGraphic(orderByChecklist, objectChecklist, objectShops, especifc)
+        dataSpecific.shift()
+
+        return dataSpecific
+    }
+
+    getDataForGraphic(orderByChecklist, objectChecklist, objectShops, specific) {
         let response = []
         let aux = 0;
         orderByChecklist.forEach(checklist => {
             let description, percent;
             description = objectChecklist[checklist[0].id_checklist].getTitle().slice(0, 15) + " - " + objectShops[checklist[0].id_shop].description + " ( " + checklist[0].date + " ) ";
-            percent = this.computePercent([checklist], especifc || orderByChecklist.length)
+
+            percent = this.computePercent([checklist], specific || orderByChecklist.length)
+            console.log(specific || orderByChecklist.length)
+
             aux += percent
             response.push([description, percent])
         })
-        response.unshift(["Não Satisfatório",100 - aux]) 
+        response.unshift(["Não Satisfatório", 100 - aux])
         return response;
     }
 
