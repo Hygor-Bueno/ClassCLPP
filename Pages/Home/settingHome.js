@@ -124,19 +124,24 @@ export class SettingHome {
     }
 
     async reportAnsweredToday(checklistJson) {
-        let reportDay;
-        let shops;
-        let req = await Promise.all([connectionCLPP.get("&id_user=148&notification", "CLPP/Response.php", true), connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')])
-        reportDay = req[0]      
-        shops = this.shopJson(req[1].data)
-        let jsonReportCard = await this.contructorJsonCard(this.recordObject.separateChecklist(reportDay), checklistJson, shops)
-        this.cardRecord(jsonReportCard,'#bodyReportDiv');
+        // try{
+            let reportDay;
+            let shops;
+            let req = await Promise.all([connectionCLPP.get(`&id_user=${localStorage.getItem("id")}&notification`, "CLPP/Response.php"), connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')])
+            reportDay = req[0]      
+            shops = this.shopJson(req[1].data)
+            let jsonReportCard = await this.contructorJsonCard(this.recordObject.separateChecklist(reportDay), checklistJson, shops)
+            this.cardRecord(jsonReportCard,'#bodyReportDiv');
+        // }catch (e) {
+        //     console.error(e)
+        // }
     }
     async contructorJsonCard(pay, checklistJson, shops) {
         let response = []
+        //, checklistJson, shops, 1
         for await (const uniqueChecklist of pay) {
             let userData = await connectionCLPP.get("&id=" + uniqueChecklist[0].id_user, "CCPP/Employee.php")
-            let arrayGraphic = this.recordObject.generalGraphic([uniqueChecklist], checklistJson, shops, 1)
+            let arrayGraphic = this.recordObject.generalGraphic([uniqueChecklist])
             let result = {}
             result.cod = uniqueChecklist[0].id_checklist+"_"+uniqueChecklist[0].id_user+"_"+uniqueChecklist[0].id_shop
             result.user = usefulComponents.splitStringName(userData.data[0].name," ");
@@ -148,6 +153,7 @@ export class SettingHome {
         return response
     }
     cardRecord(jsonReportCard, context) {
+        console.log(jsonReportCard)
         $(`${context}`).insertAdjacentHTML("beforeend", jsonReportCard.map(jsonCard => (
             `
                 <div id="${jsonCard.cod}" class="cardRecordClass" >
@@ -164,7 +170,6 @@ export class SettingHome {
         jsonReportCard.forEach(elementGraphic =>  this.createGraphichCard(elementGraphic))
     }
     createGraphichCard(jsonGraphich) {
-        console.log(jsonGraphich)
         let clppGraphic = new ClppGraphichObject;
         clppGraphic.clppGraphics(jsonGraphich.graphich, `#can_${jsonGraphich.cod}`, 3)
     }
