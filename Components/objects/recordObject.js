@@ -64,7 +64,7 @@ export class RecordObject extends ConnectionCLPP {
                 }
             }
         }
-        this.returnGet(getArray)
+        return getArray 
     }
 
     getInformation(keys, xxx, y) {
@@ -94,7 +94,7 @@ export class RecordObject extends ConnectionCLPP {
         let arrayResp = [];
         for await (let resp of getArray) {
             let array = await this.get(resp, "CLPP/Response.php")
-            arrayResp = arrayResp.concat(array.data)
+            if (array) arrayResp = arrayResp.concat(array.data)
         }
         return arrayResp;
     }

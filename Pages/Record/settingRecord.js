@@ -65,10 +65,7 @@ export class SettingRecord {
                 this.settingBtnAlertSave()
                 break;
             case "filterBtn":
-                this.controllerBtns(["#buttonRecordPrint"], false)
-                this.recordObject.setFilters(this.lockInfo())
-                this.validationDate()
-                this.recordObject.getParamsForFilters()
+            this.pressBtnFilter()
                 break;
             case "graphicButton":
 
@@ -86,8 +83,15 @@ export class SettingRecord {
                 console.error("data-function")
         }
     }
+    async pressBtnFilter(){
+        this.controllerBtns(["#buttonRecordPrint"], false)
+        this.recordObject.setFilters(this.lockInfo())
+        this.validationDate()
+        let returnReq = await this.recordObject.returnGet(this.recordObject.getParamsForFilters())
+        console.log(returnReq)
+    }
   
-   loadSavedReports(stop_json){
+    loadSavedReports(stop_json){
         let jsonFilters = stop_json.filters
         getB_id("inputNameTitles").value = stop_json.name
         Object.keys(jsonFilters.checklist).forEach(element => {
