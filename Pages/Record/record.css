@@ -348,11 +348,13 @@ input {
 
 .btnMiniGrafico {
   display: flex;
-  justify-content: end;
+  justify-content: space-around;
+  padding: 10px;
 }
 
 .selMiniGrafico {
   border: none;
+  border-bottom: 0.5px solid rgb(178, 178, 178);
 }
 
 @media screen and (min-width: 1500px) {
