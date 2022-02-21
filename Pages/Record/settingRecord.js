@@ -65,11 +65,13 @@ export class SettingRecord {
                 this.settingBtnAlertSave()
                 break;
             case "filterBtn":
-            this.pressBtnFilter()
+                this.pressBtnFilter()
                 break;
             case "graphicButton":
                 // alert("Você abrirá um gráfico")
+
                 let req = await this.recordObject.get("&id_user=148&notification", "CLPP/Response.php",true);
+
                 // this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(this.recordObject.separateChecklist(req)), "#mainGraphic", this.typeGraph);
                 // this.recordObject.clppGraphich.clppGraphics(this.recordObject.getDataForGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop), "#mainGraphic", this.typeGraph);
                 // this.recordObject.clppGraphich.clppGraphics(this.recordObject.specificGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop,1), "#mainGraphic", this.typeGraph);
@@ -81,31 +83,74 @@ export class SettingRecord {
                 console.error("data-function")
         }
     }
-    async pressBtnFilter(){
+
+    async pressBtnFilter() {
         this.controllerBtns(["#buttonRecordPrint"], false)
         this.recordObject.setFilters(this.lockInfo())
         this.validationDate()
         let returnReq = await this.recordObject.returnGet(this.recordObject.getParamsForFilters())
+
+        this.populaShopGraphic(returnReq)
+        this.populaCheckGraphic(returnReq)
+    }
+
+        populaCheckGraphic(returnReq) {
+        getB_id('popupaCheckpGra').innerHTML = ""
+        getB_id('popupaCheckpGra').insertAdjacentHTML('beforeend', `<option class="popupaCheckpGra">Checklist</option>`)
+        let result = this.filterMiniGraphic(returnReq, "id_checklist")
+        result.forEach(element => {
+            let response = ""
+            getB_id('popupaCheckpGra').insertAdjacentHTML('beforeend', response += `<option class="popupaCheckpGra">${(this.jsonCheck[element].getTitle()).slice(0, 15) + "..."}</option>`)
+        })
+
         this.closeGraphic()
         this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(this.recordObject.separateChecklist(returnReq)),"#mainGraphic", this.typeGraph)
+
     }
-  
-    loadSavedReports(stop_json){
+
+    populaShopGraphic(returnReq) {
+        getB_id('popupaShopGra').innerHTML = ""
+        getB_id('popupaShopGra').insertAdjacentHTML('beforeend', `<option class="popupaShopGra">Unidade</option>`)
+        let result = this.filterMiniGraphic(returnReq, "id_shop")
+        result.forEach(element => {
+            console.log(element)
+            let response = ""
+            getB_id('popupaShopGra').insertAdjacentHTML('beforeend', response += `<option class="popupaShopGra">${this.jsonShop[element].description}</option>`)
+        })
+    }
+
+    filterMiniGraphic(returnReq, key) {
+        let assiistent = []
+        returnReq.forEach(resultFilters => {
+            if (this.validation(assiistent, resultFilters[key])) assiistent.push(resultFilters[key])
+        })
+        return assiistent
+    }
+
+    validation(keys, value) {
+        let response = true
+        keys.forEach(key => {
+            if (key == value) response = false
+        })
+        return response;
+    }
+
+    loadSavedReports(stop_json) {
         let jsonFilters = stop_json.filters
         getB_id("inputNameTitles").value = stop_json.name
         Object.keys(jsonFilters.checklist).forEach(element => {
             if (jsonFilters.checklist[element] != "") {
                 jsonFilters.checklist[element].forEach(ele => getB_id(`${ele}`).checked = true)
-                element == "titles" && openClose(getB_id("titleChecklistOption")) 
-                element == "question" && openClose(getB_id("titleQuestionOption")) 
-                element == "date_checklist" && openClose(getB_id("validCheckBlock")) 
+                element == "titles" && openClose(getB_id("titleChecklistOption"))
+                element == "question" && openClose(getB_id("titleQuestionOption"))
+                element == "date_checklist" && openClose(getB_id("validCheckBlock"))
             }
         })
         jsonFilters.id_shops[0].forEach(elem => getB_id(`${elem}`).checked = true)
         this.loadDate(jsonFilters)
     }
 
-    loadDate(dateJson){  
+    loadDate(dateJson) {
         let date = dateJson.date_response
         getB_id("initDate").value = date.date_init_response
         getB_id("finalDate").value = date.date_final_response
@@ -129,6 +174,7 @@ export class SettingRecord {
         });
         this.controllerSelect('selectButtonQuestion', "Selecione a checklist:", false)
         this.controllerSelect('selectButtonValidade', "Selecione a validade:", true)
+        this.controllerSelect('titleChecklist', "Selecione a validade:", true)
     }
 
     clearDate() {
