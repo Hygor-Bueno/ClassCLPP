@@ -44,21 +44,22 @@ export class SettingRecord {
             case "clearBtn":
                 this.controllerBtns(["#buttonRecordPrint"], true)
                 this.clearFilter()
+                this.closeGraphic()
                 break;
-            case "buttonRecordGraphic":
+                case "buttonRecordGraphic":
                 this.buttonGraphic(element)
                 break;
             case "titleChecklist":
-                this.openClose(element)
+                this.openClose(element.getAttribute("data-linked"))
                 break;
             case "validade":
-                this.openClose(element)
+                this.openClose(element.getAttribute("data-linked"))
                 break;
             case "unidade":
-                this.openClose(element)
+                this.openClose(element.getAttribute("data-linked"))
                 break;
             case "titleQuestion":
-                this.openClose(element)
+                this.openClose(element.getAttribute("data-linked"))
                 break;
             case "buttonRecordPrint":
                 openModal(this.alertSave())
@@ -68,16 +69,15 @@ export class SettingRecord {
                 this.pressBtnFilter()
                 break;
             case "graphicButton":
-                // alert("Você abrirá um gráfico")
-
                 let req = await this.recordObject.get("&id_user=148&notification", "CLPP/Response.php",true);
-
+                // alert("Você abrirá um gráfico")
                 // this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(this.recordObject.separateChecklist(req)), "#mainGraphic", this.typeGraph);
                 // this.recordObject.clppGraphich.clppGraphics(this.recordObject.getDataForGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop), "#mainGraphic", this.typeGraph);
                 // this.recordObject.clppGraphich.clppGraphics(this.recordObject.specificGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop,1), "#mainGraphic", this.typeGraph);
                 break;
             case "teste":
                 this.loadSavedReports(this.recordObject.getJsonRecord())
+                getB_id("filterBtn").click();
                 break;
             default:
                 console.error("data-function")
@@ -141,13 +141,18 @@ export class SettingRecord {
         Object.keys(jsonFilters.checklist).forEach(element => {
             if (jsonFilters.checklist[element] != "") {
                 jsonFilters.checklist[element].forEach(ele => getB_id(`${ele}`).checked = true)
-                element == "titles" && openClose(getB_id("titleChecklistOption"))
-                element == "question" && openClose(getB_id("titleQuestionOption"))
-                element == "date_checklist" && openClose(getB_id("validCheckBlock"))
+
+                element == "titles" && this.openClose("titleChecklistOption") 
+                element == "question" && this.openClose("titleQuestionOption") 
+                element == "date_checklist" && this.openClose("validCheckBlock") 
             }
         })
-        jsonFilters.id_shops[0].forEach(elem => getB_id(`${elem}`).checked = true)
+        if(jsonFilters.id_shops != "" ){
+            jsonFilters.id_shops.forEach(elem => getB_id(`${elem}`).checked = true)
+            this.openClose("selShop")
+        }
         this.loadDate(jsonFilters)
+        // this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(this.recordObject.separateChecklist(returnReq)),"#mainGraphic", this.typeGraph)
     }
 
     loadDate(dateJson) {
@@ -157,9 +162,9 @@ export class SettingRecord {
     }
 
     openClose(element) {
-        getB_id(element.getAttribute("data-linked")).style.display == 'none'
-            ? getB_id(element.getAttribute("data-linked")).setAttribute("style", "display:block")
-            : getB_id(element.getAttribute("data-linked")).setAttribute("style", "display:none")
+        getB_id(element).style.display == 'none'
+            ? getB_id(element).setAttribute("style", "display:block")
+            : getB_id(element).setAttribute("style", "display:none")
     }
 
     clearFilter() {
@@ -200,7 +205,7 @@ export class SettingRecord {
         auxArray.map(element => {
             element[key] ? response +=
                 `<div class="optionSelect">
-                <input type="checkbox" class="option" data-id="${element.id}" value="${element[key]}">
+                <input type="checkbox" class="option" data-id="${element.id}" id="${element.id}" value="${element[key]}">
                     <p class="valorCheck">${element[key]}</p>
                 </input>
             </div>` : ""
