@@ -68,10 +68,10 @@ export class SettingRecord {
                 this.pressBtnFilter()
                 break;
             case "graphicButton":
-
                 // alert("Você abrirá um gráfico")
-                let req = await this.recordObject.get("&id_user=148&notification", "CLPP/Response.php", true);
-                console.log(req)
+
+                let req = await this.recordObject.get("&id_user=148&notification", "CLPP/Response.php",true);
+
                 // this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(this.recordObject.separateChecklist(req)), "#mainGraphic", this.typeGraph);
                 // this.recordObject.clppGraphich.clppGraphics(this.recordObject.getDataForGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop), "#mainGraphic", this.typeGraph);
                 // this.recordObject.clppGraphich.clppGraphics(this.recordObject.specificGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop,1), "#mainGraphic", this.typeGraph);
@@ -89,11 +89,12 @@ export class SettingRecord {
         this.recordObject.setFilters(this.lockInfo())
         this.validationDate()
         let returnReq = await this.recordObject.returnGet(this.recordObject.getParamsForFilters())
+
         this.populaShopGraphic(returnReq)
         this.populaCheckGraphic(returnReq)
     }
 
-    populaCheckGraphic(returnReq) {
+        populaCheckGraphic(returnReq) {
         getB_id('popupaCheckpGra').innerHTML = ""
         getB_id('popupaCheckpGra').insertAdjacentHTML('beforeend', `<option class="popupaCheckpGra">Checklist</option>`)
         let result = this.filterMiniGraphic(returnReq, "id_checklist")
@@ -101,6 +102,10 @@ export class SettingRecord {
             let response = ""
             getB_id('popupaCheckpGra').insertAdjacentHTML('beforeend', response += `<option class="popupaCheckpGra">${(this.jsonCheck[element].getTitle()).slice(0, 15) + "..."}</option>`)
         })
+
+        this.closeGraphic()
+        this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(this.recordObject.separateChecklist(returnReq)),"#mainGraphic", this.typeGraph)
+
     }
 
     populaShopGraphic(returnReq) {

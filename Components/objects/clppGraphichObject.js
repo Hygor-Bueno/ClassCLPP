@@ -3,7 +3,6 @@ export class ClppGraphichObject {
     clppGraphics(arrayValues, context, types) {
         let transparency = 0.4
         let noS = arrayValues[0][0] == "Não Satisfatório"
-        console.log(document.querySelector(`${context}`), context)
         let heightY = arrayValues.length
         
         this.graphicRecord = new Chart(document.querySelector(`${context}`).getContext("2d"),
@@ -64,6 +63,8 @@ export class ClppGraphichObject {
 
     colorsGraphics(transparency, noS) {
         let color = [
+            `rgba(50,103,68,${transparency})`,
+            
             `rgba(246, 143, 31,${transparency})`,
             `rgba(46, 49, 146,${transparency})`,
 
@@ -90,6 +91,8 @@ export class ClppGraphichObject {
     }
     borderColorGraphics(noS) {
         let borderColor = [
+            `rgb(50,103,68)`,
+
             `rgb(246, 143, 31)`,
             `rgb(46, 49, 146)`,
 

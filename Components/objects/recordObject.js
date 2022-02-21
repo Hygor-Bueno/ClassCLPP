@@ -12,7 +12,6 @@ export class RecordObject extends ConnectionCLPP {
     #filters;
     #jsonRecord;
 
-    clppGraphich = new ClppGraphichObject;
 
     getId_user() { return this.#id_user }
     getPoint() { return this.#point }
@@ -96,44 +95,60 @@ export class RecordObject extends ConnectionCLPP {
             let array = await this.get(resp, "CLPP/Response.php")
             if (array) arrayResp = arrayResp.concat(array.data)
         }
-        return arrayResp;
+        return {data: arrayResp};
     }
 
     separateChecklist(response) {
+        console.log("********** inicio separateChecklist() *************") 
+        console.log(response) 
         let orderByChecklist = [];
         let assistent = this.getKeys(response);
+        console.log(assistent)
         assistent.forEach(elemKey => {
             orderByChecklist.push(response.data.filter(element => { return elemKey[0] == element.id_user && elemKey[1] == element.date && elemKey[2] == element.id_checklist && elemKey[3] == element.id_shop }));
         })
+        console.log(orderByChecklist)
+        console.log("********** Fim separateChecklist() *************") 
         return orderByChecklist;
     }
 
     getKeys(response) {
-        let assistent = "";
-        let check = ""
-        let date = "";
+        let assistent = [];
+        let check = []
+        let date = [];
         let filterKeys = [];
         response.data.forEach(element => {
-            if ((element.id_user != assistent || element.id_checklist != check) || date != element.id_shop) {
-                assistent = element.id_user;
-                check = element.id_checklist;
-                date = element.id_shop;
+            if ((this.validateKeys(element.id_user , assistent) || this.validateKeys(element.id_checklist , check)) || this.validateKeys( element.id_shop,date)) {
+                assistent.push(element.id_user);
+                check.push(element.id_checklist);
+                date.push(element.id_shop);
                 filterKeys.push([element.id_user, element.date, element.id_checklist, element.id_shop])
             }
         })
+        console.log(filterKeys," <= getKeys(response)")
         return filterKeys;
     }
-
+    validateKeys(value,keys){
+        console.log(keys)
+        let controller = true;
+        if(keys.length > 0){
+            keys.forEach(key =>{
+                if(key == value) controller = false
+            })
+            console.log(keys,value,controller)
+        }
+        return controller;
+    }
     generalGraphic(orderByChecklist) {
+        console.log(orderByChecklist)
         let point = this.computePercent(orderByChecklist, 1)
         let dataSpecific = [["Não Satisfatório", 100 - point], ["Satisfatório", point]]
         return dataSpecific
     }
 
-    specificGraphic(orderByChecklist, objectChecklist, objectShops, especifc) {
-        let dataSpecific = this.getDataForGraphic(orderByChecklist, objectChecklist, objectShops, especifc)
+    specificGraphic(orderByChecklist, objectChecklist, objectShops, specific) {
+        let dataSpecific = this.getDataForGraphic(orderByChecklist, objectChecklist, objectShops, specific)
         dataSpecific.shift()
-
         return dataSpecific
     }
 
@@ -142,7 +157,7 @@ export class RecordObject extends ConnectionCLPP {
         let aux = 0;
         orderByChecklist.forEach(checklist => {
             let description, percent;
-            description = objectChecklist[checklist[0].id_checklist].getTitle().slice(0, 10) + " - " + objectShops[checklist[0].id_shop].description + this.formateDateGraph(checklist[0].date);
+            description = objectChecklist[checklist[0].id_checklist].getTitle().slice(0, 15) + " - " + objectShops[checklist[0].id_shop].description +  this.formateDateGraph(checklist[0].date);
 
             percent = this.computePercent([checklist], specific || orderByChecklist.length)
             console.log(specific || orderByChecklist.length)
@@ -160,6 +175,7 @@ export class RecordObject extends ConnectionCLPP {
     }
 
     computePercent(responseChecklist, max) {
+        console.log(responseChecklist, " <== *computePercent*")
         let question = 0;
         let sum = 0;
         let ignore = 0;
