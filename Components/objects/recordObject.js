@@ -64,7 +64,7 @@ export class RecordObject extends ConnectionCLPP {
                 }
             }
         }
-        return getArray 
+        return getArray
     }
 
     getInformation(keys, xxx, y) {
