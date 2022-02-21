@@ -125,12 +125,13 @@ export class RecordPage extends SettingRecord {
                         <aside id="unityGraphic">
                             <div class="btnMiniGrafico">
                                 <select class="selMiniGrafico" style="display:">
-                                    <option type="option">Unidades</option>
+                                    <option type="option">Unidade</option>
                                     <option type="option">Interlagos</option> 
                                     <option type="option">Taboao</option>
                                 </select>
                                 <select class="selMiniGrafico" style="display:">
-                                    <option type="option">Barra</option>
+                                    <option type="option">Tipo de gráfico</option>
+                                    <option type="option" >Barra</option>
                                     <option type="option">Pizza</option> 
                                     <option type="option">Porcentagem</option>
                                 </select>
@@ -141,11 +142,12 @@ export class RecordPage extends SettingRecord {
                         <aside id="checklistGraphic" >
                         <div class="btnMiniGrafico">
                             <select class="selMiniGrafico" style="display:">
-                                <option type="option">Checklist</option>
+                                <option type="option">Checkist</option>
                                 <option type="option">Check A</option> 
                                 <option type="option">Check B</option>
                             </select>
                             <select class="selMiniGrafico" style="display:">
+                                <option type="option" >Tipo de gráfico</option>
                                 <option type="option" >Barra</option>
                                 <option type="option" >Pizza</option> 
                                 <option type="option" >Porcentagem</option>

@@ -63,7 +63,7 @@ export class RecordObject extends ConnectionCLPP {
                 }
             }
         }
-        this.returnGet(getArray)
+        return getArray 
     }
 
     getInformation(keys, xxx, y) {
@@ -93,9 +93,9 @@ export class RecordObject extends ConnectionCLPP {
         let arrayResp = [];
         for await (let resp of getArray) {
             let array = await this.get(resp, "CLPP/Response.php")
-            arrayResp = arrayResp.concat(array.data)
+            if (array) arrayResp = arrayResp.concat(array.data)
         }
-        return arrayResp;
+        return {data: arrayResp};
     }
 
     separateChecklist(response) {
@@ -111,6 +111,7 @@ export class RecordObject extends ConnectionCLPP {
         console.log("********** Fim separateChecklist() *************") 
         return orderByChecklist;
     }
+
     getKeys(response) {
         let assistent = [];
         let check = []
@@ -145,10 +146,9 @@ export class RecordObject extends ConnectionCLPP {
         return dataSpecific
     }
 
-    specificGraphic(orderByChecklist, objectChecklist, objectShops, especifc) {
-        let dataSpecific = this.getDataForGraphic(orderByChecklist, objectChecklist, objectShops, especifc)
+    specificGraphic(orderByChecklist, objectChecklist, objectShops, specific) {
+        let dataSpecific = this.getDataForGraphic(orderByChecklist, objectChecklist, objectShops, specific)
         dataSpecific.shift()
-
         return dataSpecific
     }
 
@@ -168,10 +168,10 @@ export class RecordObject extends ConnectionCLPP {
         response.unshift(["Não Satisfatório", 100 - aux])
         return response;
     }
-    formateDateGraph(date){
+    formateDateGraph(date) {
         let usefulComponents = new UsefulComponents;
-        let result = usefulComponents.splitString(date,"-")
-        return " "+result[2]+"/"+result[1] 
+        let result = usefulComponents.splitString(date, "-")
+        return " " + result[2] + "/" + result[1]
     }
 
     computePercent(responseChecklist, max) {
