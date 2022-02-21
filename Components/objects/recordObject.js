@@ -11,7 +11,7 @@ export class RecordObject extends ConnectionCLPP {
     #description;
     #filters;
     #jsonRecord;
-
+    clppGraphich = new ClppGraphichObject;
 
     getId_user() { return this.#id_user }
     getPoint() { return this.#point }
@@ -129,18 +129,15 @@ export class RecordObject extends ConnectionCLPP {
         return filterKeys;
     }
     validateKeys(value,keys){
-        console.log(keys)
         let controller = true;
         if(keys.length > 0){
             keys.forEach(key =>{
                 if(key == value) controller = false
             })
-            console.log(keys,value,controller)
         }
         return controller;
     }
     generalGraphic(orderByChecklist) {
-        console.log(orderByChecklist)
         let point = this.computePercent(orderByChecklist, 1)
         let dataSpecific = [["Não Satisfatório", 100 - point], ["Satisfatório", point]]
         return dataSpecific
