@@ -96,7 +96,7 @@ export class RecordObject extends ConnectionCLPP {
             let array = await this.get(resp, "CLPP/Response.php")
             if (array) arrayResp = arrayResp.concat(array.data)
         }
-        return arrayResp;
+        return {data: arrayResp};
     }
 
     separateChecklist(response) {
@@ -128,10 +128,9 @@ export class RecordObject extends ConnectionCLPP {
         return dataSpecific
     }
 
-    specificGraphic(orderByChecklist, objectChecklist, objectShops, especifc) {
-        let dataSpecific = this.getDataForGraphic(orderByChecklist, objectChecklist, objectShops, especifc)
+    specificGraphic(orderByChecklist, objectChecklist, objectShops, specific) {
+        let dataSpecific = this.getDataForGraphic(orderByChecklist, objectChecklist, objectShops, specific)
         dataSpecific.shift()
-
         return dataSpecific
     }
 

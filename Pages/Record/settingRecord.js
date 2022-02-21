@@ -68,10 +68,8 @@ export class SettingRecord {
             this.pressBtnFilter()
                 break;
             case "graphicButton":
-
                 // alert("Você abrirá um gráfico")
                 let req = await this.recordObject.get("&id_user=148&notification", "CLPP/Response.php",true);
-                console.log(req)
                 // this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(this.recordObject.separateChecklist(req)), "#mainGraphic", this.typeGraph);
                 // this.recordObject.clppGraphich.clppGraphics(this.recordObject.getDataForGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop), "#mainGraphic", this.typeGraph);
                 // this.recordObject.clppGraphich.clppGraphics(this.recordObject.specificGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop,1), "#mainGraphic", this.typeGraph);
@@ -88,7 +86,8 @@ export class SettingRecord {
         this.recordObject.setFilters(this.lockInfo())
         this.validationDate()
         let returnReq = await this.recordObject.returnGet(this.recordObject.getParamsForFilters())
-        console.log(returnReq)
+        this.closeGraphic()
+        this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(this.recordObject.separateChecklist(returnReq)),"#mainGraphic", this.typeGraph)
     }
   
     loadSavedReports(stop_json){
