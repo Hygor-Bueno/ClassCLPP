@@ -13,6 +13,7 @@ export class RecordObject extends ConnectionCLPP {
     #jsonRecord;
 
     clppGraphich = new ClppGraphichObject;
+
     getId_user() { return this.#id_user }
     getPoint() { return this.#point }
     getDate() { return this.#date }
@@ -63,7 +64,7 @@ export class RecordObject extends ConnectionCLPP {
                 }
             }
         }
-        return getArray 
+        return getArray
     }
 
     getInformation(keys, xxx, y) {
@@ -135,8 +136,10 @@ export class RecordObject extends ConnectionCLPP {
             keys.forEach(key =>{
                 if(key == value) {controller = false}
             })
+
         //  controller &&   console.log(keys,value,controller)
         
+
         return controller;
     }
     generalGraphic(orderByChecklist) {

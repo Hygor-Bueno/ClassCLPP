@@ -129,6 +129,7 @@ export class SettingHome {
             let shops;
             let req = await Promise.all([connectionCLPP.get(`&id_user=${localStorage.getItem("id")}&notification`, "CLPP/Response.php"), connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')])
             reportDay = req[0]      
+            console.log(reportDay)
             shops = this.shopJson(req[1].data)
             let jsonReportCard = await this.contructorJsonCard(this.recordObject.separateChecklist(reportDay), checklistJson, shops)
             this.cardRecord(jsonReportCard,'#bodyReportDiv');
