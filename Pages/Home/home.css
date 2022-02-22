@@ -391,6 +391,12 @@ b {
 .cardRecordClass:hover{
     cursor: pointer;
 }
+.cardRecordClass aside{
+    border-bottom: 1px solid rgb(178, 178, 178);
+}
+.cardRecordClass aside p{
+    margin:2.5px;
+}
 .cardRecordClass section{
     margin: 10px;
 }
