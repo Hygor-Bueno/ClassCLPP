@@ -46,7 +46,7 @@ export class SettingRecord {
                 this.clearFilter()
                 this.closeGraphic()
                 break;
-                case "buttonRecordGraphic":
+            case "buttonRecordGraphic":
                 this.buttonGraphic(element)
                 break;
             case "titleChecklist":
@@ -69,11 +69,7 @@ export class SettingRecord {
                 this.pressBtnFilter()
                 break;
             case "graphicButton":
-                let req = await this.recordObject.get("&id_user=148&notification", "CLPP/Response.php",true);
-                // alert("Você abrirá um gráfico")
-                // this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(this.recordObject.separateChecklist(req)), "#mainGraphic", this.typeGraph);
-                // this.recordObject.clppGraphich.clppGraphics(this.recordObject.getDataForGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop), "#mainGraphic", this.typeGraph);
-                // this.recordObject.clppGraphich.clppGraphics(this.recordObject.specificGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop,1), "#mainGraphic", this.typeGraph);
+                let req = await this.recordObject.get("&id_user=148&notification", "CLPP/Response.php", true);
                 break;
             case "teste":
                 this.loadSavedReports(this.recordObject.getJsonRecord())
@@ -94,7 +90,7 @@ export class SettingRecord {
         this.populaCheckGraphic(returnReq)
     }
 
-        populaCheckGraphic(returnReq) {
+    populaCheckGraphic(returnReq) {
         getB_id('popupaCheckpGra').innerHTML = ""
         getB_id('popupaCheckpGra').insertAdjacentHTML('beforeend', `<option class="popupaCheckpGra">Checklist</option>`)
         let result = this.filterMiniGraphic(returnReq, "id_checklist")
@@ -104,7 +100,7 @@ export class SettingRecord {
         })
 
         this.closeGraphic()
-        this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(this.recordObject.separateChecklist(returnReq)),"#mainGraphic", this.typeGraph)
+        this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(this.recordObject.separateChecklist(returnReq)), "#mainGraphic", this.typeGraph)
 
     }
 
@@ -121,8 +117,9 @@ export class SettingRecord {
 
     filterMiniGraphic(returnReq, key) {
         let assiistent = []
-        returnReq.forEach(resultFilters => {
-            if (this.validation(assiistent, resultFilters[key])) assiistent.push(resultFilters[key])
+        console.log(returnReq)
+        returnReq.data.forEach(resultFilters => {
+            if (this.validation(assiistent, resultFilters[key])) { assiistent.push(resultFilters[key]) }
         })
         return assiistent
     }
@@ -142,12 +139,12 @@ export class SettingRecord {
             if (jsonFilters.checklist[element] != "") {
                 jsonFilters.checklist[element].forEach(ele => getB_id(`${ele}`).checked = true)
 
-                element == "titles" && this.openClose("titleChecklistOption") 
-                element == "question" && this.openClose("titleQuestionOption") 
-                element == "date_checklist" && this.openClose("validCheckBlock") 
+                element == "titles" && this.openClose("titleChecklistOption")
+                element == "question" && this.openClose("titleQuestionOption")
+                element == "date_checklist" && this.openClose("validCheckBlock")
             }
         })
-        if(jsonFilters.id_shops != "" ){
+        if (jsonFilters.id_shops != "") {
             jsonFilters.id_shops.forEach(elem => getB_id(`${elem}`).checked = true)
             this.openClose("selShop")
         }

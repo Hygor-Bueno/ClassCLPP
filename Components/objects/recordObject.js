@@ -41,14 +41,12 @@ export class RecordObject extends ConnectionCLPP {
         }
     }
 
-
     getParamsForFilters() {
         let params = "";
         let getArray = [];
         let markShop = this.#filters['id_shops'].length || 1;
         let markTitle = this.#filters['checklist']['titles'].length || 1;
         let markQuestion = this.#filters.checklist.question.length || 1;
-
         for (let cnt = 0; cnt < markShop; cnt++) {
             for (let xxx = 0; xxx < markTitle; xxx++) {
                 for (let y = 0; y < markQuestion; y++) {
@@ -101,14 +99,11 @@ export class RecordObject extends ConnectionCLPP {
 
     separateChecklist(response) {
         console.log("********** inicio separateChecklist() *************") 
-       
         let orderByChecklist = [];
         let assistent = this.getKeys(response);
-      
         assistent.forEach(elemKey => {
             orderByChecklist.push(response.data.filter(element => { return elemKey[0] == element.id_user && elemKey[1] == element.date && elemKey[2] == element.id_checklist && elemKey[3] == element.id_shop }));
         })
-     
         console.log("********** Fim separateChecklist() *************") 
         return orderByChecklist;
     }
@@ -130,18 +125,16 @@ export class RecordObject extends ConnectionCLPP {
         console.log(filterKeys," <= getKeys(response)")
         return filterKeys;
     }
+
     validateKeys(value,keys){
         let controller = true;
         
             keys.forEach(key =>{
                 if(key == value) {controller = false}
             })
-
-        //  controller &&   console.log(keys,value,controller)
-        
-
         return controller;
     }
+
     generalGraphic(orderByChecklist) {
         let point = this.computePercent(orderByChecklist, 1)
         let dataSpecific = [["Não Satisfatório", 100 - point], ["Satisfatório", point]]
@@ -170,6 +163,7 @@ export class RecordObject extends ConnectionCLPP {
         response.unshift(["Não Satisfatório", 100 - aux])
         return response;
     }
+
     formateDateGraph(date) {
         let usefulComponents = new UsefulComponents;
         let result = usefulComponents.splitString(date, "-")
