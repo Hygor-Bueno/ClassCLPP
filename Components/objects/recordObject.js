@@ -88,7 +88,6 @@ export class RecordObject extends ConnectionCLPP {
                 }
             }
         })
-        console.log(params)
         return params;
     }
 
