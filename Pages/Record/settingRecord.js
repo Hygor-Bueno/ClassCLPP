@@ -13,6 +13,8 @@ export class SettingRecord {
     typeGraph = 3
     userFulComponents = new UsefulComponents;
     recordObject = new RecordObject;
+    recordObject2 = new RecordObject;
+    recordObject3 = new RecordObject;
 
     async setting(objectChecklist) {
         this.clickPage();
@@ -45,8 +47,9 @@ export class SettingRecord {
                 this.controllerBtns(["#buttonRecordPrint"], true)
                 this.clearFilter()
                 this.closeGraphic()
+
                 break;
-                case "buttonRecordGraphic":
+            case "buttonRecordGraphic":
                 this.buttonGraphic(element)
                 break;
             case "titleChecklist":
@@ -69,7 +72,7 @@ export class SettingRecord {
                 this.pressBtnFilter()
                 break;
             case "graphicButton":
-                let req = await this.recordObject.get("&id_user=148&notification", "CLPP/Response.php",true);
+                let req = await this.recordObject.get("&id_user=148&notification", "CLPP/Response.php", true);
                 // alert("Você abrirá um gráfico")
                 // this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(this.recordObject.separateChecklist(req)), "#mainGraphic", this.typeGraph);
                 // this.recordObject.clppGraphich.clppGraphics(this.recordObject.getDataForGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop), "#mainGraphic", this.typeGraph);
@@ -90,10 +93,10 @@ export class SettingRecord {
         this.validationDate()
         let returnReq = await this.recordObject.returnGet(this.recordObject.getParamsForFilters())
         this.populaShopGraphic(returnReq)
-        this.populaCheckGraphic(returnReq,this.recordObject.separateChecklist(returnReq))
+        this.populaCheckGraphic(returnReq, this.recordObject.separateChecklist(returnReq))
     }
 
-        populaCheckGraphic(returnReq,reqFiltred) {
+    populaCheckGraphic(returnReq, reqFiltred) {
         getB_id('popupaCheckpGra').innerHTML = ""
         getB_id('popupaCheckpGra').insertAdjacentHTML('beforeend', `<option class="popupaCheckpGra">Checklist</option>`)
         let result = this.filterMiniGraphic(returnReq, "id_checklist")
@@ -101,10 +104,12 @@ export class SettingRecord {
             let response = ""
             getB_id('popupaCheckpGra').insertAdjacentHTML('beforeend', response += `<option class="popupaCheckpGra">${(this.jsonCheck[element].getTitle()).slice(0, 15) + "..."}</option>`)
         })
-
         this.closeGraphic()
-        this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(reqFiltred),"#mainGraphic", this.typeGraph)
-        this.recordObject.clppGraphich.clppGraphics(this.recordObject.specificGraphic(reqFiltred,this.jsonCheck, this.jsonShop,1),"#graphicUnity", 2)
+        let resultReq = this.recordObject.generalGraphic(reqFiltred)
+        this.recordObject.setPoint(resultReq[1][1])
+        this.recordObject.clppGraphich.clppGraphics(resultReq, "#mainGraphic", this.typeGraph)
+        this.recordObject2.clppGraphich.clppGraphics(this.recordObject2.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicUnity", this.typeGraph)
+
     }
 
     populaShopGraphic(returnReq) {
@@ -112,7 +117,6 @@ export class SettingRecord {
         getB_id('popupaShopGra').insertAdjacentHTML('beforeend', `<option class="popupaShopGra">Unidade</option>`)
         let result = this.filterMiniGraphic(returnReq, "id_shop")
         result.forEach(element => {
-            console.log(element)
             let response = ""
             getB_id('popupaShopGra').insertAdjacentHTML('beforeend', response += `<option class="popupaShopGra">${this.jsonShop[element].description}</option>`)
         })
@@ -140,13 +144,12 @@ export class SettingRecord {
         Object.keys(jsonFilters.checklist).forEach(element => {
             if (jsonFilters.checklist[element] != "") {
                 jsonFilters.checklist[element].forEach(ele => getB_id(`${ele}`).checked = true)
-
-                element == "titles" && this.openClose("titleChecklistOption") 
-                element == "question" && this.openClose("titleQuestionOption") 
-                element == "date_checklist" && this.openClose("validCheckBlock") 
+                element == "titles" && this.openClose("titleChecklistOption")
+                element == "question" && this.openClose("titleQuestionOption")
+                element == "date_checklist" && this.openClose("validCheckBlock")
             }
         })
-        if(jsonFilters.id_shops != "" ){
+        if (jsonFilters.id_shops != "") {
             jsonFilters.id_shops.forEach(elem => getB_id(`${elem}`).checked = true)
             this.openClose("selShop")
         }
@@ -242,9 +245,12 @@ export class SettingRecord {
 
     closeGraphic() {
         getB_id('mainGraphic').getContext('2d').clearRect(0, 0, getB_id('mainGraphic').width, getB_id('mainGraphic').height)
-        getB_id('graphicUnity').getContext('2d').clearRect(0, 0, getB_id('graphicUnity').width, getB_id('graphicUnity').height)
-        getB_id('graphicChecklist').getContext('2d').clearRect(0, 0, getB_id('graphicChecklist').width, getB_id('graphicChecklist').height)
         this.recordObject.clppGraphich.graphicRecord && this.recordObject.clppGraphich.graphicRecord.destroy();
+        getB_id('graphicUnity').getContext('2d').clearRect(0, 0, getB_id('graphicUnity').width, getB_id('graphicUnity').height)
+        this.recordObject2.clppGraphich.graphicRecord && this.recordObject2.clppGraphich.graphicRecord.destroy();
+        getB_id('graphicUnity').getContext('2d').clearRect(0, 0, getB_id('graphicUnity').width, getB_id('graphicUnity').height)
+        this.recordObject3.clppGraphich.graphicRecord && this.recordObject3.clppGraphich.graphicRecord.destroy();
+
     }
 
     controllerSelect(local, message, check) {
@@ -386,12 +392,11 @@ export class SettingRecord {
         })
     }
 
-    setDateObj() {
-        this.recordObject.setId_user(localStorage.getItem("id"))
-        this.recordObject.setDescritpion($('#inputTitle input[type=text]').value)
-        this.recordObject.setPoint(0)
-        this.recordObject.setType(this.typeGraph)
-        this.recordObject.setDate(this.userFulComponents.currentDate())
+    setDateObj(newPoint) {
+            this.recordObject.setId_user(localStorage.getItem("id"))
+            this.recordObject.setDescritpion($('#inputTitle input[type=text]').value)
+            this.recordObject.setType(this.typeGraph)
+            this.recordObject.setDate(this.userFulComponents.currentDate())
     }
 
     lockInfo() {

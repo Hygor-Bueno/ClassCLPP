@@ -99,16 +99,11 @@ export class RecordObject extends ConnectionCLPP {
     }
 
     separateChecklist(response) {
-        console.log("********** inicio separateChecklist() *************") 
-        console.log(response) 
         let orderByChecklist = [];
         let assistent = this.getKeys(response);
-        console.log(assistent)
         assistent.forEach(elemKey => {
             orderByChecklist.push(response.data.filter(element => { return elemKey[0] == element.id_user && elemKey[1] == element.date && elemKey[2] == element.id_checklist && elemKey[3] == element.id_shop }));
         })
-        console.log(orderByChecklist)
-        console.log("********** Fim separateChecklist() *************") 
         return orderByChecklist;
     }
 
@@ -144,7 +139,6 @@ export class RecordObject extends ConnectionCLPP {
     }
 
     specificGraphic(orderByChecklist, objectChecklist, objectShops, specific) {
-        console.log(orderByChecklist, objectChecklist, objectShops, specific)
         let dataSpecific = this.getDataForGraphic(orderByChecklist, objectChecklist, objectShops, specific)
         dataSpecific.shift()
         return dataSpecific
