@@ -101,7 +101,6 @@ export class RecordObject extends ConnectionCLPP {
     }
 
     separateChecklist(response) {
-        console.log(response)
         let orderByChecklist = [];
         let assistent = this.getKeys(response);
         assistent.forEach(elemKey => {
@@ -136,7 +135,6 @@ export class RecordObject extends ConnectionCLPP {
     }
 
     specificGraphic(orderByChecklist, objectChecklist, objectShops, specific) {
-        console.log(orderByChecklist, objectChecklist, objectShops, specific)
         let dataSpecific = this.getDataForGraphic(orderByChecklist, objectChecklist, objectShops, specific)
         dataSpecific.shift()
         return dataSpecific
