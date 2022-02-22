@@ -79,10 +79,10 @@ export class RecordObject extends ConnectionCLPP {
                         params += '&id_question=' + this.#filters[keys][subKey][y]
                         break;
                     case 'date_init_response':
-                        params += '&date_init_response=' + this.#filters[keys][subKey]
+                        params += `&date_init_response="${this.#filters[keys][subKey]}"`
                         break;
                     case 'date_final_response':
-                        params += '&date_final_response=' + this.#filters[keys][subKey]
+                        params += `&date_final_response="${this.#filters[keys][subKey]}"`
                         break;
                     case 'titles':
                         params += '&id_checklist=' + this.#filters['checklist']['titles'][xxx]
@@ -90,7 +90,6 @@ export class RecordObject extends ConnectionCLPP {
                 }
             }
         })
-        console.log(params)
         return params;
     }
 

@@ -327,6 +327,27 @@ input {
   align-items: center;
   justify-content: space-evenly;
 }
+#modalAlertFailure{
+  border-radius: 5px;
+  width:500px;
+  height:100px;
+  background: #b5001a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#alertFailureName {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+#alertFailureName h1{
+  font-size: 18px;
+  color: white;
+}
 
 #saveFile {
   border-radius: 5px;
