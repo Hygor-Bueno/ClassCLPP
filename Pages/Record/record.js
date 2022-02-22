@@ -134,7 +134,10 @@ export class RecordPage extends SettingRecord {
                                     <option type="option">Pizza</option> 
                                     <option type="option">Porcentagem</option>
                                 </select>
-                            </div>
+                                </div>
+                                <div id="containerGraphicUnity">
+                                    <canvas id="graphicUnity"></canvas>
+                                </div>
                         </aside>
                    
                    
@@ -149,7 +152,10 @@ export class RecordPage extends SettingRecord {
                                 <option type="option" >Pizza</option> 
                                 <option type="option" >Porcentagem</option>
                             </select>
-                        </div>    
+                            </div>    
+                            <div id="containerGraphicChecklist">
+                                <canvas id="graphicChecklist"></canvas>
+                            </div>
                         </aside>
                    
                 </body>

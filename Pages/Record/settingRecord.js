@@ -89,12 +89,11 @@ export class SettingRecord {
         this.recordObject.setFilters(this.lockInfo())
         this.validationDate()
         let returnReq = await this.recordObject.returnGet(this.recordObject.getParamsForFilters())
-
         this.populaShopGraphic(returnReq)
-        this.populaCheckGraphic(returnReq)
+        this.populaCheckGraphic(returnReq,this.recordObject.separateChecklist(returnReq))
     }
 
-        populaCheckGraphic(returnReq) {
+        populaCheckGraphic(returnReq,reqFiltred) {
         getB_id('popupaCheckpGra').innerHTML = ""
         getB_id('popupaCheckpGra').insertAdjacentHTML('beforeend', `<option class="popupaCheckpGra">Checklist</option>`)
         let result = this.filterMiniGraphic(returnReq, "id_checklist")
@@ -104,8 +103,8 @@ export class SettingRecord {
         })
 
         this.closeGraphic()
-        this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(this.recordObject.separateChecklist(returnReq)),"#mainGraphic", this.typeGraph)
-
+        this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(reqFiltred),"#mainGraphic", this.typeGraph)
+        this.recordObject.clppGraphich.clppGraphics(this.recordObject.specificGraphic(reqFiltred,this.jsonCheck, this.jsonShop,1),"#graphicUnity", 2)
     }
 
     populaShopGraphic(returnReq) {
@@ -121,7 +120,7 @@ export class SettingRecord {
 
     filterMiniGraphic(returnReq, key) {
         let assiistent = []
-        returnReq.forEach(resultFilters => {
+        returnReq.data.forEach(resultFilters => {
             if (this.validation(assiistent, resultFilters[key])) assiistent.push(resultFilters[key])
         })
         return assiistent
@@ -243,6 +242,8 @@ export class SettingRecord {
 
     closeGraphic() {
         getB_id('mainGraphic').getContext('2d').clearRect(0, 0, getB_id('mainGraphic').width, getB_id('mainGraphic').height)
+        getB_id('graphicUnity').getContext('2d').clearRect(0, 0, getB_id('graphicUnity').width, getB_id('graphicUnity').height)
+        getB_id('graphicChecklist').getContext('2d').clearRect(0, 0, getB_id('graphicChecklist').width, getB_id('graphicChecklist').height)
         this.recordObject.clppGraphich.graphicRecord && this.recordObject.clppGraphich.graphicRecord.destroy();
     }
 
