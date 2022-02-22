@@ -113,11 +113,11 @@ export class SettingRecord {
     }
 
     filterMiniGraphic(returnReq, key) {
-        let assiistent = []
+        let assistent = []
         returnReq.data.forEach(resultFilters => {
-            if (this.validation(assiistent, resultFilters[key])) assiistent.push(resultFilters[key])
+            if (this.validation(assistent, resultFilters[key])) assistent.push(resultFilters[key])
         })
-        return assiistent
+        return assistent
     }
 
     validation(keys, value) {
