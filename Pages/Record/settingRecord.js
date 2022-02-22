@@ -66,7 +66,7 @@ export class SettingRecord {
                 this.settingBtnAlertSave()
                 break;
             case "filterBtn":
-            this.pressBtnFilter()
+            await this.pressBtnFilter()
                 break;
             case "graphicButton":
                 let req = await this.recordObject.get("&id_user=148&notification", "CLPP/Response.php",true);
@@ -108,7 +108,6 @@ export class SettingRecord {
             this.openClose("selShop")
         }
         this.loadDate(jsonFilters)
-        // this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(this.recordObject.separateChecklist(returnReq)),"#mainGraphic", this.typeGraph)
     }
 
     loadDate(dateJson){  
