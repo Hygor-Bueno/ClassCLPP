@@ -357,6 +357,17 @@ input {
   border-bottom: 0.5px solid rgb(178, 178, 178);
 }
 
+#graphicUnity, #graphicChecklist {
+  max-height: 280px
+}
+
+#containerGraphicUnity,
+#containerGraphicChecklist {
+
+ 
+  
+}
+
 @media screen and (min-width: 1500px) {
   .titleOptionBlock,
   #titleMain {
