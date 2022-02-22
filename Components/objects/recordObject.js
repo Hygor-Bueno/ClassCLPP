@@ -36,11 +36,14 @@ export class RecordObject extends ConnectionCLPP {
             point: this.#point,
             date: this.#date,
             type: this.#type,
-            name: this.#description,
-            filters: this.#filters
+            description: this.#description,
+            filter: this.#filters
         }
     }
 
+    async readyPost(){
+        await this.post(this.#jsonRecord,"CLPP/Record.php",true)
+    }
 
     getParamsForFilters() {
         let params = "";
@@ -101,7 +104,6 @@ export class RecordObject extends ConnectionCLPP {
     }
 
     separateChecklist(response) {
-        console.log(response)
         let orderByChecklist = [];
         let assistent = this.getKeys(response);
         assistent.forEach(elemKey => {
