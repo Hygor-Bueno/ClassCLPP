@@ -70,14 +70,25 @@ export class SettingRecord {
                 this.settingBtnAlertSave()
                 break;
             case "filterBtn":
-                this.pressBtnFilter()
+                this.validaPressBtnFilter() == true ? this.pressBtnFilter() : alert('Selecione um dado');
                 break;
             default:
                 console.error("data-function")
         }
     }
 
+    validaPressBtnFilter() {
+        let checklist = document.querySelectorAll(".option")
+        checklist.forEach(element => {
+            console.log(element.checked.true)
+            /* if (element.checked == true) return true
+            else if (element.checked == false) return false */
+        })
+
+    }
+
     async pressBtnFilter() {
+
         this.controllerBtns(["#buttonRecordPrint"], false)
         this.recordObject.setFilters(this.lockInfo())
         this.validationDate()
@@ -95,11 +106,10 @@ export class SettingRecord {
             getB_id('popupaCheckpGra').insertAdjacentHTML('beforeend', response += `<option class="popupaCheckpGra">${(this.jsonCheck[element].getTitle()).slice(0, 15) + "..."}</option>`)
         })
         this.closeGraphic()
-        let resultReq = this.recordObject.generalGraphic(reqFiltred)
-        this.recordObject.setPoint(resultReq[1][1])
-        this.recordObject.clppGraphich.clppGraphics(resultReq, "#mainGraphic", this.typeGraph)
-        this.recordObject2.clppGraphich.clppGraphics(this.recordObject2.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicUnity", this.typeGraph)
-
+        this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(reqFiltred), "#mainGraphic", this.typeGraph)
+        console.log()
+        this.recordObject.clppGraphich.clppGraphics(this.recordObject.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicUnity", this.typeGraph)
+        this.recordObject.clppGraphich.clppGraphics(this.recordObject.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicChecklist", this.typeGraph)
     }
 
     populaShopGraphic(returnReq) {
@@ -241,7 +251,6 @@ export class SettingRecord {
         this.recordObject2.clppGraphich.graphicRecord && this.recordObject2.clppGraphich.graphicRecord.destroy();
         getB_id('graphicUnity').getContext('2d').clearRect(0, 0, getB_id('graphicUnity').width, getB_id('graphicUnity').height)
         this.recordObject3.clppGraphich.graphicRecord && this.recordObject3.clppGraphich.graphicRecord.destroy();
-
     }
 
     controllerSelect(local, message, check) {

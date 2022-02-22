@@ -25,8 +25,6 @@ export class ClppGraphichObject {
             });
     }
 
-
-
     grade(type,heightY) {
         return type == 2 ?
             {
@@ -44,6 +42,7 @@ export class ClppGraphichObject {
             :
             {}
     }
+
     typeGraphics(value) {
         let response;
 
@@ -89,6 +88,7 @@ export class ClppGraphichObject {
         noS && color.unshift(`rgba(131,131,131,${transparency})`)
         return color;
     }
+
     borderColorGraphics(noS) {
         let borderColor = [
             `rgb(50,103,68)`,
