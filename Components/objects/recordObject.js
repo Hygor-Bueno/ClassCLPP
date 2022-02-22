@@ -100,46 +100,32 @@ export class RecordObject extends ConnectionCLPP {
     }
 
     separateChecklist(response) {
-        console.log("********** inicio separateChecklist() *************") 
-       
+        console.log(response)
         let orderByChecklist = [];
         let assistent = this.getKeys(response);
-      
         assistent.forEach(elemKey => {
             orderByChecklist.push(response.data.filter(element => { return elemKey[0] == element.id_user && elemKey[1] == element.date && elemKey[2] == element.id_checklist && elemKey[3] == element.id_shop }));
         })
-     
-        console.log("********** Fim separateChecklist() *************") 
         return orderByChecklist;
     }
 
     getKeys(response) {
-        let assistent = [];
-        let check = []
-        let date = [];
+        let assistent = [["","",""]];
         let filterKeys = [];
         response.data.forEach(element => {
-            console.log(this.validateKeys(element.id_user , assistent) || this.validateKeys(element.id_checklist , check) || this.validateKeys(element.id_shop,date))
-            if ((this.validateKeys(element.id_user , assistent) || this.validateKeys(element.id_checklist , check)) || this.validateKeys( element.id_shop,date)) {
-                assistent.push(element.id_user);
-                check.push(element.id_checklist);
-                date.push(element.id_shop);
+            console.log("user => ",element.id_user," checklist => ", element.id_checklist, " loja => ",element.id_shop )
+            if ((this.validateKeys([element.id_user,element.id_checklist,element.id_shop] , assistent))) {
+                assistent.push([element.id_user,element.id_checklist,element.id_shop]);
                 filterKeys.push([element.id_user, element.date, element.id_checklist, element.id_shop])
             }
         })
-        console.log(filterKeys," <= getKeys(response)")
         return filterKeys;
     }
     validateKeys(value,keys){
         let controller = true;
-        
-            keys.forEach(key =>{
-                if(key == value) {controller = false}
-            })
-
-        //  controller &&   console.log(keys,value,controller)
-        
-
+        keys.forEach(key =>{       
+                if(key[0] == value[0] && key[1] && value[1] && key[2] == value[2]) { console.log(value,key); controller = false}
+            })  
         return controller;
     }
     generalGraphic(orderByChecklist) {
@@ -160,10 +146,7 @@ export class RecordObject extends ConnectionCLPP {
         orderByChecklist.forEach(checklist => {
             let description, percent;
             description = objectChecklist[checklist[0].id_checklist].getTitle().slice(0, 15) + " - " + objectShops[checklist[0].id_shop].description +  this.formateDateGraph(checklist[0].date);
-
             percent = this.computePercent([checklist], specific || orderByChecklist.length)
-            console.log(specific || orderByChecklist.length)
-
             aux += percent
             response.push([description, percent])
         })
@@ -177,7 +160,6 @@ export class RecordObject extends ConnectionCLPP {
     }
 
     computePercent(responseChecklist, max) {
-        console.log(responseChecklist, " <== *computePercent*")
         let question = 0;
         let sum = 0;
         let ignore = 0;

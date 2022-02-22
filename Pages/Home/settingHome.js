@@ -127,7 +127,8 @@ export class SettingHome {
         // try{
             let reportDay;
             let shops;
-            let req = await Promise.all([connectionCLPP.get(`&id_user=${localStorage.getItem("id")}&notification`, "CLPP/Response.php"), connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')])
+            let req =""
+             await Promise.all([connectionCLPP.get(`&id_user=${localStorage.getItem("id")}&notification`, "CLPP/Response.php"), connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')]).then(response => {req = response})
             reportDay = req[0]      
             console.log(reportDay)
             shops = this.shopJson(req[1].data)
