@@ -227,8 +227,12 @@ b {
     margin: 5px;
     background: #f1f2f5;
     width: 60%;
+    border: solid 1px black;
 }
-
+.articleLeftChecklist ol li{
+    word-break: break-word;
+    margin-right: 10px;
+}
 .articleRigthChecklist {
     padding: 1px;
     width: 50%;
