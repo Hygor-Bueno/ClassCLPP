@@ -152,7 +152,6 @@ export class SettingRecord {
             this.openClose("selShop")
         }
         this.loadDate(jsonFilters)
-        // this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(this.recordObject.separateChecklist(returnReq)),"#mainGraphic", this.typeGraph)
     }
 
     loadDate(dateJson) {
