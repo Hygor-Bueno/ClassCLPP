@@ -153,7 +153,6 @@ export class SettingHome {
         return response
     }
     cardRecord(jsonReportCard, context) {
-        console.log(jsonReportCard)
         $(`${context}`).insertAdjacentHTML("beforeend", jsonReportCard.map(jsonCard => (
             `
                 <div id="${jsonCard.cod}" class="cardRecordClass" >

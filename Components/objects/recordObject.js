@@ -11,6 +11,7 @@ export class RecordObject extends ConnectionCLPP {
     #description;
     #filters;
     #jsonRecord;
+
     clppGraphich = new ClppGraphichObject;
 
     getId_user() { return this.#id_user }
@@ -100,14 +101,14 @@ export class RecordObject extends ConnectionCLPP {
 
     separateChecklist(response) {
         console.log("********** inicio separateChecklist() *************") 
-        console.log(response) 
+       
         let orderByChecklist = [];
         let assistent = this.getKeys(response);
-        console.log(assistent)
+      
         assistent.forEach(elemKey => {
             orderByChecklist.push(response.data.filter(element => { return elemKey[0] == element.id_user && elemKey[1] == element.date && elemKey[2] == element.id_checklist && elemKey[3] == element.id_shop }));
         })
-        console.log(orderByChecklist)
+     
         console.log("********** Fim separateChecklist() *************") 
         return orderByChecklist;
     }
@@ -118,6 +119,7 @@ export class RecordObject extends ConnectionCLPP {
         let date = [];
         let filterKeys = [];
         response.data.forEach(element => {
+            console.log(this.validateKeys(element.id_user , assistent) || this.validateKeys(element.id_checklist , check) || this.validateKeys(element.id_shop,date))
             if ((this.validateKeys(element.id_user , assistent) || this.validateKeys(element.id_checklist , check)) || this.validateKeys( element.id_shop,date)) {
                 assistent.push(element.id_user);
                 check.push(element.id_checklist);
@@ -130,11 +132,14 @@ export class RecordObject extends ConnectionCLPP {
     }
     validateKeys(value,keys){
         let controller = true;
-        if(keys.length > 0){
+        
             keys.forEach(key =>{
-                if(key == value) controller = false
+                if(key == value) {controller = false}
             })
-        }
+
+        //  controller &&   console.log(keys,value,controller)
+        
+
         return controller;
     }
     generalGraphic(orderByChecklist) {
