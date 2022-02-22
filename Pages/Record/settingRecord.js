@@ -394,9 +394,10 @@ export class SettingRecord {
 
     settingBtnAlertSave() {
         getB_id('cancelFile').addEventListener('click', () => { closeModal() })
-        getB_id('saveFile').addEventListener('click', () => {
+        getB_id('saveFile').addEventListener('click', async () => {
             this.setDateObj()
             this.recordObject.saveReport()
+            await this.recordObject.readyPost()
             closeModal()
         })
     }

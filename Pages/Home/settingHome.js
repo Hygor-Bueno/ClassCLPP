@@ -151,11 +151,14 @@ export class SettingHome {
     }
 
     cardRecord(jsonReportCard, context) {
+        console.log(jsonReportCard)
         $(`${context}`).insertAdjacentHTML("beforeend", jsonReportCard.map(jsonCard => (
             `
                 <div id="${jsonCard.cod}" class="cardRecordClass" >
                     <aside>
-                        <p>${jsonCard.user}</p>
+                        <p><b>Nome:</b> ${jsonCard.user}</p>
+                        <p><b>Unidade:</b> ${jsonCard.shop}</p>
+                        <p><b>Pontuação:</b>  ${jsonCard.porcent}%</p>
                     </aside>
                     <section>
                         <canvas id="can_${jsonCard.cod}">

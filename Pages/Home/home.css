@@ -227,8 +227,12 @@ b {
     margin: 5px;
     background: #f1f2f5;
     width: 60%;
+    border: solid 1px black;
 }
-
+.articleLeftChecklist ol li{
+    word-break: break-word;
+    margin-right: 10px;
+}
 .articleRigthChecklist {
     padding: 1px;
     width: 50%;
@@ -390,6 +394,12 @@ b {
 }
 .cardRecordClass:hover{
     cursor: pointer;
+}
+.cardRecordClass aside{
+    border-bottom: 1px solid rgb(178, 178, 178);
+}
+.cardRecordClass aside p{
+    margin:2.5px;
 }
 .cardRecordClass section{
     margin: 10px;

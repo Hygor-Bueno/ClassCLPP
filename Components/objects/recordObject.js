@@ -36,9 +36,12 @@ export class RecordObject extends ConnectionCLPP {
             point: this.#point,
             date: this.#date,
             type: this.#type,
-            name: this.#description,
-            filters: this.#filters
+            description: this.#description,
+            filter: this.#filters
         }
+    }
+    async readyPost() {
+        await this.post(this.#jsonRecord, "CLPP/Record.php", true)
     }
 
     getParamsForFilters() {
@@ -74,10 +77,10 @@ export class RecordObject extends ConnectionCLPP {
                         params += '&id_question=' + this.#filters[keys][subKey][y]
                         break;
                     case 'date_init_response':
-                        params += '&date_init_response=' + this.#filters[keys][subKey]
+                        params += `&date_init_response="${this.#filters[keys][subKey]}"`
                         break;
                     case 'date_final_response':
-                        params += '&date_final_response=' + this.#filters[keys][subKey]
+                        params += `&date_final_response="${this.#filters[keys][subKey]}"`
                         break;
                     case 'titles':
                         params += '&id_checklist=' + this.#filters['checklist']['titles'][xxx]
@@ -122,7 +125,6 @@ export class RecordObject extends ConnectionCLPP {
         })
         return filterKeys;
     }
-
     validateKeys(value, keys) {
         let controller = true;
         keys.forEach(key => {
