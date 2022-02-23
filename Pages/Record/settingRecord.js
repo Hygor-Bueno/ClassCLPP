@@ -26,7 +26,6 @@ export class SettingRecord {
         this.shopJson(await this.getShop());
         this.blockQuestion();
         this.pegandoValidade();
-        setTimeout(async () => { }, 1000);
     }
 
     jsonChecklists(objectChecklist) {
