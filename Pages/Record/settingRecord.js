@@ -69,7 +69,7 @@ export class SettingRecord {
                 this.settingBtnAlertSave()
                 break;
             case "filterBtn":
-                this.validaPressBtnFilter() == true ? this.pressBtnFilter() : alert('Selecione um dado');
+                !this.validaPressBtnFilter() ? this.pressBtnFilter() : alert('Selecione um dado');
                 break;
             default:
                 console.error("data-function")
@@ -79,9 +79,10 @@ export class SettingRecord {
     validaPressBtnFilter() {
         let checklist = document.querySelectorAll(".option")
         checklist.forEach(element => {
-            console.log(element.checked.true)
-            /* if (element.checked == true) return true
-            else if (element.checked == false) return false */
+            console.log(element.checked)
+
+            if (element.checked == true) return true
+            else if (element.checked == false) return false
         })
 
     }
@@ -207,7 +208,7 @@ export class SettingRecord {
             element[key] ? response +=
                 `<div class="optionSelect">
                 <input type="checkbox" class="option" data-id="${element.id}" id="${element.id}" value="${element[key]}">
-                    <p class="valorCheck">${element[key]}</p>
+                    <p class="valorCheck">${(element[key]).toLowerCase().slice(0, 25)}</p>
                 </input>
             </div>` : ""
         })
@@ -367,16 +368,16 @@ export class SettingRecord {
             return question
         }
     }
-    checkDescription(){
-        if(!$('#inputTitle input[type=text]').value){
+    checkDescription() {
+        if (!$('#inputTitle input[type=text]').value) {
             openModal(this.alertFailure())
-            setTimeout(() => {closeModal()}, 2000) 
-        }else{
+            setTimeout(() => { closeModal() }, 2000)
+        } else {
             openModal(this.alertSave())
         }
     }
 
-    alertFailure(){
+    alertFailure() {
         const modalFailure = `
         <div id="modalAlertFailure">
             <div id="alertFailureName">
@@ -386,7 +387,7 @@ export class SettingRecord {
         return modalFailure
     }
 
-    alertSave() { 
+    alertSave() {
         const modalAlert = `
             <div id="modalAlert">
                 <div id="alertMsg">
