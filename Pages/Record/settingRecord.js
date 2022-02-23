@@ -1,5 +1,6 @@
 import { ObjectChecklist } from "../../Components/objects/checklistObject.js";
 import { RecordObject } from "../../Components/objects/recordObject.js";
+import { Routers } from "../../Routers/router.js";
 import { getB_id, $, $_all, openModal, closeModal } from "../../Util/compressSyntaxe.js";
 import { UsefulComponents } from "../../Util/usefulComponents.js";
 
@@ -11,6 +12,7 @@ export class SettingRecord {
     jsonShop = {};
     expanded = false;
     typeGraph = 3
+    routers = new Routers;
     userFulComponents = new UsefulComponents;
     recordObject = new RecordObject;
     recordObject2 = new RecordObject;
@@ -46,7 +48,6 @@ export class SettingRecord {
                 this.controllerBtns(["#buttonRecordPrint"], true)
                 this.clearFilter()
                 this.closeGraphic()
-
                 break;
             case "buttonRecordGraphic":
                 this.buttonGraphic(element)
@@ -64,29 +65,29 @@ export class SettingRecord {
                 this.openClose(element.getAttribute("data-linked"))
                 break;
             case "buttonRecordPrint":
-                openModal(this.alertSave())
+                this.checkDescription()
                 this.settingBtnAlertSave()
                 break;
             case "filterBtn":
-                this.pressBtnFilter()
-                break;
-            case "graphicButton":
-                let req = await this.recordObject.get("&id_user=148&notification", "CLPP/Response.php", true);
-                // alert("Você abrirá um gráfico")
-                // this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(this.recordObject.separateChecklist(req)), "#mainGraphic", this.typeGraph);
-                // this.recordObject.clppGraphich.clppGraphics(this.recordObject.getDataForGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop), "#mainGraphic", this.typeGraph);
-                // this.recordObject.clppGraphich.clppGraphics(this.recordObject.specificGraphic(this.recordObject.separateChecklist(req), this.jsonCheck, this.jsonShop,1), "#mainGraphic", this.typeGraph);
-                break;
-            case "teste":
-                this.loadSavedReports(this.recordObject.getJsonRecord())
-                getB_id("filterBtn").click();
+                this.validaPressBtnFilter() == true ? this.pressBtnFilter() : alert('Selecione um dado');
                 break;
             default:
                 console.error("data-function")
         }
     }
 
+    validaPressBtnFilter() {
+        let checklist = document.querySelectorAll(".option")
+        checklist.forEach(element => {
+            console.log(element.checked.true)
+            /* if (element.checked == true) return true
+            else if (element.checked == false) return false */
+        })
+
+    }
+
     async pressBtnFilter() {
+
         this.controllerBtns(["#buttonRecordPrint"], false)
         this.recordObject.setFilters(this.lockInfo())
         this.validationDate()
@@ -104,11 +105,10 @@ export class SettingRecord {
             getB_id('popupaCheckpGra').insertAdjacentHTML('beforeend', response += `<option class="popupaCheckpGra">${(this.jsonCheck[element].getTitle()).slice(0, 15) + "..."}</option>`)
         })
         this.closeGraphic()
-        let resultReq = this.recordObject.generalGraphic(reqFiltred)
-        this.recordObject.setPoint(resultReq[1][1])
-        this.recordObject.clppGraphich.clppGraphics(resultReq, "#mainGraphic", this.typeGraph)
-        this.recordObject2.clppGraphich.clppGraphics(this.recordObject2.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicUnity", this.typeGraph)
-
+        this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(reqFiltred), "#mainGraphic", this.typeGraph)
+        console.log()
+        this.recordObject.clppGraphich.clppGraphics(this.recordObject.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicUnity", this.typeGraph)
+        this.recordObject.clppGraphich.clppGraphics(this.recordObject.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicChecklist", this.typeGraph)
     }
 
     populaShopGraphic(returnReq) {
@@ -122,11 +122,11 @@ export class SettingRecord {
     }
 
     filterMiniGraphic(returnReq, key) {
-        let assiistent = []
+        let assistent = []
         returnReq.data.forEach(resultFilters => {
-            if (this.validation(assiistent, resultFilters[key])) assiistent.push(resultFilters[key])
+            if (this.validation(assistent, resultFilters[key])) assistent.push(resultFilters[key])
         })
-        return assiistent
+        return assistent
     }
 
     validation(keys, value) {
@@ -153,6 +153,7 @@ export class SettingRecord {
             this.openClose("selShop")
         }
         this.loadDate(jsonFilters)
+        getB_id("filterBtn").click();
     }
 
     loadDate(dateJson) {
@@ -249,7 +250,6 @@ export class SettingRecord {
         this.recordObject2.clppGraphich.graphicRecord && this.recordObject2.clppGraphich.graphicRecord.destroy();
         getB_id('graphicUnity').getContext('2d').clearRect(0, 0, getB_id('graphicUnity').width, getB_id('graphicUnity').height)
         this.recordObject3.clppGraphich.graphicRecord && this.recordObject3.clppGraphich.graphicRecord.destroy();
-
     }
 
     controllerSelect(local, message, check) {
@@ -367,8 +367,26 @@ export class SettingRecord {
             return question
         }
     }
+    checkDescription(){
+        if(!$('#inputTitle input[type=text]').value){
+            openModal(this.alertFailure())
+            setTimeout(() => {closeModal()}, 2000) 
+        }else{
+            openModal(this.alertSave())
+        }
+    }
 
-    alertSave() {
+    alertFailure(){
+        const modalFailure = `
+        <div id="modalAlertFailure">
+            <div id="alertFailureName">
+                <h1>Para salvar um relatório, é necessário digitar um nome!</h1>
+            </div>    
+        </div> `
+        return modalFailure
+    }
+
+    alertSave() { 
         const modalAlert = `
             <div id="modalAlert">
                 <div id="alertMsg">
@@ -389,14 +407,15 @@ export class SettingRecord {
             this.recordObject.saveReport()
             await this.recordObject.readyPost()
             closeModal()
+            this.routers.routers('record')
         })
     }
 
-    setDateObj(newPoint) {
-            this.recordObject.setId_user(localStorage.getItem("id"))
-            this.recordObject.setDescritpion($('#inputTitle input[type=text]').value)
-            this.recordObject.setType(this.typeGraph)
-            this.recordObject.setDate(this.userFulComponents.currentDate())
+    setDateObj() {
+        this.recordObject.setId_user(localStorage.getItem("id"))
+        this.recordObject.setDescritpion($('#inputTitle input[type=text]').value)
+        this.recordObject.setType(this.typeGraph)
+        this.recordObject.setDate(this.userFulComponents.currentDate())
     }
 
     lockInfo() {
