@@ -90,7 +90,7 @@ export class SettingRecord {
     validaPressBtnFilter() {
         let checklist = document.querySelectorAll(".option")
         checklist.forEach(element => {
-            console.log(element.checked.true)
+            console.log(element.checked)
             /* if (element.checked == true) return true
             else if (element.checked == false) return false */
         })
