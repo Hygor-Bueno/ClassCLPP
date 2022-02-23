@@ -26,6 +26,7 @@ export class SettingRecord {
         this.shopJson(await this.getShop());
         this.blockQuestion();
         this.pegandoValidade();
+        localStorage.getItem("jsonRecord") && this.loadSavedReports(JSON.parse(localStorage.getItem("jsonRecord")))
     }
 
     jsonChecklists(objectChecklist) {
@@ -69,7 +70,7 @@ export class SettingRecord {
                 this.settingBtnAlertSave()
                 break;
             case "filterBtn":
-                this.validaPressBtnFilter() == true ? this.pressBtnFilter() : alert('Selecione um dado');
+                !this.validaPressBtnFilter() == true ? this.pressBtnFilter() : alert('Selecione um dado');
                 break;
             default:
                 console.error("data-function")
@@ -87,7 +88,6 @@ export class SettingRecord {
     }
 
     async pressBtnFilter() {
-
         this.controllerBtns(["#buttonRecordPrint"], false)
         this.recordObject.setFilters(this.lockInfo())
         this.validationDate()
@@ -138,7 +138,9 @@ export class SettingRecord {
     }
 
     loadSavedReports(stop_json) {
-        let jsonFilters = stop_json.filters
+        let t = stop_json.filters
+        let jsonFilters = JSON.parse(t)
+        console.log(JSON.parse(t))
         getB_id("inputNameTitles").value = stop_json.name
         Object.keys(jsonFilters.checklist).forEach(element => {
             if (jsonFilters.checklist[element] != "") {

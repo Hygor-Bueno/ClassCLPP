@@ -211,9 +211,11 @@ export class SettingHome {
         })
     }
     configRecord(){
+        let routers = new Routers;
         $_all(".cardRecord").forEach(cardRecord => cardRecord.addEventListener("click",()=>{ 
             console.log(this.objectRecord[cardRecord.getAttribute("data-idrecord")])
             localStorage.setItem("jsonRecord",JSON.stringify(this.objectRecord[cardRecord.getAttribute("data-idrecord")]))
+            routers.routers("record")
         }))
     }
 }
