@@ -40,6 +40,7 @@ export class RecordObject extends ConnectionCLPP {
             filter: this.#filters
         }
     }
+
     async readyPost() {
         await this.post(this.#jsonRecord, "CLPP/Record.php", true)
     }
@@ -50,6 +51,7 @@ export class RecordObject extends ConnectionCLPP {
         let markShop = this.#filters['id_shops'].length || 1;
         let markTitle = this.#filters['checklist']['titles'].length || 1;
         let markQuestion = this.#filters.checklist.question.length || 1;
+
         for (let cnt = 0; cnt < markShop; cnt++) {
             for (let xxx = 0; xxx < markTitle; xxx++) {
                 for (let y = 0; y < markQuestion; y++) {
@@ -101,14 +103,11 @@ export class RecordObject extends ConnectionCLPP {
     }
 
     separateChecklist(response) {
-        console.log("********** inicio separateChecklist() *************")
-        console.log(response)
         let orderByChecklist = [];
         let assistent = this.getKeys(response);
         assistent.forEach(elemKey => {
             orderByChecklist.push(response.data.filter(element => { return elemKey[0] == element.id_user && elemKey[1] == element.date && elemKey[2] == element.id_checklist && elemKey[3] == element.id_shop }));
         })
-        console.log("********** Fim separateChecklist() *************")
         return orderByChecklist;
     }
 
@@ -126,11 +125,10 @@ export class RecordObject extends ConnectionCLPP {
     validateKeys(value, keys) {
         let controller = true;
         keys.forEach(key => {
-            if (key[0] == value[0] && key[1] && value[1] && key[2] == value[2]) {controller = false }
+            if (key[0] == value[0] && key[1] == value[1] && key[2] == value[2]) {controller = false }
         })
         return controller;
     }
-
     generalGraphic(orderByChecklist) {
         let point = this.computePercent(orderByChecklist, 1)
         let dataSpecific = [["Não Satisfatório", 100 - point], ["Satisfatório", point]]
@@ -154,7 +152,6 @@ export class RecordObject extends ConnectionCLPP {
         response.unshift(["Não Satisfatório", 100 - aux])
         return response;
     }
-
     formateDateGraph(date) {
         let usefulComponents = new UsefulComponents;
         let result = usefulComponents.splitString(date, "-")
