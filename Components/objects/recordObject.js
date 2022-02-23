@@ -90,7 +90,6 @@ export class RecordObject extends ConnectionCLPP {
                 }
             }
         })
-        console.log(params)
         return params;
     }
 
@@ -116,7 +115,6 @@ export class RecordObject extends ConnectionCLPP {
         let assistent = [["", "", ""]];
         let filterKeys = [];
         response.data.forEach(element => {
-            console.log("user => ", element.id_user, " checklist => ", element.id_checklist, " loja => ", element.id_shop)
             if ((this.validateKeys([element.id_user, element.id_checklist, element.id_shop], assistent))) {
                 assistent.push([element.id_user, element.id_checklist, element.id_shop]);
                 filterKeys.push([element.id_user, element.date, element.id_checklist, element.id_shop])
@@ -127,7 +125,7 @@ export class RecordObject extends ConnectionCLPP {
     validateKeys(value, keys) {
         let controller = true;
         keys.forEach(key => {
-            if (key[0] == value[0] && key[1] && value[1] && key[2] == value[2]) { console.log(value, key); controller = false }
+            if (key[0] == value[0] && key[1] && value[1] && key[2] == value[2]) {controller = false }
         })
         return controller;
     }
@@ -136,13 +134,11 @@ export class RecordObject extends ConnectionCLPP {
         let dataSpecific = [["Não Satisfatório", 100 - point], ["Satisfatório", point]]
         return dataSpecific
     }
-
     specificGraphic(orderByChecklist, objectChecklist, objectShops, specific) {
         let dataSpecific = this.getDataForGraphic(orderByChecklist, objectChecklist, objectShops, specific)
         dataSpecific.shift()
         return dataSpecific
     }
-
     getDataForGraphic(orderByChecklist, objectChecklist, objectShops, specific) {
         let response = []
         let aux = 0;
@@ -161,7 +157,6 @@ export class RecordObject extends ConnectionCLPP {
         let result = usefulComponents.splitString(date, "-")
         return " " + result[2] + "/" + result[1]
     }
-
     computePercent(responseChecklist, max) {
         let question = 0;
         let sum = 0;
