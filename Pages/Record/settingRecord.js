@@ -70,7 +70,7 @@ export class SettingRecord {
                 this.settingBtnAlertSave()
                 break;
             case "filterBtn":
-                this.validaPressBtnFilter() == true ? this.pressBtnFilter() : alert('Selecione um dado');
+                !this.validaPressBtnFilter() ? this.pressBtnFilter() : alert('Selecione um dado');
                 break;
             default:
                 console.error("data-function")
@@ -440,6 +440,7 @@ export class SettingRecord {
             if (ele.checked && ele.getAttribute('data-id') != exception) checklistJson.push(ele.getAttribute('data-id'))
         })
         return checklistJson;
+        
     }
 
     controllerBtns(btns, parans) {
