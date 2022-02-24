@@ -26,11 +26,7 @@ export class SettingRecord {
         this.shopJson(await this.getShop());
         this.blockQuestion();
         this.pegandoValidade();
-<<<<<<< HEAD
         localStorage.getItem("jsonRecord") &&  this.loadSavedReports(JSON.parse(localStorage.getItem("jsonRecord")))
-=======
-        localStorage.getItem("jsonRecord") && this.loadSavedReports(JSON.parse(localStorage.getItem("jsonRecord")))
->>>>>>> a14c6e3d9687d5cfc7031c1821cca0f50b5993a2
     }
 
     jsonChecklists(objectChecklist) {
@@ -141,14 +137,8 @@ export class SettingRecord {
     }
 
     loadSavedReports(stop_json) {
-<<<<<<< HEAD
         let jsonFilters = JSON.parse(stop_json.filters)
         getB_id("inputNameTitles").value = stop_json.description
-=======
-        let jsonFilters = stop_json.filters
-        jsonFilters =  JSON.parse(jsonFilters)
-        getB_id("inputNameTitles").value = stop_json.name
->>>>>>> a14c6e3d9687d5cfc7031c1821cca0f50b5993a2
         Object.keys(jsonFilters.checklist).forEach(element => {
             if (jsonFilters.checklist[element] != "") {
                 jsonFilters.checklist[element].forEach(ele => getB_id(`${ele}`).checked = true)
@@ -369,7 +359,6 @@ export class SettingRecord {
             this.jsonShop[shop.id] = shop
         })
     }
-
 
     getQuestion(cont) {
         if (cont.length != 0) {
