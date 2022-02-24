@@ -26,7 +26,11 @@ export class SettingRecord {
         this.shopJson(await this.getShop());
         this.blockQuestion();
         this.pegandoValidade();
+<<<<<<< HEAD
+        localStorage.getItem("jsonRecord") &&  this.loadSavedReports(JSON.parse(localStorage.getItem("jsonRecord")))
+=======
         localStorage.getItem("jsonRecord") && this.loadSavedReports(JSON.parse(localStorage.getItem("jsonRecord")))
+>>>>>>> a14c6e3d9687d5cfc7031c1821cca0f50b5993a2
     }
 
     jsonChecklists(objectChecklist) {
@@ -84,7 +88,6 @@ export class SettingRecord {
             /* if (element.checked == true) return true
             else if (element.checked == false) return false */
         })
-
     }
 
     async pressBtnFilter() {
@@ -92,6 +95,7 @@ export class SettingRecord {
         this.recordObject.setFilters(this.lockInfo())
         this.validationDate()
         let returnReq = await this.recordObject.returnGet(this.recordObject.getParamsForFilters())
+        this.recordObject.setPoint(this.recordObject.generalGraphic(this.recordObject.separateChecklist(returnReq))[1][1])
         this.populaShopGraphic(returnReq)
         this.populaCheckGraphic(returnReq, this.recordObject.separateChecklist(returnReq))
     }
@@ -106,9 +110,8 @@ export class SettingRecord {
         })
         this.closeGraphic()
         this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(reqFiltred), "#mainGraphic", this.typeGraph)
-        console.log()
-        this.recordObject.clppGraphich.clppGraphics(this.recordObject.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicUnity", this.typeGraph)
-        this.recordObject.clppGraphich.clppGraphics(this.recordObject.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicChecklist", this.typeGraph)
+        this.recordObject2.clppGraphich.clppGraphics(this.recordObject2.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicUnity", this.typeGraph)
+        this.recordObject3.clppGraphich.clppGraphics(this.recordObject3.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicChecklist", this.typeGraph)
     }
 
     populaShopGraphic(returnReq) {
@@ -138,9 +141,14 @@ export class SettingRecord {
     }
 
     loadSavedReports(stop_json) {
+<<<<<<< HEAD
+        let jsonFilters = JSON.parse(stop_json.filters)
+        getB_id("inputNameTitles").value = stop_json.description
+=======
         let jsonFilters = stop_json.filters
         jsonFilters =  JSON.parse(jsonFilters)
         getB_id("inputNameTitles").value = stop_json.name
+>>>>>>> a14c6e3d9687d5cfc7031c1821cca0f50b5993a2
         Object.keys(jsonFilters.checklist).forEach(element => {
             if (jsonFilters.checklist[element] != "") {
                 jsonFilters.checklist[element].forEach(ele => getB_id(`${ele}`).checked = true)
@@ -246,11 +254,11 @@ export class SettingRecord {
     }
 
     closeGraphic() {
-        getB_id('mainGraphic').getContext('2d').clearRect(0, 0, getB_id('mainGraphic').width, getB_id('mainGraphic').height)
+        // getB_id('mainGraphic').getContext('2d').clearRect(0, 0, getB_id('mainGraphic').width, getB_id('mainGraphic').height)
         this.recordObject.clppGraphich.graphicRecord && this.recordObject.clppGraphich.graphicRecord.destroy();
-        getB_id('graphicUnity').getContext('2d').clearRect(0, 0, getB_id('graphicUnity').width, getB_id('graphicUnity').height)
+        // getB_id('graphicUnity').getContext('2d').clearRect(0, 0, getB_id('graphicUnity').width, getB_id('graphicUnity').height)
         this.recordObject2.clppGraphich.graphicRecord && this.recordObject2.clppGraphich.graphicRecord.destroy();
-        getB_id('graphicUnity').getContext('2d').clearRect(0, 0, getB_id('graphicUnity').width, getB_id('graphicUnity').height)
+        // getB_id('graphicChecklist').getContext('2d').clearRect(0, 0, getB_id('graphicChecklist').width, getB_id('graphicChecklist').height)
         this.recordObject3.clppGraphich.graphicRecord && this.recordObject3.clppGraphich.graphicRecord.destroy();
     }
 
