@@ -440,6 +440,7 @@ export class SettingRecord {
             if (ele.checked && ele.getAttribute('data-id') != exception) checklistJson.push(ele.getAttribute('data-id'))
         })
         return checklistJson;
+        
     }
 
     controllerBtns(btns, parans) {
