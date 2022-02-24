@@ -383,10 +383,6 @@ input {
   max-height: 280px;
 }
 
-#containerGraphicUnity,
-#containerGraphicChecklist {
-}
-
 @media screen and (min-width: 1500px) {
   .titleOptionBlock,
   #titleMain {
@@ -423,7 +419,6 @@ input {
   #graphicUnity,
   #graphicChecklist {
     max-height: 220px;
-    
   }
 }
 
