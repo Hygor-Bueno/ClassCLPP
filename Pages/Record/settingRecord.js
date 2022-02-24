@@ -26,11 +26,11 @@ export class SettingRecord {
         this.shopJson(await this.getShop());
         this.blockQuestion();
         this.pegandoValidade();
-
+        //getB_id("inputNameTitles").oninput = (e) => {console.log(e)}
 
         getB_id("corpoRecord").onchange = (e) => {
             let getTypeId = e.target[e.target.selectedIndex].getAttribute("id")
-            console.log(getTypeId)
+            this.changeChartType(getTypeId)
         }
 
         localStorage.getItem("jsonRecord") &&  this.loadSavedReports(JSON.parse(localStorage.getItem("jsonRecord")))
@@ -79,20 +79,11 @@ export class SettingRecord {
                 this.settingBtnAlertSave()
                 break;
             case "filterBtn":
-                !this.validaPressBtnFilter() ? this.pressBtnFilter() : alert('Selecione um dado');
+                this.walksArray(".option").length >= 1 ? this.pressBtnFilter() : alert('Selecione um dado');
                 break;
             default:
                 console.error("data-function")
         }
-    }
-
-    validaPressBtnFilter() {
-        let checklist = document.querySelectorAll(".option")
-        checklist.forEach(element => {
-            console.log(element.checked.true)
-            /* if (element.checked == true) return true
-            else if (element.checked == false) return false */
-        })
     }
 
     async pressBtnFilter() {
@@ -114,10 +105,7 @@ export class SettingRecord {
             getB_id('popupaCheckpGra').insertAdjacentHTML('beforeend', response += `<option class="popupaCheckpGra" id="${this.jsonCheck[element].getIdChecklist()}">${(this.jsonCheck[element].getTitle()).slice(0, 15) + "..."}</option>`)
         })
         this.closeGraphic()
-        console.log(this.jsonCheck)
         this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(reqFiltred), "#mainGraphic", this.typeGraph)
-
-
         this.recordObject2.clppGraphich.clppGraphics(this.recordObject2.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicUnity", this.typeGraph)
         this.recordObject3.clppGraphich.clppGraphics(this.recordObject3.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicChecklist", this.typeGraph)
 
@@ -251,9 +239,19 @@ export class SettingRecord {
 
     changeChartType(value) {
         this.closeGraphic();
-        if (value == 'buttonRecordBar') this.typeGraph = 2
-        else if (value == 'buttonRecordPizza') this.typeGraph = 1
-        else this.typeGraph = 3
+        switch (value) {
+            case 'buttonRecordBar'||'graphicMiniBarShop'||'graphicMiniBarCheck':
+                this.typeGraph = 2
+                break;
+                case 'buttonRecordPizza'||'graphicMiniPizzaShop'||'graphicMiniPizzaCheck':
+                    this.typeGraph = 1
+                    break;
+                    case 'buttonRecordPercentage'||'graphicMiniPorcCheck'||'graphicMiniPorcShop':
+                this.typeGraph = 3
+                break;
+            }
+        console.log(value)
+        console.log(this.typeGraph)
     }
 
     closeGraphic() {
@@ -373,7 +371,6 @@ export class SettingRecord {
         })
     }
 
-
     getQuestion(cont) {
         if (cont.length != 0) {
             let question = this.jsonCheck[cont[0].attributes[2].value].getQuestion()
@@ -454,7 +451,7 @@ export class SettingRecord {
         return checklistJson;
 
     }
-
+    
     controllerBtns(btns, parans) {
         btns.forEach(btn => {
             $(btn).disabled = parans;
