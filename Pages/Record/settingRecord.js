@@ -80,10 +80,9 @@ export class SettingRecord {
     validaPressBtnFilter() {
         let checklist = document.querySelectorAll(".option")
         checklist.forEach(element => {
-            console.log(element.checked)
-
-            if (element.checked == true) return true
-            else if (element.checked == false) return false
+            console.log(element.checked.true)
+            /* if (element.checked == true) return true
+            else if (element.checked == false) return false */
         })
 
     }
@@ -139,9 +138,8 @@ export class SettingRecord {
     }
 
     loadSavedReports(stop_json) {
-        let t = stop_json.filters
-        let jsonFilters = JSON.parse(t)
-        console.log(JSON.parse(t))
+        let jsonFilters = stop_json.filters
+        jsonFilters =  JSON.parse(jsonFilters)
         getB_id("inputNameTitles").value = stop_json.name
         Object.keys(jsonFilters.checklist).forEach(element => {
             if (jsonFilters.checklist[element] != "") {
@@ -150,13 +148,14 @@ export class SettingRecord {
                 element == "question" && this.openClose("titleQuestionOption")
                 element == "date_checklist" && this.openClose("validCheckBlock")
             }
-        })
+        }) 
         if (jsonFilters.id_shops != "") {
             jsonFilters.id_shops.forEach(elem => getB_id(`${elem}`).checked = true)
             this.openClose("selShop")
         }
         this.loadDate(jsonFilters)
         getB_id("filterBtn").click();
+        localStorage.getItem("jsonRecord") && localStorage.removeItem("jsonRecord")
     }
 
     loadDate(dateJson) {
@@ -210,7 +209,7 @@ export class SettingRecord {
             element[key] ? response +=
                 `<div class="optionSelect">
                 <input type="checkbox" class="option" data-id="${element.id}" id="${element.id}" value="${element[key]}">
-                    <p class="valorCheck">${(element[key]).toLowerCase().slice(0, 25)}</p>
+                    <p class="valorCheck">${element[key]}</p>
                 </input>
             </div>` : ""
         })
@@ -370,16 +369,16 @@ export class SettingRecord {
             return question
         }
     }
-    checkDescription() {
-        if (!$('#inputTitle input[type=text]').value) {
+    checkDescription(){
+        if(!$('#inputTitle input[type=text]').value){
             openModal(this.alertFailure())
-            setTimeout(() => { closeModal() }, 2000)
-        } else {
+            setTimeout(() => {closeModal()}, 2000) 
+        }else{
             openModal(this.alertSave())
         }
     }
 
-    alertFailure() {
+    alertFailure(){
         const modalFailure = `
         <div id="modalAlertFailure">
             <div id="alertFailureName">
@@ -389,7 +388,7 @@ export class SettingRecord {
         return modalFailure
     }
 
-    alertSave() {
+    alertSave() { 
         const modalAlert = `
             <div id="modalAlert">
                 <div id="alertMsg">
