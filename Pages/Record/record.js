@@ -124,14 +124,17 @@ export class RecordPage extends SettingRecord {
                         <aside id="unityGraphic">
                             <div class="btnMiniGrafico">
                                 <select class="selMiniGrafico" id="popupaShopGra" style="display:">
+
+
+
                                     <option type="option">Unidade</option>
                                     
                                 </select>
                                 <select class="selMiniGrafico" style="display:">
                                     <option type="option">Tipo de gráfico</option>
-                                    <option type="option" >Barra</option>
-                                    <option type="option">Pizza</option> 
-                                    <option type="option">Porcentagem</option>
+                                    <option type="option" id="graphicMiniPizzaShop">Pizza</option> 
+                                    <option type="option" id="graphicMiniPorcShop">Porcentagem</option>
+                                    <option type="option" id="graphicMiniBarShop" >Barra</option>
                                 </select>
                                 </div>
                                 <div id="containerGraphicUnity">
@@ -147,9 +150,9 @@ export class RecordPage extends SettingRecord {
                             </select>
                             <select class="selMiniGrafico" style="display:">
                                 <option type="option" >Tipo de gráfico</option>
-                                <option type="option" >Barra</option>
-                                <option type="option" >Pizza</option> 
-                                <option type="option" >Porcentagem</option>
+                                <option type="option" id="graphicMiniBarCheck">Barra</option>
+                                <option type="option" id="graphicMiniPizzaCheck">Pizza</option> 
+                                <option type="option" id="graphicMiniPorcCheck">Porcentagem</option>
                             </select>
                             </div>    
                             <div id="containerGraphicChecklist">

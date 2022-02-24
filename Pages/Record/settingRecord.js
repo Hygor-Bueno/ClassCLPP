@@ -26,7 +26,16 @@ export class SettingRecord {
         this.shopJson(await this.getShop());
         this.blockQuestion();
         this.pegandoValidade();
+
+
+        getB_id("corpoRecord").onchange = (e) => {
+            let getTypeId = e.target[e.target.selectedIndex].getAttribute("id")
+            console.log(getTypeId)
+        }
+
         localStorage.getItem("jsonRecord") &&  this.loadSavedReports(JSON.parse(localStorage.getItem("jsonRecord")))
+
+ 
     }
 
     jsonChecklists(objectChecklist) {
@@ -102,12 +111,16 @@ export class SettingRecord {
         let result = this.filterMiniGraphic(returnReq, "id_checklist")
         result.forEach(element => {
             let response = ""
-            getB_id('popupaCheckpGra').insertAdjacentHTML('beforeend', response += `<option class="popupaCheckpGra">${(this.jsonCheck[element].getTitle()).slice(0, 15) + "..."}</option>`)
+            getB_id('popupaCheckpGra').insertAdjacentHTML('beforeend', response += `<option class="popupaCheckpGra" id="${this.jsonCheck[element].getIdChecklist()}">${(this.jsonCheck[element].getTitle()).slice(0, 15) + "..."}</option>`)
         })
         this.closeGraphic()
+        console.log(this.jsonCheck)
         this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(reqFiltred), "#mainGraphic", this.typeGraph)
+
+
         this.recordObject2.clppGraphich.clppGraphics(this.recordObject2.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicUnity", this.typeGraph)
         this.recordObject3.clppGraphich.clppGraphics(this.recordObject3.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicChecklist", this.typeGraph)
+
     }
 
     populaShopGraphic(returnReq) {
@@ -116,7 +129,7 @@ export class SettingRecord {
         let result = this.filterMiniGraphic(returnReq, "id_shop")
         result.forEach(element => {
             let response = ""
-            getB_id('popupaShopGra').insertAdjacentHTML('beforeend', response += `<option class="popupaShopGra">${this.jsonShop[element].description}</option>`)
+            getB_id('popupaShopGra').insertAdjacentHTML('beforeend', response += `<option class="popupaShopGra" id="${this.jsonShop[element].id}">${this.jsonShop[element].description}</option>`)
         })
     }
 
@@ -438,9 +451,9 @@ export class SettingRecord {
             if (ele.checked && ele.getAttribute('data-id') != exception) checklistJson.push(ele.getAttribute('data-id'))
         })
         return checklistJson;
-        
-    }
 
+    }
+    
     controllerBtns(btns, parans) {
         btns.forEach(btn => {
             $(btn).disabled = parans;
