@@ -150,10 +150,8 @@ export class SettingRecord {
     }
 
     loadSavedReports(stop_json) {
-
         let jsonFilters = JSON.parse(stop_json.filters)
         getB_id("inputNameTitles").value = stop_json.description
-
         Object.keys(jsonFilters.checklist).forEach(element => {
             if (jsonFilters.checklist[element] != "") {
                 jsonFilters.checklist[element].forEach(ele => getB_id(`${ele}`).checked = true)
