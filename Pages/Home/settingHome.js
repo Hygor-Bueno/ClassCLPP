@@ -22,7 +22,7 @@ var connectionCLPP = new ConnectionCLPP;
 export class SettingHome {
     recordObject = new RecordObject;
     checklistObject = new ObjectChecklist;
-    objectRecord={};
+    objectRecord = {};
     async settings() {
         this.notifyMessage();
         this.carousel();
@@ -124,18 +124,19 @@ export class SettingHome {
     }
 
     async reportAnsweredToday(checklistJson) {
-        // try{
-        let reportDay;
-        let shops;
-        let req = ""
-        await Promise.all([connectionCLPP.get(`&id_user=${localStorage.getItem("id")}&notification`, "CLPP/Response.php"), connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')]).then(response => { req = response })
-        reportDay = req[0]
-        shops = this.shopJson(req[1].data)
-        let jsonReportCard = await this.contructorJsonCard(this.recordObject.separateChecklist(reportDay), checklistJson, shops)
-        this.cardRecord(jsonReportCard, '#bodyReportDiv');
-        // }catch (e) {
-        //     console.error(e)
-        // }
+        try {
+            let reportDay;
+            let shops;
+            let req = ""
+            await Promise.all([connectionCLPP.get(`&id_user=${localStorage.getItem("id")}&notification`, "CLPP/Response.php"), connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')]).then(response => { req = response })
+            reportDay = req[0]
+            shops = this.shopJson(req[1].data)
+            let jsonReportCard = await this.contructorJsonCard(this.recordObject.separateChecklist(reportDay), checklistJson, shops)
+            this.cardRecord(jsonReportCard, '#bodyReportDiv');
+        } catch (exception) {
+            console.log(exception)
+            return `<P></P>`
+        }
     }
 
     async contructorJsonCard(pay, checklistJson, shops) {
@@ -172,7 +173,7 @@ export class SettingHome {
         )).join(""))
         jsonReportCard.forEach(elementGraphic => this.createGraphichCard(elementGraphic))
     }
-    
+
     createGraphichCard(jsonGraphich) {
         let clppGraphic = new ClppGraphichObject;
         clppGraphic.clppGraphics(jsonGraphich.graphich, `#can_${jsonGraphich.cod}`, 3)
@@ -185,36 +186,42 @@ export class SettingHome {
         return jsonShop;
     }
     recordCreate(arrayRecord) {
-        this.createJsonObject(arrayRecord)
+        try {
 
-        return arrayRecord.data.map(recordCard => (
-            `
-            <div id="cardRecord_${recordCard.id}" class="cardRecord" data-idrecord="${recordCard.id}">
+            this.createJsonObject(arrayRecord)
+
+            return arrayRecord.data.map(recordCard => (
+                `
+                <div id="cardRecord_${recordCard.id}" class="cardRecord" data-idrecord="${recordCard.id}">
                 <section>
-                    <div>
-                        <label><b>Nome do relatório:</b></label><P>${recordCard.description}</P>
-                    </div>
-                    <div>
-                        <label><b>Data de criação:</b></label><P>${recordCard.date}</P>
-                    </div>
-                    <div>
-                        <label><b>Pontuação geral:</b></label><p>${recordCard.point}%</p> 
-                    </div>                
+                <div>
+                <label><b>Nome do relatório:</b></label><P>${recordCard.description}</P>
+                </div>
+                <div>
+                <label><b>Data de criação:</b></label><P>${recordCard.date}</P>
+                </div>
+                <div>
+                <label><b>Pontuação geral:</b></label><p>${recordCard.point}%</p> 
+                </div>                
                 </section>
-            </div>
+                </div>
             `
-        )).join("")
+            )).join("")
+        } catch (exception) {
+            console.log(exception)
+            return `<P></P>`
+        }
     }
-    createJsonObject(arrays){
-        arrays.data.forEach(array =>{
+    createJsonObject(arrays) {
+        arrays.data.forEach(array => {
             this.objectRecord[array.id] = array;
         })
     }
-    configRecord(){
+    configRecord() {
         let routers = new Routers;
-        $_all(".cardRecord").forEach(cardRecord => cardRecord.addEventListener("click",()=>{ 
+        $_all(".cardRecord").forEach(cardRecord => cardRecord.addEventListener("click", () => {
             console.log(this.objectRecord[cardRecord.getAttribute("data-idrecord")])
-            localStorage.setItem("jsonRecord",JSON.stringify(this.objectRecord[cardRecord.getAttribute("data-idrecord")]))
+            localStorage.setItem("jsonRecord", JSON.stringify(this.objectRecord[cardRecord.getAttribute("data-idrecord")]))
             routers.routers("record")
         }))
     }
