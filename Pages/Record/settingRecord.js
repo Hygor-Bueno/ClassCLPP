@@ -26,11 +26,16 @@ export class SettingRecord {
         this.shopJson(await this.getShop());
         this.blockQuestion();
         this.pegandoValidade();
-<<<<<<< HEAD
+
+
+        getB_id("corpoRecord").onchange = (e) => {
+            let getTypeId = e.target[e.target.selectedIndex].getAttribute("id")
+            console.log(getTypeId)
+        }
+
         localStorage.getItem("jsonRecord") &&  this.loadSavedReports(JSON.parse(localStorage.getItem("jsonRecord")))
-=======
-        localStorage.getItem("jsonRecord") && this.loadSavedReports(JSON.parse(localStorage.getItem("jsonRecord")))
->>>>>>> a14c6e3d9687d5cfc7031c1821cca0f50b5993a2
+
+ 
     }
 
     jsonChecklists(objectChecklist) {
@@ -106,12 +111,16 @@ export class SettingRecord {
         let result = this.filterMiniGraphic(returnReq, "id_checklist")
         result.forEach(element => {
             let response = ""
-            getB_id('popupaCheckpGra').insertAdjacentHTML('beforeend', response += `<option class="popupaCheckpGra">${(this.jsonCheck[element].getTitle()).slice(0, 15) + "..."}</option>`)
+            getB_id('popupaCheckpGra').insertAdjacentHTML('beforeend', response += `<option class="popupaCheckpGra" id="${this.jsonCheck[element].getIdChecklist()}">${(this.jsonCheck[element].getTitle()).slice(0, 15) + "..."}</option>`)
         })
         this.closeGraphic()
+        console.log(this.jsonCheck)
         this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(reqFiltred), "#mainGraphic", this.typeGraph)
+
+
         this.recordObject2.clppGraphich.clppGraphics(this.recordObject2.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicUnity", this.typeGraph)
         this.recordObject3.clppGraphich.clppGraphics(this.recordObject3.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicChecklist", this.typeGraph)
+
     }
 
     populaShopGraphic(returnReq) {
@@ -120,7 +129,7 @@ export class SettingRecord {
         let result = this.filterMiniGraphic(returnReq, "id_shop")
         result.forEach(element => {
             let response = ""
-            getB_id('popupaShopGra').insertAdjacentHTML('beforeend', response += `<option class="popupaShopGra">${this.jsonShop[element].description}</option>`)
+            getB_id('popupaShopGra').insertAdjacentHTML('beforeend', response += `<option class="popupaShopGra" id="${this.jsonShop[element].id}">${this.jsonShop[element].description}</option>`)
         })
     }
 
@@ -141,14 +150,10 @@ export class SettingRecord {
     }
 
     loadSavedReports(stop_json) {
-<<<<<<< HEAD
+
         let jsonFilters = JSON.parse(stop_json.filters)
         getB_id("inputNameTitles").value = stop_json.description
-=======
-        let jsonFilters = stop_json.filters
-        jsonFilters =  JSON.parse(jsonFilters)
-        getB_id("inputNameTitles").value = stop_json.name
->>>>>>> a14c6e3d9687d5cfc7031c1821cca0f50b5993a2
+
         Object.keys(jsonFilters.checklist).forEach(element => {
             if (jsonFilters.checklist[element] != "") {
                 jsonFilters.checklist[element].forEach(ele => getB_id(`${ele}`).checked = true)
@@ -449,7 +454,7 @@ export class SettingRecord {
             if (ele.checked && ele.getAttribute('data-id') != exception) checklistJson.push(ele.getAttribute('data-id'))
         })
         return checklistJson;
-        
+
     }
 
     controllerBtns(btns, parans) {
