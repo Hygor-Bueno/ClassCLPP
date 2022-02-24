@@ -383,6 +383,17 @@ input {
   max-height: 280px;
 }
 
+<<<<<<< HEAD
+=======
+/* #containerGraphicUnity,
+#containerGraphicChecklist {
+ 
+  
+} */
+
+
+
+>>>>>>> a14c6e3d9687d5cfc7031c1821cca0f50b5993a2
 @media screen and (min-width: 1500px) {
   .titleOptionBlock,
   #titleMain {
