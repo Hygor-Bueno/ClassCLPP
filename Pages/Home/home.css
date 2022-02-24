@@ -286,7 +286,6 @@ b {
     scroll-snap-align: start;
     pointer-events: none;
 }
-
 .cardCheck header {
     display: flex;
     align-items: center;
@@ -296,21 +295,18 @@ b {
     min-height: 18px;
 
 }
-
 .cardCheck section {
     display: flex;
     margin-top: 5px;
     font-size: 14px;
     height: 80%;
 }
-
 .listQuestionsHeader {
     display: flex;
     align-items: center;
     width: 100%;
     /* border-bottom: solid 1px rgb(178, 178, 178); */
 }
-
 .listQuestions {
     display: none;
     flex-direction: column;
@@ -318,7 +314,6 @@ b {
     height: 40px;
     width: 100%;
 }
-
 .viewQuizList {
     background-image: url("../../assets/images/down.svg");
     background-repeat: no-repeat;
@@ -329,12 +324,36 @@ b {
     margin-left: 10px;
     ;
 }
-
 #recordDiv {
+    display: flex;
+    flex-direction: column;
     margin: 5px;
     height: 50%;
     border-top: solid 5px white;
+}
+#subRecordDiv {
+    height:100%;
     overflow-y: auto;
+}
+#bodyRecordDiv{
+    display:grid;
+    grid-template-columns: 1fr 1fr ;
+}
+.cardRecord{
+    background:white;
+    margin: 5px;
+    border: solid 1px rgb(178, 178, 178);
+}
+.cardRecord:hover{
+    cursor: pointer;
+}
+.cardRecord section div{
+    display:flex;
+    justify-content:space-between;   
+}
+
+.cardRecord header,.cardRecord section{
+    margin:5px;
 }
 
 @media screen and (min-width: 1500px) {

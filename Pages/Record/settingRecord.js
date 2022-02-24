@@ -26,7 +26,7 @@ export class SettingRecord {
         this.shopJson(await this.getShop());
         this.blockQuestion();
         this.pegandoValidade();
-        setTimeout(async () => { }, 1000);
+        localStorage.getItem("jsonRecord") &&  this.loadSavedReports(JSON.parse(localStorage.getItem("jsonRecord")))
     }
 
     jsonChecklists(objectChecklist) {
@@ -80,19 +80,19 @@ export class SettingRecord {
     validaPressBtnFilter() {
         let checklist = document.querySelectorAll(".option")
         checklist.forEach(element => {
-            console.log(element.checked.true)
-            /* if (element.checked == true) return true
-            else if (element.checked == false) return false */
-        })
+            console.log(element.checked)
 
+            if (element.checked == true) return true
+            else if (element.checked == false) return false
+        })
     }
 
     async pressBtnFilter() {
-
         this.controllerBtns(["#buttonRecordPrint"], false)
         this.recordObject.setFilters(this.lockInfo())
         this.validationDate()
         let returnReq = await this.recordObject.returnGet(this.recordObject.getParamsForFilters())
+        this.recordObject.setPoint(this.recordObject.generalGraphic(this.recordObject.separateChecklist(returnReq))[1][1])
         this.populaShopGraphic(returnReq)
         this.populaCheckGraphic(returnReq, this.recordObject.separateChecklist(returnReq))
     }
@@ -107,9 +107,8 @@ export class SettingRecord {
         })
         this.closeGraphic()
         this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(reqFiltred), "#mainGraphic", this.typeGraph)
-        console.log()
-        this.recordObject.clppGraphich.clppGraphics(this.recordObject.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicUnity", this.typeGraph)
-        this.recordObject.clppGraphich.clppGraphics(this.recordObject.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicChecklist", this.typeGraph)
+        this.recordObject2.clppGraphich.clppGraphics(this.recordObject2.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicUnity", this.typeGraph)
+        this.recordObject3.clppGraphich.clppGraphics(this.recordObject3.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicChecklist", this.typeGraph)
     }
 
     populaShopGraphic(returnReq) {
@@ -139,8 +138,8 @@ export class SettingRecord {
     }
 
     loadSavedReports(stop_json) {
-        let jsonFilters = stop_json.filters
-        getB_id("inputNameTitles").value = stop_json.name
+        let jsonFilters = JSON.parse(stop_json.filters)
+        getB_id("inputNameTitles").value = stop_json.description
         Object.keys(jsonFilters.checklist).forEach(element => {
             if (jsonFilters.checklist[element] != "") {
                 jsonFilters.checklist[element].forEach(ele => getB_id(`${ele}`).checked = true)
@@ -208,7 +207,7 @@ export class SettingRecord {
             element[key] ? response +=
                 `<div class="optionSelect">
                 <input type="checkbox" class="option" data-id="${element.id}" id="${element.id}" value="${element[key]}">
-                    <p class="valorCheck">${element[key]}</p>
+                    <p class="valorCheck">${(element[key]).toLowerCase().slice(0, 25)}</p>
                 </input>
             </div>` : ""
         })
@@ -245,11 +244,11 @@ export class SettingRecord {
     }
 
     closeGraphic() {
-        getB_id('mainGraphic').getContext('2d').clearRect(0, 0, getB_id('mainGraphic').width, getB_id('mainGraphic').height)
+        // getB_id('mainGraphic').getContext('2d').clearRect(0, 0, getB_id('mainGraphic').width, getB_id('mainGraphic').height)
         this.recordObject.clppGraphich.graphicRecord && this.recordObject.clppGraphich.graphicRecord.destroy();
-        getB_id('graphicUnity').getContext('2d').clearRect(0, 0, getB_id('graphicUnity').width, getB_id('graphicUnity').height)
+        // getB_id('graphicUnity').getContext('2d').clearRect(0, 0, getB_id('graphicUnity').width, getB_id('graphicUnity').height)
         this.recordObject2.clppGraphich.graphicRecord && this.recordObject2.clppGraphich.graphicRecord.destroy();
-        getB_id('graphicUnity').getContext('2d').clearRect(0, 0, getB_id('graphicUnity').width, getB_id('graphicUnity').height)
+        // getB_id('graphicChecklist').getContext('2d').clearRect(0, 0, getB_id('graphicChecklist').width, getB_id('graphicChecklist').height)
         this.recordObject3.clppGraphich.graphicRecord && this.recordObject3.clppGraphich.graphicRecord.destroy();
     }
 
@@ -368,16 +367,16 @@ export class SettingRecord {
             return question
         }
     }
-    checkDescription(){
-        if(!$('#inputTitle input[type=text]').value){
+    checkDescription() {
+        if (!$('#inputTitle input[type=text]').value) {
             openModal(this.alertFailure())
-            setTimeout(() => {closeModal()}, 2000) 
-        }else{
+            setTimeout(() => { closeModal() }, 2000)
+        } else {
             openModal(this.alertSave())
         }
     }
 
-    alertFailure(){
+    alertFailure() {
         const modalFailure = `
         <div id="modalAlertFailure">
             <div id="alertFailureName">
@@ -387,7 +386,7 @@ export class SettingRecord {
         return modalFailure
     }
 
-    alertSave() { 
+    alertSave() {
         const modalAlert = `
             <div id="modalAlert">
                 <div id="alertMsg">

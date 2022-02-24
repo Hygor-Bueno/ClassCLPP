@@ -22,13 +22,14 @@ var connectionCLPP = new ConnectionCLPP;
 export class SettingHome {
     recordObject = new RecordObject;
     checklistObject = new ObjectChecklist;
-
+    objectRecord={};
     async settings() {
         this.notifyMessage();
         this.carousel();
         this.buttonCardChecklist();
         this.buttonEditChecklist();
         await this.reportAnsweredToday(this.checklistJson)
+        this.configRecord()
     }
     openMessage() {
         getB_id('message').setAttribute('style', 'display:flex')
@@ -123,15 +124,18 @@ export class SettingHome {
     }
 
     async reportAnsweredToday(checklistJson) {
-            let reportDay;
-            let shops;
-            let req =""
-             await Promise.all([connectionCLPP.get(`&id_user=${localStorage.getItem("id")}&notification`, "CLPP/Response.php"), connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')]).then(response => {req = response})
-            reportDay = req[0]      
-            console.log(reportDay)
-            shops = this.shopJson(req[1].data)
-            let jsonReportCard = await this.contructorJsonCard(this.recordObject.separateChecklist(reportDay), checklistJson, shops)
-            this.cardRecord(jsonReportCard,'#bodyReportDiv');
+        // try{
+        let reportDay;
+        let shops;
+        let req = ""
+        await Promise.all([connectionCLPP.get(`&id_user=${localStorage.getItem("id")}&notification`, "CLPP/Response.php"), connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')]).then(response => { req = response })
+        reportDay = req[0]
+        shops = this.shopJson(req[1].data)
+        let jsonReportCard = await this.contructorJsonCard(this.recordObject.separateChecklist(reportDay), checklistJson, shops)
+        this.cardRecord(jsonReportCard, '#bodyReportDiv');
+        // }catch (e) {
+        //     console.error(e)
+        // }
     }
 
     async contructorJsonCard(pay, checklistJson, shops) {
@@ -140,8 +144,8 @@ export class SettingHome {
             let userData = await connectionCLPP.get("&id=" + uniqueChecklist[0].id_user, "CCPP/Employee.php")
             let arrayGraphic = this.recordObject.generalGraphic([uniqueChecklist])
             let result = {}
-            result.cod = uniqueChecklist[0].id_checklist+"_"+uniqueChecklist[0].id_user+"_"+uniqueChecklist[0].id_shop
-            result.user = usefulComponents.splitStringName(userData.data[0].name," ");
+            result.cod = uniqueChecklist[0].id_checklist + "_" + uniqueChecklist[0].id_user + "_" + uniqueChecklist[0].id_shop
+            result.user = usefulComponents.splitStringName(userData.data[0].name, " ");
             result.shop = shops[uniqueChecklist[0].id_shop].description;
             result.porcent = arrayGraphic[1][1];
             result.graphich = arrayGraphic;
@@ -151,7 +155,6 @@ export class SettingHome {
     }
 
     cardRecord(jsonReportCard, context) {
-        console.log(jsonReportCard)
         $(`${context}`).insertAdjacentHTML("beforeend", jsonReportCard.map(jsonCard => (
             `
                 <div id="${jsonCard.cod}" class="cardRecordClass" >
@@ -167,7 +170,7 @@ export class SettingHome {
                 </div>
              `
         )).join(""))
-        jsonReportCard.forEach(elementGraphic =>  this.createGraphichCard(elementGraphic))
+        jsonReportCard.forEach(elementGraphic => this.createGraphichCard(elementGraphic))
     }
     
     createGraphichCard(jsonGraphich) {
@@ -181,4 +184,45 @@ export class SettingHome {
         })
         return jsonShop;
     }
+    recordCreate(arrayRecord) {
+        this.createJsonObject(arrayRecord)
+
+        return arrayRecord.data.map(recordCard => (
+            `
+            <div id="cardRecord_${recordCard.id}" class="cardRecord" data-idrecord="${recordCard.id}">
+                <section>
+                    <div>
+                        <label><b>Nome do relatório:</b></label><P>${recordCard.description}</P>
+                    </div>
+                    <div>
+                        <label><b>Data de criação:</b></label><P>${recordCard.date}</P>
+                    </div>
+                    <div>
+                        <label><b>Pontuação geral:</b></label><p>${recordCard.point}%</p> 
+                    </div>                
+                </section>
+            </div>
+            `
+        )).join("")
+    }
+    createJsonObject(arrays){
+        arrays.data.forEach(array =>{
+            this.objectRecord[array.id] = array;
+        })
+    }
+    configRecord(){
+        let routers = new Routers;
+        $_all(".cardRecord").forEach(cardRecord => cardRecord.addEventListener("click",()=>{ 
+            console.log(this.objectRecord[cardRecord.getAttribute("data-idrecord")])
+            localStorage.setItem("jsonRecord",JSON.stringify(this.objectRecord[cardRecord.getAttribute("data-idrecord")]))
+            routers.routers("record")
+        }))
+    }
 }
+// date: "2022-02-22"
+// description: "Record 02"
+// filters: "{\"id_shops\": [], \"checklist\": {\"titles\": [\"344\"], \"question\": [], \"date_checklist\": []}, \"date_response\": {\"date_init_response\": \"2022-02-22\", \"date_final_response\": \"2022-02-22\"}}"
+// id: "55"
+// id_user: "148"
+// point: "55.56"
+// type: "3"

@@ -40,6 +40,7 @@ export class RecordObject extends ConnectionCLPP {
             filter: this.#filters
         }
     }
+
     async readyPost() {
         await this.post(this.#jsonRecord, "CLPP/Record.php", true)
     }
@@ -50,6 +51,7 @@ export class RecordObject extends ConnectionCLPP {
         let markShop = this.#filters['id_shops'].length || 1;
         let markTitle = this.#filters['checklist']['titles'].length || 1;
         let markQuestion = this.#filters.checklist.question.length || 1;
+
         for (let cnt = 0; cnt < markShop; cnt++) {
             for (let xxx = 0; xxx < markTitle; xxx++) {
                 for (let y = 0; y < markQuestion; y++) {
@@ -101,14 +103,11 @@ export class RecordObject extends ConnectionCLPP {
     }
 
     separateChecklist(response) {
-        console.log("********** inicio separateChecklist() *************")
-        console.log(response)
         let orderByChecklist = [];
         let assistent = this.getKeys(response);
         assistent.forEach(elemKey => {
             orderByChecklist.push(response.data.filter(element => { return elemKey[0] == element.id_user && elemKey[1] == element.date && elemKey[2] == element.id_checklist && elemKey[3] == element.id_shop }));
         })
-        console.log("********** Fim separateChecklist() *************")
         return orderByChecklist;
     }
 
@@ -116,7 +115,6 @@ export class RecordObject extends ConnectionCLPP {
         let assistent = [["", "", ""]];
         let filterKeys = [];
         response.data.forEach(element => {
-            console.log("user => ", element.id_user, " checklist => ", element.id_checklist, " loja => ", element.id_shop)
             if ((this.validateKeys([element.id_user, element.id_checklist, element.id_shop], assistent))) {
                 assistent.push([element.id_user, element.id_checklist, element.id_shop]);
                 filterKeys.push([element.id_user, element.date, element.id_checklist, element.id_shop])
@@ -127,23 +125,20 @@ export class RecordObject extends ConnectionCLPP {
     validateKeys(value, keys) {
         let controller = true;
         keys.forEach(key => {
-            if (key[0] == value[0] && key[1] && value[1] && key[2] == value[2]) { console.log(value, key); controller = false }
+            if (key[0] == value[0] && key[1] == value[1] && key[2] == value[2]) {controller = false }
         })
         return controller;
     }
-
     generalGraphic(orderByChecklist) {
         let point = this.computePercent(orderByChecklist, 1)
         let dataSpecific = [["Não Satisfatório", 100 - point], ["Satisfatório", point]]
         return dataSpecific
     }
-
     specificGraphic(orderByChecklist, objectChecklist, objectShops, specific) {
         let dataSpecific = this.getDataForGraphic(orderByChecklist, objectChecklist, objectShops, specific)
         dataSpecific.shift()
         return dataSpecific
     }
-
     getDataForGraphic(orderByChecklist, objectChecklist, objectShops, specific) {
         let response = []
         let aux = 0;
@@ -157,13 +152,11 @@ export class RecordObject extends ConnectionCLPP {
         response.unshift(["Não Satisfatório", 100 - aux])
         return response;
     }
-
     formateDateGraph(date) {
         let usefulComponents = new UsefulComponents;
         let result = usefulComponents.splitString(date, "-")
         return " " + result[2] + "/" + result[1]
     }
-
     computePercent(responseChecklist, max) {
         let question = 0;
         let sum = 0;
