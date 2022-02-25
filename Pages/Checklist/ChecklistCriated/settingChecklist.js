@@ -32,12 +32,17 @@ export class SettingChecklist {
     }
   }
   async constructorObject(array) {
-    //Esssa parte popula o checklist
-    await array.forEach(async element => {
-      let response = new ObjectChecklist();
-      await response.loadingCheckDataBase(element);
-      this.checklistsUser[element.id] = response;
-    });
+    try {
+      //Esssa parte popula o checklist
+      await array.forEach(async element => {
+        let response = new ObjectChecklist();
+        await response.loadingCheckDataBase(element);
+        this.checklistsUser[element.id] = response;
+      });
+    } catch (exception) {
+      console.log(exception)
+      return `<P></P>`
+    }
   }
   async setting(array) {
     await this.constructorObject(array);
@@ -257,7 +262,7 @@ export class SettingChecklist {
       return response;
     } catch (e) {
       console.error(e + " : Falha ao realizar a requisição...");
-      return `<div class="ErrorPageDefault"><p>Desculpe, você não possui checklist...</p></div>`;
+      return `<div class="ErrorPageDefault"><p style= "margin-left:5px; margin-right:"> Atenção, você não possui checklist...</p></div>`;
     }
   }
 }

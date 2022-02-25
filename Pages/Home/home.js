@@ -175,13 +175,19 @@ export class HomePage extends SettingHome {
         return response
     }
     async createObjChecklist() {
-        let req = await checklist.get('&web&id_user=' + localStorage.getItem('id'));
-        req.forEach(element => {
-            let objectChecklist = new ObjectChecklist;
-            objectChecklist.loadingCheckDataBase(element);
-            this.checklistJson[element.id] = objectChecklist;
-        })
-        return;
+        try{
+            let req = await checklist.get('&web&id_user=' + localStorage.getItem('id'));
+            req.forEach(element => {
+                let objectChecklist = new ObjectChecklist;
+                objectChecklist.loadingCheckDataBase(element);
+                this.checklistJson[element.id] = objectChecklist;
+            })
+
+            return;
+        }catch (exception) {
+            console.log(exception)
+            return `<P></P>`
+        }
     }
     validatorChat(object) {
         if (document.querySelector('#bodyMessageDiv header')) {
