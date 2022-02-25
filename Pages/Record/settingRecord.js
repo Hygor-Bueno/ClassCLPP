@@ -214,15 +214,19 @@ export class SettingRecord {
     }
 
     templateOption(objectChecklist, key, array) {
+        
         let response = ""
         let auxArray = array || objectChecklist.data
         auxArray.map(element => {
             element[key] ? response +=
-                `<div class="optionSelect">
+            `
+            <div class="optionSelect">
                 <input type="checkbox" class="option" data-id="${element.id}" id="${element.id}" value="${element[key]}">
                     <p class="valorCheck">${element[key]}</p>
                 </input>
-            </div>` : ""
+            </div>` 
+            : 
+            ""
         })
         return response;
     }

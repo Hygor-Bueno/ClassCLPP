@@ -562,7 +562,7 @@ export class TemplateChecklist {
             if (result.error) {
                 await this.checklist.saveChecklist();
                 await this.checklist.saveQuestions();
-                // this.finalChecklist('finalizar')
+                this.finalChecklist()
             } else {
                 this.errorHandling.main(result.data)
             }
