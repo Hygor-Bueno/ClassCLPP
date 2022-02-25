@@ -216,21 +216,20 @@ export class SettingRecord {
     }
 
     templateOption(objectChecklist, key, array) {
+        
         let response = ""
-        try {
-            let auxArray = array || objectChecklist.data
-            auxArray.map(element => {
-                element[key] ? response +=
-                    `<div class="optionSelect">
-                    <input type="checkbox" class="option" data-id="${element.id}" id="${element.id}" value="${element[key]}">
-                        <p class="valorCheck">${element[key]}</p>
-                    </input>
-                </div>` : ""
-            })
-        } catch (error) {
-            console.log(error)
-            return response += `<p style="font-weight: bold; font-size: 18px; color:gray; display: flex; justify-content: center;align-items: center;">Você não possui checklist</p>`
-        }
+        let auxArray = array || objectChecklist.data
+        auxArray.map(element => {
+            element[key] ? response +=
+            `
+            <div class="optionSelect">
+                <input type="checkbox" class="option" data-id="${element.id}" id="${element.id}" value="${element[key]}">
+                    <p class="valorCheck">${element[key]}</p>
+                </input>
+            </div>` 
+            : 
+            ""
+        })
         return response;
     }
 
