@@ -24,10 +24,7 @@ export class RecordPage extends SettingRecord {
                                     </div>
                                     <div class="optionSelect" id="titleChecklistOption" style="display:none"> 
                                         <div class="optionSelect">
-                                        
-                                            <input type="checkbox" class="option" data-id="todos" id="todos">
-                                                <p class="valorCheck">Todos</p>
-                                            </input>
+                                            <input type="checkbox" class="option" data-id="todos" id="todos"/><p class="valorCheck">Todos</p>
                                         </div>
                                         ${this.templateOption(objectChecklist, 'description', null)}    
                                     </div>

@@ -20,30 +20,30 @@ export class SettingRecord {
 
     async setting(objectChecklist) {
         this.clickPage();
-        this.jsonChecklists(objectChecklist);
         this.templateDate(objectChecklist);
         await this.populaShop();
         this.shopJson(await this.getShop());
         this.blockQuestion();
         this.pegandoValidade();
-        //getB_id("inputNameTitles").oninput = (e) => {console.log(e)}
-
-        getB_id("corpoRecord").onchange = (e) => {
-            let getTypeId = e.target[e.target.selectedIndex].getAttribute("id")
-            this.changeChartType(getTypeId)
-        }
-
-        localStorage.getItem("jsonRecord") &&  this.loadSavedReports(JSON.parse(localStorage.getItem("jsonRecord")))
-
- 
+        this.clickTypeGraphic();
+        this.jsonChecklists(objectChecklist);
+        if(!objectChecklist){ 
+          $('#todos').remove(); 
+          $('.valorCheck').remove(); 
+        } 
+        localStorage.getItem("jsonRecord") && this.loadSavedReports(JSON.parse(localStorage.getItem("jsonRecord")))
     }
 
     jsonChecklists(objectChecklist) {
-        objectChecklist.data.forEach(async (element) => {
-            const objectChecklist = new ObjectChecklist;
-            await objectChecklist.loadingCheckDataBase(element)
-            this.jsonCheck[element.id] = objectChecklist
-        })
+        try {
+            objectChecklist.data.forEach(async (element) => {
+                const objectChecklist = new ObjectChecklist;
+                await objectChecklist.loadingCheckDataBase(element)
+                this.jsonCheck[element.id] = objectChecklist
+            })
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     clickPage() {
@@ -86,11 +86,12 @@ export class SettingRecord {
         }
     }
 
-    async pressBtnFilter() {
+    async pressBtnFilter(local) {
         this.controllerBtns(["#buttonRecordPrint"], false)
         this.recordObject.setFilters(this.lockInfo())
         this.validationDate()
         let returnReq = await this.recordObject.returnGet(this.recordObject.getParamsForFilters())
+        this.chengeMiniGraphic(this.recordObject.separateChecklist(returnReq))
         this.recordObject.setPoint(this.recordObject.generalGraphic(this.recordObject.separateChecklist(returnReq))[1][1])
         this.populaShopGraphic(returnReq)
         this.populaCheckGraphic(returnReq, this.recordObject.separateChecklist(returnReq))
@@ -107,7 +108,15 @@ export class SettingRecord {
         this.closeGraphic()
         this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(reqFiltred), "#mainGraphic", this.typeGraph)
         this.recordObject2.clppGraphich.clppGraphics(this.recordObject2.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicUnity", this.typeGraph)
-        this.recordObject3.clppGraphich.clppGraphics(this.recordObject3.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicChecklist", this.typeGraph)
+        this.recordObject3.clppGraphich.clppGraphics(this.recordObject3.getDataForGraphic(reqFiltred, this.jsonCheck, this.jsonShop), "#graphicChecklist", this.typeGraph)
+    }
+
+    clickTypeGraphic() {
+        getB_id("corpoRecord").onchange = (e) => {
+            let getTypeId = e.target[e.target.selectedIndex].getAttribute("id")
+            this.changeChartType(getTypeId)
+            this.pressBtnFilter();
+        }
     }
     populaShopGraphic(returnReq) {
         getB_id('popupaShopGra').innerHTML = ""
@@ -145,7 +154,7 @@ export class SettingRecord {
                 element == "question" && this.openClose("titleQuestionOption")
                 element == "date_checklist" && this.openClose("validCheckBlock")
             }
-        }) 
+        })
         if (jsonFilters.id_shops != "") {
             jsonFilters.id_shops.forEach(elem => getB_id(`${elem}`).checked = true)
             this.openClose("selShop")
@@ -201,28 +210,37 @@ export class SettingRecord {
 
     templateOption(objectChecklist, key, array) {
         let response = ""
-        let auxArray = array || objectChecklist.data
-        auxArray.map(element => {
-            element[key] ? response +=
-                `<div class="optionSelect">
-                <input type="checkbox" class="option" data-id="${element.id}" id="${element.id}" value="${element[key]}">
-                    <p class="valorCheck">${element[key]}</p>
-                </input>
-            </div>` : ""
-        })
+        try {
+            let auxArray = array || objectChecklist.data
+            auxArray.map(element => {
+                element[key] ? response +=
+                    `<div class="optionSelect">
+                    <input type="checkbox" class="option" data-id="${element.id}" id="${element.id}" value="${element[key]}">
+                        <p class="valorCheck">${element[key]}</p>
+                    </input>
+                </div>` : ""
+            })
+        } catch (error) {
+         console.log(error) 
+        }
         return response;
     }
 
     templateDate(objectChecklist) {
         let jsonDate = [];
-        objectChecklist.data.forEach(element => {
-            let newJson = {
-                date: element.date_init ? this.userFulComponents.convertData(element.date_init, "-") + " - " + this.userFulComponents.convertData(element.date_final, "-") : false,
-                id: (element.id)
-            }
-            jsonDate.push(newJson)
-        })
-        $('#titleDate .optionSelect').insertAdjacentHTML('beforeend', this.templateOption(null, 'date', jsonDate))
+        try {
+            objectChecklist.data.forEach(element => {
+                let newJson = {
+                    date: element.date_init ? this.userFulComponents.convertData(element.date_init, "-") + " - " + this.userFulComponents.convertData(element.date_final, "-") : false,
+                    id: (element.id)
+                }
+                jsonDate.push(newJson)
+            })
+            $('#titleDate .optionSelect').insertAdjacentHTML('beforeend', this.templateOption(null, 'date', jsonDate))
+        } catch (error) {
+            console.log(error)
+        }
+
     }
 
     buttonGraphic(element) {
@@ -237,13 +255,23 @@ export class SettingRecord {
 
     changeChartType(value) {
         this.closeGraphic();
-        if (value == 'buttonRecordBar'||value =='graphicMiniBarShop'||value =='graphicMiniBarCheck'){
+        if (value == 'buttonRecordBar' || value == 'graphicMiniBarShop' || value == 'graphicMiniBarCheck') {
             this.typeGraph = 2
-        }else if(value == 'buttonRecordPizza'||value =='graphicMiniPizzaShop'||value =='graphicMiniPizzaCheck'){
+        } else if (value == 'buttonRecordPizza' || value == 'graphicMiniPizzaShop' || value == 'graphicMiniPizzaCheck') {
             this.typeGraph = 1
-        }else if (value == 'buttonRecordPercentage'||value =='graphicMiniPorcCheck'||value =='graphicMiniPorcShop'){
+        } else if (value == 'buttonRecordPercentage' || value == 'graphicMiniPorcCheck' || value == 'graphicMiniPorcShop') {
             this.typeGraph = 3
+        }else{
+            console.log(value)
         }
+    }
+
+    chengeMiniGraphic(reqFiltred){
+        console.log(reqFiltred)
+        let firstUnity=[];
+        let outersUnity;
+        reqFiltred.forEach((array) => firstUnity.push(array.sort()))
+        console.log(firstUnity)
     }
 
     closeGraphic() {
@@ -369,16 +397,16 @@ export class SettingRecord {
             return question
         }
     }
-    checkDescription(){
-        if(!$('#inputTitle input[type=text]').value){
+    checkDescription() {
+        if (!$('#inputTitle input[type=text]').value) {
             openModal(this.alertFailure())
-            setTimeout(() => {closeModal()}, 2000) 
-        }else{
+            setTimeout(() => { closeModal() }, 2000)
+        } else {
             openModal(this.alertSave())
         }
     }
 
-    alertFailure(){
+    alertFailure() {
         const modalFailure = `
         <div id="modalAlertFailure">
             <div id="alertFailureName">
@@ -388,7 +416,7 @@ export class SettingRecord {
         return modalFailure
     }
 
-    alertSave() { 
+    alertSave() {
         const modalAlert = `
             <div id="modalAlert">
                 <div id="alertMsg">
@@ -443,7 +471,7 @@ export class SettingRecord {
         return checklistJson;
 
     }
-    
+
     controllerBtns(btns, parans) {
         btns.forEach(btn => {
             $(btn).disabled = parans;
