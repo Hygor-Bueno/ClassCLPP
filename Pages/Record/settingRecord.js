@@ -17,6 +17,7 @@ export class SettingRecord {
     recordObject = new RecordObject;
     recordObject2 = new RecordObject;
     recordObject3 = new RecordObject;
+    reqFiltred;
 
     async setting(objectChecklist) {
         this.clickPage();
@@ -91,8 +92,8 @@ export class SettingRecord {
         this.recordObject.setFilters(this.lockInfo())
         this.validationDate()
         let returnReq = await this.recordObject.returnGet(this.recordObject.getParamsForFilters())
-        this.chengeMiniGraphic(this.recordObject.separateChecklist(returnReq))
-        this.recordObject.setPoint(this.recordObject.generalGraphic(this.recordObject.separateChecklist(returnReq))[1][1])
+        this.reqFiltred = this.recordObject.separateChecklist(returnReq)
+        this.recordObject.setPoint(this.recordObject.generalGraphic(this.reqFiltred)[1][1])
         this.populaShopGraphic(returnReq)
         this.populaCheckGraphic(returnReq, this.recordObject.separateChecklist(returnReq))
     }
@@ -262,16 +263,14 @@ export class SettingRecord {
         } else if (value == 'buttonRecordPercentage' || value == 'graphicMiniPorcCheck' || value == 'graphicMiniPorcShop') {
             this.typeGraph = 3
         }else{
-            console.log(value)
+            this.chengeMiniGraphic(value)
         }
     }
 
-    chengeMiniGraphic(reqFiltred){
-        console.log(reqFiltred)
+    chengeMiniGraphic(id_unity){
+        console.log(id_unity,this.reqFiltred)
         let firstUnity=[];
-        let outersUnity;
-        reqFiltred.forEach((array) => firstUnity.push(array.sort()))
-        console.log(firstUnity)
+        this.reqFiltred.forEach((array) => console.log(array))
     }
 
     closeGraphic() {
