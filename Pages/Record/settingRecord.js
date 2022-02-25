@@ -239,19 +239,13 @@ export class SettingRecord {
 
     changeChartType(value) {
         this.closeGraphic();
-        switch (value) {
-            case 'buttonRecordBar'||'graphicMiniBarShop'||'graphicMiniBarCheck':
-                this.typeGraph = 2
-                break;
-                case 'buttonRecordPizza'||'graphicMiniPizzaShop'||'graphicMiniPizzaCheck':
-                    this.typeGraph = 1
-                    break;
-                    case 'buttonRecordPercentage'||'graphicMiniPorcCheck'||'graphicMiniPorcShop':
-                this.typeGraph = 3
-                break;
-            }
-        console.log(value)
-        console.log(this.typeGraph)
+        if (value == 'buttonRecordBar'||value =='graphicMiniBarShop'||value =='graphicMiniBarCheck'){
+            this.typeGraph = 2
+        }else if(value == 'buttonRecordPizza'||value =='graphicMiniPizzaShop'||value =='graphicMiniPizzaCheck'){
+            this.typeGraph = 1
+        }else if (value == 'buttonRecordPercentage'||value =='graphicMiniPorcCheck'||value =='graphicMiniPorcShop'){
+            this.typeGraph = 3
+        }
     }
 
     closeGraphic() {
