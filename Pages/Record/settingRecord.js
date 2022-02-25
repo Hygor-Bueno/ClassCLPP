@@ -95,11 +95,11 @@ export class SettingRecord {
         this.recordObject.setFilters(this.lockInfo())
         this.validationDate()
         let returnReq = await this.recordObject.returnGet(this.recordObject.getParamsForFilters())
-        this.chengeMiniGraphic(this.recordObject.separateChecklist(returnReq))
-        this.recordObject.setPoint(this.recordObject.generalGraphic(this.recordObject.separateChecklist(returnReq))[1][1])
+        console.log(returnReq)
+        this.reqFiltred = this.recordObject.separateChecklist(returnReq)
+        this.recordObject.setPoint(this.recordObject.generalGraphic(this.reqFiltred)[1][1])
         this.populaShopGraphic(returnReq)
-        this.reqFiltred= this.recordObject.separateChecklist(returnReq)
-        this.populaCheckGraphic(returnReq,   this.reqFiltred)
+        this.populaCheckGraphic(returnReq, this.reqFiltred)
         this.clearFilter()
     }
 
@@ -122,7 +122,7 @@ export class SettingRecord {
         getB_id("corpoRecord").onchange = (e) => {
             let getTypeId = e.target[e.target.selectedIndex].getAttribute("id")
             this.changeChartType(getTypeId)
-            this.pressBtnFilter();
+            //this.pressBtnFilter();
         }
     }
     populaShopGraphic(returnReq) {
@@ -271,22 +271,17 @@ export class SettingRecord {
         } else if (value == 'buttonRecordPercentage' || value == 'graphicMiniPorcCheck' || value == 'graphicMiniPorcShop') {
             this.typeGraph = 3
         }else{
-            console.log(value)
+            this.chengeMiniGraphic(value)
         }
     }
 
-
-    chengeMiniGraphic(reqFiltred){
-        console.log(reqFiltred)
+    chengeMiniGraphic(id_unity){
         let firstUnity=[];
-        let outersUnity;
-        reqFiltred.forEach((array) => firstUnity.push(array.sort()))
-        console.log(firstUnity)
+        this.reqFiltred.forEach((array) => array.forEach((value) => {if(value.id_shop == id_unity) firstUnity.push(value)}))
+        console.log(this.recordObject.generalGraphic([firstUnity]))
     }
 
-    closeGraphic() {
-        // getB_id('mainGraphic').getContext('2d').clearRect(0, 0, getB_id('mainGraphic').width, getB_id('mainGraphic').height)
-
+    closeGraphicGeneral() {
         this.recordObject.clppGraphich.graphicRecord && this.recordObject.clppGraphich.graphicRecord.destroy();
     }
     closeMiniGraphic() {     
