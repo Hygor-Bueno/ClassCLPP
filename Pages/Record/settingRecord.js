@@ -17,6 +17,7 @@ export class SettingRecord {
     recordObject = new RecordObject;
     recordObject2 = new RecordObject;
     recordObject3 = new RecordObject;
+    reqFiltred;
 
     async setting(objectChecklist) {
         this.clickPage();
@@ -27,10 +28,11 @@ export class SettingRecord {
         this.pegandoValidade();
         this.clickTypeGraphic();
         this.jsonChecklists(objectChecklist);
-        if(!objectChecklist){ 
-          $('#todos').remove(); 
-          $('.valorCheck').remove(); 
-        } 
+
+        if (!objectChecklist) {
+            $('#todos').remove();
+            $('.valorCheck').remove();
+        }
         localStorage.getItem("jsonRecord") && this.loadSavedReports(JSON.parse(localStorage.getItem("jsonRecord")))
     }
 
@@ -57,7 +59,8 @@ export class SettingRecord {
             case "clearBtn":
                 this.controllerBtns(["#buttonRecordPrint"], true)
                 this.clearFilter()
-                this.closeGraphic()
+                this.closeGraphicGeneral()
+                this.closeMiniGraphic()
                 break;
             case "buttonRecordGraphic":
                 this.buttonGraphic(element)
@@ -86,38 +89,21 @@ export class SettingRecord {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
+    // deixar os graficos independentes 
     async pressBtnFilter(local) {
+        this.closeMiniGraphic();
         this.controllerBtns(["#buttonRecordPrint"], false)
         this.recordObject.setFilters(this.lockInfo())
         this.validationDate()
         let returnReq = await this.recordObject.returnGet(this.recordObject.getParamsForFilters())
         this.recordObject.setPoint(this.recordObject.generalGraphic(this.recordObject.separateChecklist(returnReq))[1][1])
         this.populaShopGraphic(returnReq)
-        this.populaCheckGraphic(returnReq, this.recordObject.separateChecklist(returnReq))
+        this.reqFiltred= this.recordObject.separateChecklist(returnReq)
+        this.populaCheckGraphic(returnReq,   this.reqFiltred)
+        this.clearFilter()
     }
 
-
-
-
-
-
-
-
-
-
-
     populaCheckGraphic(returnReq, reqFiltred) {
-        console.log(reqFiltred)
         getB_id('popupaCheckpGra').innerHTML = ""
         getB_id('popupaCheckpGra').insertAdjacentHTML('beforeend', `<option class="popupaCheckpGra">Checklist</option>`)
         let result = this.filterMiniGraphic(returnReq, "id_checklist")
@@ -125,8 +111,9 @@ export class SettingRecord {
             let response = ""
             getB_id('popupaCheckpGra').insertAdjacentHTML('beforeend', response += `<option class="popupaCheckpGra" id="${this.jsonCheck[element].getIdChecklist()}">${(this.jsonCheck[element].getTitle()).slice(0, 15) + "..."}</option>`)
         })
-        this.closeGraphic()
+        this.closeGraphicGeneral()        
         this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(reqFiltred), "#mainGraphic", this.typeGraph)
+        this.typeGraph = 2
         this.recordObject2.clppGraphich.clppGraphics(this.recordObject2.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicUnity", this.typeGraph)
         this.recordObject3.clppGraphich.clppGraphics(this.recordObject3.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicChecklist", this.typeGraph)
     }
@@ -231,7 +218,6 @@ export class SettingRecord {
 
     templateOption(objectChecklist, key, array) {
         let response = ""
-        console.log(objectChecklist)
         try {
             let auxArray = array || objectChecklist.data
             auxArray.map(element => {
@@ -243,7 +229,8 @@ export class SettingRecord {
                 </div>` : ""
             })
         } catch (error) {
-         console.log(error) 
+            console.log(error)
+            return response += `<p style="font-weight: bold; font-size: 18px; color:gray; display: flex; justify-content: center;align-items: center;">Você não possui checklist</p>`
         }
         return response;
     }
@@ -271,12 +258,13 @@ export class SettingRecord {
             if (element.getAttribute('id') == e.getAttribute('id')) {
                 e.setAttribute("style", "opacity: 1")
                 this.changeChartType(e.getAttribute('id'));
+                this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(this.reqFiltred), "#mainGraphic", this.typeGraph)
             } else e.setAttribute("style", "opacity: 0.3")
         })
     }
 
     changeChartType(value) {
-        this.closeGraphic();
+        this.closeGraphicGeneral();
         if (value == 'buttonRecordBar' || value == 'graphicMiniBarShop' || value == 'graphicMiniBarCheck') {
             this.typeGraph = 2
         } else if (value == 'buttonRecordPizza' || value == 'graphicMiniPizzaShop' || value == 'graphicMiniPizzaCheck') {
@@ -285,13 +273,11 @@ export class SettingRecord {
             this.typeGraph = 3
         }
     }
-
-    closeGraphic() {
-        // getB_id('mainGraphic').getContext('2d').clearRect(0, 0, getB_id('mainGraphic').width, getB_id('mainGraphic').height)
+    closeGraphicGeneral(){
         this.recordObject.clppGraphich.graphicRecord && this.recordObject.clppGraphich.graphicRecord.destroy();
-        // getB_id('graphicUnity').getContext('2d').clearRect(0, 0, getB_id('graphicUnity').width, getB_id('graphicUnity').height)
+    }
+    closeMiniGraphic() {     
         this.recordObject2.clppGraphich.graphicRecord && this.recordObject2.clppGraphich.graphicRecord.destroy();
-        // getB_id('graphicChecklist').getContext('2d').clearRect(0, 0, getB_id('graphicChecklist').width, getB_id('graphicChecklist').height)
         this.recordObject3.clppGraphich.graphicRecord && this.recordObject3.clppGraphich.graphicRecord.destroy();
     }
 

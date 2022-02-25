@@ -88,6 +88,9 @@ export class RecordPage extends SettingRecord {
                     <button type="button" id="clearBtn" data-function="clearBtn"> LIMPAR </button> 
                 </div>
             </aside>
+            <div id="btnEsconde">
+                <button type="button" id="btnEscondeButton">></button>
+            </div>
             <section id="corpoRecord">
                 <header id="header">
                     <section id="inputTitle">
@@ -121,13 +124,10 @@ export class RecordPage extends SettingRecord {
                         <aside id="unityGraphic">
                             <div class="btnMiniGrafico">
                                 <select class="selMiniGrafico" id="popupaShopGra" style="display:">
-
-
-
                                     <option type="option">Unidade</option>
-                                    
+    
                                 </select>
-                                <select class="selMiniGrafico" style="display:">
+                                <select class="selMiniGrafico"  id="selMiniGraficoShop"style="display:">
                                     <option type="option">Tipo de gráfico</option>
                                     <option type="option" id="graphicMiniPizzaShop">Pizza</option> 
                                     <option type="option" id="graphicMiniPorcShop">Porcentagem</option>
@@ -145,7 +145,7 @@ export class RecordPage extends SettingRecord {
                             <select class="selMiniGrafico" id="popupaCheckpGra"  style="display:">
                                 <option type="option">Checklist</option>
                             </select>
-                            <select class="selMiniGrafico" style="display:">
+                            <select class="selMiniGrafico" id="selMiniGraficoCheck"style="display:">
                                 <option type="option" >Tipo de gráfico</option>
                                 <option type="option" id="graphicMiniBarCheck">Barra</option>
                                 <option type="option" id="graphicMiniPizzaCheck">Pizza</option> 
