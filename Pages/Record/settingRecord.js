@@ -86,38 +86,18 @@ export class SettingRecord {
         }
     }
 
-
-
-
-
-
-
-
-
-
-
     async pressBtnFilter(local) {
         this.controllerBtns(["#buttonRecordPrint"], false)
         this.recordObject.setFilters(this.lockInfo())
         this.validationDate()
         let returnReq = await this.recordObject.returnGet(this.recordObject.getParamsForFilters())
+        this.chengeMiniGraphic(this.recordObject.separateChecklist(returnReq))
         this.recordObject.setPoint(this.recordObject.generalGraphic(this.recordObject.separateChecklist(returnReq))[1][1])
         this.populaShopGraphic(returnReq)
         this.populaCheckGraphic(returnReq, this.recordObject.separateChecklist(returnReq))
     }
 
-
-
-
-
-
-
-
-
-
-
     populaCheckGraphic(returnReq, reqFiltred) {
-        console.log(reqFiltred)
         getB_id('popupaCheckpGra').innerHTML = ""
         getB_id('popupaCheckpGra').insertAdjacentHTML('beforeend', `<option class="popupaCheckpGra">Checklist</option>`)
         let result = this.filterMiniGraphic(returnReq, "id_checklist")
@@ -129,7 +109,7 @@ export class SettingRecord {
         this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(reqFiltred), "#mainGraphic", this.typeGraph)
         this.recordObject2.clppGraphich.clppGraphics(this.recordObject2.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicUnity", this.typeGraph)
         this.recordObject3.clppGraphich.clppGraphics(this.recordObject3.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicChecklist", this.typeGraph)
-
+    }
 
     clickTypeGraphic() {
         getB_id("corpoRecord").onchange = (e) => {
@@ -137,7 +117,6 @@ export class SettingRecord {
             this.changeChartType(getTypeId)
             this.pressBtnFilter();
         }
-
     }
     populaShopGraphic(returnReq) {
         getB_id('popupaShopGra').innerHTML = ""
@@ -231,7 +210,6 @@ export class SettingRecord {
 
     templateOption(objectChecklist, key, array) {
         let response = ""
-        console.log(objectChecklist)
         try {
             let auxArray = array || objectChecklist.data
             auxArray.map(element => {
@@ -283,7 +261,17 @@ export class SettingRecord {
             this.typeGraph = 1
         } else if (value == 'buttonRecordPercentage' || value == 'graphicMiniPorcCheck' || value == 'graphicMiniPorcShop') {
             this.typeGraph = 3
+        }else{
+            console.log(value)
         }
+    }
+
+    chengeMiniGraphic(reqFiltred){
+        console.log(reqFiltred)
+        let firstUnity=[];
+        let outersUnity;
+        reqFiltred.forEach((array) => firstUnity.push(array.sort()))
+        console.log(firstUnity)
     }
 
     closeGraphic() {
