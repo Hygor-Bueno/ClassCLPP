@@ -89,13 +89,13 @@ export class SettingRecord {
         }
     }
 
-    // deixar os graficos independentes 
     async pressBtnFilter(local) {
         this.closeMiniGraphic();
         this.controllerBtns(["#buttonRecordPrint"], false)
         this.recordObject.setFilters(this.lockInfo())
         this.validationDate()
         let returnReq = await this.recordObject.returnGet(this.recordObject.getParamsForFilters())
+        this.chengeMiniGraphic(this.recordObject.separateChecklist(returnReq))
         this.recordObject.setPoint(this.recordObject.generalGraphic(this.recordObject.separateChecklist(returnReq))[1][1])
         this.populaShopGraphic(returnReq)
         this.reqFiltred= this.recordObject.separateChecklist(returnReq)
@@ -125,7 +125,6 @@ export class SettingRecord {
             this.pressBtnFilter();
         }
     }
-
     populaShopGraphic(returnReq) {
         getB_id('popupaShopGra').innerHTML = ""
         getB_id('popupaShopGra').insertAdjacentHTML('beforeend', `<option class="popupaShopGra">Unidade</option>`)
@@ -271,9 +270,23 @@ export class SettingRecord {
             this.typeGraph = 1
         } else if (value == 'buttonRecordPercentage' || value == 'graphicMiniPorcCheck' || value == 'graphicMiniPorcShop') {
             this.typeGraph = 3
+        }else{
+            console.log(value)
         }
     }
-    closeGraphicGeneral(){
+
+
+    chengeMiniGraphic(reqFiltred){
+        console.log(reqFiltred)
+        let firstUnity=[];
+        let outersUnity;
+        reqFiltred.forEach((array) => firstUnity.push(array.sort()))
+        console.log(firstUnity)
+    }
+
+    closeGraphic() {
+        // getB_id('mainGraphic').getContext('2d').clearRect(0, 0, getB_id('mainGraphic').width, getB_id('mainGraphic').height)
+
         this.recordObject.clppGraphich.graphicRecord && this.recordObject.clppGraphich.graphicRecord.destroy();
     }
     closeMiniGraphic() {     
