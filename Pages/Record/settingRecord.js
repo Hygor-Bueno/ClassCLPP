@@ -85,23 +85,8 @@ export class SettingRecord {
             case "filterBtn":
                 this.walksArray(".option").length >= 1 ? this.pressBtnFilter() : alert('Selecione um dado');
                 break;
-            case "btnEscondeButton":
-                this.escondeButton()
-                break
             default:
                 console.error("data-function")
-        }
-    }
-
-    escondeButton() {
-        let local = getB_id("asideFilter")
-        let button = getB_id("btnEscondeButton")
-        if (local.style.display == "none") {
-            local.setAttribute("style", "display:flex")
-            button.innerText = "< "
-        } else if (local.style.display == "flex") {
-            local.setAttribute("style", "display:none")
-            button.innerText = " >"
         }
     }
 
@@ -143,20 +128,13 @@ export class SettingRecord {
             let response = ""
             getB_id('popupaCheckpGra').insertAdjacentHTML('beforeend', response += `<option class="popupaCheckpGra" id="${this.jsonCheck[element].getIdChecklist()}">${(this.jsonCheck[element].getTitle()).slice(0, 15) + "..."}</option>`)
         })
-        this.closeGraphicGeneral()
+        this.closeGraphicGeneral()        
         this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(reqFiltred), "#mainGraphic", this.typeGraph)
         this.typeGraph = 2
         this.recordObject2.clppGraphich.clppGraphics(this.recordObject2.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicUnity", this.typeGraph)
         this.recordObject3.clppGraphich.clppGraphics(this.recordObject3.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicChecklist", this.typeGraph)
     }
 
-    clickTypeGraphic() {
-        getB_id("corpoRecord").onchange = (e) => {
-            let getTypeId = e.target[e.target.selectedIndex].getAttribute("id")
-            this.changeChartType(getTypeId)
-        }
-    }
-    
     populaShopGraphic(returnReq) {
         getB_id('popupaShopGra').innerHTML = ""
         getB_id('popupaShopGra').insertAdjacentHTML('beforeend', `<option class="popupaShopGra">Unidade</option>`)
@@ -170,7 +148,7 @@ export class SettingRecord {
     filterMiniGraphic(returnReq, key) {
         let assistent = []
         returnReq.data.forEach(resultFilters => {
-            if (this.validation(assistent, resultFilters[key])) { assistent.push(resultFilters[key]) }
+            if (this.validation(assistent, resultFilters[key])) assistent.push(resultFilters[key])
         })
         return assistent
     }
@@ -222,7 +200,9 @@ export class SettingRecord {
 
     resetOptions() {
         const clear = document.querySelectorAll(".option")
-        clear.forEach(options => { options.checked = false });
+        clear.forEach(options => {
+            options.checked = false
+        });
         this.controllerSelect('selectButtonQuestion', "Selecione a checklist:", false)
         this.controllerSelect('selectButtonValidade', "Selecione a validade:", true)
         this.controllerSelect('titleChecklist', "Selecione a validade:", true)
@@ -240,7 +220,9 @@ export class SettingRecord {
         if (dateInit != 0 && dateFinal == 0) {
             alert('selecione data final')
             return
-        } else if (dateInit == 0 && dateFinal != 0) alert('Selecione data inicial')
+        } else if (dateInit == 0 && dateFinal != 0) {
+            alert('Selecione data inicial')
+        }
     }
 
     templateOption(objectChecklist, key, array) {
@@ -248,11 +230,14 @@ export class SettingRecord {
         let auxArray = array || objectChecklist.data
         auxArray.map(element => {
             element[key] ? response +=
-                `<div class="optionSelect">
-                    <input type="checkbox" class="option" data-id="${element.id}" id="${element.id}" value="${element[key]}">
-                        <p class="valorCheck">${element[key]}</p>
-                    </input>
-                </div>` : ""
+            `
+            <div class="optionSelect">
+                <input type="checkbox" class="option" data-id="${element.id}" id="${element.id}" value="${element[key]}">
+                    <p class="valorCheck">${element[key]}</p>
+                </input>
+            </div>` 
+            : 
+            ""
         })
         return response;
     }
@@ -268,7 +253,10 @@ export class SettingRecord {
                 jsonDate.push(newJson)
             })
             $('#titleDate .optionSelect').insertAdjacentHTML('beforeend', this.templateOption(null, 'date', jsonDate))
-        } catch (error) { console.log(error) }
+        } catch (error) {
+            console.log(error)
+        }
+
     }
 
     buttonGraphic(element) {
@@ -303,7 +291,7 @@ export class SettingRecord {
     closeGraphicGeneral() {
         this.recordObject.clppGraphich.graphicRecord && this.recordObject.clppGraphich.graphicRecord.destroy();
     }
-    closeMiniGraphic() {
+    closeMiniGraphic() {     
         this.recordObject2.clppGraphich.graphicRecord && this.recordObject2.clppGraphich.graphicRecord.destroy();
         this.recordObject3.clppGraphich.graphicRecord && this.recordObject3.clppGraphich.graphicRecord.destroy();
     }
