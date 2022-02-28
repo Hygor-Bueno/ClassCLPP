@@ -12,6 +12,7 @@ export class SettingRecord {
     jsonShop = {};
     expanded = false;
     typeGraph = 3
+    typeMiniGraph = 1
     routers = new Routers;
     userFulComponents = new UsefulComponents;
     recordObject = new RecordObject;
@@ -101,7 +102,24 @@ export class SettingRecord {
         this.populaCheckGraphic(returnReq, this.reqFiltred)
         this.clearFilter()
     }
-
+    
+    clickTypeGraphic() {
+        getB_id("corpoRecord").onchange = (e) => {
+            let getTypeId = e.target[e.target.selectedIndex].getAttribute("id")
+            this.changeTypeMiniGraphic(getTypeId,e.target.getAttribute("id"))
+        }
+    }
+    changeTypeMiniGraphic(idType,local){
+        if (idType == 'graphicMiniBarShop' || idType == 'graphicMiniBarCheck') {
+            this.typeMiniGraph = 2
+        }else if (idType == 'graphicMiniPizzaShop' || idType == 'graphicMiniPizzaCheck') {
+            this.typeMiniGraph = 1
+        }else if (idType == 'graphicMiniPorcCheck' || idType == 'graphicMiniPorcShop') {
+            this.typeMiniGraph = 3
+        }else if(local == "popupaShopGra"){
+            this.chengeMiniGraphicUnity(idType)
+        }
+    }
     populaCheckGraphic(returnReq, reqFiltred) {
         getB_id('popupaCheckpGra').innerHTML = ""
         getB_id('popupaCheckpGra').insertAdjacentHTML('beforeend', `<option class="popupaCheckpGra">Checklist</option>`)
@@ -117,20 +135,13 @@ export class SettingRecord {
         this.recordObject3.clppGraphich.clppGraphics(this.recordObject3.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicChecklist", this.typeGraph)
     }
 
-    clickTypeGraphic() {
-        getB_id("corpoRecord").onchange = (e) => {
-            let getTypeId = e.target[e.target.selectedIndex].getAttribute("id")
-            this.changeChartType(getTypeId)
-            //this.pressBtnFilter();
-        }
-    }
     populaShopGraphic(returnReq) {
         getB_id('popupaShopGra').innerHTML = ""
         getB_id('popupaShopGra').insertAdjacentHTML('beforeend', `<option class="popupaShopGra">Unidade</option>`)
         let result = this.filterMiniGraphic(returnReq, "id_shop")
         result.forEach(element => {
             let response = ""
-            getB_id('popupaShopGra').insertAdjacentHTML('beforeend', response += `<option class="popupaShopGra" id="${this.jsonShop[element].id}">${this.jsonShop[element].description}</option>`)
+            getB_id('popupaShopGra').insertAdjacentHTML('beforeend', response += `<option class="popupaShopGra" id="idShops_${this.jsonShop[element].id}">${this.jsonShop[element].description}</option>`)
         })
     }
 
@@ -215,7 +226,6 @@ export class SettingRecord {
     }
 
     templateOption(objectChecklist, key, array) {
-        
         let response = ""
         let auxArray = array || objectChecklist.data
         auxArray.map(element => {
@@ -262,24 +272,20 @@ export class SettingRecord {
 
     changeChartType(value) {
         this.closeGraphicGeneral();
-        if (value == 'buttonRecordBar' || value == 'graphicMiniBarShop' || value == 'graphicMiniBarCheck') {
+        if (value == 'buttonRecordBar') {
             this.typeGraph = 2
-        } else if (value == 'buttonRecordPizza' || value == 'graphicMiniPizzaShop' || value == 'graphicMiniPizzaCheck') {
+        } else if (value == 'buttonRecordPizza') {
             this.typeGraph = 1
-        } else if (value == 'buttonRecordPercentage' || value == 'graphicMiniPorcCheck' || value == 'graphicMiniPorcShop') {
+        } else if (value == 'buttonRecordPercentage') {
             this.typeGraph = 3
-        }else{
-            this.chengeMiniGraphicUnity(value)
         }
     }
 
     chengeMiniGraphicUnity(id_unity){
         let firstUnity=[];
-        console.log(this.reqFiltred)
-        this.reqFiltred.forEach((array) =>{if(array[0].id_shop == id_unity) firstUnity.push(array)})
+        this.reqFiltred.forEach((array) =>{if(array[0].id_shop == id_unity.split('_')[1]) firstUnity.push(array)})
         this.recordObject2.clppGraphich.graphicRecord && this.recordObject2.clppGraphich.graphicRecord.destroy();
-        this.recordObject2.clppGraphich.clppGraphics(this.recordObject.getDataForGraphic(firstUnity, this.jsonCheck, this.jsonShop), "#graphicUnity", this.typeGraph)
-        console.log(firstUnity)
+        this.recordObject2.clppGraphich.clppGraphics(this.recordObject.getDataForGraphic(firstUnity, this.jsonCheck, this.jsonShop), "#graphicUnity", this.typeMiniGraph)
     }
 
     closeGraphicGeneral() {
