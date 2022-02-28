@@ -69,7 +69,7 @@ export class HomePage extends SettingHome {
                         </div>   
                     </div>
                     <div id="recordDiv">
-                    <header><h1>Relatório Criados:  </h1></header>
+                    <header><h1>Relatório Criados:  </h1> <button type="button" id="teste">T</button></header>
                         <div id="subRecordDiv" class="style_scroll">
                             <section id="bodyRecordDiv">
                                 ${this.recordCreate(this.getRecord) ||  `<p></p>`}
