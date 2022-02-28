@@ -5,7 +5,7 @@ export class RecordPage extends SettingRecord {
         document.getElementById("message").setAttribute("style", "display:none");
         let response =
             `<div id="divRecord">
-                <aside id="asideFilter">
+                <aside id="asideFilter" style="display:flex">
                 <div id="titleMain">
                     <h1>Filtra Checklist</h1>
                 </div> 
@@ -88,9 +88,19 @@ export class RecordPage extends SettingRecord {
                     <button type="button" id="clearBtn" data-function="clearBtn"> LIMPAR </button> 
                 </div>
             </aside>
+
+
+
+
+
             <div id="btnEsconde">
-                <button type="button" id="btnEscondeButton">></button>
+                <button type="button" id="btnEscondeButton" data-function="btnEscondeButton" style="display:flex"> < </button>
             </div>
+
+
+
+
+
             <section id="corpoRecord">
                 <header id="header">
                     <section id="inputTitle">
