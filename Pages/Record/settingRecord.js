@@ -89,13 +89,12 @@ export class SettingRecord {
         }
     }
 
-    async pressBtnFilter(local) {
+    async pressBtnFilter() {
         this.closeMiniGraphic();
         this.controllerBtns(["#buttonRecordPrint"], false)
         this.recordObject.setFilters(this.lockInfo())
         this.validationDate()
         let returnReq = await this.recordObject.returnGet(this.recordObject.getParamsForFilters())
-        console.log(returnReq)
         this.reqFiltred = this.recordObject.separateChecklist(returnReq)
         this.recordObject.setPoint(this.recordObject.generalGraphic(this.reqFiltred)[1][1])
         this.populaShopGraphic(returnReq)
@@ -270,14 +269,17 @@ export class SettingRecord {
         } else if (value == 'buttonRecordPercentage' || value == 'graphicMiniPorcCheck' || value == 'graphicMiniPorcShop') {
             this.typeGraph = 3
         }else{
-            this.chengeMiniGraphic(value)
+            this.chengeMiniGraphicUnity(value)
         }
     }
 
-    chengeMiniGraphic(id_unity){
+    chengeMiniGraphicUnity(id_unity){
         let firstUnity=[];
-        this.reqFiltred.forEach((array) => array.forEach((value) => {if(value.id_shop == id_unity) firstUnity.push(value)}))
-        console.log(this.recordObject.generalGraphic([firstUnity]))
+        console.log(this.reqFiltred)
+        this.reqFiltred.forEach((array) =>{if(array[0].id_shop == id_unity) firstUnity.push(array)})
+        this.recordObject2.clppGraphich.graphicRecord && this.recordObject2.clppGraphich.graphicRecord.destroy();
+        this.recordObject2.clppGraphich.clppGraphics(this.recordObject.getDataForGraphic(firstUnity, this.jsonCheck, this.jsonShop), "#graphicUnity", this.typeGraph)
+        console.log(firstUnity)
     }
 
     closeGraphicGeneral() {
