@@ -112,11 +112,11 @@ export class RecordObject extends ConnectionCLPP {
     }
 
     getKeys(response) {
-        let assistent = [["", "", ""]];
+        let assistent = [["", "", "",""]];
         let filterKeys = [];
         response.data.forEach(element => {
-            if ((this.validateKeys([element.id_user, element.id_checklist, element.id_shop], assistent))) {
-                assistent.push([element.id_user, element.id_checklist, element.id_shop]);
+            if ((this.validateKeys([element.id_user, element.id_checklist, element.id_shop,element.date], assistent))) {
+                assistent.push([element.id_user, element.id_checklist, element.id_shop,element.date]);
                 filterKeys.push([element.id_user, element.date, element.id_checklist, element.id_shop])
             }
         })
@@ -125,7 +125,7 @@ export class RecordObject extends ConnectionCLPP {
     validateKeys(value, keys) {
         let controller = true;
         keys.forEach(key => {
-            if (key[0] == value[0] && key[1] == value[1] && key[2] == value[2]) {controller = false }
+            if (key[0] == value[0] && key[1] == value[1] && key[2] == value[2]  && key[3] == value[3]) {controller = false }
         })
         return controller;
     }
