@@ -10,6 +10,7 @@ import { ConnectionCLPP } from "../../Connection/ConnectionCLPP.js";
 import { RecordObject } from "../../Components/objects/recordObject.js";
 import { ObjectChecklist } from "../../Components/objects/checklistObject.js";
 import { ClppGraphichObject } from "../../Components/objects/clppGraphichObject.js";
+import { PrintRecord } from "../../Components/printRecord.js";
 
 var listMessage = new MessageList
 var validator = new Validation
@@ -28,8 +29,17 @@ export class SettingHome {
         this.carousel();
         this.buttonCardChecklist();
         this.buttonEditChecklist();
-        await this.reportAnsweredToday(this.checklistJson)
+        await this.reportAnsweredToday()
         this.configRecord()
+        this.teste(this.checklistJson)
+    }
+    teste(checklistJson){
+        let printRecord = new PrintRecord;
+
+        console.log(checklistJson[352])
+        getB_id('teste').addEventListener('click', ()=>{ 
+            printRecord.main(checklistJson[352]);
+        })
     }
     openMessage() {
         getB_id('message').setAttribute('style', 'display:flex')
@@ -123,7 +133,7 @@ export class SettingHome {
         })
     }
 
-    async reportAnsweredToday(checklistJson) {
+    async reportAnsweredToday() {
         try {
             let reportDay;
             let shops;
@@ -192,17 +202,17 @@ export class SettingHome {
             return arrayRecord.data.map(recordCard => (
                 `
                 <div id="cardRecord_${recordCard.id}" class="cardRecord" data-idrecord="${recordCard.id}">
-                <section>
-                <div>
-                <label><b>Nome do relatório:</b></label><P>${recordCard.description}</P>
-                </div>
-                <div>
-                <label><b>Data de criação:</b></label><P>${recordCard.date}</P>
-                </div>
-                <div>
-                <label><b>Pontuação geral:</b></label><p>${recordCard.point}%</p> 
-                </div>                
-                </section>
+                    <section>
+                        <div>
+                            <label><b>Nome do relatório:</b></label><P>${recordCard.description}</P>
+                        </div>
+                        <div>
+                            <label><b>Data de criação:</b></label><P>${recordCard.date}</P>
+                        </div>
+                        <div>
+                            <label><b>Pontuação geral:</b></label><p>${recordCard.point}%</p> 
+                        </div>                
+                    </section>
                 </div>
             `
             )).join("")
@@ -214,6 +224,7 @@ export class SettingHome {
         arrays.data.forEach(array => {
             this.objectRecord[array.id] = array;
         })
+        console.log(this.objectRecord)
     }
     configRecord() {
         let routers = new Routers;
