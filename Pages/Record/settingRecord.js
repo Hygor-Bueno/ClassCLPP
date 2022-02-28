@@ -102,7 +102,7 @@ export class SettingRecord {
         this.populaCheckGraphic(returnReq, this.reqFiltred)
         this.clearFilter()
     }
-    
+
     clickTypeGraphic() {
         getB_id("corpoRecord").onchange = (e) => {
             let getTypeId = e.target[e.target.selectedIndex].getAttribute("data-type")
@@ -127,7 +127,24 @@ export class SettingRecord {
         this.typeGraph = 2
         this.recordObject2.clppGraphich.clppGraphics(this.recordObject2.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicUnity", this.typeGraph)
         this.recordObject3.clppGraphich.clppGraphics(this.recordObject3.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicChecklist", this.typeGraph)
+        console.log('vai brasil')
     }
+
+
+    clickTypeGraphic() {
+        getB_id("corpoRecord").onchange = (e) => {
+            let getTypeId = e.target[e.target.selectedIndex].getAttribute("id")
+            this.changeChartType(getTypeId)
+        }
+    }
+
+    vaibrasil() {
+        getB_id("corpoRecord").onchange = (e) => {
+            let getTypeId = e.target[e.target.selectedIndex].getAttribute("id")
+            this.changeChartType(getTypeId)
+        }
+    }
+
 
     populaShopGraphic(returnReq) {
         getB_id('popupaShopGra').innerHTML = ""
@@ -275,9 +292,9 @@ export class SettingRecord {
         }
     }
 
-    chengeMiniGraphicUnity(id_unity){
-        let firstUnity=[];
-        this.reqFiltred.forEach((array) =>{if(array[0].id_shop == id_unity.split('_')[1]) firstUnity.push(array)})
+    chengeMiniGraphicUnity(id_unity) {
+        let firstUnity = [];
+        this.reqFiltred.forEach((array) => { if (array[0].id_shop == id_unity.split('_')[1]) firstUnity.push(array) })
         this.recordObject2.clppGraphich.graphicRecord && this.recordObject2.clppGraphich.graphicRecord.destroy();
         this.recordObject2.clppGraphich.clppGraphics(this.recordObject.getDataForGraphic(firstUnity, this.jsonCheck, this.jsonShop), "#graphicUnity", this.typeMiniGraph)
     }
@@ -485,4 +502,4 @@ export class SettingRecord {
             $(btn).setAttribute('style', parans ? "opacity: .3" : "opacity: 1")
         })
     }
-}  
+}
