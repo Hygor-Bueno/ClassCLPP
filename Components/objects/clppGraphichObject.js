@@ -1,7 +1,6 @@
 export class ClppGraphichObject {
     graphicRecord;
     clppGraphics(arrayValues, context, types) {
-        console.log(arrayValues)
         let transparency = 0.4
         let noS = arrayValues[0][0] == "Não Satisfatório"
         let heightY = arrayValues.length
