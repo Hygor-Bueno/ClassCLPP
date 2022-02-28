@@ -148,6 +148,7 @@ export class SettingRecord {
         this.typeGraph = 2
         this.recordObject2.clppGraphich.clppGraphics(this.recordObject2.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicUnity", this.typeGraph)
         this.recordObject3.clppGraphich.clppGraphics(this.recordObject3.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicChecklist", this.typeGraph)
+        console.log('vai brasil')
     }
 
     clickTypeGraphic() {
@@ -503,4 +504,4 @@ export class SettingRecord {
             $(btn).setAttribute('style', parans ? "opacity: .3" : "opacity: 1")
         })
     }
-}  
+}
