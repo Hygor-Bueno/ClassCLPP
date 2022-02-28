@@ -9,6 +9,7 @@ import { Routers } from "../../Routers/router.js";
 import { ConnectionCLPP } from "../../Connection/ConnectionCLPP.js";
 import { RecordObject } from "../../Components/objects/recordObject.js";
 import { ObjectChecklist } from "../../Components/objects/checklistObject.js";
+import { ClppGraphichObject } from "../../Components/objects/clppGraphichObject.js";
 
 var listMessage = new MessageList
 var validator = new Validation
@@ -21,12 +22,14 @@ var connectionCLPP = new ConnectionCLPP;
 export class SettingHome {
     recordObject = new RecordObject;
     checklistObject = new ObjectChecklist;
-
-    settings() {
+    objectRecord = {};
+    async settings() {
         this.notifyMessage();
         this.carousel();
         this.buttonCardChecklist();
         this.buttonEditChecklist();
+        await this.reportAnsweredToday(this.checklistJson)
+        this.configRecord()
     }
     openMessage() {
         getB_id('message').setAttribute('style', 'display:flex')
@@ -53,7 +56,6 @@ export class SettingHome {
     buttonCardChecklist() {
         $_all('.viewQuizList').forEach(element => {
             element.addEventListener("click", () => {
-                // console.log(getB_id(`listQuestion_${element.getAttribute('data-id')}`))
                 let divList = getB_id(`listQuestion_${element.getAttribute('data-id')}`);
                 if (window.getComputedStyle(divList, null).display == 'none') {
                     divList.style.display = "flex"
@@ -81,7 +83,7 @@ export class SettingHome {
     settingsButtonChat(idSender) {
         getB_id('buttonReply').addEventListener('click', () => this.closeMessage());
         getB_id('buttonSend').addEventListener('click', () => { this.buttonSend(idSender, getB_id('inputSend').value, 1, '#bodyMessageDiv section') });
-        getB_id('inputSend').addEventListener('keypress', (enter) => {if (enter.key === 'Enter') getB_id('buttonSend').click()})
+        getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
     async buttonSend(idSender, message, type, local, localScroll) {
         if (type == 2 ? true : validator.minLength(message, 0) && validator.maxLength(message, 200)) {
@@ -110,31 +112,122 @@ export class SettingHome {
             }
         })
     }
+
     buttonEditChecklist() {
-        $_all(".editChecklistCard").forEach(element => { element.addEventListener("click", async() => {
-            let router = new Routers;
-            localStorage.setItem("editChecklist", element.getAttribute("id").split("_")[1])
-            await router.routers("checklistCreated")
-        })})
-        
-    }
-    async reportAnsweredToday(checklistJson) {
-        let reportDay =  connectionCLPP.get("&id_user=148&notification", "CLPP/Response.php", true);
-        let shops =  connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')
-        let req = await Promise.all([connectionCLPP.get("&id_user=148&notification", "CLPP/Response.php", true),connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')])
-        reportDay = req[0]
-        shops = this.shopJson(req[1].data)
-        console.log(reportDay.data, " <= Checklist",shops, " <= Unidades ", checklistJson, " <= CHecklist")    
-        
-        
-        console.log(this.recordObject.getDataForGraphic([this.recordObject.separateChecklist(reportDay)[0]],checklistJson,shops,1))
+        $_all(".editChecklistCard").forEach(element => {
+            element.addEventListener("click", async () => {
+                let router = new Routers;
+                localStorage.setItem("editChecklist", element.getAttribute("id").split("_")[1])
+                await router.routers("checklistCreated")
+            })
+        })
     }
 
+    async reportAnsweredToday(checklistJson) {
+        try {
+            let reportDay;
+            let shops;
+            let req = ""
+            await Promise.all([connectionCLPP.get(`&id_user=${localStorage.getItem("id")}&notification`, "CLPP/Response.php"), connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')]).then(response => { req = response })
+            reportDay = req[0]
+            shops = this.shopJson(req[1].data)
+            let jsonReportCard = await this.contructorJsonCard(this.recordObject.separateChecklist(reportDay), shops)
+            this.cardRecord(jsonReportCard, '#bodyReportDiv');
+        } catch (exception) {
+            return `<P></P>`
+        }
+    }
+
+    async contructorJsonCard(pay, shops) {
+        let response = []
+        for await (const uniqueChecklist of pay) {
+            let userData = await connectionCLPP.get("&id=" + uniqueChecklist[0].id_user, "CCPP/Employee.php")
+            let arrayGraphic = this.recordObject.generalGraphic([uniqueChecklist])
+            let result = {}
+            result.cod = uniqueChecklist[0].id_checklist + "_" + uniqueChecklist[0].id_user + "_" + uniqueChecklist[0].id_shop
+            result.user = usefulComponents.splitStringName(userData.data[0].name, " ");
+            result.shop = shops[uniqueChecklist[0].id_shop].description;
+            result.porcent = arrayGraphic[1][1];
+            result.graphich = arrayGraphic;
+            response.push(result);
+        }
+        return response
+    }
+
+    cardRecord(jsonReportCard, context) {
+        $(`${context}`).insertAdjacentHTML("beforeend", jsonReportCard.map(jsonCard => (
+            `
+                <div id="${jsonCard.cod}" class="cardRecordClass" >
+                    <aside>
+                        <p><b>Nome:</b> ${jsonCard.user}</p>
+                        <p><b>Unidade:</b> ${jsonCard.shop}</p>
+                        <p><b>Pontuação:</b>  ${jsonCard.porcent}%</p>
+                    </aside>
+                    <section>
+                        <canvas id="can_${jsonCard.cod}">
+                        </canvas>
+                    </section>
+                </div>
+             `
+        )).join(""))
+        jsonReportCard.forEach(elementGraphic => this.createGraphichCard(elementGraphic))
+    }
+
+    createGraphichCard(jsonGraphich) {
+        let clppGraphic = new ClppGraphichObject;
+        clppGraphic.clppGraphics(jsonGraphich.graphich, `#can_${jsonGraphich.cod}`, 3)
+    }
     shopJson(response) {
-        let jsonShop={};
+        let jsonShop = {};
         response.forEach(shop => {
             jsonShop[shop.id] = shop
         })
-       return jsonShop;
+        return jsonShop;
+    }
+    recordCreate(arrayRecord) {
+        try {
+
+            this.createJsonObject(arrayRecord)
+
+            return arrayRecord.data.map(recordCard => (
+                `
+                <div id="cardRecord_${recordCard.id}" class="cardRecord" data-idrecord="${recordCard.id}">
+                <section>
+                <div>
+                <label><b>Nome do relatório:</b></label><P>${recordCard.description}</P>
+                </div>
+                <div>
+                <label><b>Data de criação:</b></label><P>${recordCard.date}</P>
+                </div>
+                <div>
+                <label><b>Pontuação geral:</b></label><p>${recordCard.point}%</p> 
+                </div>                
+                </section>
+                </div>
+            `
+            )).join("")
+        } catch (exception) {
+            return `<P></P>`
+        }
+    }
+    createJsonObject(arrays) {
+        arrays.data.forEach(array => {
+            this.objectRecord[array.id] = array;
+        })
+    }
+    configRecord() {
+        let routers = new Routers;
+        $_all(".cardRecord").forEach(cardRecord => cardRecord.addEventListener("click", () => {
+            console.log(this.objectRecord[cardRecord.getAttribute("data-idrecord")])
+            localStorage.setItem("jsonRecord", JSON.stringify(this.objectRecord[cardRecord.getAttribute("data-idrecord")]))
+            routers.routers("record")
+        }))
     }
 }
+// date: "2022-02-22"
+// description: "Record 02"
+// filters: "{\"id_shops\": [], \"checklist\": {\"titles\": [\"344\"], \"question\": [], \"date_checklist\": []}, \"date_response\": {\"date_init_response\": \"2022-02-22\", \"date_final_response\": \"2022-02-22\"}}"
+// id: "55"
+// id_user: "148"
+// point: "55.56"
+// type: "3"

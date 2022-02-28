@@ -1,4 +1,5 @@
 import { ConnectionCLPP } from "../../Connection/ConnectionCLPP.js";
+import { UsefulComponents } from "../../Util/usefulComponents.js";
 import { ClppGraphichObject } from "./clppGraphichObject.js";
 const id = localStorage.getItem("id")
 
@@ -10,55 +11,95 @@ export class RecordObject extends ConnectionCLPP {
     #description;
     #filters;
     #jsonRecord;
+
     clppGraphich = new ClppGraphichObject;
 
-    getId_user() {return this.#id_user}
-    getPoint() {return this.#point}
-    getDate() {return this.#date}
-    getType() {return this.#type}
-    getDescription() {return this.#description}
-    getFilters() {return this.#filters}
-    getJsonRecord() {return this.#jsonRecord}
+    getId_user() { return this.#id_user }
+    getPoint() { return this.#point }
+    getDate() { return this.#date }
+    getType() { return this.#type }
+    getDescription() { return this.#description }
+    getFilters() { return this.#filters }
+    getJsonRecord() { return this.#jsonRecord }
 
-    setId_user(id_user) {this.#id_user = id_user}
-    setPoint(point) {this.#point = point}
-    setDate(date) {this.#date = date}
-    setType(type) {this.#type = type}
-    setDescritpion(description) {this.#description = description}
-    setFilters(filters) {this.#filters = filters}
-    setJsonRecord(jsonRecord) {this.#jsonRecord = jsonRecord}
+    setId_user(id_user) { this.#id_user = id_user }
+    setPoint(point) { this.#point = point }
+    setDate(date) { this.#date = date }
+    setType(type) { this.#type = type }
+    setDescritpion(description) { this.#description = description }
+    setFilters(filters) { this.#filters = filters }
+    setJsonRecord(jsonRecord) { this.#jsonRecord = jsonRecord }
 
-    saveReport(){
-        this.#jsonRecord={
-            id_user: this.#id_user, 
+    saveReport() {
+        this.#jsonRecord = {
+            id_user: this.#id_user,
             point: this.#point,
             date: this.#date,
             type: this.#type,
-            name: this.#description,
-            filters: this.#filters
+            description: this.#description,
+            filter: this.#filters
         }
-    } 
-
-    
-    getParamsForFilters(){
-        console.log(this.#filters.checklist,this.#filters.id_shops, this.#filters.date_response)
-        Object.keys(this.#filters).forEach(element => {
-            Object.keys(this.#filters[element]).forEach(key => {
-                console.log(this.#filters[element][key])
-                this.#filters[element][key] != "" && this.#filters[element][key].forEach(value => {this.returnGet(key,value)
-                })
-            })
-        })
     }
-    
-    returnGet(keys,values){
-        if(keys == "titles") keys = "checklist";        
-        if(keys == 0) keys = 'id_shop';
-        console.log(keys,values)
-        // let params;
-        // if(values != "") values.forEach(value => {params += `&${keys}=${value}`})
-        // console.log(params)
-        //await this.get(`&id_user=${id}`+ params, "CLPP/Response.php")
+
+    async readyPost() {
+        await this.post(this.#jsonRecord, "CLPP/Record.php", true)
+    }
+
+    getParamsForFilters() {
+        let params = "";
+        let getArray = [];
+        let markShop = this.#filters['id_shops'].length || 1;
+        let markTitle = this.#filters['checklist']['titles'].length || 1;
+        let markQuestion = this.#filters.checklist.question.length || 1;
+
+        for (let cnt = 0; cnt < markShop; cnt++) {
+            for (let xxx = 0; xxx < markTitle; xxx++) {
+                for (let y = 0; y < markQuestion; y++) {
+                    Object.keys(this.#filters).forEach((keys, index) => {
+                        if (index != 1) {
+                            params += this.getInformation(keys, xxx, y)
+                        } else {
+                            if (this.#filters['id_shops'][cnt]) params += '&id_shop=' + this.#filters['id_shops'][cnt]
+                        }
+                    })
+                    getArray.push(`&id_user=${id}` + params)
+                    params = "";
+                }
+            }
+        }
+        return getArray
+    }
+
+    getInformation(keys, xxx, y) {
+        let params = "";
+        Object.keys(this.#filters[keys]).forEach(subKey => {
+            if (this.#filters[keys][subKey] != "") {
+                switch (subKey) {
+                    case 'question':
+                        params += '&id_question=' + this.#filters[keys][subKey][y]
+                        break;
+                    case 'date_init_response':
+                        params += `&date_init_response="${this.#filters[keys][subKey]}"`
+                        break;
+                    case 'date_final_response':
+                        params += `&date_final_response="${this.#filters[keys][subKey]}"`
+                        break;
+                    case 'titles':
+                        params += '&id_checklist=' + this.#filters['checklist']['titles'][xxx]
+                        break;
+                }
+            }
+        })
+        return params;
+    }
+
+    async returnGet(getArray) {
+        let arrayResp = [];
+        for await (let resp of getArray) {
+            let array = await this.get(resp, "CLPP/Response.php")
+            if (array) arrayResp = arrayResp.concat(array.data)
+        }
+        return { data: arrayResp };
     }
 
     separateChecklist(response) {
@@ -67,62 +108,60 @@ export class RecordObject extends ConnectionCLPP {
         assistent.forEach(elemKey => {
             orderByChecklist.push(response.data.filter(element => { return elemKey[0] == element.id_user && elemKey[1] == element.date && elemKey[2] == element.id_checklist && elemKey[3] == element.id_shop }));
         })
-        // console.log(this.computePercent(orderByChecklist, 1)) // Calcula o valor geral do checklist
-
         return orderByChecklist;
     }
+
     getKeys(response) {
-        console.log(response)
-        let assistent = "";
-        let check = ""
-        let date = "";
+        let assistent = [["", "", "",""]];
         let filterKeys = [];
         response.data.forEach(element => {
-            if ((element.id_user != assistent || element.id_checklist != check) || date != element.id_shop) {
-                assistent = element.id_user;
-                check = element.id_checklist;
-                date = element.id_shop;
+            if ((this.validateKeys([element.id_user, element.id_checklist, element.id_shop,element.date], assistent))) {
+                assistent.push([element.id_user, element.id_checklist, element.id_shop,element.date]);
                 filterKeys.push([element.id_user, element.date, element.id_checklist, element.id_shop])
             }
         })
         return filterKeys;
     }
+    validateKeys(value, keys) {
+        let controller = true;
+        keys.forEach(key => {
+            if (key[0] == value[0] && key[1] == value[1] && key[2] == value[2]  && key[3] == value[3]) {controller = false }
+        })
+        return controller;
+    }
     generalGraphic(orderByChecklist) {
-        let point= this.computePercent(orderByChecklist, 1)
-        let dataSpecific = [["Não Satisfatório",100 - point], ["satisfatório",point]]
+        let point = this.computePercent(orderByChecklist, 1)
+        let dataSpecific = [["Não Satisfatório", 100 - point], ["Satisfatório", point]]
         return dataSpecific
     }
-
-    specificGraphic(orderByChecklist, objectChecklist, objectShops, especifc){
-        let dataSpecific = this.getDataForGraphic(orderByChecklist, objectChecklist, objectShops, especifc)
+    specificGraphic(orderByChecklist, objectChecklist, objectShops, specific) {
+        let dataSpecific = this.getDataForGraphic(orderByChecklist, objectChecklist, objectShops, specific)
         dataSpecific.shift()
-
         return dataSpecific
     }
-
     getDataForGraphic(orderByChecklist, objectChecklist, objectShops, specific) {
         let response = []
         let aux = 0;
         orderByChecklist.forEach(checklist => {
             let description, percent;
-            description = objectChecklist[checklist[0].id_checklist].getTitle().slice(0, 15) + " - " + objectShops[checklist[0].id_shop].description + " ( " + checklist[0].date + " ) ";
-
-            percent = this.computePercent([checklist], especifc || orderByChecklist.length)
-            console.log(especifc || orderByChecklist.length)
-
+            description = objectChecklist[checklist[0].id_checklist].getTitle().slice(0, 15) + " - " + objectShops[checklist[0].id_shop].description + this.formateDateGraph(checklist[0].date);
+            percent = this.computePercent([checklist], specific || orderByChecklist.length)
             aux += percent
             response.push([description, percent])
         })
-        response.unshift(["Não Satisfatório",100 - aux]) 
+        response.unshift(["Não Satisfatório", 100 - aux])
         return response;
     }
-
+    formateDateGraph(date) {
+        let usefulComponents = new UsefulComponents;
+        let result = usefulComponents.splitString(date, "-")
+        return " " + result[2] + "/" + result[1]
+    }
     computePercent(responseChecklist, max) {
         let question = 0;
         let sum = 0;
         let ignore = 0;
         for (const allQuestion of responseChecklist) {
-            console.log(allQuestion)
             question += parseFloat(allQuestion[0].qtd_questions);
             for (const options of allQuestion) {
                 if (options.type <= 2) {

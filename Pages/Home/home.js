@@ -27,11 +27,12 @@ export class HomePage extends SettingHome {
     checklistJson = {};
     message;
     teplateChecklist = new TemplateChecklist;
-
+    getRecord;
     async main() {
         this.userJson = await employee.get("&id=" + localStorage.getItem("id"), true);
         await this.createObjChecklist();
-        
+        this.getRecord =  await connectionCLPP.get(`&id_user=${localStorage.getItem("id")}`, "CLPP/Record.php");
+        // console.log(await employee.get("&id=5", true))
         this.accessClpp = await userAccess.get('&application_id=7&web');
         let nameUser = usefulComponents.splitStringName(this.userJson.name, " ")
         let response =
@@ -55,8 +56,7 @@ export class HomePage extends SettingHome {
                             <header class= "dashboardHome">
                                 <h1> Checklist Respondidos: </h1>
                             </header>                         
-                            <div id="bodyReportDiv">
-                                ${await this.reportAnsweredToday(this.checklistJson) || `<p>Whats?</p>`}
+                            <div id="bodyReportDiv" class="style_scroll">
                             </div>
                         </div>
                     </div>
@@ -69,7 +69,12 @@ export class HomePage extends SettingHome {
                         </div>   
                     </div>
                     <div id="recordDiv">
-                        <header><h1>Relatório Criados:  </h1></header>
+                    <header><h1>Relatório Criados:  </h1></header>
+                        <div id="subRecordDiv" class="style_scroll">
+                            <section id="bodyRecordDiv">
+                                ${this.recordCreate(this.getRecord) ||  `<p></p>`}
+                            </section>
+                        </div>
                     </div>
                 </aside>
             </div>
@@ -170,13 +175,19 @@ export class HomePage extends SettingHome {
         return response
     }
     async createObjChecklist() {
-        let req = await checklist.get('&web&id_user=' + localStorage.getItem('id'));
-        req.forEach(element => {
-            let objectChecklist = new ObjectChecklist;
-            objectChecklist.loadingCheckDataBase(element);
-            this.checklistJson[element.id] = objectChecklist;
-        })
-        return;
+        try{
+            let req = await checklist.get('&web&id_user=' + localStorage.getItem('id'));
+            req.forEach(element => {
+                let objectChecklist = new ObjectChecklist;
+                objectChecklist.loadingCheckDataBase(element);
+                this.checklistJson[element.id] = objectChecklist;
+            })
+
+            return;
+        }catch (exception) {
+            console.log(exception)
+            return `<P></P>`
+        }
     }
     validatorChat(object) {
         if (document.querySelector('#bodyMessageDiv header')) {

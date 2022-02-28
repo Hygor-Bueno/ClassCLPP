@@ -204,6 +204,10 @@ button {
 }
 
 .ErrorPageDefault {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size:26px;
     color: #999;
     width: 100%;
     height: 100%;
@@ -523,6 +527,9 @@ button {
 
 /*FORMATAÇÃO DO ASIDE CHECKLIST */
 #bodyCheckEditable aside {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     height: 95%;
     width: 40%;
 }

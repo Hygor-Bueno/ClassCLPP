@@ -199,12 +199,12 @@ export class ObjectChecklist extends ConnectionCLPP {
       this.saveOptions(this.filterOption(question), question.id_question);
     });
   }
-  saveOptions(options, idQuestion) {
-    options.forEach(async (element) => {
+  async saveOptions(options, idQuestion) {
+    for await(const element of options){
       element.id_question = idQuestion;
       let req = await this.post(element, "CLPP/Option.php?app_id=7");
       element.id = req.last_id;
-    });
+    }
   }
   async saveQuestionsBD(question) {
     let questionJSON = {

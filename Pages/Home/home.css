@@ -3,6 +3,7 @@
     width: 100%;
     height: 100%;
 }
+
 #bodyMessageDiv {
     display: flex;
     flex-direction: column;
@@ -10,6 +11,7 @@
     margin: 5px;
     width: 250px;
 }
+
 #bodyMessageDiv header {
     display: flex;
     margin: 5px;
@@ -19,68 +21,79 @@
     background: white;
     border-bottom: solid 1px rgb(178, 178, 178);
 }
-#bodyMessageDiv header p{
+
+#bodyMessageDiv header p {
     margin-left: 5px;
 }
-#bodyMessageDiv header img:hover{
+
+#bodyMessageDiv header img:hover {
     cursor: pointer;
 }
-#bodyMessageDiv section{
-    margin:5px;
+
+#bodyMessageDiv section {
+    margin: 5px;
     overflow-y: auto;
-    height:85%;
-    background:white;
+    height: 85%;
+    background: white;
     border: solid 1px rgb(178, 178, 178);
 }
-.messageReceived{
-    width:100%;
-    margin-top:10px;
+
+.messageReceived {
+    width: 100%;
+    margin-top: 10px;
     word-wrap: break-word;
 }
 
-.messageReceived p{
-    padding:2px;
+.messageReceived p {
+    padding: 2px;
     width: 70%;
-    background:#f1f2f5;
+    background: #f1f2f5;
     border-radius: 5px;
 }
 
-.messageReceived span{
-    background:#f1f2f5;
-    font-size:14px;
+.messageReceived span {
+    background: #f1f2f5;
+    font-size: 14px;
     opacity: .7;
-    padding:2px;
+    padding: 2px;
 }
-.messageSend{
+
+.messageSend {
     display: flex;
     justify-content: flex-end;
-    width:100%;
-    margin-top:10px;
+    width: 100%;
+    margin-top: 10px;
     word-wrap: break-word;
 }
-.messageSend p{
-    padding:2px;
+
+.messageSend p {
+    padding: 2px;
     width: 70%;
-    background:#f1f2f5;
+    background: #f1f2f5;
     border-radius: 5px;
 }
-#bodyMessageDiv footer{
+
+#bodyMessageDiv footer {
     margin: 5px;
     display: flex;
     justify-content: space-between;
 }
-#bodyMessageDiv footer button{
-    border:none;
-    background:none;
+
+#bodyMessageDiv footer button {
+    border: none;
+    background: none;
 }
-#bodyMessageDiv footer button:hover{
+
+#bodyMessageDiv footer button:hover {
     cursor: pointer;
 }
+
 #homeLeft {
     border-right: solid 5px white;
     width: 50%;
     height: 100%;
 }
+
 #welcom {
     display: flex;
     flex-direction: column;
@@ -90,18 +103,22 @@
     min-height: 10%;
     border: 1px solid rgb(178, 178, 178);
 }
+
 h1 {
     font-size: 20px;
     font-weight: bold;
     padding: 5px;
 }
+
 b {
     font-weight: bold;
 }
+
 #welcom p {
     border-top: 1px solid rgb(178, 178, 178);
     padding: 5px;
 }
+
 #bodyHome {
     display: flex;
     justify-content: space-between;
@@ -109,6 +126,7 @@ b {
     width: 100%;
     height: 85%;
 }
+
 #messageDiv {
     margin: 5px;
     width: 49%;
@@ -116,24 +134,29 @@ b {
     border: 1px solid rgb(178, 178, 178);
     overflow-y: auto;
 }
+
 #bodyChatDiv {
     padding: 5px;
 }
+
 .cardMessageUser {
     display: flex;
     align-items: center;
     height: 50px;
     border-bottom: 1px solid rgb(178, 178, 178);
 }
-.cardMessageUser img{
+
+.cardMessageUser img {
     margin-left: 5px;
 }
+
 .photosUsers {
     width: 35px;
     height: 35px;
     border-radius: 17.5px;
     margin-right: 10px;
 }
+
 #checkResponseDiv {
     margin: 5px;
     width: 49%;
@@ -141,6 +164,7 @@ b {
     overflow-y: auto;
     border: 1px solid rgb(178, 178, 178);
 }
+
 .dashboardHome {
     display: flex;
     align-items: center;
@@ -148,6 +172,7 @@ b {
     background: white;
     border-bottom: 1px solid rgb(178, 178, 178);
 }
+
 #homeRight {
     display: flex;
     flex-direction: column;
@@ -155,72 +180,87 @@ b {
     width: 50%;
     height: 100%;
 }
+
 #checkDiv {
     margin: 5px;
     height: 50%;
     overflow-y: auto;
 }
+
 #bodyCheckDiv {
     display: flex;
     width: 100%;
     height: 89%;
     justify-content: start;
     align-items: center;
-    overflow-x:auto;
+    overflow-x: auto;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
 }
-.editChecklistCard{
+
+.editChecklistCard {
     pointer-events: painted;
 }
-.articleLeftChecklist{
-    padding:1px;    
+
+.articleLeftChecklist {
+    padding: 1px;
     width: 50%;
     height: 100%;
     border-right: 1px solid rgb(178, 178, 178);
     overflow-y: auto;
     pointer-events: painted;
 }
-.listEmployees{
+
+.listEmployees {
     display: flex;
-    justify-content:center;
+    justify-content: center;
     min-height: 90%;
 }
+
 .listEmployeesEmpty {
     margin-left: 5px;
 }
-.articleLeftChecklist ol, .articleRigthChecklist ol{
-    padding-top:5px;
-    padding-bottom:5px;
-    margin: 5px;
-    background:#f1f2f5;
-    width: 60%;
-}
 
-.articleRigthChecklist{
-    padding:1px;
+.articleLeftChecklist ol, .articleRigthChecklist ol {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin: 5px;
+    background: #f1f2f5;
+    width: 60%;
+    border: solid 1px black;
+}
+.articleLeftChecklist ol li{
+    word-break: break-word;
+    margin-right: 10px;
+}
+.articleRigthChecklist {
+    padding: 1px;
     width: 50%;
     height: 100%;
     overflow-y: auto;
     pointer-events: painted;
 }
-.notificationChecklist{
-    display:flex;
+
+.notificationChecklist {
+    display: flex;
     align-items: center;
-    min-height:20px;
+    min-height: 20px;
 }
-.unicNotifyOn{
+
+.unicNotifyOn {
     margin-left: 10px;
-    color:#326744;
+    color: #326744;
     font-weight: bold;
-    font-size:16px;
+    font-size: 16px;
 }
-.unicNotifyOff{
+
+.unicNotifyOff {
     margin-left: 10px;
-    color:#B5001A;
+    color: #B5001A;
     font-weight: bold;
-    font-size:16px;
+    font-size: 16px;
 }
+
 #bodyCheckDiv::-webkit-scrollbar {
     height: 5px;
 }
@@ -235,8 +275,8 @@ b {
 }
 
 .cardCheck {
-    flex:none;
-    width:75%; 
+    flex: none;
+    width: 75%;
     height: 170px;
     margin: 5px;
     border: solid 1px rgb(178, 178, 178);
@@ -249,7 +289,7 @@ b {
 .cardCheck header {
     display: flex;
     align-items: center;
-    justify-content:space-between;
+    justify-content: space-between;
     border-bottom: solid 1px rgb(178, 178, 178);
     padding-bottom: 3px;
     min-height: 18px;
@@ -259,70 +299,132 @@ b {
     display: flex;
     margin-top: 5px;
     font-size: 14px;
-    height:80%;
+    height: 80%;
 }
-.listQuestionsHeader{
+.listQuestionsHeader {
     display: flex;
     align-items: center;
-    width:100%;
+    width: 100%;
     /* border-bottom: solid 1px rgb(178, 178, 178); */
 }
-.listQuestions{
-    display:none;
+.listQuestions {
+    display: none;
     flex-direction: column;
     align-items: center;
-    height:40px;
-    width:100%;
+    height: 40px;
+    width: 100%;
 }
-.viewQuizList{
-    background-image: url("../../assets/images/down.svg"); 
+.viewQuizList {
+    background-image: url("../../assets/images/down.svg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
-    width: 18px;   
-    height:18px; 
-    margin-left: 10px;;
+    width: 18px;
+    height: 18px;
+    margin-left: 10px;
+    ;
 }
 #recordDiv {
+    display: flex;
+    flex-direction: column;
     margin: 5px;
     height: 50%;
     border-top: solid 5px white;
+}
+#subRecordDiv {
+    height:100%;
     overflow-y: auto;
 }
-@media screen and (min-width: 1500px){
-    #bodySection p{
-        font-size:17px;
+#bodyRecordDiv{
+    display:grid;
+    grid-template-columns: 1fr 1fr ;
+}
+.cardRecord{
+    background:white;
+    margin: 5px;
+    border: solid 1px rgb(178, 178, 178);
+}
+.cardRecord:hover{
+    cursor: pointer;
+}
+.cardRecord section div{
+    display:flex;
+    justify-content:space-between;   
+}
+
+.cardRecord header,.cardRecord section{
+    margin:5px;
+}
+
+@media screen and (min-width: 1500px) {
+    #bodySection p {
+        font-size: 17px;
         margin: 5px;
     }
-    #welcom p, .listQuestions, .listEmployees{
-        font-size:16px;
+
+    #welcom p, .listQuestions, .listEmployees {
+        font-size: 16px;
     }
-    #bodySection h1{
-        font-size:23px;
+
+    #bodySection h1 {
+        font-size: 23px;
     }
-    #bodySection h2{
+
+    #bodySection h2 {
         font-size: 20px;
     }
-  
-    .cardMessageUser{
+
+    .cardMessageUser {
         padding: 5px;
     }
-    .cardMessageUser p{
-        font-size:18px;
+
+    .cardMessageUser p {
+        font-size: 18px;
     }
-    .cardMessageUser img{
-        width:50px;
-        height:50px;
+
+    .cardMessageUser img {
+        width: 50px;
+        height: 50px;
         border-radius: 25px;
     }
-    .cardCheck{
-        height:230px;
+
+    .cardCheck {
+        height: 230px;
     }
-    .listEmployees{
-        min-height:85%;
+
+    .listEmployees {
+        min-height: 85%;
     }
-    .viewQuizList{
+
+    .viewQuizList {
         margin-left: 2px;
     }
-   
+
+    
+}
+/* ESTILIZAÇAO DOS CHECKLISTS RESPONDIDOS */
+.cardRecordClass {
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0px 0px 10px  black;
+    background: white;
+    margin: 25px 5px;
+    min-height: 50px;
+}
+.cardRecordClass:hover{
+    cursor: pointer;
+}
+.cardRecordClass aside{
+    border-bottom: 1px solid rgb(178, 178, 178);
+}
+.cardRecordClass aside p{
+    margin:2.5px;
+}
+.cardRecordClass section{
+    margin: 10px;
+}
+
+#bodyReportDiv{
+    overflow-y: auto;
+    height: 93%;
 }

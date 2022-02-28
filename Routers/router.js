@@ -49,7 +49,7 @@ export class Routers {
 		result = new HomePage;
 		document.getElementById('StylePages').setAttribute('href', "./Pages/Home/home.css");
 		await this.loadPage(result["main"](), local, 70, 25);
-		result.settings();
+		await result.settings();
 	}
 	pageChecklistCreate(local) {
 		let result;
