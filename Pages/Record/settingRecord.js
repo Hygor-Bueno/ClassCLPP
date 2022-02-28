@@ -12,7 +12,7 @@ export class SettingRecord {
     jsonShop = {};
     expanded = false;
     typeGraph = 3
-    typeMiniGraph = 1
+    typeMiniGraph =[]
     routers = new Routers;
     userFulComponents = new UsefulComponents;
     recordObject = new RecordObject;
@@ -105,20 +105,14 @@ export class SettingRecord {
     
     clickTypeGraphic() {
         getB_id("corpoRecord").onchange = (e) => {
-            let getTypeId = e.target[e.target.selectedIndex].getAttribute("id")
-            this.changeTypeMiniGraphic(getTypeId,e.target.getAttribute("id"))
+            let getTypeId = e.target[e.target.selectedIndex].getAttribute("data-type")
+            e.target.getAttribute("id")=="selMiniGraficoShop" && this.changeTypeMiniGraphic(getTypeId)
+            
         }
     }
-    changeTypeMiniGraphic(idType,local){
-        if (idType == 'graphicMiniBarShop' || idType == 'graphicMiniBarCheck') {
-            this.typeMiniGraph = 2
-        }else if (idType == 'graphicMiniPizzaShop' || idType == 'graphicMiniPizzaCheck') {
-            this.typeMiniGraph = 1
-        }else if (idType == 'graphicMiniPorcCheck' || idType == 'graphicMiniPorcShop') {
-            this.typeMiniGraph = 3
-        }else if(local == "popupaShopGra"){
-            this.chengeMiniGraphicUnity(idType)
-        }
+    changeTypeMiniGraphic(idType){
+        this.typeMiniGraph = idType.split('_')[1]
+        console.log(this.typeMiniGraph)
     }
     populaCheckGraphic(returnReq, reqFiltred) {
         getB_id('popupaCheckpGra').innerHTML = ""
@@ -141,7 +135,7 @@ export class SettingRecord {
         let result = this.filterMiniGraphic(returnReq, "id_shop")
         result.forEach(element => {
             let response = ""
-            getB_id('popupaShopGra').insertAdjacentHTML('beforeend', response += `<option class="popupaShopGra" id="idShops_${this.jsonShop[element].id}">${this.jsonShop[element].description}</option>`)
+            getB_id('popupaShopGra').insertAdjacentHTML('beforeend', response += `<option class="popupaShopGra" data-type="idShops_${this.jsonShop[element].id}">${this.jsonShop[element].description}</option>`)
         })
     }
 
