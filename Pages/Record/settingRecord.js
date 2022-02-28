@@ -117,21 +117,21 @@ export class SettingRecord {
         this.populaCheckGraphic(returnReq, this.reqFiltred)
         this.clearFilter()
     }
-    
+
     clickTypeGraphic() {
         getB_id("corpoRecord").onchange = (e) => {
             let getTypeId = e.target[e.target.selectedIndex].getAttribute("id")
-            this.changeTypeMiniGraphic(getTypeId,e.target.getAttribute("id"))
+            this.changeTypeMiniGraphic(getTypeId, e.target.getAttribute("id"))
         }
     }
-    changeTypeMiniGraphic(idType,local){
+    changeTypeMiniGraphic(idType, local) {
         if (idType == 'graphicMiniBarShop' || idType == 'graphicMiniBarCheck') {
             this.typeMiniGraph = 2
-        }else if (idType == 'graphicMiniPizzaShop' || idType == 'graphicMiniPizzaCheck') {
+        } else if (idType == 'graphicMiniPizzaShop' || idType == 'graphicMiniPizzaCheck') {
             this.typeMiniGraph = 1
-        }else if (idType == 'graphicMiniPorcCheck' || idType == 'graphicMiniPorcShop') {
+        } else if (idType == 'graphicMiniPorcCheck' || idType == 'graphicMiniPorcShop') {
             this.typeMiniGraph = 3
-        }else if(local == "popupaShopGra"){
+        } else if (local == "popupaShopGra") {
             this.chengeMiniGraphicUnity(idType)
         }
     }
@@ -157,7 +157,15 @@ export class SettingRecord {
             this.changeChartType(getTypeId)
         }
     }
-    
+
+    vaibrasil() {
+        getB_id("corpoRecord").onchange = (e) => {
+            let getTypeId = e.target[e.target.selectedIndex].getAttribute("id")
+            this.changeChartType(getTypeId)
+        }
+    }
+
+
     populaShopGraphic(returnReq) {
         getB_id('popupaShopGra').innerHTML = ""
         getB_id('popupaShopGra').insertAdjacentHTML('beforeend', `<option class="popupaShopGra">Unidade</option>`)
@@ -294,9 +302,9 @@ export class SettingRecord {
         }
     }
 
-    chengeMiniGraphicUnity(id_unity){
-        let firstUnity=[];
-        this.reqFiltred.forEach((array) =>{if(array[0].id_shop == id_unity.split('_')[1]) firstUnity.push(array)})
+    chengeMiniGraphicUnity(id_unity) {
+        let firstUnity = [];
+        this.reqFiltred.forEach((array) => { if (array[0].id_shop == id_unity.split('_')[1]) firstUnity.push(array) })
         this.recordObject2.clppGraphich.graphicRecord && this.recordObject2.clppGraphich.graphicRecord.destroy();
         this.recordObject2.clppGraphich.clppGraphics(this.recordObject.getDataForGraphic(firstUnity, this.jsonCheck, this.jsonShop), "#graphicUnity", this.typeMiniGraph)
     }
