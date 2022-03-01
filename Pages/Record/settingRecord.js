@@ -159,16 +159,7 @@ export class SettingRecord {
         this.typeGraph = 2
         this.recordObject2.clppGraphich.clppGraphics(this.recordObject2.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicUnity", this.typeGraph)
         this.recordObject3.clppGraphich.clppGraphics(this.recordObject3.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicChecklist", this.typeGraph)
-
         console.log('vai brasil')
-    }
-
-    clickTypeGraphic() {
-        getB_id("corpoRecord").onchange = (e) => {
-            let getTypeId = e.target[e.target.selectedIndex].getAttribute("id")
-            this.changeChartType(getTypeId)
-        }
-
     }
 
     populaShopGraphic(returnReq) {
@@ -176,6 +167,7 @@ export class SettingRecord {
         getB_id('popupaShopGra').innerHTML = ""
         getB_id('popupaShopGra').insertAdjacentHTML('beforeend', `<option class="popupaShopGra">Unidade</option>`)
         let result = this.filterMiniGraphic(returnReq, "id_shop")
+        console.log(result)
         result.forEach(element => {
             let response = ""
             getB_id('popupaShopGra').insertAdjacentHTML('beforeend', response += `<option class="popupaShopGra" data-type="idShops_${this.jsonShop[element].id}">${this.jsonShop[element].description}</option>`)
