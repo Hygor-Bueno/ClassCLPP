@@ -108,18 +108,18 @@ export class SettingRecord {
     clickTypeGraphic() {
         getB_id("corpoRecord").onchange = (e) => {
             let getTypeId = e.target[e.target.selectedIndex].getAttribute("data-type")
-            this.changeTypeMiniGraphic(getTypeId,e.target.getAttribute("id"))
-            this.chengeShop(getTypeId,e.target.getAttribute("id"))
+            this.changeTypeMiniGraphic(getTypeId, e.target.getAttribute("id"))
+            this.chengeShop(getTypeId, e.target.getAttribute("id"))
             this.chengeMiniGraphicUnity()
         }
     }
-    changeTypeMiniGraphic(idType,local){
-        if(local == "selMiniGraficoCheck")this.typeMiniGraphUnity = parseInt(idType.split('_')[1])
-        if(local == "selMiniGraficoShop")this.typeMiniGraphUnity = parseInt(idType.split('_')[1])
+    changeTypeMiniGraphic(idType, local) {
+        if (local == "selMiniGraficoCheck") this.typeMiniGraphUnity = parseInt(idType.split('_')[1])
+        if (local == "selMiniGraficoShop") this.typeMiniGraphUnity = parseInt(idType.split('_')[1])
     }
-    chengeShop(idType,local){
-        if(local == "popupaShopGra")this.shop_id = parseInt(idType.split('_')[1])
-        if(local == "popupaCheckpGra")this.shop_id = parseInt(idType.split('_')[1])
+    chengeShop(idType, local) {
+        if (local == "popupaShopGra") this.shop_id = parseInt(idType.split('_')[1])
+        if (local == "popupaCheckpGra") this.shop_id = parseInt(idType.split('_')[1])
 
     }
     populaCheckGraphic(returnReq, reqFiltred) {
@@ -141,6 +141,7 @@ export class SettingRecord {
         getB_id('popupaShopGra').innerHTML = ""
         getB_id('popupaShopGra').insertAdjacentHTML('beforeend', `<option class="popupaShopGra">Unidade</option>`)
         let result = this.filterMiniGraphic(returnReq, "id_shop")
+        console.log(result)
         result.forEach(element => {
             let response = ""
             getB_id('popupaShopGra').insertAdjacentHTML('beforeend', response += `<option class="popupaShopGra" data-type="idShops_${this.jsonShop[element].id}">${this.jsonShop[element].description}</option>`)
@@ -285,9 +286,9 @@ export class SettingRecord {
 
     chengeMiniGraphicUnity() {
         let firstUnity = [];
-        this.reqFiltred.forEach((array) => {if (array[0].id_shop == this.shop_id) firstUnity.push(array)})
+        this.reqFiltred.forEach((array) => { if (array[0].id_shop == this.shop_id) firstUnity.push(array) })
         this.recordObject2.clppGraphich.graphicRecord && this.recordObject2.clppGraphich.graphicRecord.destroy();
-        this.recordObject2.clppGraphich.clppGraphics(this.recordObject2.getDataForGraphic(firstUnity, this.jsonCheck, this.jsonShop), "#graphicUnity",this.typeMiniGraphUnity)
+        this.recordObject2.clppGraphich.clppGraphics(this.recordObject2.getDataForGraphic(firstUnity, this.jsonCheck, this.jsonShop), "#graphicUnity", this.typeMiniGraphUnity)
     }
 
     closeGraphicGeneral() {
