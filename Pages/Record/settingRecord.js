@@ -126,6 +126,7 @@ export class SettingRecord {
     clickTypeGraphic() {
         getB_id("corpoRecord").onchange = (e) => {
             let getTypeId = e.target[e.target.selectedIndex].getAttribute("data-type")
+
             e.path[1].getAttribute('id') == "btnsCheck" && this.changeCheck(getTypeId,e.target.getAttribute("id"))
             e.path[1].getAttribute('id') == "btnsShop" && this.changeShop(getTypeId,e.target.getAttribute("id"))
         }
@@ -139,6 +140,7 @@ export class SettingRecord {
         if(local == "selMiniGraficoShop")this.typeMiniGraphUnity = parseInt(idType.split('_')[1])
         if(local == "popupaShopGra")this.shop_id = parseInt(idType.split('_')[1])
         this.changeMiniGraphicUnity()
+
     }
 
     populaCheckGraphic(returnReq, reqFiltred) {
@@ -302,9 +304,9 @@ export class SettingRecord {
 
     changeMiniGraphicUnity() {
         let firstUnity = [];
-        this.reqFiltred.forEach((array) => {if (array[0].id_shop == this.shop_id) firstUnity.push(array)})
+        this.reqFiltred.forEach((array) => { if (array[0].id_shop == this.shop_id) firstUnity.push(array) })
         this.recordObject2.clppGraphich.graphicRecord && this.recordObject2.clppGraphich.graphicRecord.destroy();
-        this.recordObject2.clppGraphich.clppGraphics(this.recordObject2.getDataForGraphic(firstUnity, this.jsonCheck, this.jsonShop), "#graphicUnity",this.typeMiniGraphUnity)
+        this.recordObject2.clppGraphich.clppGraphics(this.recordObject2.getDataForGraphic(firstUnity, this.jsonCheck, this.jsonShop), "#graphicUnity", this.typeMiniGraphUnity)
     }
 
     changeMiniGraphicCheck(){
@@ -317,7 +319,9 @@ export class SettingRecord {
     closeGraphicGeneral() {
         this.recordObject.clppGraphich.graphicRecord && this.recordObject.clppGraphich.graphicRecord.destroy();
     }
+
     closeMiniGraphic() {     
+
         this.recordObject2.clppGraphich.graphicRecord && this.recordObject2.clppGraphich.graphicRecord.destroy();
         this.recordObject3.clppGraphich.graphicRecord && this.recordObject3.clppGraphich.graphicRecord.destroy();
     }
