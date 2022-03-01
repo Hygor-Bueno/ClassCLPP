@@ -12,7 +12,9 @@ export class SettingRecord {
     jsonShop = {};
     expanded = false;
     typeGraph = 3
-    typeMiniGraph =[]
+    typeMiniGraphUnity = 2
+    typeMiniGraphCheck = 2
+    shop_id;
     routers = new Routers;
     userFulComponents = new UsefulComponents;
     recordObject = new RecordObject;
@@ -106,13 +108,19 @@ export class SettingRecord {
     clickTypeGraphic() {
         getB_id("corpoRecord").onchange = (e) => {
             let getTypeId = e.target[e.target.selectedIndex].getAttribute("data-type")
-            e.target.getAttribute("id")=="selMiniGraficoShop" && this.changeTypeMiniGraphic(getTypeId)
-            
+            this.changeTypeMiniGraphic(getTypeId,e.target.getAttribute("id"))
+            this.chengeShop(getTypeId,e.target.getAttribute("id"))
+            this.chengeMiniGraphicUnity()
         }
     }
-    changeTypeMiniGraphic(idType){
-        this.typeMiniGraph = idType.split('_')[1]
-        console.log(this.typeMiniGraph)
+    changeTypeMiniGraphic(idType,local){
+        if(local == "selMiniGraficoCheck")this.typeMiniGraphUnity = parseInt(idType.split('_')[1])
+        if(local == "selMiniGraficoShop")this.typeMiniGraphUnity = parseInt(idType.split('_')[1])
+    }
+    chengeShop(idType,local){
+        if(local == "popupaShopGra")this.shop_id = parseInt(idType.split('_')[1])
+        if(local == "popupaCheckpGra")this.shop_id = parseInt(idType.split('_')[1])
+
     }
     populaCheckGraphic(returnReq, reqFiltred) {
         getB_id('popupaCheckpGra').innerHTML = ""
@@ -127,24 +135,7 @@ export class SettingRecord {
         this.typeGraph = 2
         this.recordObject2.clppGraphich.clppGraphics(this.recordObject2.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicUnity", this.typeGraph)
         this.recordObject3.clppGraphich.clppGraphics(this.recordObject3.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicChecklist", this.typeGraph)
-        console.log('vai brasil')
     }
-
-
-    clickTypeGraphic() {
-        getB_id("corpoRecord").onchange = (e) => {
-            let getTypeId = e.target[e.target.selectedIndex].getAttribute("id")
-            this.changeChartType(getTypeId)
-        }
-    }
-
-    vaibrasil() {
-        getB_id("corpoRecord").onchange = (e) => {
-            let getTypeId = e.target[e.target.selectedIndex].getAttribute("id")
-            this.changeChartType(getTypeId)
-        }
-    }
-
 
     populaShopGraphic(returnReq) {
         getB_id('popupaShopGra').innerHTML = ""
@@ -292,11 +283,11 @@ export class SettingRecord {
         }
     }
 
-    chengeMiniGraphicUnity(id_unity) {
+    chengeMiniGraphicUnity() {
         let firstUnity = [];
-        this.reqFiltred.forEach((array) => { if (array[0].id_shop == id_unity.split('_')[1]) firstUnity.push(array) })
+        this.reqFiltred.forEach((array) => {if (array[0].id_shop == this.shop_id) firstUnity.push(array)})
         this.recordObject2.clppGraphich.graphicRecord && this.recordObject2.clppGraphich.graphicRecord.destroy();
-        this.recordObject2.clppGraphich.clppGraphics(this.recordObject.getDataForGraphic(firstUnity, this.jsonCheck, this.jsonShop), "#graphicUnity", this.typeMiniGraph)
+        this.recordObject2.clppGraphich.clppGraphics(this.recordObject2.getDataForGraphic(firstUnity, this.jsonCheck, this.jsonShop), "#graphicUnity",this.typeMiniGraphUnity)
     }
 
     closeGraphicGeneral() {
