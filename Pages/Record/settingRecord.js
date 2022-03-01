@@ -153,13 +153,6 @@ export class SettingRecord {
         console.log('vai brasil')
     }
 
-    clickTypeGraphic() {
-        getB_id("corpoRecord").onchange = (e) => {
-            let getTypeId = e.target[e.target.selectedIndex].getAttribute("id")
-            this.changeChartType(getTypeId)
-        }
-    }
-
     populaShopGraphic(returnReq) {
         getB_id('popupaShopGra').innerHTML = ""
         getB_id('popupaShopGra').insertAdjacentHTML('beforeend', `<option class="popupaShopGra">Unidade</option>`)
