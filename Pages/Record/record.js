@@ -139,9 +139,9 @@ export class RecordPage extends SettingRecord {
                                 </select>
                                 <select class="selMiniGrafico"  id="selMiniGraficoShop"style="display:">
                                     <option type="option">Tipo de gráfico</option>
-                                    <option type="option" id="graphicMiniPizzaShop">Pizza</option> 
-                                    <option type="option" id="graphicMiniPorcShop">Porcentagem</option>
-                                    <option type="option" id="graphicMiniBarShop" >Barra</option>
+                                    <option type="option" id="graphicMiniPizzaShop" data-type="type_1">Pizza</option> 
+                                    <option type="option" id="graphicMiniPorcShop" data-type="type_3">Porcentagem</option>
+                                    <option type="option" id="graphicMiniBarShop" data-type="type_2">Barra</option>
                                 </select>
                                 </div>
                                 <div id="containerGraphicUnity">
@@ -157,9 +157,9 @@ export class RecordPage extends SettingRecord {
                             </select>
                             <select class="selMiniGrafico" id="selMiniGraficoCheck"style="display:">
                                 <option type="option" >Tipo de gráfico</option>
-                                <option type="option" id="graphicMiniBarCheck">Barra</option>
-                                <option type="option" id="graphicMiniPizzaCheck">Pizza</option> 
-                                <option type="option" id="graphicMiniPorcCheck">Porcentagem</option>
+                                <option type="option" id="graphicMiniBarCheck"data-type="type_2">Barra</option>
+                                <option type="option" id="graphicMiniPizzaCheck"data-type="type_1">Pizza</option> 
+                                <option type="option" id="graphicMiniPorcCheck" data-type="type_3">Porcentagem</option>
                             </select>
                             </div>    
                             <div id="containerGraphicChecklist">
