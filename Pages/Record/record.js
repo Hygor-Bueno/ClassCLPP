@@ -132,7 +132,7 @@ export class RecordPage extends SettingRecord {
                     </section>
 
                         <aside id="unityGraphic">
-                            <div class="btnMiniGrafico">
+                            <div class="btnMiniGrafico" id="btnsShop">
                                 <select class="selMiniGrafico" id="popupaShopGra" style="display:">
                                     <option type="option">Unidade</option>
     
@@ -151,7 +151,7 @@ export class RecordPage extends SettingRecord {
                    
                    
                         <aside id="checklistGraphic" >
-                        <div class="btnMiniGrafico">
+                        <div class="btnMiniGrafico" id="btnsCheck">
                             <select class="selMiniGrafico" id="popupaCheckpGra"  style="display:">
                                 <option type="option">Checklist</option>
                             </select>

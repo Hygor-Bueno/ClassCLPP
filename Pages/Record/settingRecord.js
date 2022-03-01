@@ -12,9 +12,8 @@ export class SettingRecord {
     jsonShop = {};
     expanded = false;
     typeGraph = 3
-    typeMiniGraphUnity = 2
-    typeMiniGraphCheck = 2
     shop_id;
+    check_id;
     routers = new Routers;
     userFulComponents = new UsefulComponents;
     recordObject = new RecordObject;
@@ -38,7 +37,6 @@ export class SettingRecord {
         }
         localStorage.getItem("jsonRecord") && this.loadSavedReports(JSON.parse(localStorage.getItem("jsonRecord")))
     }
-
     jsonChecklists(objectChecklist) {
         try {
             objectChecklist.data.forEach(async (element) => {
@@ -50,13 +48,11 @@ export class SettingRecord {
             console.log(error)
         }
     }
-
     clickPage() {
         $('#divRecord').addEventListener("click", (event) => {
             if (event.target.tagName.toLowerCase() == "button") this.functionFilter(event.target)
         })
     }
-
     async functionFilter(element) {
         switch (element.getAttribute("data-function")) {
             case "clearBtn":
@@ -91,7 +87,6 @@ export class SettingRecord {
                 console.error("data-function")
         }
     }
-
     async pressBtnFilter() {
         this.closeMiniGraphic();
         this.controllerBtns(["#buttonRecordPrint"], false)
@@ -104,23 +99,28 @@ export class SettingRecord {
         this.populaCheckGraphic(returnReq, this.reqFiltred)
         this.clearFilter()
     }
-
     clickTypeGraphic() {
         getB_id("corpoRecord").onchange = (e) => {
             let getTypeId = e.target[e.target.selectedIndex].getAttribute("data-type")
-            this.changeTypeMiniGraphic(getTypeId, e.target.getAttribute("id"))
-            this.chengeShop(getTypeId, e.target.getAttribute("id"))
-            this.chengeMiniGraphicUnity()
+            this.changeCheckAndShop(getTypeId, e.target.getAttribute("id"), e.path[1].getAttribute('id'))
         }
     }
-    changeTypeMiniGraphic(idType, local) {
-        if (local == "selMiniGraficoCheck") this.typeMiniGraphUnity = parseInt(idType.split('_')[1])
-        if (local == "selMiniGraficoShop") this.typeMiniGraphUnity = parseInt(idType.split('_')[1])
+    changeCheckAndShop(idType,local, path){
+        let typeMiniGraphCheck = 2;
+        let typeMiniGraphUnity = 2;
+        if(path == "btnsCheck"){
+            local == "selMiniGraficoCheck" ? typeMiniGraphCheck = parseInt(idType.split('_')[1]):this.check_id = parseInt(idType.split('_')[1])
+            this.changeMiniGraphic(this.recordObject3,"id_checklist","#graphicChecklist",typeMiniGraphCheck,this.check_id,)
+        }else if(path == "btnsShop"){
+            local == "selMiniGraficoShop" ? typeMiniGraphUnity = parseInt(idType.split('_')[1]):this.shop_id = parseInt(idType.split('_')[1])
+            this.changeMiniGraphic(this.recordObject2,"id_shop", "#graphicUnity",typeMiniGraphUnity,this.shop_id)
+        }
     }
-    chengeShop(idType, local) {
-        if (local == "popupaShopGra") this.shop_id = parseInt(idType.split('_')[1])
-        if (local == "popupaCheckpGra") this.shop_id = parseInt(idType.split('_')[1])
-
+    changeMiniGraphic(path,keys,local,type,id) {
+        let firstUnity = [];
+        this.reqFiltred.forEach((array) => {if (array[0][keys] == id) firstUnity.push(array)})
+        path.clppGraphich.graphicRecord && path.clppGraphich.graphicRecord.destroy();
+        path.clppGraphich.clppGraphics(path.getDataForGraphic(firstUnity, this.jsonCheck, this.jsonShop), local, type)
     }
     populaCheckGraphic(returnReq, reqFiltred) {
         getB_id('popupaCheckpGra').innerHTML = ""
@@ -128,7 +128,7 @@ export class SettingRecord {
         let result = this.filterMiniGraphic(returnReq, "id_checklist")
         result.forEach(element => {
             let response = ""
-            getB_id('popupaCheckpGra').insertAdjacentHTML('beforeend', response += `<option class="popupaCheckpGra" id="${this.jsonCheck[element].getIdChecklist()}">${(this.jsonCheck[element].getTitle()).slice(0, 15) + "..."}</option>`)
+            getB_id('popupaCheckpGra').insertAdjacentHTML('beforeend', response += `<option class="popupaCheckpGra" data-type="idCheck_${this.jsonCheck[element].getIdChecklist()}">${(this.jsonCheck[element].getTitle()).slice(0, 15) + "..."}</option>`)
         })
         this.closeGraphicGeneral()        
         this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(reqFiltred), "#mainGraphic", this.typeGraph)
@@ -136,18 +136,15 @@ export class SettingRecord {
         this.recordObject2.clppGraphich.clppGraphics(this.recordObject2.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicUnity", this.typeGraph)
         this.recordObject3.clppGraphich.clppGraphics(this.recordObject3.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicChecklist", this.typeGraph)
     }
-
     populaShopGraphic(returnReq) {
         getB_id('popupaShopGra').innerHTML = ""
         getB_id('popupaShopGra').insertAdjacentHTML('beforeend', `<option class="popupaShopGra">Unidade</option>`)
         let result = this.filterMiniGraphic(returnReq, "id_shop")
-        console.log(result)
         result.forEach(element => {
             let response = ""
             getB_id('popupaShopGra').insertAdjacentHTML('beforeend', response += `<option class="popupaShopGra" data-type="idShops_${this.jsonShop[element].id}">${this.jsonShop[element].description}</option>`)
         })
     }
-
     filterMiniGraphic(returnReq, key) {
         let assistent = []
         returnReq.data.forEach(resultFilters => {
@@ -155,7 +152,6 @@ export class SettingRecord {
         })
         return assistent
     }
-
     validation(keys, value) {
         let response = true
         keys.forEach(key => {
@@ -163,7 +159,6 @@ export class SettingRecord {
         })
         return response;
     }
-
     loadSavedReports(stop_json) {
         let jsonFilters = JSON.parse(stop_json.filters)
         getB_id("inputNameTitles").value = stop_json.description
@@ -183,24 +178,20 @@ export class SettingRecord {
         getB_id("filterBtn").click();
         localStorage.getItem("jsonRecord") && localStorage.removeItem("jsonRecord")
     }
-
     loadDate(dateJson) {
         let date = dateJson.date_response
         getB_id("initDate").value = date.date_init_response
         getB_id("finalDate").value = date.date_final_response
     }
-
     openClose(element) {
         getB_id(element).style.display == 'none'
             ? getB_id(element).setAttribute("style", "display:block")
             : getB_id(element).setAttribute("style", "display:none")
     }
-
     clearFilter() {
         this.clearDate()
         this.resetOptions()
     }
-
     resetOptions() {
         const clear = document.querySelectorAll(".option")
         clear.forEach(options => {
@@ -210,13 +201,11 @@ export class SettingRecord {
         this.controllerSelect('selectButtonValidade', "Selecione a validade:", true)
         this.controllerSelect('titleChecklist', "Selecione a validade:", true)
     }
-
     clearDate() {
         const data = document.querySelectorAll("input[type='date']")
         data.forEach(date => { date.value = "" })
         document.getElementById("selectTitulo").innerHTML = "Selecione o checklist:"
     }
-
     validationDate() {
         let dateInit = getB_id("initDate").value
         let dateFinal = getB_id("finalDate").value
@@ -227,7 +216,6 @@ export class SettingRecord {
             alert('Selecione data inicial')
         }
     }
-
     templateOption(objectChecklist, key, array) {
         let response = ""
         let auxArray = array || objectChecklist.data
@@ -244,11 +232,9 @@ export class SettingRecord {
         })
         return response;
     }
-
     templateDate(objectChecklist) {
         let jsonDate = [];
-        try {
-            objectChecklist.data.forEach(element => {
+        try {objectChecklist.data.forEach(element => {
                 let newJson = {
                     date: element.date_init ? this.userFulComponents.convertData(element.date_init, "-") + " - " + this.userFulComponents.convertData(element.date_final, "-") : false,
                     id: (element.id)
@@ -261,7 +247,6 @@ export class SettingRecord {
         }
 
     }
-
     buttonGraphic(element) {
         let array = [getB_id('buttonRecordBar'), getB_id('buttonRecordPizza'), getB_id('buttonRecordPercentage')]
         array.forEach((e) => {
@@ -272,7 +257,6 @@ export class SettingRecord {
             } else e.setAttribute("style", "opacity: 0.3")
         })
     }
-
     changeChartType(value) {
         this.closeGraphicGeneral();
         if (value == 'buttonRecordBar') {
@@ -283,14 +267,6 @@ export class SettingRecord {
             this.typeGraph = 3
         }
     }
-
-    chengeMiniGraphicUnity() {
-        let firstUnity = [];
-        this.reqFiltred.forEach((array) => { if (array[0].id_shop == this.shop_id) firstUnity.push(array) })
-        this.recordObject2.clppGraphich.graphicRecord && this.recordObject2.clppGraphich.graphicRecord.destroy();
-        this.recordObject2.clppGraphich.clppGraphics(this.recordObject2.getDataForGraphic(firstUnity, this.jsonCheck, this.jsonShop), "#graphicUnity", this.typeMiniGraphUnity)
-    }
-
     closeGraphicGeneral() {
         this.recordObject.clppGraphich.graphicRecord && this.recordObject.clppGraphich.graphicRecord.destroy();
     }
@@ -298,7 +274,6 @@ export class SettingRecord {
         this.recordObject2.clppGraphich.graphicRecord && this.recordObject2.clppGraphich.graphicRecord.destroy();
         this.recordObject3.clppGraphich.graphicRecord && this.recordObject3.clppGraphich.graphicRecord.destroy();
     }
-
     controllerSelect(local, message, check) {
         if (check) {
             getB_id(local).setAttribute("style", "opacity:1")
@@ -308,12 +283,10 @@ export class SettingRecord {
             $(`#${local} button`).disabled = true
         } $(`#${local} p`).innerText = message
     }
-
     async populaShop() {
         let req = await this.getShop()
         getB_id('selShop').insertAdjacentHTML('beforeend', this.templateOption(null, 'description', req))
     }
-
     pegandoValidade() {
         let array = [];
         getB_id('validCheckBlock').onchange = (validade) => {
@@ -339,7 +312,6 @@ export class SettingRecord {
             }
         }
     }
-
     blockQuestion() {
         getB_id('titleChecklistOption').onchange = async () => {
             getB_id('titleQuestionOption').innerHTML = ""
@@ -360,7 +332,6 @@ export class SettingRecord {
             } else this.selectAll()
         }
     }
-
     selectAll() {
         document.querySelectorAll('#titleChecklistOption input[type=checkbox]').forEach(element => {
             element.checked = true
@@ -369,7 +340,6 @@ export class SettingRecord {
             this.controllerSelect("selectButtonQuestion", "Multiplos checklist", false)
         })
     }
-
     walksArray(local) {
         let array = []
         document.querySelectorAll(local).forEach(element => {
@@ -377,7 +347,6 @@ export class SettingRecord {
         })
         return array
     }
-
     walksArray2(local, id) {
         let response
         document.querySelectorAll(local).forEach(element => {
@@ -385,7 +354,6 @@ export class SettingRecord {
         })
         return response
     }
-
     validateParameter(array, cont) {
         if (array > 1) document.getElementById("selectTitulo").innerHTML = "Multi selecionado"
         if (array == 1) document.getElementById("selectTitulo").innerHTML = cont.value.toLowerCase().slice(0, 20) + ".."
