@@ -85,10 +85,27 @@ export class SettingRecord {
             case "filterBtn":
                 this.walksArray(".option").length >= 1 ? this.pressBtnFilter() : alert('Selecione um dado');
                 break;
+            case "btnEscondeButton":
+                this.escondeButton()
+                break;
             default:
                 console.error("data-function")
         }
     }
+
+    escondeButton() {
+        console.log('Voce vai conseguir. O seu botao vai funcionar')
+        let local = getB_id("asideFilter")
+        let button = getB_id("btnEscondeButton")
+        if (local.style.display == "none") {
+            local.setAttribute("style", "display:flex")
+            button.innerText = "< "
+        } else if (local.style.display == "flex") {
+            local.setAttribute("style", "display:none")
+            button.innerText = " >"
+        }
+    }
+
     async pressBtnFilter() {
         this.closeMiniGraphic();
         this.controllerBtns(["#buttonRecordPrint"], false)
@@ -110,15 +127,18 @@ export class SettingRecord {
     changeCheckAndShop(idType,local, path){
         if(path == "btnsCheck"){
             local == "selMiniGraficoCheck" ? this.typeMiniGraphCheck = parseInt(idType.split('_')[1]):this.check_id = parseInt(idType.split('_')[1])
-            this.changeMiniGraphic(this.recordObject3,"id_checklist","#graphicChecklist",this.typeMiniGraphCheck,this.check_id,)
+            this.changeMiniGraphic(this.recordObject3,"#graphicChecklist")
         }else if(path == "btnsShop"){
             local == "selMiniGraficoShop" ? this.typeMiniGraphUnity = parseInt(idType.split('_')[1]):this.shop_id = parseInt(idType.split('_')[1])
-            this.changeMiniGraphic(this.recordObject2,"id_shop", "#graphicUnity",this.typeMiniGraphUnity,this.shop_id)
+            this.changeMiniGraphic(this.recordObject2, "#graphicUnity")
         }
     }
-    changeMiniGraphic(path,keys,local,type,id) {
+    changeMiniGraphic(path, local) {
+        let type = local == "#graphicUnity"? this.typeMiniGraphUnity : this.typeMiniGraphCheck  
+        let id = local == "#graphicUnity"? this.shop_id : this.check_id 
+        let keys = local == "#graphicUnity"? "id_shop":"id_checklist"
         let firstUnity = [];
-        this.reqFiltred.forEach((array) => {if (array[0][keys] == id) firstUnity.push(array)})
+        this.reqFiltred.forEach((array) => { if (array[0][keys] == id) firstUnity.push(array) })
         path.clppGraphich.graphicRecord && path.clppGraphich.graphicRecord.destroy();
         path.clppGraphich.clppGraphics(path.getDataForGraphic(firstUnity, this.jsonCheck, this.jsonShop), local, type)
     }
@@ -130,7 +150,7 @@ export class SettingRecord {
             let response = ""
             getB_id('popupaCheckpGra').insertAdjacentHTML('beforeend', response += `<option class="popupaCheckpGra" data-type="idCheck_${this.jsonCheck[element].getIdChecklist()}">${(this.jsonCheck[element].getTitle()).slice(0, 15) + "..."}</option>`)
         })
-        this.closeGraphicGeneral()        
+        this.closeGraphicGeneral()
         this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(reqFiltred), "#mainGraphic", this.typeGraph)
         this.typeGraph = 2
         this.recordObject2.clppGraphich.clppGraphics(this.recordObject2.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicUnity", this.typeGraph)
@@ -221,20 +241,21 @@ export class SettingRecord {
         let auxArray = array || objectChecklist.data
         auxArray.map(element => {
             element[key] ? response +=
-            `
+                `
             <div class="optionSelect">
                 <input type="checkbox" class="option" data-id="${element.id}" id="${element.id}" value="${element[key]}">
                     <p class="valorCheck">${element[key]}</p>
                 </input>
-            </div>` 
-            : 
-            ""
+            </div>`
+                :
+                ""
         })
         return response;
     }
     templateDate(objectChecklist) {
         let jsonDate = [];
-        try {objectChecklist.data.forEach(element => {
+        try {
+            objectChecklist.data.forEach(element => {
                 let newJson = {
                     date: element.date_init ? this.userFulComponents.convertData(element.date_init, "-") + " - " + this.userFulComponents.convertData(element.date_final, "-") : false,
                     id: (element.id)
@@ -270,7 +291,7 @@ export class SettingRecord {
     closeGraphicGeneral() {
         this.recordObject.clppGraphich.graphicRecord && this.recordObject.clppGraphich.graphicRecord.destroy();
     }
-    closeMiniGraphic() {     
+    closeMiniGraphic() {
         this.recordObject2.clppGraphich.graphicRecord && this.recordObject2.clppGraphich.graphicRecord.destroy();
         this.recordObject3.clppGraphich.graphicRecord && this.recordObject3.clppGraphich.graphicRecord.destroy();
     }
