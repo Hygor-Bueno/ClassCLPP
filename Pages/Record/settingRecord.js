@@ -99,6 +99,7 @@ export class SettingRecord {
     }
 
     escondeButton() {
+        console.log('Voce vai conseguir. O seu botao vai funcionar')
         let local = getB_id("asideFilter")
         let button = getB_id("btnEscondeButton")
         if (local.style.display == "none") {
