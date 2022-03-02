@@ -24,6 +24,8 @@ export class SettingHome {
     recordObject = new RecordObject;
     checklistObject = new ObjectChecklist;
     objectRecord = {};
+    objectShops={};
+    separateChecklist;
     async settings() {
         this.notifyMessage();
         this.carousel();
@@ -32,14 +34,11 @@ export class SettingHome {
         await this.reportAnsweredToday()
         this.configRecord()
         this.teste(this.checklistJson)
+      
     }
     teste(checklistJson){
         let printRecord = new PrintRecord;
-
-        console.log(checklistJson[352])
-        getB_id('teste').addEventListener('click', ()=>{ 
-            printRecord.main(checklistJson[352]);
-        })
+        getB_id('teste').addEventListener('click', async ()=>{printRecord.main(checklistJson[352],this.separateChecklist[0],this.objectShops,this.returnJsonObject(await this.checklistObject.get("&application_id=7&web","CCPP/UserAccess.php")))})
     }
     openMessage() {
         getB_id('message').setAttribute('style', 'display:flex')
@@ -136,12 +135,11 @@ export class SettingHome {
     async reportAnsweredToday() {
         try {
             let reportDay;
-            let shops;
             let req = ""
             await Promise.all([connectionCLPP.get(`&id_user=${localStorage.getItem("id")}&notification`, "CLPP/Response.php"), connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')]).then(response => { req = response })
             reportDay = req[0]
-            shops = this.shopJson(req[1].data)
-            let jsonReportCard = await this.contructorJsonCard(this.recordObject.separateChecklist(reportDay), shops)
+            this.objectShops = this.shopJson(req[1].data)
+            let jsonReportCard = await this.contructorJsonCard(this.recordObject.separateChecklist(reportDay), this.objectShops)
             this.cardRecord(jsonReportCard, '#bodyReportDiv');
         } catch (exception) {
             return `<P></P>`
@@ -149,6 +147,7 @@ export class SettingHome {
     }
 
     async contructorJsonCard(pay, shops) {
+        this.separateChecklist = pay;
         let response = []
         for await (const uniqueChecklist of pay) {
             let userData = await connectionCLPP.get("&id=" + uniqueChecklist[0].id_user, "CCPP/Employee.php")
@@ -225,6 +224,13 @@ export class SettingHome {
             this.objectRecord[array.id] = array;
         })
         console.log(this.objectRecord)
+    }
+    returnJsonObject(arrays) {
+        let response = {}
+        arrays.data.forEach(array => {
+            response[array.id] = array;
+        })
+        return response
     }
     configRecord() {
         let routers = new Routers;
