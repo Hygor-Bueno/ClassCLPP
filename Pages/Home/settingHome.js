@@ -11,6 +11,7 @@ import { RecordObject } from "../../Components/objects/recordObject.js";
 import { ObjectChecklist } from "../../Components/objects/checklistObject.js";
 import { ClppGraphichObject } from "../../Components/objects/clppGraphichObject.js";
 import { PrintRecord } from "../../Components/printRecord.js";
+import { PrintRecord2 } from "../../Components/printRecord2.js";
 
 var listMessage = new MessageList
 var validator = new Validation
@@ -24,6 +25,7 @@ export class SettingHome {
     recordObject = new RecordObject;
     checklistObject = new ObjectChecklist;
     objectRecord = {};
+    separateChecklist;
     async settings() {
         this.notifyMessage();
         this.carousel();
@@ -32,15 +34,22 @@ export class SettingHome {
         await this.reportAnsweredToday()
         this.configRecord()
         this.teste(this.checklistJson)
+        this.teste2(this.checklistJson)
     }
-    teste(checklistJson){
-        let printRecord = new PrintRecord;
 
-        console.log(checklistJson[352])
-        getB_id('teste').addEventListener('click', ()=>{ 
-            printRecord.main(checklistJson[352]);
-        })
+    teste(checklistJson) {
+        let printRecord = new PrintRecord;
+        console.log(this.objectRecord)
+        getB_id('teste').addEventListener('click', () => { printRecord.main(checklistJson[341]) })
     }
+
+    teste2(checklistJson) {
+        let printRecord2 = new PrintRecord2;
+
+
+        getB_id('teste2').addEventListener('click', () => { printRecord2.main(checklistJson[343]) })
+    }
+
     openMessage() {
         getB_id('message').setAttribute('style', 'display:flex')
     }
@@ -224,7 +233,6 @@ export class SettingHome {
         arrays.data.forEach(array => {
             this.objectRecord[array.id] = array;
         })
-        console.log(this.objectRecord)
     }
     configRecord() {
         let routers = new Routers;
