@@ -12,6 +12,8 @@ export class SettingRecord {
     jsonShop = {};
     expanded = false;
     typeGraph = 3
+    typeMiniGraphCheck = 2;
+    typeMiniGraphUnity = 2;
     shop_id;
     check_id;
     routers = new Routers;
@@ -106,14 +108,12 @@ export class SettingRecord {
         }
     }
     changeCheckAndShop(idType,local, path){
-        let typeMiniGraphCheck = 2;
-        let typeMiniGraphUnity = 2;
         if(path == "btnsCheck"){
-            local == "selMiniGraficoCheck" ? typeMiniGraphCheck = parseInt(idType.split('_')[1]):this.check_id = parseInt(idType.split('_')[1])
-            this.changeMiniGraphic(this.recordObject3,"id_checklist","#graphicChecklist",typeMiniGraphCheck,this.check_id,)
+            local == "selMiniGraficoCheck" ? this.typeMiniGraphCheck = parseInt(idType.split('_')[1]):this.check_id = parseInt(idType.split('_')[1])
+            this.changeMiniGraphic(this.recordObject3,"id_checklist","#graphicChecklist",this.typeMiniGraphCheck,this.check_id,)
         }else if(path == "btnsShop"){
-            local == "selMiniGraficoShop" ? typeMiniGraphUnity = parseInt(idType.split('_')[1]):this.shop_id = parseInt(idType.split('_')[1])
-            this.changeMiniGraphic(this.recordObject2,"id_shop", "#graphicUnity",typeMiniGraphUnity,this.shop_id)
+            local == "selMiniGraficoShop" ? this.typeMiniGraphUnity = parseInt(idType.split('_')[1]):this.shop_id = parseInt(idType.split('_')[1])
+            this.changeMiniGraphic(this.recordObject2,"id_shop", "#graphicUnity",this.typeMiniGraphUnity,this.shop_id)
         }
     }
     changeMiniGraphic(path,keys,local,type,id) {
