@@ -1,14 +1,14 @@
-export class PrintRecord {
+export class PrintRecord2 {
     main(objectChecklist) {
-        let response = `
-        <html>
+        let response =
+            `<html>
             <head>
                 <style type="text/css"></style> 
-                <title>Deu certo</title>
+                <title>Impressão simplificada</title>
                 ${this.printStyle()}
             </head>  
             <div id="divRecordPrint">
-                <header>
+                <header >
                     <h1>${objectChecklist.getTitle().toUpperCase()}</h1>
                     <img src="./assets/images/fundoCLPPoficial.ico" title="logo CLPP"/>
                 </header>
@@ -16,8 +16,9 @@ export class PrintRecord {
                 </div>
                 ${this.printReport(objectChecklist.getQuestion())}
             </div>
-        </html>
-        `
+        </html> `
+
+        console.log(objectChecklist)
         var win = window.open();
         win.document.write(response);
         win.document.close();
@@ -118,8 +119,9 @@ export class PrintRecord {
             </style>
         `
     }
+
     printReport(objectQuestions) {
-        console.log()
+        console.log(objectQuestions)
         let response = `
         <div id="dados">
             ${this.populateQuestion(objectQuestions)}
@@ -129,6 +131,7 @@ export class PrintRecord {
     }
 
     populateQuestion(objectQuestions) {
+        console.log(objectQuestions)
         return objectQuestions.map((question) => (
             `
             <div id="question_${question.id}" class="questionRecord">
@@ -136,9 +139,7 @@ export class PrintRecord {
                     <h2>${question.description.toUpperCase()}</h2>
                 </header>
                 <section>
-                    <div class="contentOption">
-                        ${this.populateOptions(question)}
-                    </div>
+                    ${this.populateShop(question)}    
                     <aside class="photoObservation">
                     </aside>
                 </section >
@@ -146,7 +147,19 @@ export class PrintRecord {
             `)).join("")
     }
 
+    populateShop(question) {
+        let response = "";
+        return response +=
+            `<div class="contentOption">
+
+               <main><h3>Interlagos</h3>${this.populateOptions(question)}</main> 
+               <main><h3>Taboão</h3>${this.populateOptions(question)}</main> 
+            </div>`
+
+    }
+
     populateOptions(question) {
+        console.log(question)
         let response = "";
         Object.keys(question).forEach(key => {
             if (typeof question[key] == 'object') {
@@ -159,10 +172,9 @@ export class PrintRecord {
         });
         return response;
     }
+
     selectInput(typeOption, options) {
-        console.log(options)
         let response;
-        console.log(typeOption)
         switch (typeOption) {
             case 1:
                 response = `<input type = "checkbox" disabled /><label>${options.description.toUpperCase()}</label> `
