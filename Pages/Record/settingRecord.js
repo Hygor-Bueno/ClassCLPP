@@ -92,9 +92,9 @@ export class SettingRecord {
                 console.error("data-function")
         }
     }
-
     escondeButton() {
         console.log('Voce vai conseguir. O seu botao vai funcionar')
+        console.log("Sai fora gayyyy!!!")
         let local = getB_id("asideFilter")
         let button = getB_id("btnEscondeButton")
         if (local.style.display == "none") {
@@ -105,7 +105,6 @@ export class SettingRecord {
             button.innerText = " >"
         }
     }
-
     async pressBtnFilter() {
         this.closeMiniGraphic();
         this.controllerBtns(["#buttonRecordPrint"], false)
@@ -113,6 +112,8 @@ export class SettingRecord {
         this.validationDate()
         let returnReq = await this.recordObject.returnGet(this.recordObject.getParamsForFilters())
         this.reqFiltred = this.recordObject.separateChecklist(returnReq)
+        console.log()
+        if(this.selectInfo(".optionSelectOpt input[type=checkbox]").length > 0) this.reqFiltred.forEach(ele => ele[0].qtd_questions = this.selectInfo(".optionSelectOpt input[type=checkbox]").length)
         this.recordObject.setPoint(this.recordObject.generalGraphic(this.reqFiltred)[1][1])
         this.populaShopGraphic(returnReq)
         this.populaCheckGraphic(returnReq, this.reqFiltred)
@@ -138,7 +139,7 @@ export class SettingRecord {
         let id = local == "#graphicUnity"? this.shop_id : this.check_id 
         let keys = local == "#graphicUnity"? "id_shop":"id_checklist"
         let firstUnity = [];
-        this.reqFiltred.forEach((array) => { if (array[0][keys] == id) firstUnity.push(array) })
+        this.reqFiltred.forEach((array) => {if (array[0][keys] == id) firstUnity.push(array)})
         path.clppGraphich.graphicRecord && path.clppGraphich.graphicRecord.destroy();
         path.clppGraphich.clppGraphics(path.getDataForGraphic(firstUnity, this.jsonCheck, this.jsonShop), local, type)
     }
@@ -470,11 +471,10 @@ export class SettingRecord {
 
     selectInfo(local, exception) {
         let checklistJson = []
-        $_all(local).forEach((ele) => {
-            if (ele.checked && ele.getAttribute('data-id') != exception) checklistJson.push(ele.getAttribute('data-id'))
+        $_all(local).forEach((elem) => {
+            if (elem.checked && elem.getAttribute('data-id') != exception) checklistJson.push(elem.getAttribute('data-id'))
         })
         return checklistJson;
-
     }
 
     controllerBtns(btns, parans) {
