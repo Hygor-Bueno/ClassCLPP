@@ -101,12 +101,25 @@ export class RecordObject extends ConnectionCLPP {
         }
         return { data: arrayResp };
     }
-
+    splitTo(array){
+        let response = []
+        response = this.organize(array.sort((a,b)=> a.id_shop - b.id_shop))
+        return response
+    }
+    organize(array){
+        let idShops=[]
+        let response = []
+        array.filter(a => {if(keys.indexOf(a.id_shop)<0) keys.push(a.id_shop)})
+        idShops.forEach((idShop,i) => {
+            array.forEach((element,index) => {if(element.id_shop == idShop)response[i] = [response[index],element]})
+        })
+        console.log(response,keys)
+    }
     separateChecklist(response) {
         let orderByChecklist = [];
         let assistent = this.getKeys(response);
         assistent.forEach(elemKey => {
-            orderByChecklist.push(response.data.filter(element => { return elemKey[0] == element.id_user && elemKey[1] == element.date && elemKey[2] == element.id_checklist && elemKey[3] == element.id_shop }));
+            orderByChecklist.push(response.data.filter(element => {return elemKey[0] == element.id_user && elemKey[1] == element.date && elemKey[2] == element.id_checklist && elemKey[3] == element.id_shop }));
         })
         return orderByChecklist;
     }
@@ -158,7 +171,6 @@ export class RecordObject extends ConnectionCLPP {
         return " " + result[2] + "/" + result[1]
     }
     computePercent(responseChecklist, max) {
-        // console.log(responseChecklist[0][0].qtd_questions = 1)
         let question = 0;
         let sum = 0;
         let ignore = 0;
@@ -172,8 +184,6 @@ export class RecordObject extends ConnectionCLPP {
                 }
             }
         }
-        // console.log(question, ignore, sum)
-        // console.log((100 / (question - ignore) * sum).toFixed(2) / max)
         return (100 / (question - ignore) * sum).toFixed(2) / max
     }
 }

@@ -110,7 +110,6 @@ export class SettingRecord {
         this.validationDate()
         let returnReq = await this.recordObject.returnGet(this.recordObject.getParamsForFilters())
         this.reqFiltred = this.recordObject.separateChecklist(returnReq)
-        console.log()
         if(this.selectInfo(".optionSelectOpt input[type=checkbox]").length > 0) this.reqFiltred.forEach(ele => ele[0].qtd_questions = this.selectInfo(".optionSelectOpt input[type=checkbox]").length)
         this.recordObject.setPoint(this.recordObject.generalGraphic(this.reqFiltred)[1][1])
         this.populaShopGraphic(returnReq)
@@ -152,6 +151,7 @@ export class SettingRecord {
         this.closeGraphicGeneral()
         this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(reqFiltred), "#mainGraphic", this.typeGraph)
         this.typeGraph = 2
+        this.recordObject.splitTo(returnReq.data)
         this.recordObject2.clppGraphich.clppGraphics(this.recordObject2.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicUnity", this.typeGraph)
         this.recordObject3.clppGraphich.clppGraphics(this.recordObject3.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicChecklist", this.typeGraph)
     }
