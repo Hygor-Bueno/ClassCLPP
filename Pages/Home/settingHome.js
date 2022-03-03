@@ -11,6 +11,7 @@ import { RecordObject } from "../../Components/objects/recordObject.js";
 import { ObjectChecklist } from "../../Components/objects/checklistObject.js";
 import { ClppGraphichObject } from "../../Components/objects/clppGraphichObject.js";
 import { PrintRecord } from "../../Components/printRecord.js";
+import { PrintRecord2 } from "../../Components/printRecord2.js";
 
 var listMessage = new MessageList
 var validator = new Validation
@@ -24,6 +25,8 @@ export class SettingHome {
     recordObject = new RecordObject;
     checklistObject = new ObjectChecklist;
     objectRecord = {};
+    objectShops={};
+    separateChecklist;
     async settings() {
         this.notifyMessage();
         this.carousel();
@@ -32,15 +35,22 @@ export class SettingHome {
         await this.reportAnsweredToday()
         this.configRecord()
         this.teste(this.checklistJson)
+        this.teste2(this.checklistJson)
     }
-    teste(checklistJson){
-        let printRecord = new PrintRecord;
 
-        console.log(checklistJson[352])
-        getB_id('teste').addEventListener('click', ()=>{ 
-            printRecord.main(checklistJson[352]);
-        })
+    teste(checklistJson) {
+        let printRecord = new PrintRecord;
+        console.log(this.objectRecord)
+        getB_id('teste').addEventListener('click', () => { printRecord.main(checklistJson[341]) })
     }
+
+    teste2(checklistJson) {
+        let printRecord2 = new PrintRecord2;
+
+
+        getB_id('teste2').addEventListener('click', () => { printRecord2.main(checklistJson[343]) })
+    }
+
     openMessage() {
         getB_id('message').setAttribute('style', 'display:flex')
     }
@@ -87,7 +97,7 @@ export class SettingHome {
             getB_id(`${iterator.getAttribute('id')}`).remove()                                                                              // remove o usuário da lista de mensagens não vizualizadas.
             this.settingsButtonChat(temp)                                                                                                   // Atribui as funcionalidades aos botões do Chat.
             document.querySelector('#bodyMessageDiv section').scrollTop = document.querySelector('#bodyMessageDiv section').scrollHeight;   // Faz com que o Scroll preaneça sempre em baixo.
-            webSocket.informPreview([objectSenders.send ? 'send' : 'group', objectSenders.id])                                                 // informa so websocket que o usuário abriu uma mensagem, passando por parâmento o destinatário da mensagem.
+            webSocket.informPreview([objectSenders.send ? 'send' : 'group', objectSenders.id])                                              // informa so websocket que o usuário abriu uma mensagem, passando por parâmento o destinatário da mensagem.
         })
     }
     settingsButtonChat(idSender) {
@@ -136,12 +146,11 @@ export class SettingHome {
     async reportAnsweredToday() {
         try {
             let reportDay;
-            let shops;
             let req = ""
             await Promise.all([connectionCLPP.get(`&id_user=${localStorage.getItem("id")}&notification`, "CLPP/Response.php"), connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')]).then(response => { req = response })
             reportDay = req[0]
-            shops = this.shopJson(req[1].data)
-            let jsonReportCard = await this.contructorJsonCard(this.recordObject.separateChecklist(reportDay), shops)
+            this.objectShops = this.shopJson(req[1].data)
+            let jsonReportCard = await this.contructorJsonCard(this.recordObject.separateChecklist(reportDay), this.objectShops)
             this.cardRecord(jsonReportCard, '#bodyReportDiv');
         } catch (exception) {
             return `<P></P>`
@@ -149,6 +158,7 @@ export class SettingHome {
     }
 
     async contructorJsonCard(pay, shops) {
+        this.separateChecklist = pay;
         let response = []
         for await (const uniqueChecklist of pay) {
             let userData = await connectionCLPP.get("&id=" + uniqueChecklist[0].id_user, "CCPP/Employee.php")
@@ -224,7 +234,13 @@ export class SettingHome {
         arrays.data.forEach(array => {
             this.objectRecord[array.id] = array;
         })
-        console.log(this.objectRecord)
+    }
+    returnJsonObject(arrays) {
+        let response = {}
+        arrays.data.forEach(array => {
+            response[array.id] = array;
+        })
+        return response
     }
     configRecord() {
         let routers = new Routers;
