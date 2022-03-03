@@ -25,7 +25,7 @@ export class SettingHome {
     recordObject = new RecordObject;
     checklistObject = new ObjectChecklist;
     objectRecord = {};
-    objectShops={};
+    objectShops = {};
     separateChecklist;
     async settings() {
         this.notifyMessage();
@@ -44,11 +44,19 @@ export class SettingHome {
         getB_id('teste').addEventListener('click', () => { printRecord.main(checklistJson[341]) })
     }
 
-    teste2(checklistJson) {
+    async teste2() {
         let printRecord2 = new PrintRecord2;
+        getB_id('teste2').addEventListener('click', () => { printRecord2.main(this.checklistJson[343]) })
 
+        let reportDay;
+        let req = ""
+        await Promise.all([connectionCLPP.get(`&id_user=${localStorage.getItem("id")}&notification`, "CLPP/Response.php"), connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')]).then(response => { req = response })
 
-        getB_id('teste2').addEventListener('click', () => { printRecord2.main(checklistJson[343]) })
+        reportDay = req[0]
+        this.objectShops = this.shopJson(req[1].data)
+        let jsonReportCard = await this.contructorJsonCard(this.recordObject.separateChecklist(reportDay), this.objectShops)
+        console.log(jsonReportCard)
+
     }
 
     openMessage() {
@@ -151,6 +159,7 @@ export class SettingHome {
             reportDay = req[0]
             this.objectShops = this.shopJson(req[1].data)
             let jsonReportCard = await this.contructorJsonCard(this.recordObject.separateChecklist(reportDay), this.objectShops)
+            console.log(jsonReportCard)
             this.cardRecord(jsonReportCard, '#bodyReportDiv');
         } catch (exception) {
             return `<P></P>`
