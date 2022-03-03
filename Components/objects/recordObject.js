@@ -158,6 +158,7 @@ export class RecordObject extends ConnectionCLPP {
         return " " + result[2] + "/" + result[1]
     }
     computePercent(responseChecklist, max) {
+        // console.log(responseChecklist[0][0].qtd_questions = 1)
         let question = 0;
         let sum = 0;
         let ignore = 0;
@@ -165,12 +166,14 @@ export class RecordObject extends ConnectionCLPP {
             question += parseFloat(allQuestion[0].qtd_questions);
             for (const options of allQuestion) {
                 if (options.type <= 2) {
-                    sum += parseFloat(options.value)
+                    sum += parseFloat(options.value);
                 } else {
                     ignore++;
                 }
             }
         }
+        // console.log(question, ignore, sum)
+        // console.log((100 / (question - ignore) * sum).toFixed(2) / max)
         return (100 / (question - ignore) * sum).toFixed(2) / max
     }
 }
