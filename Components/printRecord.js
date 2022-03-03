@@ -18,7 +18,7 @@ export class PrintRecord {
                 ${this.printStyle()}
             </head>  
             <div id="divRecordPrint">
-                <header >
+                <header>
                     <h1>${objectChecklist.getTitle().toUpperCase()}</h1>
                     <img src="./assets/images/fundoCLPPoficial.ico" title="logo CLPP"/>
                 </header>
