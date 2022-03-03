@@ -1,5 +1,5 @@
 export class PrintRecord2 {
-    main(objectChecklist) {
+    main(objectChecklist, resposta) {
         let response =
             `<html>
             <head>
@@ -14,11 +14,11 @@ export class PrintRecord2 {
                 </header>
                 <div id="subHeader">
                 </div>
-                ${this.printReport(objectChecklist.getQuestion())}
+                ${this.printReport(objectChecklist.getQuestion(), resposta)}
             </div>
         </html> `
 
-        console.log(objectChecklist)
+        console.log(resposta)
         var win = window.open();
         win.document.write(response);
         win.document.close();
@@ -120,18 +120,17 @@ export class PrintRecord2 {
         `
     }
 
-    printReport(objectQuestions) {
-        console.log(objectQuestions)
+    printReport(objectQuestions, resposta) {
         let response = `
         <div id="dados">
-            ${this.populateQuestion(objectQuestions)}
+            ${this.populateQuestion(objectQuestions, resposta)}
         </div>
         `
         return response;
     }
 
-    populateQuestion(objectQuestions) {
-        console.log(objectQuestions)
+    populateQuestion(objectQuestions, resposta) {
+
         return objectQuestions.map((question) => (
             `
             <div id="question_${question.id}" class="questionRecord">
@@ -139,7 +138,7 @@ export class PrintRecord2 {
                     <h2>${question.description.toUpperCase()}</h2>
                 </header>
                 <section>
-                    ${this.populateShop(question)}    
+                    ${this.populateShop(question, resposta)}    
                     <aside class="photoObservation">
                     </aside>
                 </section >
@@ -147,7 +146,8 @@ export class PrintRecord2 {
             `)).join("")
     }
 
-    populateShop(question) {
+    populateShop(question, resposta) {
+        console.log(resposta)
         let response = "";
         return response +=
             `<div class="contentOption">
@@ -159,7 +159,7 @@ export class PrintRecord2 {
     }
 
     populateOptions(question) {
-        console.log(question)
+
         let response = "";
         Object.keys(question).forEach(key => {
             if (typeof question[key] == 'object') {
