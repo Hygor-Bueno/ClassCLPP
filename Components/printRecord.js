@@ -97,6 +97,12 @@ export class PrintRecord {
                         ${this.populateOptions(question)}
                     </div>
                     <aside class="photoObservation">
+                        <div id="photoRecord">
+                            <img id="photoRecordImg" src = "./assets/images/recordPhoto.png" title = "Foto"/>
+                        </div>
+                        <div id="ObservationRecord">
+                            <img id="ObservationRecordImg" src = "./assets/images/observationRecord.png" title = "Foto"/>
+                        </div>
                     </aside>
                 </section>
             </div>
@@ -162,7 +168,7 @@ export class PrintRecord {
                     align-items: center;  
                     background:#aaa;   
                     margin:0px;   
-                    height:100%;   
+                    height:auto;   
                 }
                 #divRecordPrint{
                     display: flex;
@@ -181,7 +187,7 @@ export class PrintRecord {
                     border-bottom: 1px solid rgb(178,178,178);
                     min-height: 50px;
                 }
-                #divRecordPrint img{
+                #divRecordPrint header img{
                     width:50px;
                 }
                 #subHeader{
@@ -237,14 +243,22 @@ export class PrintRecord {
                     margin-left:5px;
                 }
                 .photoObservation{
-                   
-                    min-height:20px;
-                    min-width:20px;
-                    width:60%;
+                    display: flex;
+                    min-height: 20px;
+                    min-width: 20px;
+                    width: 60%;
                 }
                 .sectionOption{
                     display:flex;
                     align-items: center;
+                }
+                #photoRecord{
+                   width:50%;
+                   height:100px;
+                }
+                #observationRecord{
+                    width:50%;
+                    height:100px;
                 }
             </style>
         `

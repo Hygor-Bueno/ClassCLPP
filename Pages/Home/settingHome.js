@@ -38,7 +38,7 @@ export class SettingHome {
     }
     teste(checklistJson){
         let printRecord = new PrintRecord;
-        getB_id('teste').addEventListener('click', async ()=>{printRecord.main(checklistJson[352],this.separateChecklist[0],this.objectShops,this.returnJsonObject(await this.checklistObject.get("&application_id=7&web","CCPP/UserAccess.php")))})
+        getB_id('teste').addEventListener('click', async ()=>{printRecord.main(checklistJson[352],this.separateChecklist[1],this.objectShops,this.returnJsonObject(await this.checklistObject.get("&application_id=7&web","CCPP/UserAccess.php")))})
     }
     openMessage() {
         getB_id('message').setAttribute('style', 'display:flex')
@@ -86,7 +86,7 @@ export class SettingHome {
             getB_id(`${iterator.getAttribute('id')}`).remove()                                                                              // remove o usuário da lista de mensagens não vizualizadas.
             this.settingsButtonChat(temp)                                                                                                   // Atribui as funcionalidades aos botões do Chat.
             document.querySelector('#bodyMessageDiv section').scrollTop = document.querySelector('#bodyMessageDiv section').scrollHeight;   // Faz com que o Scroll preaneça sempre em baixo.
-            webSocket.informPreview([objectSenders.send ? 'send' : 'group', objectSenders.id])                                                 // informa so websocket que o usuário abriu uma mensagem, passando por parâmento o destinatário da mensagem.
+            webSocket.informPreview([objectSenders.send ? 'send' : 'group', objectSenders.id])                                              // informa so websocket que o usuário abriu uma mensagem, passando por parâmento o destinatário da mensagem.
         })
     }
     settingsButtonChat(idSender) {
