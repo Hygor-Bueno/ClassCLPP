@@ -59,22 +59,8 @@ export class PrintRecord {
         </script>
         `
     }
-    // date: "2022-03-01"
-    // date_final: null
-    // date_init: null
-    // description: null
-    // id: "510"
-    // id_checklist: "352"
-    // id_option_question: "1388"
-    // id_question: "1151"
-    // id_shop: "1"
-    // id_user: "5"
-    // photo: null
-    // qtd_questions: "6"
-    // type: "2"
-    // value: "1"
-    printReport(objectQuestions, arrayResponse) {
 
+    printReport(objectQuestions, arrayResponse) {
         let response = `
         <div id="dados">
             ${this.populateQuestion(objectQuestions, arrayResponse)}
@@ -86,23 +72,36 @@ export class PrintRecord {
     populateQuestion(objectQuestions, arrayResponse) {
         let cont = 0;
         return objectQuestions.map((question) => {
-            cont++;
-            return `
-            <div id="question_${question.id}" class="questionRecord">
-                <header>
-                    <h2>${cont} - ${question.description.toUpperCase()}</h2>
-                </header>
-                <section>
-                    <div class="contentOption">
-                        ${this.populateOptions(question)}
-                    </div>
-                    <aside class="photoObservation">
-                        ${this.populateItensMandatory(question, arrayResponse)}
-                        
-                    </aside>
-                </section>
-            </div>
-            `}).join("")
+            let response = ""
+            if(this.validationQuetions(question.id, arrayResponse)){cont++;
+                response+= `
+                <div id="question_${question.id}" class="questionRecord">
+                    <header>
+                        <h2>${cont} - ${question.description.toUpperCase()}</h2>
+                    </header>
+                    <section>
+                        <div class="contentOption">
+                            ${this.populateOptions(question)}
+                        </div>
+                        <aside class="photoObservation">
+                            ${this.populateItensMandatory(question, arrayResponse)}
+                            
+                        </aside>
+                    </section>
+                </div>
+                `}
+                return response
+        }).join("")
+    }
+
+    validationQuetions(idQuestion, arrayResponse){
+        let response = false;
+
+        console.log(idQuestion, arrayResponse)
+        arrayResponse.forEach(responseID =>{
+            if(responseID.id_question == idQuestion) response = true;
+        })
+        return response;
     }
 
     populateOptions(question) {
