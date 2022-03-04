@@ -159,12 +159,10 @@ export class SettingRecord {
         let filtredForGraph = []
         graphicShop.forEach(ele =>{
             let shop = this.jsonShop[ele[0][0].id_shop].description
-            console.log("==>> ",ele)
             let assistentArray = this.recordObject2.generalGraphic(ele, this.jsonCheck, this.jsonShop)
-            assistentArray[1][0]=shop
+            assistentArray[1][0] = shop
             filtredForGraph.push(assistentArray[1])
         })
-        console.log(filtredForGraph)
         this.recordObject2.clppGraphich.clppGraphics(filtredForGraph, "#graphicUnity", this.typeGraph)
 
     }
