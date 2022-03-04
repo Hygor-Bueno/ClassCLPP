@@ -6,19 +6,10 @@ export class PrintRecord {
         localStorage.setItem('reponseJson', JSON.stringify(arrayResponse))
         localStorage.setItem('shopJson', JSON.stringify(objectShop))
         localStorage.setItem('userJson', JSON.stringify(objectUsers))
-
         let useFulComponents = new UsefulComponents;
         let recordObject = new RecordObject;
-
-
-        let response = `
-        <html>
-            <head>
-                <style type="text/css"></style> 
-                <title>Deu certo</title>
-                ${this.printStyle()}
-            </head>  
-            <div id="divRecordPrint">
+        let response =
+            `<div id="divRecordPrint">
                 <header>
                     <h1>${objectChecklist.getTitle().toUpperCase()}</h1>
                     <img src="./assets/images/fundoCLPPoficial.ico" title="logo CLPP"/>
@@ -31,15 +22,28 @@ export class PrintRecord {
                 </div>
                 ${this.printReport(objectChecklist.getQuestion(), arrayResponse)}
             </div>
-            ${this.printScript(arrayResponse)}
-        </html>
-        `
+            
+            `         
+        return response;
+    }
+    printFile(response,arrayResponse) {
+        let fileRecord = `
+                        <html>
+                            <head>
+                                <style type="text/css"></style> 
+                                <title>Deu certo</title>
+                                ${this.printStyle()}
+                            </head>  
+                            ${response}
+                            ${this.printScript(arrayResponse)}
+                        </html>
+                        `
+
         // var win = window.open("","","width=900,height=900");
         var win = window.open();
-        win.document.write(response);
+        win.document.write(fileRecord);
         win.document.close();
         // win.print();
-        return response;
     }
     printScript() {
         return `
@@ -73,8 +77,9 @@ export class PrintRecord {
         let cont = 0;
         return objectQuestions.map((question) => {
             let response = ""
-            if(this.validationQuetions(question.id, arrayResponse)){cont++;
-                response+= `
+            if (this.validationQuetions(question.id, arrayResponse)) {
+                cont++;
+                response += `
                 <div id="question_${question.id}" class="questionRecord">
                     <header>
                         <h2>${cont} - ${question.description.toUpperCase()}</h2>
@@ -90,16 +95,14 @@ export class PrintRecord {
                     </section>
                 </div>
                 `}
-                return response
+            return response
         }).join("")
     }
 
-    validationQuetions(idQuestion, arrayResponse){
+    validationQuetions(idQuestion, arrayResponse) {
         let response = false;
-
-        console.log(idQuestion, arrayResponse)
-        arrayResponse.forEach(responseID =>{
-            if(responseID.id_question == idQuestion) response = true;
+        arrayResponse.forEach(responseID => {
+            if (responseID.id_question == idQuestion) response = true;
         })
         return response;
     }
@@ -120,9 +123,7 @@ export class PrintRecord {
     populateItensMandatory(question, arrayResponse) {
         let response = "";
         let stopInsert = 0;
-        // arrayResponse = localStorage.getItem('reponseJson')
         arrayResponse.forEach(resp => {
-    
             if (question.id == resp.id_question) {
                 if (resp.photo != null && resp.description == null) {
                     response += `
@@ -132,7 +133,7 @@ export class PrintRecord {
                                 <div id="ObservationRecord">
                                     <img id="ObservationRecordImg" src = "./assets/images/observationRecord.png" title = "Observação"/>
                                 </div>
-                                `
+                            `
                 } else if (resp.description != null && resp.photo == null) {
                     response += `
                                 <div id="photoRecord">
@@ -141,8 +142,8 @@ export class PrintRecord {
                                 <div id="ObservationRecord">
                                     <p>${resp.description}</p>
                                 </div>
-                             `
-                } else if(resp.description != null && resp.photo != null){
+                            `
+                } else if (resp.description != null && resp.photo != null) {
                     response += `
                                 <div id="photoRecord">
                                     <img id="photoRecordImg" class="photoResponse" src = "http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/${resp.photo}.png" title = "Foto" />
@@ -153,21 +154,18 @@ export class PrintRecord {
                             `
                 }
                 else {
-                    console.log(stopInsert , resp.type)
-                    if(stopInsert == 0){
-
+                    if (stopInsert == 0) {
                         response += `
-                        <div id="photoRecord">
-                        <img id="photoRecordImg" src = "./assets/images/recordPhoto.png" title = "Foto"/>
-                        </div>
-                        <div id="ObservationRecord">
-                        <img id="ObservationRecordImg" src = "./assets/images/observationRecord.png" title = "Observação"/>
-                        </div>
-                        `
+                                <div id="photoRecord">
+                                    <img id="photoRecordImg" src = "./assets/images/recordPhoto.png" title = "Foto"/>
+                                </div>
+                                <div id="ObservationRecord">
+                                    <img id="ObservationRecordImg" src = "./assets/images/observationRecord.png" title = "Observação"/>
+                                </div>
+                            `
                     }
-                    resp.type == '1' ? stopInsert ++ : stopInsert = 0;
+                    resp.type == '1' ? stopInsert++ : stopInsert = 0;
                 }
-
             }
         })
         return response;
