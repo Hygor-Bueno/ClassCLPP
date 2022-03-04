@@ -35,20 +35,12 @@ export class SettingHome {
         await this.reportAnsweredToday()
         this.configRecord()
         this.teste(this.checklistJson)
-        this.teste2(this.checklistJson)
+      
     }
 
     teste(checklistJson) {
         let printRecord = new PrintRecord;
-        console.log(this.objectRecord)
-        getB_id('teste').addEventListener('click', () => { printRecord.main(checklistJson[341]) })
-    }
-
-    teste2(checklistJson) {
-        let printRecord2 = new PrintRecord2;
-
-
-        getB_id('teste2').addEventListener('click', () => { printRecord2.main(checklistJson[343]) })
+        getB_id('teste').addEventListener('click', async ()=>{printRecord.main(checklistJson[352],this.separateChecklist[1],this.objectShops,this.returnJsonObject(await this.checklistObject.get("&application_id=7&web","CCPP/UserAccess.php")))})
     }
 
     openMessage() {
