@@ -101,12 +101,25 @@ export class RecordObject extends ConnectionCLPP {
         }
         return { data: arrayResp };
     }
-
+    splitTo(array){
+        let response = []
+        response = this.organize(array.sort((a,b)=> a.id_shop - b.id_shop))
+        return response
+    }
+    organize(array){
+        let idShops=[]
+        let response = []
+        array.filter(a => {if(keys.indexOf(a.id_shop)<0) keys.push(a.id_shop)})
+        idShops.forEach((idShop,i) => {
+            array.forEach((element,index) => {if(element.id_shop == idShop)response[i] = [response[index],element]})
+        })
+        console.log(response,keys)
+    }
     separateChecklist(response) {
         let orderByChecklist = [];
         let assistent = this.getKeys(response);
         assistent.forEach(elemKey => {
-            orderByChecklist.push(response.data.filter(element => { return elemKey[0] == element.id_user && elemKey[1] == element.date && elemKey[2] == element.id_checklist && elemKey[3] == element.id_shop }));
+            orderByChecklist.push(response.data.filter(element => {return elemKey[0] == element.id_user && elemKey[1] == element.date && elemKey[2] == element.id_checklist && elemKey[3] == element.id_shop }));
         })
         return orderByChecklist;
     }
@@ -165,7 +178,7 @@ export class RecordObject extends ConnectionCLPP {
             question += parseFloat(allQuestion[0].qtd_questions);
             for (const options of allQuestion) {
                 if (options.type <= 2) {
-                    sum += parseFloat(options.value)
+                    sum += parseFloat(options.value);
                 } else {
                     ignore++;
                 }
