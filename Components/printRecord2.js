@@ -1,5 +1,6 @@
 export class PrintRecord2 {
-    main(objectChecklist, resposta) {
+    main(objectChecklist, resposta, shops) {
+        console.log(resposta)
         let response =
             `<html>
             <head>
@@ -14,11 +15,10 @@ export class PrintRecord2 {
                 </header>
                 <div id="subHeader">
                 </div>
-                ${this.printReport(objectChecklist.getQuestion(), resposta)}
+                ${this.printReport(objectChecklist.getQuestion(), resposta, shops)}
             </div>
         </html> `
 
-        console.log(resposta)
         var win = window.open();
         win.document.write(response);
         win.document.close();
@@ -120,86 +120,68 @@ export class PrintRecord2 {
         `
     }
 
-    printReport(objectQuestions, resposta) {
+
+
+    printReport(objectQuestions, resposta, shops) {
         let response = `
-        <div id="dados">
-            ${this.populateQuestion(objectQuestions, resposta)}
-        </div>
-        `
+    <div id="dados">
+        ${this.populateQuestion(objectQuestions, resposta, shops)}
+    </div>
+    `
         return response;
     }
 
-    populateQuestion(objectQuestions, resposta) {
-
+    populateQuestion(objectQuestions, resposta, shops) {
+        console.log(objectQuestions)
         return objectQuestions.map((question) => (
             `
-            <div id="question_${question.id}" class="questionRecord">
-                <header>
-                    <h2>${question.description.toUpperCase()}</h2>
-                </header>
-                <section>
-                    ${this.populateShop(question, resposta)}    
-                    <aside class="photoObservation">
-                    </aside>
-                </section >
-            </div >
-            `)).join("")
+        <div id="question_${question.id}" class="questionRecord">
+            <header>
+                <h2>${question.description}</h2>
+            </header>
+            <section>
+                ${this.populateShop(objectQuestions, resposta, shops)}
+                <aside class="photoObservation">
+                </aside>
+            </section >
+        </div >
+        `)).join("")
     }
-
-    populateShop(question, resposta) {
-        console.log(resposta)
+    populateShop(objectQuestions, resposta, shops) {
         let response = "";
-        return response +=
-            `<div class="contentOption">
+        let a = ""
+        let unidade = ":´("
+        resposta.forEach(question => {
+            //console.log(question)
+            question.forEach(loja => {
 
-               <main><h3>Interlagos</h3>${this.populateOptions(question)}</main> 
-               <main><h3>Taboão</h3>${this.populateOptions(question)}</main> 
-            </div>`
+                console.log(loja)
+                unidade = shops[loja.id_shop].description
+            })
 
-    }
+        })
 
-    populateOptions(question) {
+        objectQuestions.forEach(question => {
+            a = (question.op_1.description)
+            response +=
+                `<div class="contentOption">
+                     <main>
+                        <h3>${unidade}</h3>
+                        ${a}
+                    </main>
+                    <main>
+                        <h3>Interlagos</h3>
+                        ${a}
+                    </main>
+                </div>`
 
-        let response = "";
-        Object.keys(question).forEach(key => {
-            if (typeof question[key] == 'object') {
-                response += `
-                    <div id="option_${question[key].id}" >
-                        ${this.selectInput(question.type, question[key])} 
-                    </div>
-                `;
-            };
-        });
+        })
+
+
+
+
+        console.log(a)
         return response;
-    }
 
-    selectInput(typeOption, options) {
-        let response;
-        switch (typeOption) {
-            case 1:
-                response = `<input type = "checkbox" disabled /><label>${options.description.toUpperCase()}</label> `
-                break;
-            case 2:
-                response = `<input type = "radio" disabled /> <label>${options.description.toUpperCase()}</label>`
-                break;
-            case 3:
-                response = `
-                <div class="sectionQuestion">
-                    <label>NOME: </label>
-                    <input type="text" placeholder="Digite o Nome" disabled />
-                    <label>CPF: </label>
-                    <input type="text" placeholder="Digite o CPF" disabled />
-                </div>
-                `
-                break;
-            case 4:
-                response = `
-                <div class="sectionOption">
-                    <input type = "text" placeholder = "Assine Aqui..." disabled /> <img src = "./assets/images/signature.svg" title = "Assinatura"/>
-                </div>
-                `
-                break;
-        }
-        return response;
     }
 }
