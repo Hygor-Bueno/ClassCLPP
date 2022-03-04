@@ -2,53 +2,77 @@ import { UsefulComponents } from "../Util/usefulComponents.js"
 import { RecordObject } from "./objects/recordObject.js";
 
 export class PrintRecord {
-    main(objectChecklist, arrayResponse, objectShop, objectUsers) {
-        localStorage.setItem('reponseJson', JSON.stringify(arrayResponse))
-        localStorage.setItem('shopJson', JSON.stringify(objectShop))
-        localStorage.setItem('userJson', JSON.stringify(objectUsers))
+    async main(objectChecklist, arrayResponse, objectShop, objectUsers) {
+        console.log("Objeto Checklist ->",objectChecklist,"Array Response ->", arrayResponse,"Objeto Shop ->", objectShop,"Objeto Users ->", objectUsers)
+        console.log(`${arrayResponse[0][0].id}`)
+        var win = window.open();
+        
+        localStorage.setItem('reponseJson', JSON.stringify(arrayResponse[0]))
+        
         let useFulComponents = new UsefulComponents;
         let recordObject = new RecordObject;
-        let response =
-            `<div id="divRecordPrint">
+        let response="";
+        arrayResponse.forEach(arrayResp=>{
+        console.log(objectChecklist[arrayResp[0].id_checklist])
+            
+        response +=
+            `<div id="record_${arrayResp[0].id}" class="divRecordPrint">
                 <header>
-                    <h1>${objectChecklist.getTitle().toUpperCase()}</h1>
+                    <h1>${objectChecklist[arrayResp[0].id_checklist].getTitle().toUpperCase()}</h1>
                     <img src="./assets/images/fundoCLPPoficial.ico" title="logo CLPP"/>
                 </header>
                 <div id="subHeader">
-                    <p><b>Usuário:</b> ${useFulComponents.splitStringName(objectUsers[arrayResponse[0].id_user]["user"], " ")}</p>
-                    <p><b>Unidade:</b> ${objectShop[arrayResponse[0].id_shop].description}</p>
-                    <p><b>Data da Resposta:</b> ${useFulComponents.convertData(arrayResponse[0].date, "-")}</p>
-                    <p><b>Pontuação: </b>${recordObject.generalGraphic(recordObject.separateChecklist({ data: arrayResponse }))[1][1]}%</p>                                          
+                    <p><b>Usuário:</b> ${useFulComponents.splitStringName(objectUsers[arrayResp[0].id_user]["user"], " ")}</p>
+                    <p><b>Unidade:</b> ${objectShop[arrayResp[0].id_shop].description}</p>
+                    <p><b>Data da Resposta:</b> ${useFulComponents.convertData(arrayResp[0].date, "-")}</p>
+                    <p><b>Pontuação: </b>${recordObject.generalGraphic(recordObject.separateChecklist({ data: arrayResp }))[1][1]}%</p>                                          
                 </div>
-                ${this.printReport(objectChecklist.getQuestion(), arrayResponse)}
+                ${this.printReport(objectChecklist[arrayResp[0].id_checklist].getQuestion(), arrayResp)}
             </div>
-            
-            `         
+            <br/>
+            `
+        })
+        let fileRecord = `
+        <html>
+            <head>
+                <style type="text/css"></style> 
+                <title>Deu certo</title>
+                ${this.printStyle()}
+            </head>  
+                ${response}
+                ${this.printScript(arrayResponse[0])}
+        </html>
+        
+        `
+        win.document.write(fileRecord);
+
+        // this.printFile(response, arrayResponse);
+       
         return response;
     }
-    printFile(response,arrayResponse) {
-        let fileRecord = `
-                        <html>
-                            <head>
-                                <style type="text/css"></style> 
-                                <title>Deu certo</title>
-                                ${this.printStyle()}
-                            </head>  
-                            ${response}
-                            ${this.printScript(arrayResponse)}
-                        </html>
-                        `
+    // printFile(response, arrayResponse) {
+    //     let fileRecord = `
+    //                     <html>
+    //                         <head>
+    //                             <style type="text/css"></style> 
+    //                             <title>Deu certo</title>
+    //                             ${this.printStyle()}
+    //                         </head>  
+    //                         ${response}
+    //                         ${this.printScript(arrayResponse)}
+    //                     </html>
+    //                     `
 
-        // var win = window.open("","","width=900,height=900");
-        var win = window.open();
-        win.document.write(fileRecord);
-        win.document.close();
-        // win.print();
-    }
+    //     // var win = window.open("","","width=900,height=900");
+    //     var win = window.open();
+    //     win.document.write(fileRecord);
+    //     win.document.close();
+    //     // win.print();
+    // }
     printScript() {
         return `
         <script>
-            function sera(){
+            function selectOption(){
                 let arrayResponse;
                 localStorage.getItem('reponseJson') ? arrayResponse = JSON.parse(localStorage.getItem('reponseJson')) : "";
                 arrayResponse.forEach(e=>{
@@ -58,7 +82,7 @@ export class PrintRecord {
                 })
             }
 
-            sera();
+            selectOption();
             document.querySelector(".photoResponse").style.transform = 'rotate(90deg)';
         </script>
         `
@@ -218,7 +242,7 @@ export class PrintRecord {
                     margin:0px;   
                     height:auto;   
                 }
-                #divRecordPrint{
+                .divRecordPrint{
                     display: flex;
                     flex-direction: column;
                     align-items: center;   
@@ -227,7 +251,7 @@ export class PrintRecord {
                     height:auto;
                     min-height:100%;
                 }
-                #divRecordPrint header  {
+                .divRecordPrint header  {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
@@ -235,7 +259,7 @@ export class PrintRecord {
                     border-bottom: 1px solid rgb(178,178,178);
                     min-height: 50px;
                 }
-                #divRecordPrint header img{
+                .divRecordPrint header img{
                     width:50px;
                 }
                 #subHeader{
@@ -255,20 +279,20 @@ export class PrintRecord {
                     padding:5px;
                     border-bottom: 1px solid rgb(178,178,178);
                 }
-                #divRecordPrint .questionRecord header{  
+                .divRecordPrint .questionRecord header{  
                     border-bottom:none;
                     background:none;
                     height: 50px;
                 }
-                #divRecordPrint .questionRecord section{
+                .divRecordPrint .questionRecord section{
                     display: flex;
                     min-height: 60px;
                     font-size: 20px;
                 }
-                #divRecordPrint .questionRecord section input{ 
+                .divRecordPrint .questionRecord section input{ 
                     font-size: 18px;
                 }
-                #divRecordPrint header h1, .questionRecord h2{
+                .divRecordPrint header h1, .questionRecord h2{
                     margin-left:5px;
                 }
             
@@ -285,7 +309,7 @@ export class PrintRecord {
                     justify-content: center;
                     color:#ccc;
                 }
-                #divRecordPrint .contentOption img{
+                .divRecordPrint .contentOption img{
                     bottom:0;
                     width:30px;
                     margin-left:5px;
