@@ -151,10 +151,24 @@ export class SettingRecord {
         this.closeGraphicGeneral()
         this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(reqFiltred), "#mainGraphic", this.typeGraph)
         this.typeGraph = 2
-        this.recordObject.splitTo(returnReq.data)
-        this.recordObject2.clppGraphich.clppGraphics(this.recordObject2.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicUnity", this.typeGraph)
+        this.graphicMiniDiv(returnReq)
         this.recordObject3.clppGraphich.clppGraphics(this.recordObject3.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicChecklist", this.typeGraph)
     }
+    graphicMiniDiv(returnReq){
+        let graphicShop = this.recordObject.splitTo(returnReq.data)
+        let filtredForGraph = []
+        graphicShop.forEach(ele =>{
+            let shop = this.jsonShop[ele[0][0].id_shop].description
+            console.log("==>> ",ele)
+            let assistentArray = this.recordObject2.generalGraphic(ele, this.jsonCheck, this.jsonShop)
+            assistentArray[1][0]=shop
+            filtredForGraph.push(assistentArray[1])
+        })
+        console.log(filtredForGraph)
+        this.recordObject2.clppGraphich.clppGraphics(filtredForGraph, "#graphicUnity", this.typeGraph)
+
+    }
+
     populaShopGraphic(returnReq) {
         getB_id('popupaShopGra').innerHTML = ""
         getB_id('popupaShopGra').insertAdjacentHTML('beforeend', `<option class="popupaShopGra">Unidade</option>`)
