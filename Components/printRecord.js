@@ -2,49 +2,77 @@ import { UsefulComponents } from "../Util/usefulComponents.js"
 import { RecordObject } from "./objects/recordObject.js";
 
 export class PrintRecord {
-    main(objectChecklist, arrayResponse, objectShop, objectUsers) {
-        localStorage.setItem('reponseJson', JSON.stringify(arrayResponse))
-        localStorage.setItem('shopJson', JSON.stringify(objectShop))
-        localStorage.setItem('userJson', JSON.stringify(objectUsers))
-
+    async main(objectChecklist, arrayResponse, objectShop, objectUsers) {
+        console.log("Objeto Checklist ->",objectChecklist,"Array Response ->", arrayResponse,"Objeto Shop ->", objectShop,"Objeto Users ->", objectUsers)
+        console.log(`${arrayResponse[0][0].id}`)
+        var win = window.open();
+        
+        localStorage.setItem('reponseJson', JSON.stringify(arrayResponse[0]))
+        
         let useFulComponents = new UsefulComponents;
         let recordObject = new RecordObject;
-
-
-        let response = `
+        let response="";
+        arrayResponse.forEach(arrayResp=>{
+        console.log(objectChecklist[arrayResp[0].id_checklist])
+            
+        response +=
+            `<div id="record_${arrayResp[0].id}" class="divRecordPrint">
+                <header>
+                    <h1>${objectChecklist[arrayResp[0].id_checklist].getTitle().toUpperCase()}</h1>
+                    <img src="./assets/images/fundoCLPPoficial.ico" title="logo CLPP"/>
+                </header>
+                <div id="subHeader">
+                    <p><b>Usuário:</b> ${useFulComponents.splitStringName(objectUsers[arrayResp[0].id_user]["user"], " ")}</p>
+                    <p><b>Unidade:</b> ${objectShop[arrayResp[0].id_shop].description}</p>
+                    <p><b>Data da Resposta:</b> ${useFulComponents.convertData(arrayResp[0].date, "-")}</p>
+                    <p><b>Pontuação: </b>${recordObject.generalGraphic(recordObject.separateChecklist({ data: arrayResp }))[1][1]}%</p>                                          
+                </div>
+                ${this.printReport(objectChecklist[arrayResp[0].id_checklist].getQuestion(), arrayResp)}
+            </div>
+            <br/>
+            `
+        })
+        let fileRecord = `
         <html>
             <head>
                 <style type="text/css"></style> 
                 <title>Deu certo</title>
                 ${this.printStyle()}
             </head>  
-            <div id="divRecordPrint">
-                <header>
-                    <h1>${objectChecklist.getTitle().toUpperCase()}</h1>
-                    <img src="./assets/images/fundoCLPPoficial.ico" title="logo CLPP"/>
-                </header>
-                <div id="subHeader">
-                    <p><b>Usuário:</b> ${useFulComponents.splitStringName(objectUsers[arrayResponse[0].id_user]["user"], " ")}</p>
-                    <p><b>Unidade:</b> ${objectShop[arrayResponse[0].id_shop].description}</p>
-                    <p><b>Data da Resposta:</b> ${useFulComponents.convertData(arrayResponse[0].date, "-")}</p>
-                    <p><b>Pontuação: </b>${recordObject.generalGraphic(recordObject.separateChecklist({ data: arrayResponse }))[1][1]}%</p>                                          
-                </div>
-                ${this.printReport(objectChecklist.getQuestion(), arrayResponse)}
-            </div>
-            ${this.printScript(arrayResponse)}
+                ${response}
+                ${this.printScript(arrayResponse[0])}
         </html>
+        
         `
-        // var win = window.open("","","width=900,height=900");
-        var win = window.open();
-        win.document.write(response);
-        win.document.close();
-        // win.print();
+        win.document.write(fileRecord);
+
+        // this.printFile(response, arrayResponse);
+       
         return response;
     }
+    // printFile(response, arrayResponse) {
+    //     let fileRecord = `
+    //                     <html>
+    //                         <head>
+    //                             <style type="text/css"></style> 
+    //                             <title>Deu certo</title>
+    //                             ${this.printStyle()}
+    //                         </head>  
+    //                         ${response}
+    //                         ${this.printScript(arrayResponse)}
+    //                     </html>
+    //                     `
+
+    //     // var win = window.open("","","width=900,height=900");
+    //     var win = window.open();
+    //     win.document.write(fileRecord);
+    //     win.document.close();
+    //     // win.print();
+    // }
     printScript() {
         return `
         <script>
-            function sera(){
+            function selectOption(){
                 let arrayResponse;
                 localStorage.getItem('reponseJson') ? arrayResponse = JSON.parse(localStorage.getItem('reponseJson')) : "";
                 arrayResponse.forEach(e=>{
@@ -54,27 +82,13 @@ export class PrintRecord {
                 })
             }
 
-            sera();
+            selectOption();
             document.querySelector(".photoResponse").style.transform = 'rotate(90deg)';
         </script>
         `
     }
-    // date: "2022-03-01"
-    // date_final: null
-    // date_init: null
-    // description: null
-    // id: "510"
-    // id_checklist: "352"
-    // id_option_question: "1388"
-    // id_question: "1151"
-    // id_shop: "1"
-    // id_user: "5"
-    // photo: null
-    // qtd_questions: "6"
-    // type: "2"
-    // value: "1"
-    printReport(objectQuestions, arrayResponse) {
 
+    printReport(objectQuestions, arrayResponse) {
         let response = `
         <div id="dados">
             ${this.populateQuestion(objectQuestions, arrayResponse)}
@@ -86,23 +100,35 @@ export class PrintRecord {
     populateQuestion(objectQuestions, arrayResponse) {
         let cont = 0;
         return objectQuestions.map((question) => {
-            cont++;
-            return `
-            <div id="question_${question.id}" class="questionRecord">
-                <header>
-                    <h2>${cont} - ${question.description.toUpperCase()}</h2>
-                </header>
-                <section>
-                    <div class="contentOption">
-                        ${this.populateOptions(question)}
-                    </div>
-                    <aside class="photoObservation">
-                        ${this.populateItensMandatory(question, arrayResponse)}
-                        
-                    </aside>
-                </section>
-            </div>
-            `}).join("")
+            let response = ""
+            if (this.validationQuetions(question.id, arrayResponse)) {
+                cont++;
+                response += `
+                <div id="question_${question.id}" class="questionRecord">
+                    <header>
+                        <h2>${cont} - ${question.description.toUpperCase()}</h2>
+                    </header>
+                    <section>
+                        <div class="contentOption">
+                            ${this.populateOptions(question)}
+                        </div>
+                        <aside class="photoObservation">
+                            ${this.populateItensMandatory(question, arrayResponse)}
+                            
+                        </aside>
+                    </section>
+                </div>
+                `}
+            return response
+        }).join("")
+    }
+
+    validationQuetions(idQuestion, arrayResponse) {
+        let response = false;
+        arrayResponse.forEach(responseID => {
+            if (responseID.id_question == idQuestion) response = true;
+        })
+        return response;
     }
 
     populateOptions(question) {
@@ -121,9 +147,7 @@ export class PrintRecord {
     populateItensMandatory(question, arrayResponse) {
         let response = "";
         let stopInsert = 0;
-        // arrayResponse = localStorage.getItem('reponseJson')
         arrayResponse.forEach(resp => {
-    
             if (question.id == resp.id_question) {
                 if (resp.photo != null && resp.description == null) {
                     response += `
@@ -133,7 +157,7 @@ export class PrintRecord {
                                 <div id="ObservationRecord">
                                     <img id="ObservationRecordImg" src = "./assets/images/observationRecord.png" title = "Observação"/>
                                 </div>
-                                `
+                            `
                 } else if (resp.description != null && resp.photo == null) {
                     response += `
                                 <div id="photoRecord">
@@ -142,8 +166,8 @@ export class PrintRecord {
                                 <div id="ObservationRecord">
                                     <p>${resp.description}</p>
                                 </div>
-                             `
-                } else if(resp.description != null && resp.photo != null){
+                            `
+                } else if (resp.description != null && resp.photo != null) {
                     response += `
                                 <div id="photoRecord">
                                     <img id="photoRecordImg" class="photoResponse" src = "http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/${resp.photo}.png" title = "Foto" />
@@ -154,21 +178,18 @@ export class PrintRecord {
                             `
                 }
                 else {
-                    console.log(stopInsert , resp.type)
-                    if(stopInsert == 0){
-
+                    if (stopInsert == 0) {
                         response += `
-                        <div id="photoRecord">
-                        <img id="photoRecordImg" src = "./assets/images/recordPhoto.png" title = "Foto"/>
-                        </div>
-                        <div id="ObservationRecord">
-                        <img id="ObservationRecordImg" src = "./assets/images/observationRecord.png" title = "Observação"/>
-                        </div>
-                        `
+                                <div id="photoRecord">
+                                    <img id="photoRecordImg" src = "./assets/images/recordPhoto.png" title = "Foto"/>
+                                </div>
+                                <div id="ObservationRecord">
+                                    <img id="ObservationRecordImg" src = "./assets/images/observationRecord.png" title = "Observação"/>
+                                </div>
+                            `
                     }
-                    resp.type == '1' ? stopInsert ++ : stopInsert = 0;
+                    resp.type == '1' ? stopInsert++ : stopInsert = 0;
                 }
-
             }
         })
         return response;
@@ -221,7 +242,7 @@ export class PrintRecord {
                     margin:0px;   
                     height:auto;   
                 }
-                #divRecordPrint{
+                .divRecordPrint{
                     display: flex;
                     flex-direction: column;
                     align-items: center;   
@@ -230,7 +251,7 @@ export class PrintRecord {
                     height:auto;
                     min-height:100%;
                 }
-                #divRecordPrint header  {
+                .divRecordPrint header  {
                     display: flex;
                     justify-content: space-between;
                     align-items: center;
@@ -238,7 +259,7 @@ export class PrintRecord {
                     border-bottom: 1px solid rgb(178,178,178);
                     min-height: 50px;
                 }
-                #divRecordPrint header img{
+                .divRecordPrint header img{
                     width:50px;
                 }
                 #subHeader{
@@ -258,20 +279,20 @@ export class PrintRecord {
                     padding:5px;
                     border-bottom: 1px solid rgb(178,178,178);
                 }
-                #divRecordPrint .questionRecord header{  
+                .divRecordPrint .questionRecord header{  
                     border-bottom:none;
                     background:none;
                     height: 50px;
                 }
-                #divRecordPrint .questionRecord section{
+                .divRecordPrint .questionRecord section{
                     display: flex;
                     min-height: 60px;
                     font-size: 20px;
                 }
-                #divRecordPrint .questionRecord section input{ 
+                .divRecordPrint .questionRecord section input{ 
                     font-size: 18px;
                 }
-                #divRecordPrint header h1, .questionRecord h2{
+                .divRecordPrint header h1, .questionRecord h2{
                     margin-left:5px;
                 }
             
@@ -288,7 +309,7 @@ export class PrintRecord {
                     justify-content: center;
                     color:#ccc;
                 }
-                #divRecordPrint .contentOption img{
+                .divRecordPrint .contentOption img{
                     bottom:0;
                     width:30px;
                     margin-left:5px;
