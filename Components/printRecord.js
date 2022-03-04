@@ -2,14 +2,15 @@ import { UsefulComponents } from "../Util/usefulComponents.js"
 import { RecordObject } from "./objects/recordObject.js";
 
 export class PrintRecord {
-    main(objectChecklist,arrayResponse,objectShop,objectUsers) {        
-        localStorage.setItem('reponseJson',JSON.stringify(arrayResponse))
-        localStorage.setItem('shopJson',JSON.stringify(objectShop))
-        localStorage.setItem('userJson',JSON.stringify(objectUsers))
+    main(objectChecklist, arrayResponse, objectShop, objectUsers) {
+        localStorage.setItem('reponseJson', JSON.stringify(arrayResponse))
+        localStorage.setItem('shopJson', JSON.stringify(objectShop))
+        localStorage.setItem('userJson', JSON.stringify(objectUsers))
+
         let useFulComponents = new UsefulComponents;
         let recordObject = new RecordObject;
 
-        console.log()
+
         let response = `
         <html>
             <head>
@@ -23,12 +24,12 @@ export class PrintRecord {
                     <img src="./assets/images/fundoCLPPoficial.ico" title="logo CLPP"/>
                 </header>
                 <div id="subHeader">
-                    <p><b>Usuário:</b> ${useFulComponents.splitStringName(objectUsers[arrayResponse[0].id_user]["user"]," ")}</p>
+                    <p><b>Usuário:</b> ${useFulComponents.splitStringName(objectUsers[arrayResponse[0].id_user]["user"], " ")}</p>
                     <p><b>Unidade:</b> ${objectShop[arrayResponse[0].id_shop].description}</p>
                     <p><b>Data da Resposta:</b> ${useFulComponents.convertData(arrayResponse[0].date, "-")}</p>
-                    <p><b>Pontuação: </b>${recordObject.generalGraphic(recordObject.separateChecklist({data:arrayResponse}))[1][1]}%</p>                                          
+                    <p><b>Pontuação: </b>${recordObject.generalGraphic(recordObject.separateChecklist({ data: arrayResponse }))[1][1]}%</p>                                          
                 </div>
-                ${this.printReport(objectChecklist.getQuestion())}
+                ${this.printReport(objectChecklist.getQuestion(), arrayResponse)}
             </div>
             ${this.printScript(arrayResponse)}
         </html>
@@ -40,53 +41,52 @@ export class PrintRecord {
         // win.print();
         return response;
     }
-    printScript(){
+    printScript() {
         return `
         <script>
             function sera(){
                 let arrayResponse;
-                localStorage.getItem('reponseJson') ? arrayResponse = JSON.parse(localStorage.getItem('reponseJson')) : ""
-                console.log(arrayResponse)
+                localStorage.getItem('reponseJson') ? arrayResponse = JSON.parse(localStorage.getItem('reponseJson')) : "";
                 arrayResponse.forEach(e=>{
                     if(document.querySelector('#option_'+e.id_option_question)){
                         document.querySelector('#option_'+e.id_option_question).setAttribute('style', e.type <= 2 ? 'color: black;font-weight: bold; background-color: #90EE9050;' : 'color: black;') 
                     }
                 })
             }
+
             sera();
+            document.querySelector(".photoResponse").style.transform = 'rotate(90deg)';
         </script>
-        `   
+        `
     }
+    // date: "2022-03-01"
+    // date_final: null
+    // date_init: null
+    // description: null
+    // id: "510"
+    // id_checklist: "352"
+    // id_option_question: "1388"
+    // id_question: "1151"
+    // id_shop: "1"
+    // id_user: "5"
+    // photo: null
+    // qtd_questions: "6"
+    // type: "2"
+    // value: "1"
+    printReport(objectQuestions, arrayResponse) {
 
-// date: "2022-03-01"
-// date_final: null
-// date_init: null
-// description: null
-// id: "510"
-// id_checklist: "352"
-// id_option_question: "1388"
-// id_question: "1151"
-// id_shop: "1"
-// id_user: "5"
-// photo: null
-// qtd_questions: "6"
-// type: "2"
-// value: "1"
-
-    printReport(objectQuestions) {
-        
         let response = `
         <div id="dados">
-            ${this.populateQuestion(objectQuestions)}
+            ${this.populateQuestion(objectQuestions, arrayResponse)}
         </div>
         `
         return response;
     }
 
-    populateQuestion(objectQuestions) {
+    populateQuestion(objectQuestions, arrayResponse) {
         let cont = 0;
         return objectQuestions.map((question) => {
-            cont ++;
+            cont++;
             return `
             <div id="question_${question.id}" class="questionRecord">
                 <header>
@@ -97,12 +97,8 @@ export class PrintRecord {
                         ${this.populateOptions(question)}
                     </div>
                     <aside class="photoObservation">
-                        <div id="photoRecord">
-                            <img id="photoRecordImg" src = "./assets/images/recordPhoto.png" title = "Foto"/>
-                        </div>
-                        <div id="ObservationRecord">
-                            <img id="ObservationRecordImg" src = "./assets/images/observationRecord.png" title = "Foto"/>
-                        </div>
+                        ${this.populateItensMandatory(question, arrayResponse)}
+                        
                     </aside>
                 </section>
             </div>
@@ -120,6 +116,61 @@ export class PrintRecord {
                 `;
             };
         });
+        return response;
+    }
+    populateItensMandatory(question, arrayResponse) {
+        let response = "";
+        let stopInsert = 0;
+        // arrayResponse = localStorage.getItem('reponseJson')
+        arrayResponse.forEach(resp => {
+    
+            if (question.id == resp.id_question) {
+                if (resp.photo != null && resp.description == null) {
+                    response += `
+                                <div id="photoRecord">
+                                    <img id="photoRecordImg" class="photoResponse" src = "http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/${resp.photo}.png" title = "Foto" />
+                                </div>
+                                <div id="ObservationRecord">
+                                    <img id="ObservationRecordImg" src = "./assets/images/observationRecord.png" title = "Observação"/>
+                                </div>
+                                `
+                } else if (resp.description != null && resp.photo == null) {
+                    response += `
+                                <div id="photoRecord">
+                                    <img id="photoRecordImg" src = "./assets/images/recordPhoto.png" title = "Foto"/>
+                                </div>
+                                <div id="ObservationRecord">
+                                    <p>${resp.description}</p>
+                                </div>
+                             `
+                } else if(resp.description != null && resp.photo != null){
+                    response += `
+                                <div id="photoRecord">
+                                    <img id="photoRecordImg" class="photoResponse" src = "http://192.168.0.99:71/GLOBAL/Controller/CLPP/uploads/${resp.photo}.png" title = "Foto" />
+                                </div>
+                                <div id="ObservationRecord">
+                                    <p>${resp.description}</p>
+                                </div>
+                            `
+                }
+                else {
+                    console.log(stopInsert , resp.type)
+                    if(stopInsert == 0){
+
+                        response += `
+                        <div id="photoRecord">
+                        <img id="photoRecordImg" src = "./assets/images/recordPhoto.png" title = "Foto"/>
+                        </div>
+                        <div id="ObservationRecord">
+                        <img id="ObservationRecordImg" src = "./assets/images/observationRecord.png" title = "Observação"/>
+                        </div>
+                        `
+                    }
+                    resp.type == '1' ? stopInsert ++ : stopInsert = 0;
+                }
+
+            }
+        })
         return response;
     }
     selectInput(typeOption, options) {
@@ -160,7 +211,7 @@ export class PrintRecord {
                 }
                 html{
                     height: 100vh;
-                    width: 100vw;
+                    width: 99vw;
                 }
                 body{
                     display: flex;
@@ -248,20 +299,33 @@ export class PrintRecord {
                     min-width: 20px;
                     width: 60%;
                 }
+                    
                 .sectionOption{
                     display:flex;
                     align-items: center;
                 }
                 #photoRecord{
-                   width:50%;
-                   height:100px;
+                    display: flex;
+                    width: 50%;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100px;
+                }
+                #photoRecordImg, #observationRecordImg{
+                    opacity: .1;
                 }
                 #observationRecord{
                     width:50%;
                     height:100px;
                 }
+                #photoRecord .photoResponse{
+                    opacity: 1;             
+                    height: 220px;
+                    border: solid 1px rgb(178,178,178);
+                    width: 100px;
+                }
             </style>
         `
     }
-   
+
 }
