@@ -103,17 +103,23 @@ export class RecordObject extends ConnectionCLPP {
     }
     splitTo(array){
         let response = []
-        response = this.organize(array.sort((a,b)=> a.id_shop - b.id_shop))
-        return response
+        let getArray = []
+        response = this.organize(array,"id_shop")
+        response.forEach(element => getArray.push(this.organize(element,"date")))
+        return getArray
     }
-    organize(array){
-        let idShops=[]
+    organize(array,keys){
+        let idEntity =[]
         let response = []
-        array.filter(a => {if(keys.indexOf(a.id_shop)<0) keys.push(a.id_shop)})
-        idShops.forEach((idShop,i) => {
-            array.forEach((element,index) => {if(element.id_shop == idShop)response[i] = [response[index],element]})
+        let org = []
+        org = array.sort((a,b)=> a[keys] - b[keys])
+        org.filter(a => {if(idEntity.indexOf(a[keys])<0) idEntity.push(a[keys])})
+        idEntity.forEach(id => {
+            let res = []
+            org.forEach(element => {if(element[keys] == id) res.push(element)})
+            response.push(res)
         })
-        console.log(response,keys)
+        return response
     }
     separateChecklist(response) {
         let orderByChecklist = [];
@@ -143,6 +149,7 @@ export class RecordObject extends ConnectionCLPP {
         return controller;
     }
     generalGraphic(orderByChecklist) {
+        console.log(orderByChecklist)
         let point = this.computePercent(orderByChecklist, 1)
         let dataSpecific = [["Não Satisfatório", 100 - point], ["Satisfatório", point]]
         return dataSpecific
