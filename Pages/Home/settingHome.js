@@ -36,18 +36,24 @@ export class SettingHome {
         this.configRecord()
         this.teste(this.checklistJson)
         this.teste2(this.checklistJson)
-    }
 
-    teste(checklistJson) {
-        let printRecord = new PrintRecord;
-        getB_id('teste').addEventListener('click', () => { printRecord.main(checklistJson[341]) })
-    }
-
-    async teste2() {
-        let printRecord2 = new PrintRecord2;
-        getB_id('teste2').addEventListener('click', () => { printRecord2.main(this.checklistJson[343], this.separateChecklist, this.objectShops) })
-        console.log([this.checklistJson[343]])
         console.log(this.separateChecklist)
+
+    }
+    teste(checklistJson) {
+        getB_id('teste').addEventListener('click', async () => {
+
+            let printRecord = new PrintRecord;
+            print += printRecord.main(checklistJson, this.separateChecklist, this.objectShops, this.returnJsonObject(await this.checklistObject.get("&application_id=7&web", "CCPP/UserAccess.php")))
+
+        })
+    }
+
+    async teste2(checklistJson) {
+        let printRecord2 = new PrintRecord2;
+        getB_id('teste2').addEventListener('click', () => { printRecord2.main(checklistJson[343], this.separateChecklist, this.objectShops) })
+        console.log([checklistJson[343]])
+        console.log(this.checklistJson, this.separateChecklist, this.objectShops)
     }
 
     openMessage() {
