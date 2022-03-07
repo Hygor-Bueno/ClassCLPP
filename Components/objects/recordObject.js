@@ -53,11 +53,11 @@ export class RecordObject extends ConnectionCLPP {
         let markQuestion = this.#filters.checklist.question.length || 1;
 
         for (let cnt = 0; cnt < markShop; cnt++) {
-            for (let xxx = 0; xxx < markTitle; xxx++) {
+            for (let x = 0; x < markTitle; x++) {
                 for (let y = 0; y < markQuestion; y++) {
                     Object.keys(this.#filters).forEach((keys, index) => {
                         if (index != 1) {
-                            params += this.getInformation(keys, xxx, y)
+                            params += this.getInformation(keys, x, y)
                         } else {
                             if (this.#filters['id_shops'][cnt]) params += '&id_shop=' + this.#filters['id_shops'][cnt]
                         }
@@ -70,7 +70,7 @@ export class RecordObject extends ConnectionCLPP {
         return getArray
     }
 
-    getInformation(keys, xxx, y) {
+    getInformation(keys, x, y) {
         let params = "";
         Object.keys(this.#filters[keys]).forEach(subKey => {
             if (this.#filters[keys][subKey] != "") {
@@ -85,7 +85,7 @@ export class RecordObject extends ConnectionCLPP {
                         params += `&date_final_response="${this.#filters[keys][subKey]}"`
                         break;
                     case 'titles':
-                        params += '&id_checklist=' + this.#filters['checklist']['titles'][xxx]
+                        params += '&id_checklist=' + this.#filters['checklist']['titles'][x]
                         break;
                 }
             }
@@ -101,18 +101,18 @@ export class RecordObject extends ConnectionCLPP {
         }
         return { data: arrayResp };
     }
-    splitTo(array){
-        let response = []
-        let getArray = []
-        response = this.organize(array,"id_shop")
-        response.forEach(element => getArray.push(this.organize(element,"date")))
-        return getArray
-    }
+    // splitTo(array){
+    //     let response = []
+    //     let getArray = []
+    //     response = this.organize(array,"id_shop")
+    //     response.forEach(element => getArray.push(this.organize(element,"date")))
+    //     return getArray
+    // }
     organize(array,keys){
         let idEntity =[]
         let response = []
         let org = []
-        org = array.sort((a,b)=> a[keys] - b[keys])
+        org = array.sort((a,b) => a[keys] - b[keys])
         org.filter(a => {if(idEntity.indexOf(a[keys])<0) idEntity.push(a[keys])})
         idEntity.forEach(id => {
             let res = []
@@ -149,7 +149,6 @@ export class RecordObject extends ConnectionCLPP {
         return controller;
     }
     generalGraphic(orderByChecklist) {
-        console.log(orderByChecklist)
         let point = this.computePercent(orderByChecklist, 1)
         let dataSpecific = [["Não Satisfatório", 100 - point], ["Satisfatório", point]]
         return dataSpecific

@@ -150,21 +150,22 @@ export class SettingRecord {
         })
         this.closeGraphicGeneral()
         this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(reqFiltred), "#mainGraphic", this.typeGraph)
-        this.typeGraph = 2
-        this.graphicMiniDiv(returnReq)
-        this.recordObject3.clppGraphich.clppGraphics(this.recordObject3.specificGraphic(reqFiltred, this.jsonCheck, this.jsonShop, 1), "#graphicChecklist", this.typeGraph)
+        this.recordObject2.clppGraphich.clppGraphics(this.graphicMiniDiv(returnReq,"id_shop"), "#graphicUnity", 2)
+        this.recordObject3.clppGraphich.clppGraphics(this.graphicMiniDiv(returnReq,"id_checklist"), "#graphicChecklist", 2)
     }
-    graphicMiniDiv(returnReq){
-        let graphicShop = this.recordObject.splitTo(returnReq.data)
+    graphicMiniDiv(returnReq,key){
+        let getItem = this.recordObject.organize(returnReq.data,key)
+        let graphicShop = []
         let filtredForGraph = []
+        getItem.forEach(element => graphicShop.push(this.recordObject.organize(element,"date")))
+        console.log(graphicShop)
         graphicShop.forEach(ele =>{
-            let shop = this.jsonShop[ele[0][0].id_shop].description
-            let assistentArray = this.recordObject2.generalGraphic(ele, this.jsonCheck, this.jsonShop)
+            let shop = key == "id_shop" ? this.jsonShop[ele[0][0].id_shop].description:this.jsonCheck[ele[0][0].id_checklist].getTitle()
+            let assistentArray = this.recordObject.generalGraphic(ele)
             assistentArray[1][0] = shop
             filtredForGraph.push(assistentArray[1])
         })
-        this.recordObject2.clppGraphich.clppGraphics(filtredForGraph, "#graphicUnity", this.typeGraph)
-
+        return filtredForGraph
     }
 
     populaShopGraphic(returnReq) {
