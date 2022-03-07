@@ -35,9 +35,11 @@ export class SettingHome {
         await this.reportAnsweredToday()
         this.configRecord()
         this.teste(this.checklistJson)
+        this.teste2(this.checklistJson)
+
+        console.log(this.separateChecklist)
 
     }
-
     teste(checklistJson) {
         getB_id('teste').addEventListener('click', async () => {
 
@@ -47,13 +49,22 @@ export class SettingHome {
         })
     }
 
+    async teste2(checklistJson) {
+        let printRecord2 = new PrintRecord2;
+        getB_id('teste2').addEventListener('click', () => { printRecord2.main(checklistJson[343], this.separateChecklist, this.objectShops) })
+        console.log([checklistJson[343]])
+        console.log(this.checklistJson, this.separateChecklist, this.objectShops)
+    }
+
     openMessage() {
         getB_id('message').setAttribute('style', 'display:flex')
     }
+
     closeMessage() {
         getB_id('message').setAttribute('style', 'display:none')
         document.querySelector('#message :first-child').remove()
     }
+
     notifyMessage() {
         let notify = $_all('.cardMessageUser')
         for (const iterator of notify) {
@@ -69,6 +80,7 @@ export class SettingHome {
             this.eventNotifyMessage(iterator, objectSenders);
         }
     }
+
     buttonCardChecklist() {
         $_all('.viewQuizList').forEach(element => {
             element.addEventListener("click", () => {
@@ -83,6 +95,7 @@ export class SettingHome {
             })
         })
     }
+
     eventNotifyMessage(iterator, objectSenders) {
         let temp = objectSenders.temp
         delete objectSenders['temp']
@@ -96,11 +109,13 @@ export class SettingHome {
             webSocket.informPreview([objectSenders.send ? 'send' : 'group', objectSenders.id])                                              // informa so websocket que o usuário abriu uma mensagem, passando por parâmento o destinatário da mensagem.
         })
     }
+
     settingsButtonChat(idSender) {
         getB_id('buttonReply').addEventListener('click', () => this.closeMessage());
         getB_id('buttonSend').addEventListener('click', () => { this.buttonSend(idSender, getB_id('inputSend').value, 1, '#bodyMessageDiv section') });
         getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
+
     async buttonSend(idSender, message, type, local, localScroll) {
         if (type == 2 ? true : validator.minLength(message, 0) && validator.maxLength(message, 200)) {
             let objectSend = [['id_sender', localStorage.getItem('id')], [idSender[0] == 'group' ? "id_group" : `id_user`, idSender[1]], ['message', message], ['type', type]]
@@ -114,6 +129,7 @@ export class SettingHome {
         }
         document.querySelector(localScroll ? localScroll : local).scrollTop = document.querySelector(localScroll ? localScroll : local).scrollHeight;
     }
+
     error(message) {
         openModal(generalModal.main(message, true))
         generalModal.close()
@@ -147,6 +163,7 @@ export class SettingHome {
             reportDay = req[0]
             this.objectShops = this.shopJson(req[1].data)
             let jsonReportCard = await this.contructorJsonCard(this.recordObject.separateChecklist(reportDay), this.objectShops)
+            /* console.log(jsonReportCard) */
             this.cardRecord(jsonReportCard, '#bodyReportDiv');
         } catch (exception) {
             return `<P></P>`
@@ -247,10 +264,3 @@ export class SettingHome {
         }))
     }
 }
-// date: "2022-02-22"
-// description: "Record 02"
-// filters: "{\"id_shops\": [], \"checklist\": {\"titles\": [\"344\"], \"question\": [], \"date_checklist\": []}, \"date_response\": {\"date_init_response\": \"2022-02-22\", \"date_final_response\": \"2022-02-22\"}}"
-// id: "55"
-// id_user: "148"
-// point: "55.56"
-// type: "3"
