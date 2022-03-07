@@ -150,11 +150,11 @@ export class SettingRecord {
         })
         this.closeGraphicGeneral()
         this.recordObject.clppGraphich.clppGraphics(this.recordObject.generalGraphic(reqFiltred), "#mainGraphic", this.typeGraph)
-        this.recordObject2.clppGraphich.clppGraphics(this.graphicMiniDiv(returnReq,"id_shop"), "#graphicUnity", 2)
-        this.recordObject3.clppGraphich.clppGraphics(this.graphicMiniDiv(returnReq,"id_checklist"), "#graphicChecklist", 2)
+        this.recordObject2.clppGraphich.clppGraphics(this.graphicMiniInit(returnReq,"id_shop"), "#graphicUnity", 2)
+        this.recordObject3.clppGraphich.clppGraphics(this.graphicMiniInit(returnReq,"id_checklist"), "#graphicChecklist", 2)
     }
-    graphicMiniDiv(returnReq,key){
-        let getItem = this.recordObject.organize(returnReq.data,key)
+    graphicMiniInit(returnReq,key){
+        let getItem = this.recordObject.organize(returnReq.data, key)
         let graphicShop = []
         let filtredForGraph = []
         getItem.forEach(element => graphicShop.push(this.recordObject.organize(element,"date")))
@@ -165,6 +165,7 @@ export class SettingRecord {
             assistentArray[1][0] = shop
             filtredForGraph.push(assistentArray[1])
         })
+        //console.log(filtredForGraph)
         return filtredForGraph
     }
 

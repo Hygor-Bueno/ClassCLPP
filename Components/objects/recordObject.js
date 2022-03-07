@@ -101,13 +101,6 @@ export class RecordObject extends ConnectionCLPP {
         }
         return { data: arrayResp };
     }
-    // splitTo(array){
-    //     let response = []
-    //     let getArray = []
-    //     response = this.organize(array,"id_shop")
-    //     response.forEach(element => getArray.push(this.organize(element,"date")))
-    //     return getArray
-    // }
     organize(array,keys){
         let idEntity =[]
         let response = []
@@ -190,6 +183,7 @@ export class RecordObject extends ConnectionCLPP {
                 }
             }
         }
+        console.log((100 / (question + ignore) * sum).toFixed(2) / max)
         return (100 / (question - ignore) * sum).toFixed(2) / max
     }
 }
