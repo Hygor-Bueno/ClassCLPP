@@ -322,7 +322,6 @@ b {
     width: 18px;
     height: 18px;
     margin-left: 10px;
-    ;
 }
 #recordDiv {
     display: flex;
@@ -351,11 +350,9 @@ b {
     display:flex;
     justify-content:space-between;   
 }
-
 .cardRecord header,.cardRecord section{
     margin:5px;
 }
-
 @media screen and (min-width: 1500px) {
     #bodySection p {
         font-size: 17px;

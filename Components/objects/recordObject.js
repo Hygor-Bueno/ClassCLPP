@@ -53,11 +53,11 @@ export class RecordObject extends ConnectionCLPP {
         let markQuestion = this.#filters.checklist.question.length || 1;
 
         for (let cnt = 0; cnt < markShop; cnt++) {
-            for (let xxx = 0; xxx < markTitle; xxx++) {
+            for (let x = 0; x < markTitle; x++) {
                 for (let y = 0; y < markQuestion; y++) {
                     Object.keys(this.#filters).forEach((keys, index) => {
                         if (index != 1) {
-                            params += this.getInformation(keys, xxx, y)
+                            params += this.getInformation(keys, x, y)
                         } else {
                             if (this.#filters['id_shops'][cnt]) params += '&id_shop=' + this.#filters['id_shops'][cnt]
                         }
@@ -70,7 +70,7 @@ export class RecordObject extends ConnectionCLPP {
         return getArray
     }
 
-    getInformation(keys, xxx, y) {
+    getInformation(keys, x, y) {
         let params = "";
         Object.keys(this.#filters[keys]).forEach(subKey => {
             if (this.#filters[keys][subKey] != "") {
@@ -85,7 +85,7 @@ export class RecordObject extends ConnectionCLPP {
                         params += `&date_final_response="${this.#filters[keys][subKey]}"`
                         break;
                     case 'titles':
-                        params += '&id_checklist=' + this.#filters['checklist']['titles'][xxx]
+                        params += '&id_checklist=' + this.#filters['checklist']['titles'][x]
                         break;
                 }
             }
@@ -101,12 +101,24 @@ export class RecordObject extends ConnectionCLPP {
         }
         return { data: arrayResp };
     }
-
+    organize(array,keys){
+        let idEntity =[]
+        let response = []
+        let org = []
+        org = array.sort((a,b) => a[keys] - b[keys])
+        org.filter(a => {if(idEntity.indexOf(a[keys])<0) idEntity.push(a[keys])})
+        idEntity.forEach(id => {
+            let res = []
+            org.forEach(element => {if(element[keys] == id) res.push(element)})
+            response.push(res)
+        })
+        return response
+    }
     separateChecklist(response) {
         let orderByChecklist = [];
         let assistent = this.getKeys(response);
         assistent.forEach(elemKey => {
-            orderByChecklist.push(response.data.filter(element => { return elemKey[0] == element.id_user && elemKey[1] == element.date && elemKey[2] == element.id_checklist && elemKey[3] == element.id_shop }));
+            orderByChecklist.push(response.data.filter(element => {return elemKey[0] == element.id_user && elemKey[1] == element.date && elemKey[2] == element.id_checklist && elemKey[3] == element.id_shop }));
         })
         return orderByChecklist;
     }
@@ -165,12 +177,14 @@ export class RecordObject extends ConnectionCLPP {
             question += parseFloat(allQuestion[0].qtd_questions);
             for (const options of allQuestion) {
                 if (options.type <= 2) {
-                    sum += parseFloat(options.value)
+                    sum += parseFloat(options.value);
                 } else {
                     ignore++;
                 }
             }
         }
+        console.log(question, ignore,sum)
+        console.log((100 / (question + ignore) * sum).toFixed(2) / max)
         return (100 / (question - ignore) * sum).toFixed(2) / max
     }
 }

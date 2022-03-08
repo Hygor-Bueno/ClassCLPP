@@ -10,6 +10,8 @@ import { ConnectionCLPP } from "../../Connection/ConnectionCLPP.js";
 import { RecordObject } from "../../Components/objects/recordObject.js";
 import { ObjectChecklist } from "../../Components/objects/checklistObject.js";
 import { ClppGraphichObject } from "../../Components/objects/clppGraphichObject.js";
+import { PrintRecord } from "../../Components/printRecord.js";
+import { PrintRecord2 } from "../../Components/printRecord2.js";
 
 var listMessage = new MessageList
 var validator = new Validation
@@ -23,21 +25,46 @@ export class SettingHome {
     recordObject = new RecordObject;
     checklistObject = new ObjectChecklist;
     objectRecord = {};
+    objectShops = {};
+    separateChecklist;
     async settings() {
         this.notifyMessage();
         this.carousel();
         this.buttonCardChecklist();
         this.buttonEditChecklist();
-        await this.reportAnsweredToday(this.checklistJson)
+        await this.reportAnsweredToday()
         this.configRecord()
+        this.teste(this.checklistJson)
+        this.teste2(this.checklistJson)
+
+        console.log(this.separateChecklist)
+
     }
+    teste(checklistJson) {
+        getB_id('teste').addEventListener('click', async () => {
+
+            let printRecord = new PrintRecord;
+            print += printRecord.main(checklistJson, this.separateChecklist, this.objectShops, this.returnJsonObject(await this.checklistObject.get("&application_id=7&web", "CCPP/UserAccess.php")))
+
+        })
+    }
+
+    async teste2(checklistJson) {
+        let printRecord2 = new PrintRecord2;
+        getB_id('teste2').addEventListener('click', () => { printRecord2.main(checklistJson[343], this.separateChecklist, this.objectShops) })
+        console.log([checklistJson[343]])
+        console.log(this.checklistJson, this.separateChecklist, this.objectShops)
+    }
+
     openMessage() {
         getB_id('message').setAttribute('style', 'display:flex')
     }
+
     closeMessage() {
         getB_id('message').setAttribute('style', 'display:none')
         document.querySelector('#message :first-child').remove()
     }
+
     notifyMessage() {
         let notify = $_all('.cardMessageUser')
         for (const iterator of notify) {
@@ -53,6 +80,7 @@ export class SettingHome {
             this.eventNotifyMessage(iterator, objectSenders);
         }
     }
+
     buttonCardChecklist() {
         $_all('.viewQuizList').forEach(element => {
             element.addEventListener("click", () => {
@@ -67,6 +95,7 @@ export class SettingHome {
             })
         })
     }
+
     eventNotifyMessage(iterator, objectSenders) {
         let temp = objectSenders.temp
         delete objectSenders['temp']
@@ -77,14 +106,16 @@ export class SettingHome {
             getB_id(`${iterator.getAttribute('id')}`).remove()                                                                              // remove o usuário da lista de mensagens não vizualizadas.
             this.settingsButtonChat(temp)                                                                                                   // Atribui as funcionalidades aos botões do Chat.
             document.querySelector('#bodyMessageDiv section').scrollTop = document.querySelector('#bodyMessageDiv section').scrollHeight;   // Faz com que o Scroll preaneça sempre em baixo.
-            webSocket.informPreview([objectSenders.send ? 'send' : 'group', objectSenders.id])                                                 // informa so websocket que o usuário abriu uma mensagem, passando por parâmento o destinatário da mensagem.
+            webSocket.informPreview([objectSenders.send ? 'send' : 'group', objectSenders.id])                                              // informa so websocket que o usuário abriu uma mensagem, passando por parâmento o destinatário da mensagem.
         })
     }
+
     settingsButtonChat(idSender) {
         getB_id('buttonReply').addEventListener('click', () => this.closeMessage());
         getB_id('buttonSend').addEventListener('click', () => { this.buttonSend(idSender, getB_id('inputSend').value, 1, '#bodyMessageDiv section') });
         getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
+
     async buttonSend(idSender, message, type, local, localScroll) {
         if (type == 2 ? true : validator.minLength(message, 0) && validator.maxLength(message, 200)) {
             let objectSend = [['id_sender', localStorage.getItem('id')], [idSender[0] == 'group' ? "id_group" : `id_user`, idSender[1]], ['message', message], ['type', type]]
@@ -98,6 +129,7 @@ export class SettingHome {
         }
         document.querySelector(localScroll ? localScroll : local).scrollTop = document.querySelector(localScroll ? localScroll : local).scrollHeight;
     }
+
     error(message) {
         openModal(generalModal.main(message, true))
         generalModal.close()
@@ -123,15 +155,15 @@ export class SettingHome {
         })
     }
 
-    async reportAnsweredToday(checklistJson) {
+    async reportAnsweredToday() {
         try {
             let reportDay;
-            let shops;
             let req = ""
             await Promise.all([connectionCLPP.get(`&id_user=${localStorage.getItem("id")}&notification`, "CLPP/Response.php"), connectionCLPP.get("&company_id=1", 'CCPP/Shop.php')]).then(response => { req = response })
             reportDay = req[0]
-            shops = this.shopJson(req[1].data)
-            let jsonReportCard = await this.contructorJsonCard(this.recordObject.separateChecklist(reportDay), shops)
+            this.objectShops = this.shopJson(req[1].data)
+            let jsonReportCard = await this.contructorJsonCard(this.recordObject.separateChecklist(reportDay), this.objectShops)
+            /* console.log(jsonReportCard) */
             this.cardRecord(jsonReportCard, '#bodyReportDiv');
         } catch (exception) {
             return `<P></P>`
@@ -139,6 +171,7 @@ export class SettingHome {
     }
 
     async contructorJsonCard(pay, shops) {
+        this.separateChecklist = pay;
         let response = []
         for await (const uniqueChecklist of pay) {
             let userData = await connectionCLPP.get("&id=" + uniqueChecklist[0].id_user, "CCPP/Employee.php")
@@ -192,17 +225,17 @@ export class SettingHome {
             return arrayRecord.data.map(recordCard => (
                 `
                 <div id="cardRecord_${recordCard.id}" class="cardRecord" data-idrecord="${recordCard.id}">
-                <section>
-                <div>
-                <label><b>Nome do relatório:</b></label><P>${recordCard.description}</P>
-                </div>
-                <div>
-                <label><b>Data de criação:</b></label><P>${recordCard.date}</P>
-                </div>
-                <div>
-                <label><b>Pontuação geral:</b></label><p>${recordCard.point}%</p> 
-                </div>                
-                </section>
+                    <section>
+                        <div>
+                            <label><b>Nome do relatório:</b></label><P>${recordCard.description}</P>
+                        </div>
+                        <div>
+                            <label><b>Data de criação:</b></label><P>${recordCard.date}</P>
+                        </div>
+                        <div>
+                            <label><b>Pontuação geral:</b></label><p>${recordCard.point}%</p> 
+                        </div>                
+                    </section>
                 </div>
             `
             )).join("")
@@ -215,6 +248,13 @@ export class SettingHome {
             this.objectRecord[array.id] = array;
         })
     }
+    returnJsonObject(arrays) {
+        let response = {}
+        arrays.data.forEach(array => {
+            response[array.id] = array;
+        })
+        return response
+    }
     configRecord() {
         let routers = new Routers;
         $_all(".cardRecord").forEach(cardRecord => cardRecord.addEventListener("click", () => {
@@ -224,10 +264,3 @@ export class SettingHome {
         }))
     }
 }
-// date: "2022-02-22"
-// description: "Record 02"
-// filters: "{\"id_shops\": [], \"checklist\": {\"titles\": [\"344\"], \"question\": [], \"date_checklist\": []}, \"date_response\": {\"date_init_response\": \"2022-02-22\", \"date_final_response\": \"2022-02-22\"}}"
-// id: "55"
-// id_user: "148"
-// point: "55.56"
-// type: "3"

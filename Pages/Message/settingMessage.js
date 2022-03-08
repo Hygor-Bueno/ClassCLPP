@@ -41,7 +41,7 @@ export class SettingMessage {
         this.createGroup()
     }
     clickSend() {
-        getB_id('buttonSend').addEventListener('click', () => {this.sendMsg();this.notificationMsg();});
+        getB_id('buttonSend').addEventListener('click', () => { this.sendMsg(); this.notificationMsg(); });
         getB_id('inputSend').addEventListener('keypress', (enter) => { if (enter.key === 'Enter') getB_id('buttonSend').click() })
     }
     chergeSendButtom() {
@@ -77,7 +77,7 @@ export class SettingMessage {
         getB_id('file').value = ""
     }
     clickDivUser(local) {
-        $_all(local).forEach(element => element.addEventListener('click', () => { this.clickEvents(element); this.chergeSendButtom()}))
+        $_all(local).forEach(element => element.addEventListener('click', () => { this.clickEvents(element); this.chergeSendButtom() }))
     }
     async clickEvents(element) {
         this.tradeDiv();
@@ -96,31 +96,31 @@ export class SettingMessage {
         this.notificationMsg();
         this.scrollMsg()
     }
-    preparatePages(){
+    preparatePages() {
         this.pages = 1;
         $('.msg_out ').remove();
-        $('.msg_in').insertAdjacentHTML("afterbegin",'<div class="msg_out style_scroll" id="bodyMessageDiv"></div>');
+        $('.msg_in').insertAdjacentHTML("afterbegin", '<div class="msg_out style_scroll" id="bodyMessageDiv"></div>');
         this.modalImg();
     }
     async chargePageMsg(split, position) {
         let object = split[0] == 'send' ? { 'id': split[1], 'destiny': '&id_send=' } : { 'id': split[1], 'destiny': '&id_group=' };
         $('.msg_out').insertAdjacentHTML(position, await this.messageList.bodyChat(object, this.pages))
         $('.msg_out ').scrollTop = $('.msg_out ').scrollHeight;
-        $('.msg_out section').setAttribute('id', `pages_${this.pages}`)     
+        $('.msg_out section').setAttribute('id', `pages_${this.pages}`)
     }
     changeHeader(element) {
         $('.colabHead').setAttribute('data-id', element.getAttribute('id'))
         $('.colabHead').innerHTML = element.innerHTML
         $(`.part2 .notifyMsg`) && $(`.part2 .notifyMsg`).remove();
         $('.part2 .colabHead').insertAdjacentHTML('beforeend',
-            `${element.getAttribute('id').split('_')[0] == "group" ? `<button class="btnOnlyGroup" type="button"><img src="./assets/images/icons8-search-group-24.png"></button>`: ""}
+            `${element.getAttribute('id').split('_')[0] == "group" ? `<button class="btnOnlyGroup" type="button"><img src="./assets/images/icons8-search-group-24.png"></button>` : ""}
             <div class="notifyMsg">
                 <img class="imgNotify" src=./assets/images/notification.svg>
             </div>`)
     }
     searchUser() {
         this.chargeEmploy()
-        $('.searchUser').addEventListener('click', async() => {
+        $('.searchUser').addEventListener('click', async () => {
             if ($('.user_in').style.display == 'flex') {
                 $('.user_in').setAttribute('style', 'display:none')
                 $('.searchUnic').setAttribute('style', 'display:none')
@@ -133,13 +133,13 @@ export class SettingMessage {
             this.clickDivUser('.templateSearchUser .divUser')
         })
     }
-    async chargeEmploy(){
-        if(!$('.templateSearchUser .divUser')) {
+    async chargeEmploy() {
+        if (!$('.templateSearchUser .divUser')) {
             $('.templateSearchUser').insertAdjacentHTML('beforeend', await this.methodUnited())
         }
     }
     createListUser() {
-        let nameArray = []       
+        let nameArray = []
         const divArray = $_all('.templateSearchUser .divUser')
         for (let index = 0; index < divArray.length; index++) {
             nameArray.push({
@@ -164,7 +164,7 @@ export class SettingMessage {
             }
             this.clickDivUser('.searchUnic .divUser')
         })
-        $('.searchUserBar').addEventListener('keypress', (e) => { if (e.key === 'Enter') $('.searchName').click()})
+        $('.searchUserBar').addEventListener('keypress', (e) => { if (e.key === 'Enter') $('.searchName').click() })
     }
     createGroup() {
         $('.searchGroup').addEventListener('click', () => {
@@ -184,7 +184,7 @@ export class SettingMessage {
     }
     saveGroup() {
         $('.buttonProgress').addEventListener('click', async () => {
-           if($('.nameGroup input').value){ 
+            if ($('.nameGroup input').value) {
                 await this.groupMessage.main($('.nameGroup input').value)
                 closeModal()
                 this.usersInGroup(1)
@@ -196,7 +196,7 @@ export class SettingMessage {
         let idsUsers = ""
         check == 0 && this.showUsers($('.colabHead').getAttribute('data-id').split('_')[1])
         $_all('.templateSearchUser .divUser').forEach((element) => idsUsers += element.outerHTML)
-       await this.listUser.checkBoxUser(idsUsers)
+        await this.listUser.checkBoxUser(idsUsers)
         $('#templateListUser').insertAdjacentHTML("afterbegin", `
         <div id="displayHeader">  
             <div id="borderBack">
@@ -206,18 +206,20 @@ export class SettingMessage {
                 <h1>Usuário do grupo:</h1>
             </header>
         </div>`)
-        check == 1 && this.settingGroup()
-        check == 0 && getB_id('borderBack').addEventListener('click', () => closeModal());
-        check == 0 && getB_id('saveGroup').addEventListener('click', () => {this.listUser.updateChecked({id_group: $('.colabHead').getAttribute('data-id').split('_')[1]},"CLPP/Group.php")})
+        this.settingGroup(check)
     }
-    settingGroup() {
+    settingGroup(check) {
         getB_id('borderBack').addEventListener('click', () => closeModal())
         getB_id('saveGroup').addEventListener('click', () => {
-            this.groupMessage.addUsers(this.listUser.insertChecked());
-            this.groupMessage.saveGroupAll();
+            if (check == 1){
+                this.groupMessage.addUsers(this.listUser.insertChecked());
+                this.groupMessage.saveGroupAll();
+                const routers = new Routers;
+                routers.routers(localStorage.getItem('router'))
+            }else{
+                this.listUser.updateChecked({ id_group: $('.colabHead').getAttribute('data-id').split('_')[1] }, "CLPP/Group.php")
+            }   
             closeModal()
-            const routers = new Routers;
-            routers.routers(localStorage.getItem('router'))
         })
     }
     consultGroup() {
@@ -225,9 +227,9 @@ export class SettingMessage {
             this.usersInGroup(0);
         })
     }
-     async showUsers(idGroup) {
-        let response = await this.connectionCLPP.get("&id=" + idGroup,"CLPP/Group.php")
-        response.data.forEach(user => { user.id_user != localStorage.getItem('id') && this.listUser.markUser(`send_${user.id_user}`)})
+    async showUsers(idGroup) {
+        let response = await this.connectionCLPP.get("&id=" + idGroup, "CLPP/Group.php")
+        response.data.forEach(user => { user.id_user != localStorage.getItem('id') && this.listUser.markUser(`send_${user.id_user}`) })
     }
     visualizationMsg(params) {
         if ($('.colabHead .divColab') && $('.colabHead').getAttribute('data-id').split('_')[1] == params.user) {
@@ -236,22 +238,22 @@ export class SettingMessage {
         }
     }
     scrollMsg() {
-        $('.msg_out').addEventListener('scroll', async() => {
-            if ($('.msg_out').scrollTop == 0 && !$('.errorReqMessage')) {             
+        $('.msg_out').addEventListener('scroll', async () => {
+            if ($('.msg_out').scrollTop == 0 && !$('.errorReqMessage')) {
                 this.pages++
-                await this.chargePageMsg(this.usefulComponents.splitString($('.colabHead').getAttribute('data-id'), '_'),'afterbegin')
-                $('.msg_out').scrollTop = parseInt($(`#pages_${this.pages}`).scrollHeight);  
+                await this.chargePageMsg(this.usefulComponents.splitString($('.colabHead').getAttribute('data-id'), '_'), 'afterbegin')
+                $('.msg_out').scrollTop = parseInt($(`#pages_${this.pages}`).scrollHeight);
             }
         })
     }
     notificationMsg() {
         let notific = $('.messageSend') && $_all('.messageSend')[$_all('.messageSend').length - 1].getAttribute('data-view')
         if (notific == 1) {
-            !$('.colabHead div:nth-child(3) img') ? $('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notify.svg'):
-            $('.colabHead div:nth-child(3) img').setAttribute('src', './assets/images/notify.svg')
+            !$('.colabHead div:nth-child(3) img') ? $('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notify.svg') :
+                $('.colabHead div:nth-child(3) img').setAttribute('src', './assets/images/notify.svg')
         } else {
-            !$('.colabHead div:nth-child(3) img') ? $('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notification.svg'):
-            $('.colabHead div:nth-child(3) img').setAttribute('src', './assets/images/notification.svg')
+            !$('.colabHead div:nth-child(3) img') ? $('.colabHead div:nth-child(2) img').setAttribute('src', './assets/images/notification.svg') :
+                $('.colabHead div:nth-child(3) img').setAttribute('src', './assets/images/notification.svg')
         }
     }
     async methodUnited() {
@@ -259,10 +261,10 @@ export class SettingMessage {
         let response = ""
         let auxArray = []
         let nameId = dataId.data.sort((a, b) => a.user.trim().localeCompare(b.user.trim()));
-        for (const iterator of nameId) {  
+        for (const iterator of nameId) {
             auxArray.push(this.listUser.main(iterator.id))
         }
-        await Promise.all(auxArray).then(data=>{response=data.join("")})
+        await Promise.all(auxArray).then(data => { response = data.join("") })
         return response;
     }
     convertArray(obj) {
@@ -281,8 +283,8 @@ export class SettingMessage {
             }
         })
     }
-    tradeDiv(){
+    tradeDiv() {
         $('.presentation').setAttribute('style', 'display:none')
-        $('.part2').setAttribute('style', 'display:flex') 
+        $('.part2').setAttribute('style', 'display:flex')
     }
 }

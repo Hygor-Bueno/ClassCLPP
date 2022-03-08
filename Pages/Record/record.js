@@ -37,7 +37,7 @@ export class RecordPage extends SettingRecord {
                                         <p id="selectTituloQuestion">Selecione a checklist:</p> 
                                         <button data-linked="titleQuestionOption" data-function="titleQuestion" id="selectQuestionCheck" disabled></button>
                                     </div>
-                                    <div class="optionSelect" id="titleQuestionOption" style="display:none"> 
+                                    <div class="optionSelectOpt" id="titleQuestionOption" style="display:none"> 
                                     </div>                              
                                 </div>    
                             </div>                            
@@ -88,19 +88,9 @@ export class RecordPage extends SettingRecord {
                     <button type="button" id="clearBtn" data-function="clearBtn"> LIMPAR </button> 
                 </div>
             </aside>
-
-
-
-
-
             <div id="btnEsconde">
                 <button type="button" id="btnEscondeButton" data-function="btnEscondeButton" style="display:flex"> < </button>
             </div>
-
-
-
-
-
             <section id="corpoRecord">
                 <header id="header">
                     <section id="inputTitle">
@@ -119,8 +109,6 @@ export class RecordPage extends SettingRecord {
                             <button type="button" class="buttonRecordGraphic" id="buttonRecordPizza" data-function="buttonRecordGraphic"></button> 
                             <button type="button" class="buttonRecordGraphic" id="buttonRecordPercentage" data-function="buttonRecordGraphic" style="opacity: 1"></button>
                         </div>
-
-                        
                 </div>
 
                 <body id="graphicRecord">
@@ -132,34 +120,31 @@ export class RecordPage extends SettingRecord {
                     </section>
 
                         <aside id="unityGraphic">
-                            <div class="btnMiniGrafico">
+                            <div class="btnMiniGrafico" id="btnsShop">
                                 <select class="selMiniGrafico" id="popupaShopGra" style="display:">
                                     <option type="option">Unidade</option>
-    
                                 </select>
                                 <select class="selMiniGrafico"  id="selMiniGraficoShop"style="display:">
                                     <option type="option">Tipo de gráfico</option>
-                                    <option type="option" id="graphicMiniPizzaShop">Pizza</option> 
-                                    <option type="option" id="graphicMiniPorcShop">Porcentagem</option>
-                                    <option type="option" id="graphicMiniBarShop" >Barra</option>
+                                    <option type="option" id="graphicMiniPizzaShop" data-type="type_1">Pizza</option> 
+                                    <option type="option" id="graphicMiniPorcShop" data-type="type_3">Porcentagem</option>
+                                    <option type="option" id="graphicMiniBarShop" data-type="type_2">Barra</option>
                                 </select>
                                 </div>
                                 <div id="containerGraphicUnity">
                                     <canvas id="graphicUnity"></canvas>
                                 </div>
                         </aside>
-                   
-                   
                         <aside id="checklistGraphic" >
-                        <div class="btnMiniGrafico">
+                        <div class="btnMiniGrafico" id="btnsCheck">
                             <select class="selMiniGrafico" id="popupaCheckpGra"  style="display:">
                                 <option type="option">Checklist</option>
                             </select>
                             <select class="selMiniGrafico" id="selMiniGraficoCheck"style="display:">
                                 <option type="option" >Tipo de gráfico</option>
-                                <option type="option" id="graphicMiniBarCheck">Barra</option>
-                                <option type="option" id="graphicMiniPizzaCheck">Pizza</option> 
-                                <option type="option" id="graphicMiniPorcCheck">Porcentagem</option>
+                                <option type="option" id="graphicMiniBarCheck"data-type="type_2">Barra</option>
+                                <option type="option" id="graphicMiniPizzaCheck"data-type="type_1">Pizza</option> 
+                                <option type="option" id="graphicMiniPorcCheck" data-type="type_3">Porcentagem</option>
                             </select>
                             </div>    
                             <div id="containerGraphicChecklist">
