@@ -11,7 +11,7 @@ export class PrintRecord {
         
         let useFulComponents = new UsefulComponents;
         let recordObject = new RecordObject;
-        let response="";
+        let response= "";
         arrayResponse.forEach(arrayResp=>{
         console.log(objectChecklist[arrayResp[0].id_checklist])
             
@@ -22,7 +22,9 @@ export class PrintRecord {
                     <img src="./assets/images/fundoCLPPoficial.ico" title="logo CLPP"/>
                 </header>
                 <div id="subHeader">
-                    <p><b>Usuário:</b> ${useFulComponents.splitStringName(objectUsers[arrayResp[0].id_user]["user"], " ")}</p>
+                    <p>
+                        <b>Usuário:</b> ${useFulComponents.splitStringName(objectUsers[arrayResp[0].id_user]["user"], " ")}
+                    </p>
                     <p><b>Unidade:</b> ${objectShop[arrayResp[0].id_shop].description}</p>
                     <p><b>Data da Resposta:</b> ${useFulComponents.convertData(arrayResp[0].date, "-")}</p>
                     <p><b>Pontuação: </b>${recordObject.generalGraphic(recordObject.separateChecklist({ data: arrayResp }))[1][1]}%</p>                                          
@@ -42,12 +44,9 @@ export class PrintRecord {
                 ${response}
                 ${this.printScript(arrayResponse[0])}
         </html>
-        
         `
         win.document.write(fileRecord);
-
         // this.printFile(response, arrayResponse);
-       
         return response;
     }
     // printFile(response, arrayResponse) {
