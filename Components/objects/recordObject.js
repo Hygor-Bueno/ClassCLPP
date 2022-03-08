@@ -183,6 +183,7 @@ export class RecordObject extends ConnectionCLPP {
                 }
             }
         }
+        console.log(question, ignore,sum)
         console.log((100 / (question + ignore) * sum).toFixed(2) / max)
         return (100 / (question - ignore) * sum).toFixed(2) / max
     }

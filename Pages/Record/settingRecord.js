@@ -165,7 +165,7 @@ export class SettingRecord {
             assistentArray[1][0] = shop
             filtredForGraph.push(assistentArray[1])
         })
-        //console.log(filtredForGraph)
+        console.log(filtredForGraph)
         return filtredForGraph
     }
 
